@@ -1,0 +1,24 @@
+{
+  "recorridos": [
+    {
+      "id": "tiempo-detenido",
+      "tipo": "tema",
+      "fecha": "2026-10-09",
+      "titulo": "El tiempo detenido",
+      "tema": "Obras en las que el tiempo parece pararse: el descanso, el cuidado, la atención a un instante.",
+      "portada": "https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d/full/843,/0/default.jpg",
+      "obras": ["aic-28560", "aic-111442", "aic-94841", "aic-64818", "aic-16568"],
+      "notas": {}
+    },
+    {
+      "id": "paris-ciudad-nueva",
+      "tipo": "tema",
+      "fecha": "2026-10-02",
+      "titulo": "París, una ciudad nueva",
+      "tema": "Cómo miraron los pintores un París que estaba cambiando: bulevares, trenes, ocio al aire libre y vida nocturna.",
+      "portada": "https://www.artic.edu/iiif/2/f8fd76e9-c396-5678-36ed-6a348c904d27/full/843,/0/default.jpg",
+      "obras": ["aic-20684", "aic-16571", "aic-14655", "aic-27992", "aic-61128"],
+      "notas": {}
+    }
+  ]
+}

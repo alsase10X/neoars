@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Explorador de arte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script>
+(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}t=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;})();
+</script>
+<style>
+:root{
+  --font:'Libre Franklin','Franklin Gothic Medium','Franklin Gothic',Arial,sans-serif;
+  --ink:#000;--paper:#fff;--grey:#6b6b6b;--soft:#cfcfcf;--tile:#eee;--stage:#f1f1f1;--accent:#ffe600;--on-accent:#000;
+  --s1:8px;--s2:16px;--s3:24px;--s4:48px;
+}
+[data-theme=dark]{--ink:#fff;--paper:#000;--grey:#a0a0a0;--soft:#333;--tile:#1a1a1a;--stage:#0c0c0c}
+*{box-sizing:border-box;border-radius:0}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;font-family:var(--font);background:var(--paper);color:var(--ink);display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+header{padding:var(--s2);border-bottom:2px solid var(--ink);display:grid;grid-template-columns:repeat(12,1fr);gap:var(--s1);align-items:end;flex:0 0 auto}
+h1{grid-column:span 5;margin:0;font-weight:800;font-size:28px;line-height:.95;letter-spacing:-.03em}
+#src{grid-column:span 7}
+#view,#order,#det{grid-column:span 4}
+#q{grid-column:span 8}#go{grid-column:span 4}
+.opt{grid-column:1/-1}
+@media(min-width:900px){h1{grid-column:span 2;font-size:30px}#src{grid-column:span 2}#view{grid-column:span 2}#order{grid-column:span 2}#det{grid-column:span 1}#q{grid-column:span 2}#go{grid-column:span 1}}
+input,select,button{font:inherit;font-size:14px;font-weight:500;padding:10px 12px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);min-width:0;letter-spacing:-.01em}
+input::placeholder,textarea::placeholder{color:var(--grey)}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid var(--accent);outline-offset:0}
+button{cursor:pointer;background:var(--ink);color:var(--paper);font-weight:700}
+button:hover{background:var(--accent);color:var(--on-accent)}
+button:disabled{opacity:.25;pointer-events:none}
+#det{background:var(--paper);color:var(--ink)}
+#det[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}
+.opt{font-size:13px;color:var(--grey);display:flex;align-items:center;gap:var(--s1);font-weight:500}
+.opt input{padding:0;width:16px;height:16px;accent-color:var(--ink)}
+#bar{display:flex;flex-wrap:wrap;align-items:center;gap:4px var(--s1);padding:6px var(--s2);border-bottom:1px solid var(--soft);flex:0 0 auto;font-size:13px;font-weight:500}
+#msg{flex:1 1 220px;min-width:0;padding:4px 0}
+#bar button{padding:6px 10px;font-size:12px;border-width:1px}
+#bar .ghost{background:var(--paper);color:var(--ink)}
+#bar .ghost:hover{background:var(--accent);color:var(--on-accent)}
+#theme{display:flex;align-items:center;gap:6px}
+#theme::before{content:'';width:11px;height:11px;border:2px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+#content{flex:1 1 auto;min-height:0;position:relative;overflow:hidden}
+#grid{height:100%;overflow:auto;columns:2 150px;column-gap:14px;padding:14px 14px 90px}
+figure{break-inside:avoid;margin:0 0 14px;background:var(--tile);overflow:hidden;cursor:pointer;position:relative;border-radius:8px}
+figure img{width:100%;display:block;min-height:80px}
+figcaption{padding:10px 10px 12px;font-size:13px;line-height:1.15;font-weight:700;letter-spacing:-.02em;background:var(--paper);border:1px solid var(--soft);border-top:0;border-radius:0 0 8px 8px}
+figcaption small{display:block;font-weight:400;color:var(--grey);margin-top:3px;letter-spacing:0}
+#map{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:grab;background:var(--paper)}
+#map.drag{cursor:grabbing}
+.tile{position:absolute;left:0;top:0;will-change:transform;overflow:hidden;background:var(--tile)}
+.tile img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
+.tile img.crop{position:absolute;max-width:none;object-fit:fill}
+.tile span{position:absolute;left:0;bottom:0;max-width:92%;padding:6px 8px;font-size:12px;line-height:1.1;font-weight:700;letter-spacing:-.02em;pointer-events:none;opacity:0;transition:opacity .15s}
+.tile:hover span{opacity:1}
+.tile i{position:absolute;left:0;top:0;padding:4px 6px;font:700 11px/1 var(--font);font-style:normal;background:var(--paper);color:var(--ink);font-variant-numeric:tabular-nums;pointer-events:none}
+#hint{position:absolute;top:var(--s1);left:var(--s1);background:var(--accent);color:var(--on-accent);padding:6px 10px;font-size:12px;font-weight:700;letter-spacing:-.01em;pointer-events:none;z-index:2}
+#pager{position:absolute;bottom:var(--s2);left:var(--s2);display:flex;gap:2px;z-index:3;pointer-events:none}
+#pager button{pointer-events:auto;padding:12px 18px;border:0}
+#pick{position:fixed;left:var(--s2);right:var(--s2);bottom:calc(var(--s2) + env(safe-area-inset-bottom,0px));z-index:9;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;gap:var(--s1);padding:var(--s1) var(--s1) var(--s1) var(--s2);font-weight:700;font-size:14px;line-height:1.2}
+#pick span{flex:1;min-width:0}
+#pick button{padding:8px 12px;font-size:13px}
+#modal{position:fixed;inset:0;background:var(--paper);display:none;flex-direction:column;z-index:10}
+#modal.open{display:flex}
+#stage{position:relative;flex:1 1 50%;min-height:0;overflow:hidden;background:var(--stage)}
+#viewer{position:absolute;inset:0;touch-action:none;overflow:hidden;cursor:grab}
+#pic{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;user-select:none;-webkit-user-drag:none;will-change:transform}
+#loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--grey);pointer-events:none;text-align:center;padding:var(--s3);font-size:14px;font-weight:500}
+.tools{position:absolute;right:var(--s1);top:var(--s1);display:flex;flex-direction:column;gap:2px;z-index:5}
+.tools button,.top button{width:44px;height:44px;padding:0;font-size:20px;border:0;font-weight:500}
+.top{position:absolute;left:var(--s1);top:var(--s1);display:flex;flex-wrap:wrap;gap:2px;z-index:5;max-width:calc(100% - 70px)}
+.top button.wide{width:auto;padding:0 14px;font-size:13px;font-weight:700}
+#slow{position:absolute;left:0;right:0;bottom:0;z-index:6;background:var(--paper);color:var(--ink);border-top:2px solid var(--ink);padding:var(--s2);display:grid;gap:12px}
+#slowQ{margin:0;font-size:19px;font-weight:800;line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
+#slowBar{height:4px;background:var(--soft)}
+#slowBar i{display:block;height:100%;width:0;background:var(--ink)}
+.slowrow{display:flex;gap:2px;align-items:center}
+.slowrow span{flex:1;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.slowrow button{padding:8px 14px;font-size:13px}
+#info{flex:1 1 50%;overflow:auto;background:var(--paper);color:var(--ink)}
+#info.hidden{display:none}
+.head{position:relative;background:var(--accent);color:var(--on-accent);padding:var(--s3) var(--s2) var(--s2)}
+.srcl{display:block;font-size:12px;font-weight:700;margin-bottom:var(--s1);letter-spacing:.02em;padding-right:96px}
+.head h2{margin:0;font-weight:800;font-size:30px;line-height:.98;letter-spacing:-.035em;text-wrap:balance}
+.head p{margin:var(--s2) 0 0;font-size:15px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+#bSave{position:absolute;right:var(--s2);top:var(--s2);padding:6px 10px;font-size:12px;border:1px solid currentColor;background:transparent;color:inherit}
+#bSave.on,#bSave:hover{background:var(--on-accent);color:var(--accent)}
+.pal{display:flex;height:10px}
+.pal:empty{display:none}
+.pal i{display:block;min-width:4px}
+.ficha{border-bottom:2px solid var(--ink)}
+.ficha>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:var(--s1);padding:14px var(--s2);font-size:14px;font-weight:700;cursor:pointer}
+.ficha>summary::-webkit-details-marker{display:none}
+.ficha>summary::after{content:'+';font-size:22px;font-weight:500;line-height:.8}
+.ficha[open]>summary{border-bottom:1px solid var(--soft)}
+.ficha[open]>summary::after{content:'−'}
+.ficha .in{padding:0 var(--s2) var(--s2)}
+.box{padding:var(--s2) 0;border-bottom:2px solid var(--ink);font-size:16px;line-height:1.4;letter-spacing:-.005em;white-space:pre-line}
+.box b{display:block;font-size:12px;font-weight:700;margin-bottom:var(--s1)}
+.box cite{display:block;margin-top:var(--s1);font-size:12px;font-style:normal;color:var(--grey);font-weight:500}
+dl{display:grid;grid-template-columns:minmax(90px,30%) 1fr;margin:0;font-size:14px;line-height:1.3}
+dt,dd{padding:10px 0;margin:0;border-bottom:1px solid var(--soft)}
+dt{font-weight:700;padding-right:var(--s1)}
+dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
+a{color:var(--ink);font-weight:700;text-underline-offset:3px}
+a:hover{background:var(--accent);color:var(--on-accent)}
+.links{display:grid;justify-items:start;padding-top:var(--s1)}
+.links>button,.links>a,.seguir button{background:none;border:0;color:var(--ink);padding:10px 0;font-size:14px;font-weight:700;text-decoration:underline;text-underline-offset:3px;text-align:left;line-height:1.25}
+.links>button:hover,.seguir button:hover{background:var(--accent);color:var(--on-accent)}
+.seguir{padding:var(--s2) var(--s2) var(--s4);display:grid;justify-items:start}
+.seguir b{font-size:12px;font-weight:700;margin-bottom:2px}
+/* Visita con el autor: se lee como un texto de sala, no como un chat */
+#med{padding:var(--s3) var(--s2) var(--s2);border-bottom:2px solid var(--ink)}
+.mhead{display:flex;align-items:center;gap:12px}
+.mono{flex:0 0 auto;width:48px;height:48px;display:grid;place-items:center;background:var(--accent);color:var(--on-accent);font-weight:800;font-size:18px;letter-spacing:-.03em;overflow:hidden}
+.mono img{width:100%;height:100%;object-fit:cover}
+.mhead div{flex:1;min-width:0}
+.mhead b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.mhead small{display:block;font-size:12px;color:var(--grey);margin-top:3px}
+.vz{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--ink);color:var(--ink);padding:6px 9px;font-size:12px;flex:0 0 auto}
+.vz::before{content:'';width:9px;height:9px;border:2px solid currentColor}
+.vz[aria-pressed=true]::before{background:currentColor}
+.vz:hover{background:var(--accent);color:var(--on-accent)}
+.mstart{margin-top:var(--s3)}
+.go{width:100%;display:flex;justify-content:space-between;align-items:center;font-size:17px;padding:16px;text-align:left}
+.go::after{content:'→';font-weight:500}
+.q{margin:var(--s3) 0 0;font-size:14px;font-weight:700;color:var(--grey);line-height:1.3}
+.q::before{content:'— '}
+.t{margin:var(--s2) 0 0;font-size:20px;line-height:1.45;font-weight:500;letter-spacing:-.012em;white-space:pre-line}
+.t.live{cursor:pointer}
+.t .w{opacity:.07;transition:opacity .45s ease}
+.t .w.on{opacity:1}
+.t.err{font-size:15px;color:var(--grey)}
+.dots{display:flex;gap:6px;align-items:center;height:28px;margin-top:var(--s3)}
+.dots i{width:8px;height:8px;background:var(--ink);opacity:.15;animation:dt 1.2s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.2s}
+.dots i:nth-child(3){animation-delay:.4s}
+@keyframes dt{0%,100%{opacity:.15}40%{opacity:1}}
+.sugs{margin-top:var(--s3);border-top:2px solid var(--ink)}
+.sugs button{display:flex;gap:10px;width:100%;text-align:left;background:none;color:var(--ink);border:0;border-bottom:1px solid var(--soft);padding:13px 0;font-size:16px;font-weight:700;letter-spacing:-.015em;line-height:1.25}
+.sugs button::before{content:'→';font-weight:500}
+.sugs button:hover{background:var(--accent);color:var(--on-accent)}
+.mask{display:flex;align-items:center;margin-top:var(--s1);border-bottom:2px solid var(--ink)}
+.mask:focus-within{outline:3px solid var(--accent)}
+.mask input{flex:1;border:0;padding:12px 0;font-size:16px;background:transparent}
+.mask input:focus{outline:none}
+.mask button{background:none;color:var(--ink);border:0;font-size:20px;padding:8px 4px}
+.mnote{margin:var(--s3) 0 0;font-size:12px;line-height:1.35;color:var(--grey);max-width:52ch}
+.medcfg{margin-top:var(--s1);font-size:13px;color:var(--grey)}
+.medcfg summary{cursor:pointer;font-weight:700;padding:4px 0}
+.medcfg .opt{margin-top:var(--s1)}
+.cfg{display:flex;gap:var(--s1);flex-wrap:wrap;margin-top:var(--s1)}
+.cfg select,.cfg input{padding:8px;font-size:13px;flex:1;min-width:120px}
+.tile em{position:absolute;right:0;top:0;padding:4px 6px;font:700 11px/1 var(--font);font-style:normal;background:var(--ink);color:var(--paper);pointer-events:none}
+figcaption em{display:inline-block;margin-top:6px;font-size:11px;font-style:normal;background:var(--ink);color:var(--paper);padding:3px 6px;letter-spacing:0}
+.alist{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.alist li{border-bottom:1px solid var(--soft)}
+.alist button{width:100%;display:flex;justify-content:space-between;align-items:baseline;gap:var(--s1);background:var(--paper);color:var(--ink);border:0;padding:14px 0;text-align:left;font-size:17px;font-weight:800;letter-spacing:-.02em}
+.alist span{font-size:12px;font-weight:500;color:var(--grey);letter-spacing:0;white-space:nowrap}
+.alist button:hover{background:var(--accent);color:var(--on-accent)}
+/* Pestañas: exposiciones curadas y catálogo libre */
+.tabs{display:flex;gap:2px;flex:0 0 auto}
+.tabs button{padding:6px 12px;font-size:12px;border-width:1px;background:var(--paper);color:var(--ink)}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--paper)}
+body.home header>:not(h1){display:none!important}
+body.home #msg,body.home #undrift{visibility:hidden}
+#expos{position:absolute;inset:0;overflow:auto;padding:var(--s2) var(--s2) var(--s4)}
+.xsec{max-width:1120px;margin:0 auto var(--s4)}
+.xsec>h2{margin:var(--s1) 0 var(--s2);font-size:12px;font-weight:700;letter-spacing:.02em}
+.xgrid{display:grid;gap:var(--s4) var(--s3);grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.xcard{display:block;width:100%;text-align:left;background:none;color:var(--ink);border:0;padding:0}
+.xcard:hover{background:none;color:var(--ink)}
+.xcard .im{display:block;position:relative;aspect-ratio:4/3;max-width:100%;background:var(--tile) center/cover no-repeat}
+.xcard .new{position:absolute;left:0;top:0;background:var(--accent);color:var(--on-accent);font-style:normal;font-size:12px;font-weight:800;padding:6px 10px}
+.xcard b{display:block;margin-top:14px;font-size:26px;font-weight:800;letter-spacing:-.035em;line-height:1;text-wrap:balance}
+.xcard:hover b{text-decoration:underline;text-underline-offset:4px}
+.xcard p{margin:8px 0 0;font-size:15px;line-height:1.35;font-weight:500;max-width:46ch}
+.xcard small{display:block;margin-top:8px;font-size:12px;color:var(--grey);font-weight:500}
+/* Modo recorrido: barra siempre visible */
+#modal.rec{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+#recBar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:flex;gap:2px;background:var(--ink);padding-bottom:env(safe-area-inset-bottom,0px)}
+#recBar button{border:0;height:56px;font-size:14px}
+#recPrev{width:56px;font-size:20px;font-weight:500}
+.rb-t{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 12px;background:var(--paper);color:var(--ink);line-height:1.15;text-align:left}
+.rb-t span{max-width:100%;font-size:14px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rb-t small{font-size:12px;font-weight:500;color:var(--grey);font-variant-numeric:tabular-nums}
+#recNext{padding:0 18px;background:#ffe600;color:#000;font-weight:800}
+#recNext:hover{background:var(--paper);color:var(--ink)}
+.ri-t{margin:0;font-size:34px;font-weight:800;letter-spacing:-.035em;line-height:.98;text-wrap:balance}
+.ri-p{margin:var(--s2) 0 0;font-size:17px;line-height:1.4;font-weight:500;max-width:46ch}
+.ri-list{list-style:none;margin:var(--s3) 0 0;padding:0;border-top:2px solid var(--ink)}
+.ri-list li{border-bottom:1px solid var(--soft)}
+.ri-list button{width:100%;display:grid;grid-template-columns:24px 56px minmax(0,1fr);gap:12px;align-items:center;padding:12px 0;background:none;border:0;color:var(--ink);text-align:left}
+.ri-list button:hover{background:var(--accent);color:var(--on-accent)}
+.ri-list button[aria-current=true] .n{background:var(--ink);color:var(--paper);text-align:center}
+.ri-list img{width:56px;height:56px;object-fit:cover;background:var(--tile)}
+.ri-list b{display:block;font-size:15px;letter-spacing:-.02em;line-height:1.15}
+.ri-list small{display:block;color:var(--grey);font-size:12px;margin-top:2px;font-weight:500}
+.ri-list em{font-style:normal;font-weight:700;color:var(--ink)}
+#expoTema{width:100%;margin-top:var(--s1);font:inherit;font-size:15px;line-height:1.35;padding:8px 0;border:0;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);resize:vertical;min-height:52px}
+@media(min-width:900px){#modal{flex-direction:row}#info{flex:0 0 440px;border-left:2px solid var(--ink)}}
+
+/* Capas a pantalla completa: comparar, exposición, juego, postal */
+.ov{position:fixed;inset:0;z-index:30;background:var(--paper);color:var(--ink);display:flex;flex-direction:column}
+.ovh{display:flex;align-items:center;gap:var(--s1);padding:calc(var(--s1) + env(safe-area-inset-top,0px)) var(--s1) var(--s1) var(--s2);border-bottom:2px solid var(--ink);flex:0 0 auto}
+.ovh h3{flex:1;min-width:0;margin:0;font-size:20px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.ovh small{display:block;font-size:12px;font-weight:500;color:var(--grey);letter-spacing:0;margin-top:3px}
+.ovh button{width:44px;height:44px;padding:0;font-size:20px;border:0;flex:0 0 auto}
+.ovf{display:flex;flex-wrap:wrap;gap:2px;padding:var(--s1) var(--s2) calc(var(--s1) + env(safe-area-inset-bottom,0px));border-top:2px solid var(--ink);flex:0 0 auto}
+.ovf button{flex:1 1 auto}
+.ovf .ghost{background:var(--paper);color:var(--ink)}
+.panes{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:2px;background:var(--ink)}
+.pane{position:relative;flex:1 1 50%;min-height:0;overflow:hidden;background:var(--stage);touch-action:none;cursor:grab}
+.pane img{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.cap{position:absolute;left:0;bottom:0;max-width:90%;background:var(--paper);color:var(--ink);padding:6px 10px;font-size:12px;line-height:1.2;pointer-events:none;z-index:2}
+.cap b{display:block;font-size:13px;letter-spacing:-.02em}
+@media(min-width:900px){.panes{flex-direction:row}}
+.ovb{flex:1 1 auto;min-height:0;overflow:auto;padding:var(--s2)}
+#expoTitle{width:100%;font-size:24px;font-weight:800;letter-spacing:-.03em;border:0;border-bottom:2px solid var(--ink);padding:8px 0;background:transparent}
+#expoList{list-style:none;margin:var(--s1) 0 0;padding:0}
+#expoList li{display:grid;grid-template-columns:24px 64px minmax(0,1fr) auto;gap:12px;padding:14px 0;border-bottom:1px solid var(--soft);align-items:start}
+.n{font-weight:800;font-variant-numeric:tabular-nums;font-size:14px;padding-top:2px}
+#expoList img{width:64px;height:64px;object-fit:cover;background:var(--tile);cursor:pointer;display:block}
+.tx b{display:block;font-size:15px;letter-spacing:-.02em;line-height:1.15;cursor:pointer}
+.tx small{display:block;color:var(--grey);font-size:12px;margin:3px 0 8px;line-height:1.3}
+.tx textarea{width:100%;min-height:64px;font:inherit;font-size:14px;line-height:1.35;padding:8px;border:1px solid var(--ink);background:var(--paper);color:var(--ink);resize:vertical}
+.ctl{display:flex;flex-direction:column;gap:2px}
+.ctl button{width:36px;height:36px;padding:0;font-size:15px;background:var(--paper);color:var(--ink);border:1px solid var(--ink)}
+.empty{color:var(--grey);font-size:15px;line-height:1.4;padding:var(--s3) 0;margin:0;max-width:40ch}
+.gimg{flex:1 1 auto;min-height:0;background:var(--stage);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.gimg img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.gctl{padding:var(--s2) var(--s2) calc(var(--s2) + env(safe-area-inset-bottom,0px));display:grid;gap:10px;border-top:2px solid var(--ink);flex:0 0 auto}
+#gYear{font-size:48px;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+#gRange{width:100%;padding:0;border:0;height:36px;accent-color:var(--ink);background:transparent}
+.gscale{display:flex;justify-content:space-between;font-size:12px;color:var(--grey);font-variant-numeric:tabular-nums;margin-top:-6px}
+#gRes{font-size:15px;line-height:1.4;min-height:1.4em}
+#gRes b{font-size:20px;letter-spacing:-.02em}
+.post-b{display:flex;flex-direction:column;align-items:center;gap:var(--s2)}
+#pcv{max-width:100%;max-height:55vh;width:auto;height:auto;border:1px solid var(--soft);display:block}
+#pphrase{width:100%;max-width:480px}
+#postMsg{font-size:14px;color:var(--grey);text-align:center;max-width:480px;margin:0}
+#toast{position:fixed;left:50%;bottom:calc(var(--s3) + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;background:var(--ink);color:var(--paper);padding:10px 14px;font-size:14px;font-weight:700;max-width:calc(100% - 32px);overflow-wrap:anywhere}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Explorador<br>de arte</h1>
+  <select id="src" aria-label="Museo">
+    <option value="aic">Art Institute of Chicago</option>
+    <option value="met">The Met, Nueva York</option>
+    <option value="cma">Cleveland Museum of Art</option>
+    <option value="all">Los tres museos</option>
+  </select>
+  <select id="view" aria-label="Vista">
+    <option value="map">Mapa</option>
+    <option value="cols">Columnas</option>
+  </select>
+  <select id="order" aria-label="Orden">
+    <option value="none">Sin orden</option>
+    <option value="color">Por color</option>
+    <option value="date">Por fecha</option>
+  </select>
+  <button id="det" aria-pressed="false" title="Mostrar fragmentos en lugar de obras enteras">Detalles</button>
+  <input id="q" placeholder="Artista, tema, obra…" enterkeyhint="search">
+  <button id="go">Buscar</button>
+  <label class="opt" id="optText"><input type="checkbox" id="onlyText"> Solo obras con texto explicativo (Chicago)</label>
+</header>
+<div id="bar">
+  <div class="tabs" role="tablist"><button id="tExp" role="tab">Exposiciones</button><button id="tCat" role="tab">Catálogo</button></div>
+  <span id="msg"></span>
+  <button id="undrift" class="ghost" hidden>Quitar deriva ✕</button>
+  <button id="bExpo" class="ghost">Mi recorrido · 0</button>
+  <button id="bGame" class="ghost">¿De cuándo es?</button>
+  <button id="theme" class="ghost" aria-label="Cambiar entre modo claro y oscuro"></button>
+</div>
+<div id="content">
+  <div id="map"><div id="hint">Arrastra para explorar</div></div>
+  <div id="grid" hidden></div>
+  <div id="expos" hidden></div>
+  <div id="pager"><button id="prev">← Anterior</button><button id="next">Siguiente →</button></div>
+</div>
+<div id="pick" hidden><span id="pickTxt"></span><button id="pickX">Cancelar</button></div>
+
+<div id="modal">
+  <div id="stage">
+    <div id="viewer"><img id="pic" alt=""></div>
+    <div id="loading">Cargando imagen…</div>
+    <div class="top">
+      <button id="close" aria-label="Cerrar">✕</button>
+      <button id="toggle" class="wide">Ocultar ficha</button>
+      <button id="slowBtn" class="wide">Mirar despacio</button>
+    </div>
+    <div class="tools">
+      <button id="zin" aria-label="Acercar">+</button>
+      <button id="zout" aria-label="Alejar">−</button>
+      <button id="zhome" aria-label="Restablecer">⤢</button>
+    </div>
+    <div id="slow" hidden>
+      <p id="slowQ"></p>
+      <div id="slowBar"><i></i></div>
+      <div class="slowrow"><span id="slowN"></span><button id="slowP">Pausa</button><button id="slowX">Salir</button></div>
+    </div>
+  </div>
+  <div id="info"></div>
+  <div id="recBar" hidden>
+    <button id="recPrev" aria-label="Obra anterior">←</button>
+    <button id="recIdx" class="rb-t" aria-label="Ver todas las obras del recorrido"><span id="recTitle"></span><small id="recPos"></small></button>
+    <button id="recNext">Siguiente obra →</button>
+  </div>
+</div>
+
+<div id="cmp" class="ov" hidden>
+  <div class="ovh"><h3>Comparar<small>El zoom y el desplazamiento se mueven a la vez en las dos</small></h3><button id="cmpX" aria-label="Cerrar">✕</button></div>
+  <div class="panes">
+    <div class="pane" id="pane0"><img alt=""><div class="cap"></div></div>
+    <div class="pane" id="pane1"><img alt=""><div class="cap"></div></div>
+  </div>
+</div>
+
+<div id="expo" class="ov" hidden>
+  <div class="ovh"><h3>Mi recorrido<small>Elige obras, ordénalas y di de qué trata</small></h3><button id="expoX" aria-label="Cerrar">✕</button></div>
+  <div class="ovb">
+    <input id="expoTitle" aria-label="Título del recorrido">
+    <textarea id="expoTema" placeholder="De qué trata, en una frase. Orienta a quien media cada obra." aria-label="Tema del recorrido"></textarea>
+    <p class="empty" id="expoEmpty">Todavía no has guardado obras. Abre una en el catálogo y pulsa «Guardar»: aparecerá aquí.</p>
+    <ol id="expoList"></ol>
+  </div>
+  <div class="ovf" id="expoF">
+    <button id="expoPlay">Recorrer</button>
+    <button id="expoMap" class="ghost">Ver en el mapa</button>
+    <button id="expoDl" class="ghost">Exportar JSON</button>
+    <button id="expoCp" class="ghost">Copiar JSON</button>
+  </div>
+</div>
+
+<div id="game" class="ov" hidden>
+  <div class="ovh"><h3>¿De cuándo es?<small id="gN"></small></h3><button id="gameX" aria-label="Cerrar">✕</button></div>
+  <div class="gimg"><img id="gImg" alt="Obra sin identificar"></div>
+  <div class="gctl">
+    <div id="gYear"></div>
+    <input type="range" id="gRange" aria-label="Año">
+    <div class="gscale"><span id="gMin"></span><span id="gMax"></span></div>
+    <div id="gRes"></div>
+    <button id="gBtn">Comprobar</button>
+  </div>
+</div>
+
+<div id="post" class="ov" hidden>
+  <div class="ovh"><h3>Postal<small>Lo que estabas mirando, con tu frase</small></h3><button id="postX" aria-label="Cerrar">✕</button></div>
+  <div class="ovb post-b">
+    <canvas id="pcv" width="1080" height="1350"></canvas>
+    <p id="postMsg"></p>
+    <input id="pphrase" placeholder="Tu frase (si la dejas vacía, sale el título)" maxlength="90">
+  </div>
+  <div class="ovf"><button id="pDown">Descargar imagen</button><button id="pShare" class="ghost" hidden>Compartir</button></div>
+</div>
+
+<div id="recIntro" class="ov" hidden>
+  <div class="ovh"><h3 id="riHead">Exposición</h3><button id="riX" aria-label="Cerrar">✕</button></div>
+  <div class="ovb" id="riBody"></div>
+  <div class="ovf"><button id="riGo" class="go">Empezar</button></div>
+</div>
+
+<div id="toast" hidden></div>
+
+<script>
+const PAGE = 20, GAP = 2, STEP = 7000;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SRC_NAME = {aic:'Art Institute of Chicago', met:'The Met, Nueva York', cma:'Cleveland Museum of Art'};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const strip = s => String(s ?? '').replace(/<[^>]+>/g,'').trim();
+const ls = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : v; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+};
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+const pad2 = n => String(n).padStart(2,'0');
+const yearOf = s => { const m = String(s ?? '').match(/-?\d{3,4}/); return m ? +m[0] : null; };
+const fmtYear = y => y == null ? '' : y < 0 ? `${-y} a. C.` : String(y);
+const firstLine = s => String(s || '').split('\n')[0];
+const within = (p, ms) => Promise.race([p, new Promise(r => setTimeout(r, ms))]);
+let state = {page:1, seed:1, more:false}, current = [], art = null, drift = null, expoView = false, DET = false;
+
+/* ---------- Autores que presentan su obra ----------
+   Solo autores muy documentados. Se reconocen por el nombre (con variantes), porque cada museo
+   usa identificadores distintos; se puede añadir un campo ids:{aic, met, cma} más adelante.
+   «buscar» son las formas de nombre para pedir sus obras a los museos.
+   «dossier» es opcional: si existe, alimenta la presentación con datos preparados. */
+const DOSSIER_VAN_GOGH = {
+  estado:'Ejemplo de formato. Redactado sin contrastar línea a línea con las fuentes: revisar antes de usar en público.',
+  fuentes:['Van Gogh Museum, Ámsterdam','Vincent van Gogh. The Letters (edición del Van Gogh Museum y el Huygens ING)'],
+  hechos:[
+    {t:'Nací en 1853 en Groot-Zundert (Países Bajos), hijo de un pastor protestante.', f:'Van Gogh Museum'},
+    {t:'Antes de pintar fui empleado de la casa de arte Goupil, profesor y predicador laico entre los mineros del Borinage, en Bélgica. Decidí ser artista en 1880, con 27 años.', f:'Van Gogh Museum'},
+    {t:'Mi hermano Theo, marchante en París, me sostuvo económicamente toda mi carrera. Le escribí cientos de cartas.', f:'The Letters'},
+    {t:'En París, entre 1886 y 1888, conocí a los impresionistas, aclaré mi paleta y coleccioné estampas japonesas.', f:'Van Gogh Museum'},
+    {t:'En febrero de 1888 me fui a Arlés buscando la luz del sur. Alquilé la Casa Amarilla y soñaba con un taller compartido con otros pintores.', f:'Van Gogh Museum'},
+    {t:'Gauguin vivió conmigo en Arlés desde finales de octubre de 1888, unos dos meses. Terminó mal, en diciembre, con una crisis mía.', f:'Van Gogh Museum'},
+    {t:'En mayo de 1889 ingresé por voluntad propia en el asilo de Saint-Paul-de-Mausole, en Saint-Rémy-de-Provence, y allí seguí pintando.', f:'Van Gogh Museum'},
+    {t:'En mayo de 1890 me instalé en Auvers-sur-Oise, cerca del doctor Gachet.', f:'Van Gogh Museum'},
+    {t:'En vida vendí muy poco.', f:'Van Gogh Museum'}
+  ],
+  ideas:[
+    {t:'Usaba el color para expresar, no para copiar lo que veía.', f:'Cartas a Theo, 1888'},
+    {t:'Con El dormitorio quería que el color sugiriera descanso o sueño, con tintas planas como en las estampas japonesas y casi sin sombras.', f:'Carta a Theo, 16 de octubre de 1888'},
+    {t:'Admiraba a Millet; el trabajo del campo y la gente sencilla eran temas centrales para mí.', f:'The Letters'},
+    {t:'Veía el sur de Francia como un Japón propio.', f:'The Letters'}
+  ],
+  relacionadas:[
+    'Tres versiones de El dormitorio: la primera (octubre de 1888, Van Gogh Museum), una copia del mismo tamaño (septiembre de 1889, Art Institute of Chicago) y otra más pequeña para mi madre y mi hermana (1889, Musée d\'Orsay).',
+    'Los girasoles, pintados en Arlés para decorar la habitación de Gauguin.',
+    'La Berceuse, retrato de Augustine Roulin, del que hice varias versiones.'
+  ],
+  personas:['Theo van Gogh, mi hermano','Paul Gauguin','La familia Roulin: Joseph, el cartero, y Augustine','El doctor Paul Gachet'],
+  voz:'Intenso pero sin grandilocuencia. Nombra los colores con precisión casi técnica. Humilde con el dinero y el éxito. Menciona a Theo con naturalidad. Busca la dignidad en la gente sencilla y en el trabajo. Sobre su enfermedad, sobrio y solo si viene al caso.',
+  citas:[] // Vacío a propósito: solo frases literales con su referencia exacta de carta.
+};
+const AUTORES = [
+  {nombre:'Vincent van Gogh', vida:'1853–1890', muerte:1890, alias:['vincent van gogh'], buscar:['Vincent van Gogh'], dossier:DOSSIER_VAN_GOGH},
+  {nombre:'Claude Monet', vida:'1840–1926', muerte:1926, alias:['claude monet'], buscar:['Claude Monet']},
+  {nombre:'Rembrandt', vida:'1606–1669', muerte:1669, alias:['rembrandt van rijn','rembrandt harmensz van rijn'], buscar:['Rembrandt van Rijn','Rembrandt']},
+  {nombre:'Francisco de Goya', vida:'1746–1828', muerte:1828, alias:['goya y lucientes','francisco de goya'], buscar:['Goya']},
+  {nombre:'Edgar Degas', vida:'1834–1917', muerte:1917, alias:['edgar degas'], buscar:['Edgar Degas']},
+  {nombre:'Paul Cézanne', vida:'1839–1906', muerte:1906, alias:['paul cezanne'], buscar:['Paul Cézanne','Paul Cezanne']},
+  {nombre:'Paul Gauguin', vida:'1848–1903', muerte:1903, alias:['paul gauguin'], buscar:['Paul Gauguin']},
+  {nombre:'Pierre-Auguste Renoir', vida:'1841–1919', muerte:1919, alias:['pierre auguste renoir','auguste renoir'], buscar:['Pierre-Auguste Renoir','Auguste Renoir']},
+  {nombre:'Georges Seurat', vida:'1859–1891', muerte:1891, alias:['georges seurat'], buscar:['Georges Seurat']},
+  {nombre:'Mary Cassatt', vida:'1844–1926', muerte:1926, alias:['mary cassatt','mary stevenson cassatt'], buscar:['Mary Cassatt']},
+  {nombre:'Gustave Caillebotte', vida:'1848–1894', muerte:1894, alias:['gustave caillebotte'], buscar:['Gustave Caillebotte']},
+  {nombre:'Édouard Manet', vida:'1832–1883', muerte:1883, alias:['edouard manet'], buscar:['Édouard Manet','Edouard Manet']},
+  {nombre:'Berthe Morisot', vida:'1841–1895', muerte:1895, alias:['berthe morisot'], buscar:['Berthe Morisot']},
+  {nombre:'Camille Pissarro', vida:'1830–1903', muerte:1903, alias:['camille pissarro'], buscar:['Camille Pissarro']},
+  {nombre:'Henri de Toulouse-Lautrec', vida:'1864–1901', muerte:1901, alias:['toulouse lautrec'], buscar:['Toulouse-Lautrec']},
+  {nombre:'Katsushika Hokusai', vida:'1760–1849', muerte:1849, alias:['katsushika hokusai'], buscar:['Katsushika Hokusai','Hokusai']},
+  {nombre:'Utagawa Hiroshige', vida:'1797–1858', muerte:1858, alias:['utagawa hiroshige','ando hiroshige'], excluir:['hiroshige ii','hiroshige iii'], buscar:['Utagawa Hiroshige','Hiroshige']},
+  {nombre:'J. M. W. Turner', vida:'1775–1851', muerte:1851, alias:['joseph mallord william turner','j m w turner'], buscar:['Joseph Mallord William Turner']},
+  {nombre:'Winslow Homer', vida:'1836–1910', muerte:1910, alias:['winslow homer'], buscar:['Winslow Homer']},
+  {nombre:'El Greco', vida:'1541–1614', muerte:1614, alias:['el greco','domenikos theotokopoulos'], buscar:['El Greco']},
+  {nombre:'Diego Velázquez', vida:'1599–1660', muerte:1660, alias:['diego velazquez','diego rodriguez de silva y velazquez'], buscar:['Velázquez','Velazquez']},
+  {nombre:'Johannes Vermeer', vida:'1632–1675', muerte:1675, alias:['johannes vermeer'], buscar:['Johannes Vermeer']},
+  {nombre:'Albrecht Dürer', vida:'1471–1528', muerte:1528, alias:['albrecht durer'], buscar:['Albrecht Dürer','Albrecht Durer']}
+];
+const normTxt = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+const ATTRIB = /\b(follower|school|workshop|circle|after|style|manner|copy|attributed|studio|imitator|pupil|possibly|probably)\b/i;
+function autorDe(a){
+  if(!a || !a.name || ATTRIB.test(a.name) || ATTRIB.test(a.attrib || '')) return null;
+  const n = ' '+normTxt(a.name)+' ';
+  return AUTORES.find(x => x.alias.some(al => n.includes(' '+al+' ')) && !(x.excluir || []).some(e => n.includes(' '+e+' '))) || null;
+}
+
+function toast(t, ms = 2400){ const el = $('toast'); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, ms); }
+
+function setTheme(t){
+  document.documentElement.dataset.theme = t; ls.set('theme', t);
+  $('theme').textContent = t==='dark' ? 'Claro' : 'Oscuro';
+}
+$('theme').onclick = () => setTheme(document.documentElement.dataset.theme==='dark' ? 'light' : 'dark');
+setTheme(document.documentElement.dataset.theme);
+
+/* ---------- Color ---------- */
+function rgbHsl(r,g,b){
+  r/=255; g/=255; b/=255;
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b), l = (mx+mn)/2;
+  if(mx === mn) return [0, 0, l*100];
+  const d = mx-mn, s = l > .5 ? d/(2-mx-mn) : d/(mx+mn);
+  let h = mx===r ? (g-b)/d + (g<b?6:0) : mx===g ? (b-r)/d + 2 : (r-g)/d + 4;
+  return [h*60, s*100, l*100];
+}
+function hslHex(h,s,l){
+  s/=100; l/=100;
+  const k = n => (n + h/30) % 12, a = s*Math.min(l, 1-l);
+  const f = n => l - a*Math.max(-1, Math.min(k(n)-3, 9-k(n), 1));
+  return '#' + [f(0),f(8),f(4)].map(x => Math.round(x*255).toString(16).padStart(2,'0')).join('');
+}
+// El color sale siempre de la obra; si la obra no tiene color propio, el sistema se queda en neutro.
+const NEUTRAL = '#232323';
+function colorFor(a){
+  if(a.hsl && a.hsl[1] > 10){ const [h,s,l] = a.hsl; return hslHex(h, clamp(s,40,85), clamp(l,38,62)); }
+  return NEUTRAL;
+}
+const lum = hex => { const n=parseInt(hex.slice(1),16), r=n>>16&255, g=n>>8&255, b=n&255; return (0.299*r+0.587*g+0.114*b)/255; };
+const onColor = hex => lum(hex)>.55 ? '#000' : '#fff';
+function analyzeImg(im){
+  const S = 40, c = document.createElement('canvas'); c.width = c.height = S;
+  const x = c.getContext('2d', {willReadFrequently:true}); x.drawImage(im, 0, 0, S, S);
+  const d = x.getImageData(0,0,S,S).data, B = {}; let n = 0;
+  for(let p=0; p<d.length; p+=4){
+    const [h,s,l] = rgbHsl(d[p],d[p+1],d[p+2]); n++;
+    const k = (s > 18 && l > 10 && l < 92) ? 'h'+(Math.floor(h/30) % 12) : (l < 30 ? 'k' : l > 70 ? 'w' : 'g');
+    const b = B[k] || (B[k] = {n:0, s:0, l:0, x:0, y:0});
+    b.n++; b.s += s; b.l += l; b.x += Math.cos(h*Math.PI/180)*(s+1); b.y += Math.sin(h*Math.PI/180)*(s+1);
+  }
+  const bins = Object.entries(B).map(([k,b]) => ({k, n:b.n, h:(Math.atan2(b.y,b.x)*180/Math.PI+360)%360, s:b.s/b.n, l:b.l/b.n})).sort((p,q) => q.n-p.n);
+  const pal = bins.filter(b => b.n > n*0.03).slice(0,5).map(b => ({hex:hslHex(b.h, b.k[0]==='h' ? b.s : Math.min(b.s,8), b.l), w:b.n}));
+  const sat = bins.filter(b => b.k[0]==='h');
+  const hsl = sat.length && sat[0].n > n*0.08 ? [sat[0].h, sat[0].s, sat[0].l] : [0, 0, bins[0] ? bins[0].l : 50];
+  return {hsl, pal};
+}
+function sampleColor(a, withPal=false){
+  if(a.hsl !== undefined && (!withPal || a.pal !== undefined)) return Promise.resolve();
+  return new Promise(res => {
+    const im = new Image(); im.crossOrigin = 'anonymous';
+    const fail = () => { if(a.hsl === undefined) a.hsl = null; a.pal = null; res(); };
+    im.onload = () => { try{ const r = analyzeImg(im); if(a.hsl === undefined) a.hsl = r.hsl; a.pal = r.pal; res(); }catch(e){ fail(); } };
+    im.onerror = fail;
+    im.src = a.thumb;
+  });
+}
+
+/* ---------- Museos ---------- */
+const AIC = {
+  base:'https://api.artic.edu/api/v1/artworks',
+  fields: ['id','title','artist_display','artist_title','date_display','date_start','place_of_origin','medium_display','dimensions','credit_line','department_title','classification_title','style_title','subject_titles','description','short_description','image_id','thumbnail','color','is_public_domain','main_reference_number'],
+  async search(q, page, lim, d){
+    const filter = [{term:{is_public_domain:true}},{exists:{field:'image_id'}}];
+    if($('onlyText').checked) filter.push({exists:{field:'description'}});
+    const must = [];
+    if(d){
+      if(d.kind==='era') filter.push({range:{date_start:{gte:d.year-25, lte:d.year+25}}});
+      else if(d.alts) must.push({bool:{should:d.alts.map(v => ({match_phrase:{artist_title:v}})), minimum_should_match:1}});
+      else must.push({match_phrase:{[{artist:'artist_title', subject:'subject_titles', style:'style_title'}[d.kind]]: d.value}});
+    } else if(q) must.push({multi_match:{query:q, type:'best_fields', fields:['title^4','artist_title^4','artist_display^3','subject_titles^2','style_title^2','classification_title','medium_display','place_of_origin','description','short_description','alt_titles']}});
+    const query = must.length ? {bool:{must, filter}} : {function_score:{query:{bool:{filter}}, random_score:{seed:state.seed}}};
+    const r = await fetch(AIC.base+'/search', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({query, limit:lim, page, fields:AIC.fields})});
+    if(!r.ok) throw new Error('Chicago HTTP '+r.status);
+    const j = await r.json(), base = j.config?.iiif_url || 'https://www.artic.edu/iiif/2', total = j.pagination.total;
+    return {total, more: page*lim < Math.min(total, 10000), items: j.data.filter(a=>a.image_id).map(a=>AIC.norm(a,base))};
+  },
+  async get(id){
+    const r = await fetch(`${AIC.base}/${id}?fields=${AIC.fields.join(',')}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j = await r.json();
+    return j.data?.image_id ? AIC.norm(j.data, j.config?.iiif_url || 'https://www.artic.edu/iiif/2') : null;
+  },
+  norm(a, base){
+    const t = a.thumbnail, iiif = `${base}/${a.image_id}`;
+    return {
+      key:'aic-'+a.id, src:'aic', title:a.title, artist:a.artist_display, name:a.artist_title || '', attrib:firstLine(a.artist_display), date:a.date_display,
+      year: a.date_start ?? yearOf(a.date_display),
+      iiif, thumb:`${iiif}/full/400,/0/default.jpg`, mid:`${iiif}/full/843,/0/default.jpg`, big:`${iiif}/full/1686,/0/default.jpg`,
+      ar:(t && t.width && t.height) ? t.height/t.width : 0,
+      hsl: a.color ? [a.color.h, a.color.s, a.color.l] : undefined,
+      subject:(a.subject_titles||[])[0] || '', style:a.style_title || '', kind:a.classification_title || '',
+      voices:[
+        a.description ? {label:'Texto del museo', text:strip(a.description), by:SRC_NAME.aic}
+          : a.short_description ? {label:'Texto breve del museo', text:strip(a.short_description), by:SRC_NAME.aic} : null,
+        t?.alt_text ? {label:'Descripción visual', text:t.alt_text, by:SRC_NAME.aic+' · escrita para accesibilidad'} : null
+      ].filter(Boolean),
+      alt:t?.alt_text || '',
+      url:`https://www.artic.edu/artworks/${a.id}`,
+      fields:[['Fecha',a.date_display],['Origen',a.place_of_origin],['Técnica',a.medium_display],['Dimensiones',a.dimensions],['Clasificación',a.classification_title],['Estilo',a.style_title],['Temas',(a.subject_titles||[]).join(', ')],['Departamento',a.department_title],['Nº de referencia',a.main_reference_number],['Crédito',a.credit_line],['Licencia','Dominio público (CC0)']]
+    };
+  }
+};
+const MET = {
+  base:'https://collectionapi.metmuseum.org/public/collection/v1',
+  cache:{key:'', ids:[]},
+  async search(q, page, lim, d){
+    const p = new URLSearchParams({hasImages:'true', isPublicDomain:'true'});
+    if(d){
+      if(d.kind==='artist'){ p.set('artistOrCulture','true'); p.set('q', d.value); }
+      else if(d.kind==='era'){ p.set('dateBegin', d.year-25); p.set('dateEnd', d.year+25); p.set('q', d.kindq || 'painting'); }
+      else p.set('q', d.value);
+    } else p.set('q', q || 'painting');
+    const key = p.toString();
+    if(MET.cache.key !== key){
+      const r = await fetch(`${MET.base}/search?${key}`);
+      if(!r.ok) throw new Error('Met HTTP '+r.status);
+      MET.cache = {key, ids:(await r.json()).objectIDs || []};
+    }
+    const ids = MET.cache.ids, slice = ids.slice((page-1)*lim, page*lim);
+    const objs = await Promise.all(slice.map(id => fetch(`${MET.base}/objects/${id}`).then(r=>r.ok?r.json():null).catch(()=>null)));
+    return {total:ids.length, more: page*lim < ids.length, items:objs.filter(o=>o && o.primaryImage).map(MET.norm)};
+  },
+  async get(id){
+    const r = await fetch(`${MET.base}/objects/${id}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const o = await r.json(); return o.primaryImage ? MET.norm(o) : null;
+  },
+  norm(o){
+    return {
+      key:'met-'+o.objectID, src:'met', title:o.title, artist:[o.artistDisplayName,o.artistDisplayBio].filter(Boolean).join(' · '), name:o.artistDisplayName || '', attrib:[o.artistPrefix, o.artistRole].filter(Boolean).join(' '), date:o.objectDate,
+      year: o.objectDate ? o.objectBeginDate : null,
+      thumb:o.primaryImageSmall||o.primaryImage, mid:o.primaryImageSmall||o.primaryImage, big:o.primaryImage, ar:0, hsl:undefined,
+      subject:(o.tags||[])[0]?.term || '', style:o.period || o.culture || '', kind:o.classification || '',
+      voices:[], alt:'', url:o.objectURL,
+      fields:[['Fecha',o.objectDate],['Cultura',o.culture],['Periodo',o.period],['Técnica',o.medium],['Dimensiones',o.dimensions],['Clasificación',o.classification],['Departamento',o.department],['Nº de acceso',o.accessionNumber],['Crédito',o.creditLine],['Etiquetas',(o.tags||[]).map(t=>t.term).join(', ')],['Licencia','Dominio público (Open Access)']]
+    };
+  }
+};
+const CMA = {
+  base:'https://openaccess-api.clevelandart.org/api/artworks',
+  fields:'id,accession_number,title,creation_date,creation_date_earliest,creators,culture,technique,type,department,collection,measurements,creditline,description,did_you_know,url,images,share_license_status',
+  async search(q, page, lim, d){
+    const p = new URLSearchParams({has_image:'1', cc0:'1', limit:String(lim), skip:String((page-1)*lim)});
+    if(d){
+      if(d.kind==='era'){ p.set('created_after', d.year-25); p.set('created_before', d.year+25); }
+      else p.set('q', d.value);
+    } else if(q) p.set('q', q); else p.set('highlight','1');
+    p.set('fields', CMA.fields);
+    const r = await fetch(CMA.base+'/?'+p);
+    if(!r.ok) throw new Error('Cleveland HTTP '+r.status);
+    const j = await r.json(), total = j.info?.total ?? j.data.length;
+    return {total, more: page*lim < total, items:j.data.filter(a=>a.images?.web?.url).map(CMA.norm)};
+  },
+  async get(id){
+    const r = await fetch(`${CMA.base}/${id}`);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const a = (await r.json()).data; return a?.images?.web?.url ? CMA.norm(a) : null;
+  },
+  norm(a){
+    const w = a.images.web, pr = a.images.print, cr = a.creators || [];
+    return {
+      key:'cma-'+a.id, src:'cma', title:a.title, artist:cr.map(c=>c.description).filter(Boolean).join(' · '),
+      name:(cr[0]?.description || '').split(' (')[0], attrib:cr[0]?.role || '', date:a.creation_date,
+      year: a.creation_date_earliest ?? yearOf(a.creation_date),
+      thumb:w.url, mid:w.url, big:w.url, hi:pr?.url || '', ar:(+w.height && +w.width) ? +w.height/+w.width : 0, hsl:undefined,
+      subject:'', style:(a.culture||[])[0] || '', kind:a.type || '',
+      voices:[
+        a.description ? {label:'Texto del museo', text:strip(a.description), by:SRC_NAME.cma} : null,
+        a.did_you_know ? {label:'¿Sabías que…?', text:strip(a.did_you_know), by:SRC_NAME.cma} : null
+      ].filter(Boolean),
+      alt:'', url:a.url,
+      fields:[['Fecha',a.creation_date],['Cultura',(a.culture||[]).join(', ')],['Técnica',a.technique],['Tipo',a.type],['Dimensiones',a.measurements],['Departamento',a.department],['Colección',a.collection],['Nº de acceso',a.accession_number],['Crédito',a.creditline],['Licencia','Dominio público (CC0)']]
+    };
+  }
+};
+const APIS = {aic:AIC, met:MET, cma:CMA};
+
+/* ---------- Carga ---------- */
+async function load(page=1){
+  const q = $('q').value.trim(), src = $('src').value;
+  const keys = src==='all' ? ['aic','met','cma'] : [src], lim = src==='all' ? 7 : PAGE;
+  expoView = false; state.page = page; state.loaded = true;
+  if(document.body.classList.contains('home')) setTab('cat');
+  if(page===1) state.seed = Math.floor(Math.random()*1e5);
+  $('msg').textContent = 'Cargando…'; $('undrift').hidden = !drift; $('pager').hidden = false;
+  const res = await Promise.allSettled(keys.map(k => APIS[k].search(q, page, lim, drift)));
+  const ok = res.filter(r=>r.status==='fulfilled').map(r=>r.value), bad = res.filter(r=>r.status==='rejected');
+  if(!ok.length){ $('msg').textContent = 'Error al llamar a la API: '+(bad[0]?.reason?.message || ''); return; }
+  current = [];
+  const mx = Math.max(0, ...ok.map(o=>o.items.length));
+  for(let i=0; i<mx; i++) for(const o of ok) if(o.items[i]) current.push(o.items[i]);
+  const total = ok.reduce((s,o)=>s+o.total, 0);
+  state.more = ok.some(o=>o.more);
+  const what = drift ? ` · ${drift.label}` : q ? ` para “${q}”` : ' · selección';
+  $('msg').textContent = `${total.toLocaleString('es')} resultados${what} · página ${page}${bad.length ? ` · ${bad.length===1?'un museo no ha respondido':bad.length+' museos no han respondido'}` : ''}`;
+  $('prev').disabled = page<=1; $('next').disabled = !state.more;
+  render();
+}
+
+/* ---------- Vistas ---------- */
+const M = {x:0,y:0,vx:0,vy:0,W:1,tiles:[],raf:0,drag:null,moved:0,token:0};
+const mod = (a,n) => ((a%n)+n)%n;
+function setDet(v){ DET = v; $('det').setAttribute('aria-pressed', String(v)); ls.set('det', v?'1':'0'); }
+function render(){
+  if(document.body.classList.contains('home')) return;
+  const mapMode = $('view').value==='map';
+  $('map').hidden = !mapMode; $('grid').hidden = mapMode; $('det').disabled = !mapMode;
+  ls.set('view', $('view').value); ls.set('order', $('order').value);
+  $('hint').textContent = DET ? 'Arrastra · toca un fragmento para ver la obra' : 'Arrastra para explorar';
+  if(mapMode) buildMap(); else buildCols();
+}
+function measure(a){
+  if(a.ar) return Promise.resolve(a.ar);
+  return new Promise(res => { const im = new Image(); im.onload = () => { a.ar = im.naturalHeight/im.naturalWidth || 1; res(); }; im.onerror = () => { a.ar = 1; res(); }; im.src = a.thumb; });
+}
+async function prepare(needAr, needColor){
+  await Promise.all(current.map(a => Promise.all([needAr ? within(measure(a), 5000) : 0, needColor ? within(sampleColor(a), 5000) : 0])));
+  current.forEach(a => { if(!a.ar) a.ar = 1; });
+}
+const hueKey = a => !a.hsl ? 1000 : a.hsl[1] < 12 ? 500 + (100 - a.hsl[2]) : a.hsl[0];
+function order(list){
+  const idx = list.map((_,i)=>i), m = $('order').value;
+  if(m==='color') idx.sort((i,j) => hueKey(list[i]) - hueKey(list[j]));
+  if(m==='date') idx.sort((i,j) => (list[i].year ?? 1e9) - (list[j].year ?? 1e9));
+  return idx;
+}
+async function buildCols(){
+  cancelAnimationFrame(M.raf); const token = ++M.token;
+  await prepare(false, $('order').value==='color'); if(token!==M.token) return;
+  $('grid').innerHTML = order(current).map(i => { const a = current[i]; return `<figure data-i="${i}"><img loading="lazy" src="${esc(a.thumb)}" alt="${esc(a.alt||a.title)}"><figcaption>${esc(a.title)}<small>${esc(firstLine(a.artist))} · ${esc(a.date)}</small>${autorDe(a)?'<em>Habla el autor</em>':''}</figcaption></figure>`; }).join('');
+  $('grid').scrollTop = 0;
+}
+function cropFor(a, d){
+  let w = 0.2 + Math.random()*0.18, h = d*w/a.ar;
+  if(h > 0.9){ h = 0.9; w = h*a.ar/d; }
+  if(w > 0.9){ w = 0.9; h = d*w/a.ar; }
+  return {x:(1-w)*(0.15+Math.random()*0.7), y:(1-h)*(0.15+Math.random()*0.7), w, h};
+}
+function plainImg(a){ const im = new Image(); im.src = a.thumb; im.alt = a.alt || a.title; im.draggable = false; return im; }
+function cropImg(a, r, cw){
+  const im = new Image(); im.alt = ''; im.draggable = false;
+  const viaCss = () => {
+    const W = cw/r.w; im.className = 'crop';
+    Object.assign(im.style, {width:W+'px', height:W*a.ar+'px', left:-r.x*W+'px', top:-r.y*W*a.ar+'px'});
+    im.src = a.mid || a.thumb;
+  };
+  if(a.iiif){
+    im.onerror = () => { im.onerror = null; viaCss(); };
+    const p = v => (v*100).toFixed(2);
+    im.src = `${a.iiif}/pct:${p(r.x)},${p(r.y)},${p(r.w)},${p(r.h)}/${Math.round(Math.min(cw*1.6, 600))},/0/default.jpg`;
+  } else viaCss();
+  return im;
+}
+async function buildMap(){
+  const token = ++M.token;
+  cancelAnimationFrame(M.raf);
+  const map = $('map'); map.querySelectorAll('.tile').forEach(t=>t.remove()); M.tiles = [];
+  const n = current.length; if(!n) return;
+  const mode = $('order').value;
+  await prepare(true, mode==='color');
+  if(token!==M.token) return;
+  const vw = map.clientWidth, vh = map.clientHeight, target = vw < 700 ? 170 : 260;
+  const cols0 = Math.max(2, Math.round(vw/target) + 1), cw = vw/(cols0-1);
+  const ord = order(current), items = [], heights = [];
+  const tileH = a => DET ? Math.round(cw*(0.7 + Math.random()*0.6)) : Math.max(40, Math.round(cw*a.ar));
+  if(mode==='none'){
+    for(let c=0; c<cols0; c++) heights[c] = 0;
+    let k = 0;
+    while((k < n || Math.min(...heights) < vh + cw) && k < 200){
+      const i = ord[k % n];
+      let c = 0; for(let j=1; j<cols0; j++) if(heights[j] < heights[c]) c = j;
+      const h = tileH(current[i]);
+      items.push({i, c, y:heights[c], h}); heights[c] += h; k++;
+    }
+  } else {
+    // Orden visible: se llena columna a columna, así que arrastrar en horizontal recorre el color o el tiempo
+    let c = 0, y = 0, k = 0;
+    for(;;){
+      const i = ord[k % n], h = tileH(current[i]);
+      items.push({i, c, y, h}); y += h; k++;
+      if(y >= vh + cw){ heights[c] = y; c++; y = 0; if(k >= n && c*cw >= vw + cw) break; }
+      if(k >= 400){ if(y > 0){ heights[c] = y; c++; } break; }
+    }
+  }
+  M.W = heights.length*cw;
+  const frag = document.createDocumentFragment();
+  items.forEach((it, t) => {
+    const a = current[it.i], el = document.createElement('div');
+    el.className = 'tile'; el.dataset.t = t;
+    el.style.width = (cw-GAP)+'px'; el.style.height = (it.h-GAP)+'px';
+    const crop = DET ? cropFor(a, it.h/cw) : null;
+    el.appendChild(crop ? cropImg(a, crop, cw) : plainImg(a));
+    const col = colorFor(a), sp = document.createElement('span');
+    sp.style.background = col; sp.style.color = onColor(col); sp.textContent = a.title; el.appendChild(sp);
+    if(mode==='date' && a.year != null){ const b = document.createElement('i'); b.textContent = fmtYear(a.year); el.appendChild(b); }
+    if(autorDe(a)){ const e = document.createElement('em'); e.textContent = 'Habla el autor'; el.appendChild(e); }
+    frag.appendChild(el);
+    M.tiles.push({el, w:cw, h:it.h, bx:it.c*cw, by:it.y, H:heights[it.c], i:it.i, crop});
+  });
+  map.appendChild(frag);
+  M.x = 0; M.y = 0; M.vx = M.vy = 0;
+  place(); loop();
+}
+function place(){
+  for(const t of M.tiles){
+    const x = mod(t.bx + M.x + t.w, M.W) - t.w;
+    const y = mod(t.by + M.y + t.h, t.H) - t.h;
+    t.el.style.transform = `translate3d(${Math.round(x)}px,${Math.round(y)}px,0)`;
+  }
+}
+function loop(){
+  cancelAnimationFrame(M.raf);
+  const step = () => {
+    if(!M.drag){
+      M.x += M.vx; M.y += M.vy; M.vx *= 0.94; M.vy *= 0.94;
+      if(Math.abs(M.vx)<0.05) M.vx = 0; if(Math.abs(M.vy)<0.05) M.vy = 0;
+    }
+    place(); M.raf = requestAnimationFrame(step);
+  };
+  M.raf = requestAnimationFrame(step);
+}
+const mp = $('map');
+mp.addEventListener('pointerdown', e => {
+  mp.setPointerCapture(e.pointerId); mp.classList.add('drag');
+  M.drag = {id:e.pointerId, lx:e.clientX, ly:e.clientY}; M.moved = 0; M.vx = M.vy = 0;
+  $('hint').style.display = 'none';
+});
+mp.addEventListener('pointermove', e => {
+  if(!M.drag || M.drag.id!==e.pointerId) return;
+  const dx = e.clientX-M.drag.lx, dy = e.clientY-M.drag.ly;
+  M.x += dx; M.y += dy; M.moved += Math.abs(dx)+Math.abs(dy);
+  M.vx = dx*0.9; M.vy = dy*0.9; M.drag.lx = e.clientX; M.drag.ly = e.clientY;
+});
+const endDrag = e => {
+  if(!M.drag || M.drag.id!==e.pointerId) return;
+  M.drag = null; mp.classList.remove('drag');
+  if(e.type==='pointerup' && M.moved < 8){
+    const el = document.elementsFromPoint(e.clientX, e.clientY).find(n=>n.classList?.contains('tile'));
+    if(el){ const T = M.tiles[+el.dataset.t]; M.vx = M.vy = 0; if(T) openArt(current[T.i], T.crop); }
+  }
+};
+mp.addEventListener('pointerup', endDrag); mp.addEventListener('pointercancel', endDrag);
+mp.addEventListener('wheel', e => { e.preventDefault(); M.x -= e.deltaX; M.y -= e.deltaY; }, {passive:false});
+window.addEventListener('resize', () => { if(!document.body.classList.contains('home') && $('view').value==='map' && !$('modal').classList.contains('open')) buildMap(); });
+
+/* ---------- Visor ---------- */
+const V = {s:1,x:0,y:0,fit:1,iw:0,ih:0,pts:new Map(),lastTap:0,swap:false,tok:0,crop:null,tt:0};
+const vw_ = () => $('viewer').clientWidth, vh_ = () => $('viewer').clientHeight;
+function apply(){
+  const minS = V.fit*0.9, maxS = Math.max(V.fit*10, 1.5);
+  V.s = Math.min(maxS, Math.max(minS, V.s));
+  const w = V.iw*V.s, h = V.ih*V.s, m = 60;
+  V.x = w <= vw_() ? (vw_()-w)/2 : Math.min(m, Math.max(vw_()-w-m, V.x));
+  V.y = h <= vh_() ? (vh_()-h)/2 : Math.min(m, Math.max(vh_()-h-m, V.y));
+  $('pic').style.transform = `translate(${V.x}px,${V.y}px) scale(${V.s})`;
+}
+function home(){ if(!V.iw) return; V.fit = Math.min(vw_()/V.iw, vh_()/V.ih); V.s = V.fit; apply(); }
+function zoomAt(f, cx, cy){
+  const ns = Math.min(Math.max(V.fit*0.9, V.s*f), Math.max(V.fit*10,1.5)), k = ns/V.s;
+  V.x = cx - (cx - V.x)*k; V.y = cy - (cy - V.y)*k; V.s = ns; apply();
+}
+function focusRegion(r){
+  const vw = vw_(), vh = vh_(), s = Math.min(vw/(r.w*V.iw), vh/(r.h*V.ih));
+  V.s = s; V.x = vw/2 - (r.x+r.w/2)*V.iw*s; V.y = vh/2 - (r.y+r.h/2)*V.ih*s; apply();
+}
+function goRel(cx, cy, z){
+  const vw = vw_(), vh = vh_(); V.s = V.fit*z;
+  V.x = vw/2 - cx*V.iw*V.s; V.y = vh/2 - cy*V.ih*V.s; apply();
+}
+function smooth(fn, ms=1400){
+  const p = $('pic'); if(RM){ fn(); return; }
+  p.style.transition = `transform ${ms}ms cubic-bezier(.45,0,.2,1)`; fn();
+  clearTimeout(V.tt); V.tt = setTimeout(() => p.style.transition = '', ms+60);
+}
+const rel = e => { const r=$('viewer').getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; };
+const vEl = $('viewer');
+vEl.addEventListener('pointerdown', e => {
+  $('pic').style.transition = '';
+  if(SL.on && !SL.paused) slowPause(true);
+  vEl.setPointerCapture(e.pointerId); V.pts.set(e.pointerId, rel(e));
+  const now = Date.now();
+  if(V.pts.size===1 && now - V.lastTap < 300){ const [cx,cy]=rel(e); zoomAt(V.s>V.fit*1.5 ? V.fit/V.s : 2.5, cx, cy); }
+  if(V.pts.size===1) V.lastTap = now;
+});
+vEl.addEventListener('pointermove', e => {
+  if(!V.pts.has(e.pointerId)) return;
+  const prev = V.pts.get(e.pointerId), cur = rel(e);
+  if(V.pts.size===1){ V.x += cur[0]-prev[0]; V.y += cur[1]-prev[1]; V.pts.set(e.pointerId, cur); apply(); }
+  else if(V.pts.size===2){
+    const other = [...V.pts.entries()].find(([id])=>id!==e.pointerId)[1];
+    const d0 = Math.hypot(prev[0]-other[0], prev[1]-other[1]), d1 = Math.hypot(cur[0]-other[0], cur[1]-other[1]);
+    const mid = [(cur[0]+other[0])/2, (cur[1]+other[1])/2], pmid = [(prev[0]+other[0])/2, (prev[1]+other[1])/2];
+    V.x += mid[0]-pmid[0]; V.y += mid[1]-pmid[1]; V.pts.set(e.pointerId, cur);
+    if(d0>0) zoomAt(d1/d0, mid[0], mid[1]); else apply();
+  }
+});
+['pointerup','pointercancel','pointerleave'].forEach(t => vEl.addEventListener(t, e => V.pts.delete(e.pointerId)));
+vEl.addEventListener('wheel', e => { e.preventDefault(); $('pic').style.transition=''; const [cx,cy]=rel(e); zoomAt(e.deltaY<0?1.2:1/1.2, cx, cy); }, {passive:false});
+$('zin').onclick = () => smooth(() => zoomAt(1.6, vw_()/2, vh_()/2), 300);
+$('zout').onclick = () => smooth(() => zoomAt(1/1.6, vw_()/2, vh_()/2), 300);
+$('zhome').onclick = () => smooth(home, 500);
+window.addEventListener('resize', () => { $('modal').classList.contains('open') && home(); cmpDraw(); });
+$('pic').addEventListener('load', () => {
+  if(V.swap){ V.swap = false; return; }
+  V.iw = $('pic').naturalWidth; V.ih = $('pic').naturalHeight;
+  $('pic').style.width = V.iw+'px'; $('pic').style.height = V.ih+'px';
+  $('loading').style.display='none'; home();
+  const a = art, tok = V.tok;
+  // Si se llegó desde un fragmento, se empieza en él y se abre a la obra entera
+  if(V.crop && !RM){
+    focusRegion(V.crop);
+    setTimeout(() => { if(tok===V.tok && !SL.on) smooth(home, 1700); }, 900);
+  }
+  if(a && a.hi && a.hi !== a.big){
+    const hi = new Image();
+    hi.onload = () => {
+      if(tok!==V.tok || !$('modal').classList.contains('open')) return;
+      const k = V.iw/hi.naturalWidth;
+      $('pic').style.transition = '';
+      V.swap = true; V.s *= k; V.fit *= k; V.iw = hi.naturalWidth; V.ih = hi.naturalHeight;
+      $('pic').style.width = V.iw+'px'; $('pic').style.height = V.ih+'px';
+      $('pic').src = hi.src; apply();
+    };
+    hi.src = a.hi;
+  }
+});
+$('pic').addEventListener('error', () => { if($('pic').getAttribute('src')) $('loading').textContent='No se pudo cargar la imagen (¿bloqueo del servidor?). Prueba con otro museo.'; });
+
+function setInfo(hidden){
+  $('info').classList.toggle('hidden', hidden);
+  $('toggle').textContent = hidden ? 'Mostrar ficha' : 'Ocultar ficha';
+}
+
+/* ---------- Ficha ---------- */
+function driftOpts(a){
+  const o = [];
+  if(a.name) o.push({kind:'artist', value:a.name, label:`Más de ${a.name}`});
+  if(a.subject) o.push({kind:'subject', value:a.subject, label:`Tema: ${a.subject}`});
+  if(a.style) o.push({kind:'style', value:a.style, label:`Estilo: ${a.style}`});
+  if(a.year != null) o.push({kind:'era', year:a.year, kindq:a.kind || 'painting', label:`Época: ${fmtYear(a.year-25)}–${fmtYear(a.year+25)}`});
+  return o;
+}
+function openArt(a, crop){
+  if(cmpA){ const A = cmpA; cancelPick(); cmpOpen(A, a); return; }
+  open_(a, crop);
+}
+function setAccent(a){
+  const col = colorFor(a);
+  $('info').style.setProperty('--accent', col);
+  $('info').style.setProperty('--on-accent', onColor(col));
+}
+function renderPal(a){ const el = $('pal'); if(el) el.innerHTML = (a.pal || []).map(c => `<i style="background:${c.hex};flex:${c.w}"></i>`).join(''); }
+function open_(a, crop){
+  art = a; V.tok++; V.swap = false; V.crop = crop || null;
+  slowStop(true); speechStop();
+  const opts = driftOpts(a), isSaved = saved(a), autor = autorDe(a);
+  const voz = autor || GUIA;
+  MED = (REC && REC.meds[a.key]) || {a, autor:voz, log:[], busy:false, useDos:!!voz.dossier, lastOpts:[]};
+  if(REC){ REC.meds[a.key] = MED; MED.rec = recCtx(a); }
+  $('slowBtn').hidden = true;
+  const rows = a.fields.filter(([,v])=>v).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
+  const voices = a.voices.map(v=>`<div class="box"><b>${esc(v.label)}</b>${esc(v.text)}<cite>— ${esc(v.by)}</cite></div>`).join('');
+  setAccent(a);
+  $('info').innerHTML = `<div class="head"><span class="srcl">${esc(SRC_NAME[a.src])}</span><button id="bSave" class="${isSaved?'on':''}" aria-pressed="${isSaved}">${isSaved?'Guardada':'Guardar'}</button><h2>${esc(a.title)}</h2><p>${esc((a.artist||'').replace(/\n/g,' · '))}</p></div>
+  <div class="pal" id="pal"></div>
+  <details class="ficha"><summary>Ficha de la obra</summary><div class="in">
+    ${voices}<dl>${rows}</dl>
+    <div class="links">
+      ${a.voices.length?'<button id="bSpeak" data-l="Escuchar el texto del museo (en inglés)">Escuchar el texto del museo (en inglés)</button>':''}
+      ${REC?'':'<button id="bCmp">Comparar con otra obra</button>'}
+      <button id="bPost">Hacer una postal con lo que estás viendo</button>
+      <button id="bLink">Compartir enlace a esta obra</button>
+      <a href="${esc(a.url)}" target="_blank" rel="noopener">Ver en la web del museo</a>
+    </div>
+  </div></details>
+  ${medSection(voz)}
+  ${!REC && opts.length?`<nav class="seguir"><b>Seguir por</b>${opts.map((o,k)=>`<button data-d="${k}">${esc(o.label)}</button>`).join('')}</nav>`:''}`;
+  $('bSave').onclick = toggleSave;
+  if($('bCmp')) $('bCmp').onclick = startPick;
+  if($('bSpeak')) $('bSpeak').onclick = speak;
+  $('bPost').onclick = postal;
+  $('bLink').onclick = shareLink;
+  $('info').querySelectorAll('[data-d]').forEach(b => b.onclick = () => { drift = opts[+b.dataset.d]; close_(); load(1); });
+  medWire(); medRestore(MED);
+  renderPal(a);
+  $('info').scrollTop = 0;
+  $('modal').classList.add('open');
+  $('loading').style.display='flex'; $('loading').textContent='Cargando imagen…';
+  V.iw=0; $('pic').removeAttribute('style'); $('pic').src = a.big;
+  sampleColor(a, true).then(() => { if(art===a){ setAccent(a); renderPal(a); } });
+}
+function close_(){
+  V.tok++; slowStop(true); speechStop(); MED = null;
+  if(REC) recEnd();
+  $('modal').classList.remove('open'); $('pic').removeAttribute('src');
+  if(location.hash) try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+}
+
+/* ---------- Mirar despacio ---------- */
+const SL = {on:false,i:0,t:0,paused:false,iv:0,steps:[],hid:false};
+const SLOW_Q = [
+  [1/3,1/3,'¿De dónde viene la luz, o qué ocupa su lugar?'],
+  [2/3,1/3,'Busca algo pequeño que no habías visto.'],
+  [2/3,2/3,'Si pudieras tocar esta zona, ¿qué textura tendría?'],
+  [1/3,2/3,'¿Hacia dónde te lleva la mirada desde aquí?']
+];
+function slowStart(){
+  if(!V.iw) return;
+  speechStop();
+  const st = [{q:'Mira la obra entera unos segundos. ¿Qué es lo primero que ves?'}];
+  if(V.crop) st.push({r:[V.crop.x+V.crop.w/2, V.crop.y+V.crop.h/2], q:'Este es el fragmento que te trajo hasta aquí. ¿Qué te hizo pararte?'});
+  SLOW_Q.forEach(([x,y,q]) => st.push({r:[x,y], q}));
+  st.push({q:'Vuelve a la obra entera. ¿La ves igual que al principio?'});
+  Object.assign(SL, {steps:st, i:-1, on:true, paused:false, hid:false});
+  if(innerWidth < 900 && !$('info').classList.contains('hidden')){ setInfo(true); SL.hid = true; }
+  $('slow').hidden = false; $('slowBtn').hidden = true;
+  clearInterval(SL.iv);
+  setTimeout(() => { home(); slowNext(); SL.iv = setInterval(slowTick, 100); }, 80);
+}
+function slowNext(){
+  SL.i++; SL.t = 0;
+  const s = SL.steps[SL.i], last = SL.i === SL.steps.length-1;
+  $('slowQ').textContent = s.q; $('slowN').textContent = `${SL.i+1} / ${SL.steps.length}`;
+  slowPause(false); $('slowP').hidden = last; $('slowX').textContent = last ? 'Terminar' : 'Salir';
+  $('slowBar').firstElementChild.style.width = last ? '100%' : '0%';
+  smooth(() => s.r ? goRel(s.r[0], s.r[1], 2.6) : home(), 1600);
+  if(last) clearInterval(SL.iv);
+}
+function slowTick(){
+  if(SL.paused || !SL.on) return;
+  SL.t += 100; $('slowBar').firstElementChild.style.width = Math.min(100, SL.t/STEP*100)+'%';
+  if(SL.t >= STEP) slowNext();
+}
+function slowPause(p){ SL.paused = p; $('slowP').textContent = p ? 'Seguir' : 'Pausa'; }
+function slowStop(silent){
+  if(!SL.on) return;
+  SL.on = false; clearInterval(SL.iv);
+  $('slow').hidden = true; $('slowBtn').hidden = !!MED;
+  if(SL.hid){ setInfo(false); SL.hid = false; }
+  if(!silent) setTimeout(() => smooth(home, 900), 80);
+}
+$('slowBtn').onclick = slowStart;
+$('slowP').onclick = () => slowPause(!SL.paused);
+$('slowX').onclick = () => slowStop(false);
+
+/* ---------- Escuchar ---------- */
+function speechStop(){
+  try{ window.speechSynthesis && speechSynthesis.cancel(); }catch(e){}
+  const b = $('bSpeak'); if(b){ b.textContent = b.dataset.l; b.classList.remove('on'); }
+}
+function speakText(text, lang, onEnd, onWord){
+  if(!('speechSynthesis' in window)){ toast('Este navegador no puede leer en voz alta.'); return false; }
+  speechSynthesis.cancel();
+  const parts = (text.match(/[^.!?…]+[.!?…]*/g) || [text]).map(p => p.trim()).filter(Boolean);
+  const vs = speechSynthesis.getVoices(), low = lang.toLowerCase();
+  const voice = vs.find(v => v.lang.toLowerCase().replace('_','-') === low) || vs.find(v => v.lang.toLowerCase().startsWith(low.slice(0,2)));
+  let pos = 0;
+  parts.forEach((p, k) => {
+    const off = Math.max(0, text.indexOf(p, pos)); pos = off + p.length;
+    const u = new SpeechSynthesisUtterance(p); u.lang = lang; if(voice) u.voice = voice; u.rate = low.startsWith('es') ? 1 : .95;
+    if(onWord) u.onboundary = e => { if(e.name !== 'sentence') onWord(off + e.charIndex); };
+    if(k === parts.length-1 && onEnd) u.onend = onEnd;
+    speechSynthesis.speak(u);
+  });
+  return parts.length > 0;
+}
+function speak(){
+  if(window.speechSynthesis && speechSynthesis.speaking){ speechStop(); return; }
+  const a = art, text = [a.title, firstLine(a.artist), a.date, ...a.voices.map(v=>v.text)].filter(Boolean).join('. ');
+  if(speakText(text, 'en-US', speechStop)){ $('bSpeak').textContent = 'Parar la lectura'; $('bSpeak').classList.add('on'); }
+}
+
+/* ---------- Enlace a una obra ---------- */
+async function shareLink(){
+  const url = location.href.split('#')[0] + '#' + art.key;
+  if(navigator.share){ try{ await navigator.share({title:art.title, url}); return; }catch(e){ if(e.name==='AbortError') return; } }
+  try{ await navigator.clipboard.writeText(url); toast('Enlace copiado'); }catch(e){ toast(url, 7000); }
+}
+async function openFromHash(){
+  const m = location.hash.match(/^#(aic|met|cma)-(\d+)$/); if(!m) return;
+  try{ const a = await APIS[m[1]].get(m[2]); if(a) openArt(a); else toast('Esa obra ya no tiene imagen disponible.'); }
+  catch(e){ toast('No se ha podido abrir la obra del enlace.'); }
+}
+window.addEventListener('hashchange', openFromHash);
+
+/* ---------- Comparar ---------- */
+let cmpA = null;
+const C = {z:1, cx:.5, cy:.5, panes:[]};
+function startPick(){
+  cmpA = art; close_();
+  $('pickTxt').textContent = `Elige otra obra para comparar con «${cmpA.title}»`;
+  $('pick').hidden = false;
+}
+function cancelPick(){ cmpA = null; $('pick').hidden = true; }
+$('pickX').onclick = cancelPick;
+function cmpOpen(A, B){
+  $('cmp').hidden = false; C.z = 1; C.cx = C.cy = .5;
+  C.panes = [A, B].map((a, k) => {
+    const pane = $('pane'+k), img = pane.querySelector('img'), P = {pane, img, iw:0, ih:0};
+    pane.querySelector('.cap').innerHTML = `<b>${esc(a.title)}</b>${esc(firstLine(a.artist))}${a.date?' · '+esc(a.date):''}`;
+    img.onload = () => { P.iw = img.naturalWidth; P.ih = img.naturalHeight; img.style.width = P.iw+'px'; img.style.height = P.ih+'px'; cmpDraw(); };
+    img.removeAttribute('style'); img.src = a.big;
+    return P;
+  });
+}
+const cmpScale = P => Math.min(P.pane.clientWidth/P.iw, P.pane.clientHeight/P.ih) * C.z;
+function cmpDraw(){
+  if($('cmp').hidden) return;
+  for(const P of C.panes){
+    if(!P.iw) continue;
+    const w = P.pane.clientWidth, h = P.pane.clientHeight, s = cmpScale(P);
+    P.img.style.transform = `translate(${w/2 - C.cx*P.iw*s}px,${h/2 - C.cy*P.ih*s}px) scale(${s})`;
+  }
+}
+function cmpZoom(P, f, px, py){
+  if(!P.iw) return;
+  const w = P.pane.clientWidth, h = P.pane.clientHeight, s = cmpScale(P);
+  const fx = C.cx + (px - w/2)/(P.iw*s), fy = C.cy + (py - h/2)/(P.ih*s);
+  C.z = clamp(C.z*f, 1, 12);
+  const s2 = cmpScale(P);
+  C.cx = clamp(fx - (px - w/2)/(P.iw*s2), 0, 1); C.cy = clamp(fy - (py - h/2)/(P.ih*s2), 0, 1);
+  cmpDraw();
+}
+function gestures(el, h){
+  const pts = new Map(); let last = 0;
+  const rl = e => { const r = el.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; };
+  el.addEventListener('pointerdown', e => {
+    el.setPointerCapture(e.pointerId); pts.set(e.pointerId, rl(e));
+    const now = Date.now();
+    if(pts.size===1 && now-last < 300) h.dbl(...rl(e));
+    if(pts.size===1) last = now;
+  });
+  el.addEventListener('pointermove', e => {
+    if(!pts.has(e.pointerId)) return;
+    const prev = pts.get(e.pointerId), cur = rl(e);
+    if(pts.size===1){ pts.set(e.pointerId, cur); h.pan(cur[0]-prev[0], cur[1]-prev[1]); }
+    else if(pts.size===2){
+      const o = [...pts].find(([id])=>id!==e.pointerId)[1];
+      const d0 = Math.hypot(prev[0]-o[0], prev[1]-o[1]), d1 = Math.hypot(cur[0]-o[0], cur[1]-o[1]);
+      const mid = [(cur[0]+o[0])/2, (cur[1]+o[1])/2], pm = [(prev[0]+o[0])/2, (prev[1]+o[1])/2];
+      pts.set(e.pointerId, cur); h.pan(mid[0]-pm[0], mid[1]-pm[1]);
+      if(d0 > 0) h.zoom(d1/d0, mid[0], mid[1]);
+    }
+  });
+  ['pointerup','pointercancel'].forEach(t => el.addEventListener(t, e => pts.delete(e.pointerId)));
+  el.addEventListener('wheel', e => { e.preventDefault(); h.zoom(e.deltaY<0 ? 1.2 : 1/1.2, ...rl(e)); }, {passive:false});
+}
+[0,1].forEach(k => gestures($('pane'+k), {
+  pan(dx, dy){ const P = C.panes[k]; if(!P || !P.iw) return; const s = cmpScale(P); C.cx = clamp(C.cx - dx/(P.iw*s), 0, 1); C.cy = clamp(C.cy - dy/(P.ih*s), 0, 1); cmpDraw(); },
+  zoom(f, x, y){ const P = C.panes[k]; if(P) cmpZoom(P, f, x, y); },
+  dbl(x, y){ const P = C.panes[k]; if(!P) return; if(C.z > 1.5){ C.z = 1; C.cx = C.cy = .5; cmpDraw(); } else cmpZoom(P, 3, x, y); }
+}));
+function cmpClose(){ $('cmp').hidden = true; C.panes.forEach(P => P.img.removeAttribute('src')); C.panes = []; }
+$('cmpX').onclick = cmpClose;
+
+/* ---------- Mi exposición ---------- */
+let EXPO = null;
+try{ EXPO = JSON.parse(ls.get('expo','') || 'null'); }catch(e){}
+if(!EXPO || !Array.isArray(EXPO.items)) EXPO = {title:'Mi recorrido', tema:'', items:[]};
+function expoSave(){ ls.set('expo', JSON.stringify(EXPO)); $('bExpo').textContent = `Mi recorrido · ${EXPO.items.length}`; }
+const saved = a => EXPO.items.some(x => x.key === a.key);
+function toggleSave(){
+  const a = art;
+  if(saved(a)) EXPO.items = EXPO.items.filter(x => x.key !== a.key);
+  else EXPO.items.push({...a, note:''});
+  expoSave();
+  const s = saved(a);
+  $('bSave').textContent = s ? 'Guardada' : 'Guardar'; $('bSave').classList.toggle('on', s); $('bSave').setAttribute('aria-pressed', String(s));
+  toast(s ? `Añadida a tu exposición (${EXPO.items.length})` : 'Quitada de tu exposición');
+}
+function expoRender(){
+  $('expoTitle').value = EXPO.title; $('expoTema').value = EXPO.tema || '';
+  const L = EXPO.items;
+  $('expoList').innerHTML = L.map((a, i) => `<li data-k="${i}"><span class="n">${pad2(i+1)}</span><img src="${esc(a.thumb)}" alt="" data-act="open"><div class="tx"><b data-act="open">${esc(a.title)}</b><small>${esc(firstLine(a.artist))}${a.date?' · '+esc(a.date):''} · ${esc(SRC_NAME[a.src])}</small><textarea id="note-${esc(a.key)}" data-act="note" placeholder="Por qué está aquí (opcional; orienta al mediador, no se muestra)">${esc(a.note || '')}</textarea></div><div class="ctl"><button data-act="up" aria-label="Subir" ${i?'':'disabled'}>↑</button><button data-act="down" aria-label="Bajar" ${i<L.length-1?'':'disabled'}>↓</button><button data-act="del" aria-label="Quitar">✕</button></div></li>`).join('');
+  $('expoEmpty').hidden = !!L.length;
+  $('expoF').querySelectorAll('button').forEach(b => b.disabled = !L.length);
+}
+$('expoList').addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'), li = e.target.closest('li'); if(!t || !li) return;
+  const k = +li.dataset.k, L = EXPO.items, act = t.dataset.act;
+  if(act==='open'){ $('expo').hidden = true; openArt(L[k]); return; }
+  if(act==='up' && k > 0) [L[k-1], L[k]] = [L[k], L[k-1]];
+  else if(act==='down' && k < L.length-1) [L[k+1], L[k]] = [L[k], L[k+1]];
+  else if(act==='del') L.splice(k, 1);
+  else return;
+  expoSave(); expoRender();
+});
+$('expoList').addEventListener('input', e => {
+  if(e.target.dataset.act !== 'note') return;
+  EXPO.items[+e.target.closest('li').dataset.k].note = e.target.value; expoSave();
+});
+$('expoTitle').oninput = () => { EXPO.title = $('expoTitle').value.trim() || 'Mi recorrido'; expoSave(); };
+$('expoTema').oninput = () => { EXPO.tema = $('expoTema').value.trim(); expoSave(); };
+$('bExpo').onclick = () => { expoRender(); $('expo').hidden = false; };
+$('expoX').onclick = () => $('expo').hidden = true;
+$('expoMap').onclick = () => {
+  current = EXPO.items.slice(); expoView = true; drift = null;
+  $('undrift').hidden = true; $('pager').hidden = true;
+  $('msg').textContent = `${EXPO.title} · ${current.length} obra${current.length===1?'':'s'}`;
+  state.loaded = true; $('expo').hidden = true; setTab('cat');
+};
+// Exporta el recorrido en el mismo formato que recorridos.json
+function expoRecorrido(){
+  const notas = {}; EXPO.items.forEach(a => { if(a.note) notas[a.key] = a.note; });
+  return {id:slug(EXPO.title), tipo:'tema', fecha:new Date().toISOString().slice(0,10), titulo:EXPO.title, tema:EXPO.tema || '',
+    portada:EXPO.items[0] ? (EXPO.items[0].mid || EXPO.items[0].thumb) : '', obras:EXPO.items.map(a => a.key), notas};
+}
+function expoJSON(){ return JSON.stringify(expoRecorrido(), null, 2); }
+function download(blob, name){
+  const u = URL.createObjectURL(blob), l = document.createElement('a');
+  l.href = u; l.download = name; document.body.appendChild(l); l.click(); l.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+const slug = s => (s || 'exposicion').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'exposicion';
+$('expoPlay').onclick = () => {
+  const r = expoRecorrido(); r.id = 'mi-recorrido'; r._items = EXPO.items.slice();
+  $('expo').hidden = true; recIntro(r);
+};
+$('expoDl').onclick = () => download(new Blob([expoJSON()], {type:'application/json'}), slug(EXPO.title)+'.json');
+$('expoCp').onclick = async () => { try{ await navigator.clipboard.writeText(expoJSON()); toast('JSON copiado'); }catch(e){ toast('No se ha podido copiar. Usa «Exportar JSON».'); } };
+
+/* ---------- ¿De cuándo es? ---------- */
+const G = {};
+function gameStart(){
+  const pool = current.filter(a => a.year != null).sort(() => Math.random() - .5);
+  if(pool.length < 3) return toast('Hacen falta al menos 3 obras con fecha. Prueba otra búsqueda.');
+  const ys = pool.map(a => a.year);
+  Object.assign(G, {list:pool.slice(0,5), i:0, score:0, end:false, done:false,
+    min:Math.floor((Math.min(...ys)-150)/50)*50, max:Math.min(2030, Math.ceil((Math.max(...ys)+150)/50)*50)});
+  $('game').hidden = false; gameRound();
+}
+function gameRound(){
+  const a = G.list[G.i], r = $('gRange'); G.done = false;
+  $('gImg').src = a.mid || a.thumb;
+  r.min = G.min; r.max = G.max; r.value = Math.round((G.min+G.max)/2); r.disabled = false; r.hidden = false;
+  $('gMin').textContent = fmtYear(G.min); $('gMax').textContent = fmtYear(G.max);
+  $('gN').textContent = `Obra ${G.i+1} de ${G.list.length} · ${G.score} puntos`;
+  $('gRes').innerHTML = ''; $('gBtn').textContent = 'Comprobar'; gShow();
+}
+function gShow(){ $('gYear').textContent = fmtYear(+$('gRange').value); }
+function gameBtn(){
+  if(G.end) return gameStart();
+  if(!G.done){
+    const a = G.list[G.i], v = +$('gRange').value, d = Math.abs(v - a.year), p = Math.max(0, 100 - d);
+    G.score += p; G.done = true; $('gRange').disabled = true;
+    $('gRes').innerHTML = `<b>${esc(fmtYear(a.year))}</b> · ${d===0 ? '¡exacto!' : `te has ido ${d} año${d===1?'':'s'}`} · +${p}<br>${esc(a.title)} — ${esc(firstLine(a.artist) || 'autor desconocido')}`;
+    $('gN').textContent = `Obra ${G.i+1} de ${G.list.length} · ${G.score} puntos`;
+    $('gBtn').textContent = G.i < G.list.length-1 ? 'Siguiente' : 'Ver resultado';
+    return;
+  }
+  G.i++;
+  if(G.i < G.list.length) return gameRound();
+  G.end = true; $('gRange').hidden = true; $('gYear').textContent = `${G.score} / ${G.list.length*100}`;
+  $('gMin').textContent = $('gMax').textContent = '';
+  $('gRes').innerHTML = G.score >= G.list.length*70 ? 'Buen ojo para el tiempo.' : 'Cada siglo deja pistas: materiales, ropa, perspectiva, luz.';
+  $('gBtn').textContent = 'Otra partida';
+}
+$('gRange').oninput = gShow;
+$('gBtn').onclick = gameBtn;
+$('bGame').onclick = gameStart;
+$('gameX').onclick = () => $('game').hidden = true;
+
+/* ---------- Postal ---------- */
+const PO = {};
+function loadCors(src){
+  return new Promise((res, rej) => {
+    const im = new Image(); im.crossOrigin = 'anonymous';
+    im.onload = () => res(im); im.onerror = rej;
+    im.src = src + (src.includes('?') ? '&' : '?') + 'postal=1';
+  });
+}
+async function postal(){
+  if(!V.iw){ toast('Espera a que cargue la imagen.'); return; }
+  const vw = vw_(), vh = vh_();
+  const sx = Math.max(0, -V.x/V.s), sy = Math.max(0, -V.y/V.s);
+  PO.rect = [sx, sy, Math.min(V.iw - sx, vw/V.s), Math.min(V.ih - sy, vh/V.s)];
+  PO.a = art; PO.img = null; PO.scale = 1;
+  $('post').hidden = false; $('pcv').hidden = true; $('postMsg').textContent = 'Preparando la postal…';
+  $('pDown').disabled = true; $('pShare').hidden = true;
+  const src = $('pic').currentSrc || $('pic').src;
+  try{
+    PO.img = await loadCors(src);
+    PO.scale = PO.img.naturalWidth / V.iw;
+    try{ await document.fonts.load('800 54px "Libre Franklin"'); }catch(e){}
+    drawPost();
+    $('pcv').toDataURL();
+    $('pcv').hidden = false; $('postMsg').textContent = ''; $('pDown').disabled = false;
+    $('pShare').hidden = !(navigator.canShare && navigator.canShare({files:[new File([''], 'p.jpg', {type:'image/jpeg'})]}));
+  }catch(e){
+    $('postMsg').textContent = 'Este museo no deja componer con su imagen desde el navegador. Prueba con una obra de otro museo.';
+  }
+}
+function wrapLines(x, text, max, n){
+  const words = text.split(/\s+/), lines = []; let line = '';
+  for(const w of words){
+    const t = line ? line+' '+w : w;
+    if(x.measureText(t).width > max && line){ lines.push(line); line = w; } else line = t;
+  }
+  if(line) lines.push(line);
+  if(lines.length > n){ lines.length = n; lines[n-1] = lines[n-1].replace(/\s*\S*$/, '') + '…'; }
+  return lines;
+}
+function drawPost(){
+  if(!PO.img) return;
+  const c = $('pcv'), x = c.getContext('2d'), W = 1080, H = 1350, IH = 980, P = 56;
+  const col = colorFor(PO.a), on = onColor(col), F = '"Libre Franklin", Arial, sans-serif';
+  x.fillStyle = col; x.fillRect(0, 0, W, H);
+  let [sx, sy, sw, sh] = PO.rect.map(v => v*PO.scale); const ra = W/IH;
+  if(sw/sh > ra){ const nw = sh*ra; sx += (sw-nw)/2; sw = nw; } else { const nh = sw/ra; sy += (sh-nh)/2; sh = nh; }
+  x.drawImage(PO.img, sx, sy, sw, sh, 0, 0, W, IH);
+  x.fillStyle = on; x.textBaseline = 'alphabetic';
+  const phrase = $('pphrase').value.trim(); let y = IH + P + 40;
+  if(phrase){
+    x.font = `800 54px ${F}`;
+    for(const l of wrapLines(x, phrase, W-2*P, 2)){ x.fillText(l, P, y); y += 58; }
+    y += 14; x.font = `700 26px ${F}`; x.fillText(wrapLines(x, PO.a.title, W-2*P, 1)[0], P, y); y += 34;
+  } else {
+    x.font = `800 48px ${F}`;
+    for(const l of wrapLines(x, PO.a.title, W-2*P, 2)){ x.fillText(l, P, y); y += 52; }
+    y += 6;
+  }
+  x.font = `400 24px ${F}`;
+  x.fillText(wrapLines(x, [firstLine(PO.a.artist), PO.a.date].filter(Boolean).join(' · '), W-2*P, 1)[0] || '', P, y);
+  x.font = `500 20px ${F}`;
+  x.fillText(`${SRC_NAME[PO.a.src]} · Dominio público`, P, H - 40);
+}
+function postBlob(){ return new Promise(r => $('pcv').toBlob(r, 'image/jpeg', .92)); }
+$('pphrase').oninput = drawPost;
+$('pDown').onclick = async () => download(await postBlob(), 'postal-'+slug(PO.a.title)+'.jpg');
+$('pShare').onclick = async () => {
+  const f = new File([await postBlob()], 'postal.jpg', {type:'image/jpeg'});
+  try{ await navigator.share({files:[f], title:PO.a.title}); }catch(e){}
+};
+$('postX').onclick = () => $('post').hidden = true;
+
+/* ---------- Mediación: el autor presenta su obra ---------- */
+let MED = null, medVoz = ls.get('medVoz','0')==='1';
+// Clave de OpenRouter incluida en el fichero: cualquiera que abra el código puede verla.
+const OR_KEY = ''; // En la versión publicada no va ninguna clave: cada persona pega la suya en Ajustes.
+const MED_START = '(El visitante acaba de llegar ante la obra y se queda mirándola a tu lado. Preséntasela.)';
+function iniciales(n){
+  const caps = n.split(/[\s.-]+/).filter(w => /^[A-ZÁÉÍÓÚÑÜ]/.test(w));
+  return caps.length > 1 ? caps[0][0] + caps[caps.length-1][0] : (caps[0] || n).slice(0,2);
+}
+// Para obras sin autor de la lista media una guía: tercera persona, solo la ficha y el contexto general.
+const GUIA = {nombre:'Guía', ini:'G', guia:true};
+function medSection(autor){
+  const dos = !!autor.dossier, g = autor.guia;
+  return `<section id="med" aria-label="${g?'Visita con la guía':'Visita con '+esc(autor.nombre)}">
+    <div class="mhead"><span class="mono" aria-hidden="true">${autor.retrato ? `<img src="${esc(autor.retrato)}" alt="">` : esc(autor.ini || iniciales(autor.nombre))}</span><div><b>${g?'Guía del museo':esc(autor.nombre)}</b><small>${g?'Mediación a partir de la ficha':esc(autor.vida)+' · voz interpretada'}</small></div><button id="medVoz" class="vz" aria-pressed="${medVoz}" title="Escuchar también la voz">Voz</button></div>
+    <div id="medLog" aria-live="polite"></div>
+    <div class="mstart" id="medStart"><button class="go" id="medGo">Empezar</button></div>
+    <div class="sugs" id="medNext" hidden></div>
+    <div class="mask" id="medIn" hidden><input id="medAsk" placeholder="${g?'Pregunta otra cosa':'Pregúntale otra cosa'}" enterkeyhint="send" aria-label="Tu pregunta"><button id="medSend" aria-label="Enviar">→</button></div>
+    <p class="mnote">${g?'Mediación generada a partir de la ficha y los textos del museo.':`Voz interpretada a partir de la ficha del museo${dos?' y de un dossier biográfico':''}. No son palabras literales de ${esc(autor.nombre)}.`}</p>
+    <details class="medcfg"><summary>Ajustes</summary>
+      ${dos?`<label class="opt"><input type="checkbox" id="medDos" ${MED && MED.useDos===false?'':'checked'}> Usar el dossier de ${esc(autor.nombre)}</label>`:''}
+      <div class="cfg">
+        <select id="prov" aria-label="Modelo"><option value="puter">Puter (sin clave, inicias sesión)</option><option value="or">OpenRouter</option></select>
+        <input id="key" type="password" placeholder="Clave sk-or-v1-…" aria-label="Clave de OpenRouter">
+      </div>
+    </details>
+  </section>`;
+}
+function medWire(){
+  $('medGo').onclick = () => medTurn(MED_START, false);
+  $('medSend').onclick = () => { const v = $('medAsk').value.trim(); if(v){ $('medAsk').value = ''; medTurn(v, true); } };
+  $('medAsk').onkeydown = e => { if(e.key==='Enter') $('medSend').click(); };
+  $('medVoz').onclick = () => {
+    medVoz = !medVoz; ls.set('medVoz', medVoz?'1':'0');
+    $('medVoz').setAttribute('aria-pressed', String(medVoz));
+    if(!medVoz) try{ speechSynthesis.cancel(); }catch(e){}
+  };
+  if($('medDos')) $('medDos').onchange = e => { MED.useDos = e.target.checked; };
+  $('prov').value = OR_KEY ? 'or' : ls.get('prov','puter');
+  $('key').value = ls.get('orkey','') || OR_KEY;
+  const sync = () => { $('key').hidden = $('prov').value!=='or'; ls.set('prov',$('prov').value); if($('prov').value==='puter') loadPuter().catch(()=>{}); };
+  $('prov').onchange = sync; sync();
+  $('key').onchange = () => ls.set('orkey', $('key').value.trim());
+}
+const CIERRE = quien => `GANCHOS: en cada intervención deja dos o tres cosas mencionadas sin desarrollar (una persona, un lugar, un detalle de la obra, un momento, otra obra) que den ganas de preguntar por ellas.
+
+CIERRE OBLIGATORIO: termina cada intervención con una línea que solo contenga --- y debajo 2 o 3 preguntas que el VISITANTE podría hacerte a ti, una por línea, empezando por "> ". Son preguntas del visitante dirigidas a ${quien}, de tú: "¿Quién era…?", "¿Por qué…?", "¿Cómo…?", "Cuéntame…". Cada una tira de uno de tus ganchos o de un dato de la ficha. Como máximo 9 palabras. Nunca preguntas tuyas al visitante como "¿Quieres…?" o "¿Te gustaría…?".`;
+function obraTxt(a){
+  const ficha = a.fields.filter(([,v])=>v).map(([k,v])=>`- ${k}: ${v}`).join('\n');
+  const textos = a.voices.map(v => `[${v.label} · ${v.by}]\n${v.text}`).join('\n\n');
+  return `OBRA: «${a.title}»${a.date?`, ${a.date}`:''}${a.artist?`. Autoría según el museo: ${firstLine(a.artist)}`:''}.
+FICHA DEL MUSEO (${SRC_NAME[a.src]}):
+${ficha}
+${textos ? `\nTEXTOS DEL MUSEO (en inglés; úsalos como información, no los traduzcas al pie de la letra):\n${textos}\n` : ''}`;
+}
+function recTxt(M){
+  const R = M.rec; if(!R) return '';
+  const g = M.autor.guia;
+  return `RECORRIDO: esta obra es la parada ${R.pos} de ${R.n} del recorrido «${R.titulo}».${R.tema?` Tema: ${R.tema}`:''}
+${R.nota ? `Por qué está esta obra en el recorrido: ${R.nota}\n` : ''}Acerca tu presentación a ese tema desde lo que la obra muestra y lo que se sabe de ella. Si la relación no es evidente, dilo con naturalidad; no la fuerces.${g ? '' : ' No digas que hiciste la obra pensando en este tema salvo que conste.'}
+${R.vistos.length ? `El visitante ya ha visto en este recorrido: ${R.vistos.join('; ')}. No repitas lo que ya se ha contado.${g ? ' Puedes relacionar esta obra con las anteriores si la relación se apoya en las fichas o en hechos conocidos.' : ' Menciona a esos autores solo si tu relación con ellos está documentada.'}` : 'Es la primera parada del recorrido: puedes situar el tema en una frase.'}`;
+}
+function guiaPrompt(M){
+  return `Eres guía de sala en un museo. Estás con un visitante delante de esta obra y le ayudas a mirarla. No eres el artista ni hablas en su nombre: hablas de la obra en tercera persona, con cercanía.
+
+FUENTES: la ficha y los textos del museo, y lo que se sabe con seguridad del contexto histórico general. No inventes fechas, nombres, anécdotas ni intenciones del artista. Si algo no consta, dilo.
+
+MIRAR: invita a fijarte en algo concreto solo si aparece en la ficha, en los textos o en la descripción visual; si no, habla del conjunto: composición, color, materia, tamaño.
+
+FORMA: en español, de tú, como hablando en voz alta delante de la obra: frases cortas, sin listas, sin títulos, sin negritas. Primera intervención: de 80 a 120 palabras. Las siguientes: de 50 a 100.
+
+${CIERRE('ti, la guía')}
+
+${obraTxt(M.a)}
+${recTxt(M)}`;
+}
+function medPrompt(M){
+  if(M.autor.guia) return guiaPrompt(M);
+  const {a, autor} = M, d = M.useDos ? autor.dossier : null;
+  const pool = M.rec ? (REC ? REC.items : []) : current;
+  const otras = pool.filter(x => x.key !== a.key && autorDe(x) === autor).slice(0, 8).map(x => `- ${x.title}${x.date?` (${x.date})`:''}`).join('\n');
+  const L = l => l.map(x => typeof x === 'string' ? `- ${x}` : `- ${x.t}${x.f?` [${x.f}]`:''}`).join('\n');
+  const dos = d ? `DOSSIER (preparado y comprobado por el equipo de mediación; úsalo con preferencia a tu memoria):
+Hechos:
+${L(d.hechos)}
+Ideas tuyas documentadas (dilas con tus palabras, no como cita):
+${L(d.ideas)}
+Obras relacionadas:
+${L(d.relacionadas)}
+Personas de tu entorno:
+${L(d.personas)}
+Cómo hablas: ${d.voz}
+${d.citas.length ? `CITAS VERIFICADAS (las únicas frases que puedes decir entre comillas):\n${L(d.citas)}` : 'No hay citas verificadas: no digas nada entre comillas como cita literal.'}`
+  : 'No hay dossier: usa solo lo que sabes con seguridad de tu vida y tu obra; ante la duda, quédate en lo general.';
+  return `Eres ${autor.nombre} (${autor.vida}).
+
+SITUACIÓN: estás de pie junto a esta obra tuya, en una exposición. Un visitante está a tu lado. Tu papel es presentársela y ayudarle a mirarla. No das una lección ni recitas la ficha: le señalas cosas, le cuentas por qué y cómo la hiciste, qué buscabas, qué pasaba en tu vida entonces.
+
+FUENTES, por orden de autoridad: 1) la ficha del museo, para los datos de esta obra; 2) el dossier, si lo hay; 3) lo que sabes con seguridad de tu vida. Si lo que recuerdas contradice la ficha, vale la ficha.
+
+NO INVENTES fechas, obras, personas, lugares ni anécdotas. Si de esta obra concreta no sabes algo, dilo con sinceridad y habla de lo que sí sabes.
+
+MIRAR: puedes pedir al visitante que se fije en algo, pero solo en detalles que aparezcan en la ficha, en los textos del museo, en la descripción visual o que sean muy conocidos de esta obra. Si no estás seguro de lo que se ve, habla del conjunto: composición, color, materia, tamaño.
+
+CITAS: puedes recordar lo que escribiste o dijiste, con tus propias palabras, pero sin comillas, salvo las citas verificadas del dossier.
+
+TU TIEMPO: solo sabes lo que viviste, hasta ${autor.muerte}. No sabes qué pasó después con tu obra (precios, museos, fama) y no hablas de tu muerte. Si te preguntan por eso, di con naturalidad que eso ya no lo viviste. Si la ficha cuenta cómo llegó la obra al museo, puedes decir que eso ocurrió después de ti.
+
+TEMAS DELICADOS: la enfermedad, las crisis o los conflictos, con sobriedad y sin dramatismo, solo si el visitante pregunta o la obra lo pide.
+
+FORMA: en español, de tú, en primera persona, como hablando en voz alta delante de la obra: frases cortas, sin listas, sin títulos, sin negritas. Primera intervención: de 90 a 140 palabras. Las siguientes: de 50 a 110.
+
+${CIERRE('ti')}
+
+${obraTxt(a)}
+${dos}
+${otras ? `\nOTRAS OBRAS TUYAS QUE EL VISITANTE TIENE A MANO:\n${otras}\n` : ''}
+${recTxt(M)}`;
+}
+const NOT_VISITOR = /\b(quieres|te gustar[ií]a|prefieres|te apetece|te cuento|te muestro|te enseño|te parece)\b/i;
+function parseReply(raw){
+  const clean = s => s.replace(/\*\*?([^*\n]+)\*\*?/g, '$1').replace(/^#+\s*/gm, '').trim();
+  const opt = l => l.replace(/^\s*(>|[-*•]|\d+[.)])\s*/, '').replace(/^["«“]|["»”]$/g, '').trim();
+  const keep = o => o && !NOT_VISITOR.test(o);
+  const parts = raw.split(/\n\s*-{3,}\s*(?:\n|$)/);
+  if(parts.length > 1) return {text:clean(parts[0]), opts:parts.slice(1).join('\n').split('\n').map(opt).filter(keep).slice(0, 3)};
+  const lines = raw.split('\n'), qs = lines.filter(l => /^\s*>/.test(l));
+  return {text:clean(lines.filter(l => !/^\s*>/.test(l)).join('\n')), opts:qs.map(opt).filter(keep).slice(0, 3)};
+}
+function medAdd(kind, text, quiet){
+  let el;
+  if(kind==='you'){ el = document.createElement('p'); el.className = 'q'; el.textContent = text; }
+  else if(kind==='wait'){ el = document.createElement('div'); el.className = 'dots'; el.setAttribute('aria-label', 'Pensando'); el.innerHTML = '<i></i><i></i><i></i>'; }
+  else { el = document.createElement('p'); el.className = kind==='err' ? 't err' : 't'; el.textContent = text; }
+  $('medLog').appendChild(el);
+  if(!quiet) el.scrollIntoView({block:kind==='say' ? 'start' : 'nearest', behavior: RM ? 'auto' : 'smooth'});
+  return el;
+}
+// El texto aparece palabra a palabra. Con voz, sigue a la voz si el navegador avisa de cada palabra;
+// si no, va a ritmo de habla. Tocar el texto lo muestra entero.
+function reveal(el, text){
+  el.textContent = '';
+  const spans = []; let pos = 0;
+  for(const w of text.split(/(\s+)/)){
+    if(!w) continue;
+    if(/^\s+$/.test(w)) el.appendChild(document.createTextNode(w));
+    else { const sp = document.createElement('span'); sp.className = 'w'; sp.textContent = w; sp.dataset.c = pos; el.appendChild(sp); spans.push(sp); }
+    pos += w.length;
+  }
+  return new Promise(res => {
+    let i = 0, done = false, timer = 0, heard = false;
+    const finish = () => { if(done) return; done = true; clearInterval(timer); spans.forEach(sp => sp.classList.add('on')); el.classList.remove('live'); res(); };
+    const tick = wps => { clearInterval(timer); timer = setInterval(() => { if(i < spans.length) spans[i++].classList.add('on'); else finish(); }, 1000/wps); };
+    el.classList.add('live'); el.onclick = finish;
+    if(RM || !spans.length){ finish(); return; }
+    if(medVoz && speakText(text, 'es-ES', finish, c => { heard = true; clearInterval(timer); while(i < spans.length && +spans[i].dataset.c <= c) spans[i++].classList.add('on'); })){
+      setTimeout(() => { if(!heard && !done) tick(2.6); }, 1200);
+    } else tick(9);
+  });
+}
+function medOpts(opts){
+  MED.lastOpts = opts;
+  const box = $('medNext');
+  box.innerHTML = '';
+  opts.forEach(o => { const b = document.createElement('button'); b.textContent = o; b.onclick = () => medTurn(o, true); box.appendChild(b); });
+  box.hidden = !opts.length;
+}
+// Vuelve a pintar una conversación ya empezada (al regresar a una obra del recorrido)
+function medRestore(M){
+  if(!M.log.length && !M.busy) return;
+  $('medStart').hidden = true;
+  for(const m of M.log){
+    if(m.role==='user'){ if(m.vis) medAdd('you', m.content, true); }
+    else { const el = medAdd('say', parseReply(m.content).text, true); el.classList.remove('live'); }
+  }
+  if(M.busy){ medAdd('wait', '', true); return; }
+  medOpts(M.lastOpts); $('medIn').hidden = false;
+}
+async function medTurn(userText, visible){
+  const M = MED; if(!M || M.busy) return;
+  M.busy = true;
+  $('medStart').hidden = true; $('medNext').hidden = true; $('medIn').hidden = true;
+  try{ speechSynthesis.cancel(); }catch(e){}
+  if(visible) medAdd('you', userText);
+  M.log.push({role:'user', content:userText, vis:visible});
+  medAdd('wait');
+  try{
+    const raw = await callLLM([{role:'system', content:medPrompt(M)}, ...M.log.slice(-10).map(({role, content}) => ({role, content}))]);
+    M.log.push({role:'assistant', content:raw});
+    const {text, opts} = parseReply(raw);
+    M.lastOpts = opts; M.busy = false;
+    if(MED !== M) return;
+    $('medLog').querySelectorAll('.dots').forEach(d => d.remove());
+    const el = medAdd('say', text);
+    await reveal(el, text);
+    if(MED !== M) return;
+    medOpts(opts);
+  }catch(e){
+    M.log.pop(); M.busy = false;
+    if(MED !== M) return;
+    $('medLog').querySelectorAll('.dots').forEach(d => d.remove());
+    medAdd('err', 'No ha podido responder: ' + (e?.message || e));
+    if(!M.log.length) $('medStart').hidden = false; else medOpts(M.lastOpts);
+  }
+  if(MED === M && M.log.length) $('medIn').hidden = false;
+}
+
+/* ---------- Exposiciones (recorridos curados) ----------
+   Un recorrido es un tema y una lista ordenada de obras. Cada obra la media su autor si está en la lista;
+   si no, la guía. Los recorridos se leen de recorridos.json (junto al HTML) si existe; si no, de esta lista. */
+const IIIF = id => `https://www.artic.edu/iiif/2/${id}/full/843,/0/default.jpg`;
+let RECORRIDOS = [
+  {id:'tiempo-detenido', tipo:'tema', fecha:'2026-10-09', titulo:'El tiempo detenido',
+   tema:'Obras en las que el tiempo parece pararse: el descanso, el cuidado, la atención a un instante.',
+   portada:IIIF('6644829f-f292-c5c4-a73c-0356a6fdbf0d'),
+   obras:['aic-28560','aic-111442','aic-94841','aic-64818','aic-16568']},
+  {id:'paris-ciudad-nueva', tipo:'tema', fecha:'2026-10-02', titulo:'París, una ciudad nueva',
+   tema:'Cómo miraron los pintores un París que estaba cambiando: bulevares, trenes, ocio al aire libre y vida nocturna.',
+   portada:IIIF('f8fd76e9-c396-5678-36ed-6a348c904d27'),
+   obras:['aic-20684','aic-16571','aic-14655','aic-27992','aic-61128']}
+];
+let REC = null;
+const ITEMS = {};
+let vistos; try{ vistos = new Set(JSON.parse(ls.get('vistos','[]'))); }catch(e){ vistos = new Set(); }
+const fmtDate = f => { try{ return new Date(f+'T12:00:00').toLocaleDateString('es', {day:'numeric', month:'short', year:'numeric'}); }catch(e){ return f; } };
+async function loadRecorridos(){
+  try{ const r = await fetch('recorridos.json', {cache:'no-cache'}); if(r.ok){ const j = await r.json(); const l = Array.isArray(j) ? j : j.recorridos; if(Array.isArray(l) && l.length) RECORRIDOS = l; } }catch(e){}
+}
+function autorRec(i){ const x = AUTORES[i]; return {id:'autor-'+i, tipo:'autor', autorIdx:i, titulo:`Conoce a ${x.nombre}`, tema:`La trayectoria de ${x.nombre}, obra a obra.`}; }
+function renderHome(){
+  const rs = [...RECORRIDOS].sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''));
+  $('expos').innerHTML = `<section class="xsec"><h2>Exposiciones</h2><div class="xgrid">${rs.map(r => `<button class="xcard" data-r="${esc(r.id)}"><span class="im" style="background-image:url('${esc(r.portada || '')}')">${vistos.has(r.id) ? '' : '<i class="new">Nuevo</i>'}</span><b>${esc(r.titulo)}</b><p>${esc(r.tema)}</p><small>${r.obras.length} obras${r.fecha ? ' · ' + esc(fmtDate(r.fecha)) : ''}</small></button>`).join('')}</div></section>
+  <section class="xsec"><h2>Conoce a…</h2><ul class="alist">${AUTORES.map((x, i) => `<li><button data-a="${i}">${esc(x.nombre)}<span>${esc(x.vida)}${x.dossier ? ' · con dossier' : ''}</span></button></li>`).join('')}</ul></section>`;
+}
+$('expos').onclick = e => {
+  const c = e.target.closest('[data-r]'), au = e.target.closest('[data-a]');
+  if(c) recIntro(RECORRIDOS.find(r => r.id === c.dataset.r));
+  else if(au) recIntro(autorRec(+au.dataset.a));
+};
+async function getItem(key){
+  if(ITEMS[key]) return ITEMS[key];
+  const i = key.indexOf('-'), src = key.slice(0, i), id = key.slice(i+1);
+  if(!APIS[src]) return null;
+  const a = await APIS[src].get(id); if(a) ITEMS[key] = a; return a;
+}
+async function recItems(r){
+  if(r._items) return r._items;
+  let items;
+  if(r.tipo === 'autor'){
+    const x = AUTORES[r.autorIdx], d = {kind:'artist', value:x.buscar[0], alts:x.buscar};
+    const res = await Promise.allSettled(['aic','cma','met'].map(k => APIS[k].search('', 1, k==='met' ? 8 : 20, d)));
+    items = res.flatMap(o => o.status==='fulfilled' ? o.value.items : []).filter(a => autorDe(a) === x);
+    items.sort((p, q) => (p.year ?? 1e9) - (q.year ?? 1e9)); items = items.slice(0, 8);
+  } else items = (await Promise.all(r.obras.map(k => getItem(k).catch(() => null)))).filter(Boolean);
+  items.forEach(a => ITEMS[a.key] = a);
+  r._items = items; return items;
+}
+function riList(items, cur){
+  return `<ol class="ri-list">${items.map((a, k) => { const au = autorDe(a); return `<li><button data-k="${k}"${cur===k?' aria-current="true"':''}><span class="n">${pad2(k+1)}</span><img src="${esc(a.thumb)}" alt="" loading="lazy"><span><b>${esc(a.title)}</b><small>${esc(firstLine(a.artist) || 'Autoría desconocida')}${a.date ? ' · ' + esc(a.date) : ''} · <em>${au ? 'Habla el autor' : 'Guía'}</em></small></span></button></li>`; }).join('')}</ol>`;
+}
+async function recIntro(r, cur){
+  if(!r) return;
+  if(r.tipo !== 'autor' && r.id !== 'mi-recorrido'){ vistos.add(r.id); ls.set('vistos', JSON.stringify([...vistos])); }
+  const indice = cur != null;
+  $('riHead').textContent = indice ? 'Obras del recorrido' : (r.tipo==='autor' ? 'Conoce a…' : 'Exposición');
+  $('riBody').innerHTML = `<h2 class="ri-t">${esc(r.titulo)}</h2>${r.tema ? `<p class="ri-p">${esc(r.tema)}</p>` : ''}<div id="riL"><div class="dots" aria-label="Cargando"><i></i><i></i><i></i></div></div>`;
+  $('riGo').textContent = indice ? 'Salir del recorrido' : 'Empezar el recorrido';
+  $('riGo').disabled = !indice;
+  $('recIntro').hidden = false;
+  const items = await recItems(r).catch(() => []);
+  if($('recIntro').hidden) return;
+  if(!items.length){ $('riL').innerHTML = '<p class="empty">No se han podido cargar las obras. Revisa la conexión e inténtalo de nuevo.</p>'; return; }
+  $('riL').innerHTML = riList(items, cur);
+  $('riL').onclick = e => { const b = e.target.closest('[data-k]'); if(!b) return; $('recIntro').hidden = true; if(REC && REC.r === r) recGo(+b.dataset.k); else recStart(r, items, +b.dataset.k); };
+  $('riGo').disabled = false;
+  $('riGo').onclick = () => { $('recIntro').hidden = true; if(indice) close_(); else recStart(r, items, 0); };
+}
+$('riX').onclick = () => $('recIntro').hidden = true;
+function recStart(r, items, i){ REC = {r, items, i:0, meds:{}}; $('modal').classList.add('rec'); $('recBar').hidden = false; recGo(i || 0); }
+function recCtx(a){
+  const i = REC.items.findIndex(x => x.key === a.key);
+  return {titulo:REC.r.titulo, tema:REC.r.tema || '', pos:i+1, n:REC.items.length, nota:(REC.r.notas || {})[a.key] || '',
+    vistos:REC.items.slice(0, Math.max(0, i)).map(x => `«${x.title}» (${(autorDe(x) || {}).nombre || firstLine(x.artist) || 'autoría desconocida'})`)};
+}
+function recGo(i){
+  if(!REC) return;
+  REC.i = clamp(i, 0, REC.items.length-1);
+  open_(REC.items[REC.i]);
+  const last = REC.i === REC.items.length-1;
+  $('recTitle').textContent = REC.r.titulo;
+  $('recPos').textContent = `${REC.i+1} de ${REC.items.length}`;
+  $('recPrev').disabled = REC.i === 0;
+  $('recNext').textContent = last ? 'Terminar' : 'Siguiente obra →';
+  // Se espera un momento antes de pedir la presentación: si el visitante pasa rápido, no se gasta una llamada.
+  const M = MED; clearTimeout(REC.t);
+  if(!M.log.length && !M.busy){ $('medStart').hidden = true; medAdd('wait', '', true); REC.t = setTimeout(() => { if(MED === M){ $('medLog').querySelectorAll('.dots').forEach(d => d.remove()); medTurn(MED_START, false); } }, 900); }
+}
+function recEnd(){ REC = null; $('recBar').hidden = true; $('modal').classList.remove('rec'); }
+$('recPrev').onclick = () => recGo(REC.i - 1);
+$('recNext').onclick = () => { if(REC.i < REC.items.length-1) recGo(REC.i + 1); else { close_(); setTab('exp'); toast('Has terminado el recorrido'); } };
+$('recIdx').onclick = () => recIntro(REC.r, REC.i);
+
+function setTab(t){
+  ls.set('tab', t);
+  const home = t === 'exp';
+  document.body.classList.toggle('home', home);
+  $('tExp').setAttribute('aria-selected', String(home)); $('tCat').setAttribute('aria-selected', String(!home));
+  $('expos').hidden = !home;
+  if(home){ cancelAnimationFrame(M.raf); $('map').hidden = $('grid').hidden = true; $('pager').hidden = true; renderHome(); }
+  else { $('pager').hidden = expoView; if(!state.loaded){ state.loaded = true; load(1); } else render(); }
+}
+$('tExp').onclick = () => setTab('exp');
+$('tCat').onclick = () => setTab('cat');
+
+let puterP = null;
+function loadPuter(){
+  if(window.puter) return Promise.resolve();
+  if(!puterP) puterP = new Promise((res, rej) => {
+    const s = document.createElement('script'); s.src = 'https://js.puter.com/v2/';
+    const fail = () => { puterP = null; rej(new Error('No se ha podido cargar Puter. Revisa la conexión o usa OpenRouter en Ajustes.')); };
+    const t = setTimeout(fail, 15000);
+    s.onload = () => { clearTimeout(t); res(); }; s.onerror = () => { clearTimeout(t); fail(); };
+    document.head.appendChild(s);
+  });
+  return puterP;
+}
+async function callLLM(messages){
+  if($('prov').value==='puter'){
+    await loadPuter();
+    const r = await puter.ai.chat(messages);
+    const c = r?.message?.content ?? r;
+    return typeof c==='string' ? c : Array.isArray(c) ? c.map(p=>p.text||'').join('') : String(c);
+  }
+  const key = $('key').value.trim(); if(!key) throw new Error('Pega tu clave gratuita de OpenRouter en Ajustes.');
+  const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {method:'POST', headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'}, body:JSON.stringify({model:'openrouter/free', messages})});
+  const j = await r.json(); if(!r.ok) throw new Error(j.error?.message || 'HTTP '+r.status);
+  return j.choices[0].message.content;
+}
+
+/* ---------- Arranque ---------- */
+const syncOpt = () => { $('optText').hidden = !['aic','all'].includes($('src').value); };
+$('view').value = ls.get('view','map');
+$('src').value = ls.get('src','aic');
+$('order').value = ls.get('order','none');
+setDet(ls.get('det','0')==='1');
+syncOpt(); expoSave();
+$('view').onchange = render;
+$('order').onchange = render;
+$('det').onclick = () => { setDet(!DET); render(); };
+$('go').onclick = () => { drift = null; load(1); };
+$('q').onkeydown = e => { if(e.key==='Enter'){ drift = null; load(1); } };
+$('src').onchange = () => { ls.set('src', $('src').value); syncOpt(); load(1); };
+$('onlyText').onchange = () => load(1);
+$('undrift').onclick = () => { drift = null; load(1); };
+$('prev').onclick = () => load(state.page-1);
+$('next').onclick = () => load(state.page+1);
+$('grid').onclick = e => { const f=e.target.closest('figure'); if(f) openArt(current[+f.dataset.i]); };
+$('close').onclick = close_;
+$('toggle').onclick = () => { setInfo(!$('info').classList.contains('hidden')); setTimeout(home, 60); };
+document.addEventListener('keydown', e => {
+  if(e.key!=='Escape') return;
+  if(!$('post').hidden){ $('post').hidden = true; return; }
+  if(!$('cmp').hidden){ cmpClose(); return; }
+  if(!$('game').hidden){ $('game').hidden = true; return; }
+  if(!$('expo').hidden){ $('expo').hidden = true; return; }
+  if(!$('recIntro').hidden){ $('recIntro').hidden = true; return; }
+  if(cmpA){ cancelPick(); return; }
+  if(SL.on){ slowStop(false); return; }
+  if($('modal').classList.contains('open')) close_();
+});
+setTab(ls.get('tab','exp'));
+loadRecorridos().then(() => { if(document.body.classList.contains('home')) renderHome(); });
+openFromHash();
+</script>
+</body>
+</html>
