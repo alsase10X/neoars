@@ -64,6 +64,8 @@ El scrollytelling y el recorrido son, en el fondo, lo mismo: una lista ordenada 
 - La conversación no tiene aspecto de chat. El texto **aparece poco a poco** y hay un indicador de carga que no dice "cargando".
 - La **voz** es una opción previa y secundaria, no la principal.
 - **Los colores salen de la obra**, no son aleatorios.
+- **En móvil:** la imagen ocupa la pantalla y la ficha y la voz del autor van en una **hoja deslizable**. Abajo, una **barra con botones sencillos**: anterior, título, guardar, compartir (con el menú del propio móvil) y siguiente. *Implementado; pendiente de revisión en el móvil. Guardar usa un icono de marcador.*
+- El **sistema de diseño** debe ser muy claro y aplicarse a toda la aplicación.
 
 ### 3.8 Alojamiento
 - **GitHub Pages**, en este repositorio.
@@ -118,6 +120,17 @@ La versión publicada **no lleva ninguna clave** de modelo: cada persona usa Put
 - **Artistas vivos dentro de temas** junto a consagrados, con derechos y consentimiento.
 - **Obra del día:** una parada ligera, además del tema periódico.
 - **Retrato del autor** como avatar e **identificadores de museo** para reconocer a los autores (ahora se reconocen por el nombre).
+- **Decisiones de NeoARS aplicables aquí:** sonido desactivado por defecto y activable con un gesto, con control de silencio siempre visible; pantallas de respiración como apertura de cada exposición; vídeo corto solo cuando aporte; el pase de Wallet como canal de avisos de exposiciones nuevas.
+- **Música de época por exposición** (por ejemplo, París): un campo `musica` en `recorridos.json` con el fichero y su crédito, guardado en el repositorio, a volumen bajo y que baje más cuando habla el autor. Las composiciones antiguas son de dominio público, pero cada grabación tiene sus derechos: usar grabaciones con licencia libre (Musopen, Wikimedia Commons) y citar al intérprete.
+- **Presentación inicial pregrabada:** la primera intervención de cada obra se genera al preparar la exposición (texto y audio), se revisa y se guarda en el repositorio. El autor habla al instante, sin esperar al modelo ni gastar llamadas. La conversación posterior sigue en directo.
+- **Voz de calidad por autor con Gemini** (gemini-3.1-flash-tts-preview: capa gratuita, español, voces con estilo dirigible). Es una versión preliminar con límites estrictos y necesita el intermediario para la clave. Se usaría sobre todo en la presentación pregrabada. Evitar la caricatura y avisar de que es voz sintetizada.
+
+### Observaciones de la primera prueba (9 de octubre)
+- La generación del texto grande y secuencial es lo que mejor funciona.
+- La imagen fija arriba no cuadraba con el zoom, que quedaba detrás del texto. *Se ha probado la hoja deslizable como respuesta.*
+- Los botones de anterior y siguiente no convencen del todo; puede ser el diseño o algo más.
+- Las preguntas sugeridas hay que afinarlas, pero mejor cuando se elija el modelo definitivo y se use la visión.
+- Idea para el inicio: **cápsulas de exposiciones en un carrusel bajo el mapa**, como alternativa a meterlas dentro del mapa. Probar las dos.
 
 ---
 
