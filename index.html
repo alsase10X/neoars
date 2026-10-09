@@ -66,7 +66,7 @@ figcaption small{display:block;font-weight:400;color:var(--grey);margin-top:3px;
 #pick{position:fixed;left:var(--s2);right:var(--s2);bottom:calc(var(--s2) + env(safe-area-inset-bottom,0px));z-index:9;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;gap:var(--s1);padding:var(--s1) var(--s1) var(--s1) var(--s2);font-weight:700;font-size:14px;line-height:1.2}
 #pick span{flex:1;min-width:0}
 #pick button{padding:8px 12px;font-size:13px}
-#modal{position:fixed;inset:0;background:var(--paper);display:none;flex-direction:column;z-index:10}
+#modal{--bh:calc(56px + env(safe-area-inset-bottom,0px));position:fixed;inset:0;background:var(--paper);display:none;flex-direction:column;z-index:10;padding-bottom:var(--bh)}
 #modal.open{display:flex}
 #stage{position:relative;flex:1 1 50%;min-height:0;overflow:hidden;background:var(--stage)}
 #viewer{position:absolute;inset:0;touch-action:none;overflow:hidden;cursor:grab}
@@ -183,14 +183,19 @@ body.home #msg,body.home #undrift{visibility:hidden}
 .xcard p{margin:8px 0 0;font-size:15px;line-height:1.35;font-weight:500;max-width:46ch}
 .xcard small{display:block;margin-top:8px;font-size:12px;color:var(--grey);font-weight:500}
 /* Modo recorrido: barra siempre visible */
-#modal.rec{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
-#recBar{position:fixed;left:0;right:0;bottom:0;z-index:12;display:flex;gap:2px;background:var(--ink);padding-bottom:env(safe-area-inset-bottom,0px)}
+#recBar{position:absolute;left:0;right:0;bottom:0;z-index:12;display:flex;gap:2px;background:var(--ink);padding-bottom:env(safe-area-inset-bottom,0px)}
 #recBar button{border:0;height:56px;font-size:14px}
 #recPrev{width:56px;font-size:20px;font-weight:500}
 .rb-t{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 12px;background:var(--paper);color:var(--ink);line-height:1.15;text-align:left}
 .rb-t span{max-width:100%;font-size:14px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rb-t small{font-size:12px;font-weight:500;color:var(--grey);font-variant-numeric:tabular-nums}
-#recNext{padding:0 18px;background:#ffe600;color:#000;font-weight:800}
+#recNext{min-width:56px;padding:0 18px;background:#ffe600;color:#000;font-weight:800;font-size:18px}
+#recNext .lbl{font-size:14px}
+.ic{width:52px;display:grid;place-items:center;padding:0}
+.ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:miter}
+#bSave[aria-pressed=true] svg{fill:currentColor}
+.rb-t:disabled{opacity:1;pointer-events:none}
+.grab{display:none}
 #recNext:hover{background:var(--paper);color:var(--ink)}
 .ri-t{margin:0;font-size:34px;font-weight:800;letter-spacing:-.035em;line-height:.98;text-wrap:balance}
 .ri-p{margin:var(--s2) 0 0;font-size:17px;line-height:1.4;font-weight:500;max-width:46ch}
@@ -205,6 +210,19 @@ body.home #msg,body.home #undrift{visibility:hidden}
 .ri-list em{font-style:normal;font-weight:700;color:var(--ink)}
 #expoTema{width:100%;margin-top:var(--s1);font:inherit;font-size:15px;line-height:1.35;padding:8px 0;border:0;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);resize:vertical;min-height:52px}
 @media(min-width:900px){#modal{flex-direction:row}#info{flex:0 0 440px;border-left:2px solid var(--ink)}}
+/* Móvil: la imagen ocupa la pantalla y la ficha y la voz viven en una hoja que se sube y se baja */
+@media(max-width:899px){
+  #modal.open{display:block}
+  #stage{position:absolute;left:0;right:0;top:0;bottom:var(--bh)}
+  #info{position:absolute;left:0;right:0;bottom:var(--bh);height:50%;z-index:7;border-top:2px solid var(--ink);transition:height .35s cubic-bezier(.2,.8,.2,1);overscroll-behavior:contain}
+  #info.drag{transition:none}
+  #info.hidden{display:block}
+  .grab{display:flex;position:sticky;top:0;z-index:3;height:24px;align-items:center;justify-content:center;background:var(--accent);cursor:grab;touch-action:none}
+  .grab i{width:44px;height:4px;background:var(--on-accent);opacity:.5}
+  .head{touch-action:none}
+  .tools,#toggle{display:none}
+  #recNext .lbl{display:none}
+}
 
 /* Capas a pantalla completa: comparar, exposición, juego, postal */
 .ov{position:fixed;inset:0;z-index:30;background:var(--paper);color:var(--ink);display:flex;flex-direction:column}
@@ -309,10 +327,12 @@ body.home #msg,body.home #undrift{visibility:hidden}
     </div>
   </div>
   <div id="info"></div>
-  <div id="recBar" hidden>
+  <div id="recBar">
     <button id="recPrev" aria-label="Obra anterior">←</button>
     <button id="recIdx" class="rb-t" aria-label="Ver todas las obras del recorrido"><span id="recTitle"></span><small id="recPos"></small></button>
-    <button id="recNext">Siguiente obra →</button>
+    <button id="bSave" class="ic" aria-label="Guardar en mi recorrido" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4.5L6 21z"/></svg></button>
+    <button id="bShare" class="ic" aria-label="Compartir"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5M5 12v9h14v-9"/></svg></button>
+    <button id="recNext" aria-label="Siguiente obra"><span class="lbl">Siguiente obra </span>→</button>
   </div>
 </div>
 
@@ -804,17 +824,18 @@ mp.addEventListener('wheel', e => { e.preventDefault(); M.x -= e.deltaX; M.y -= 
 window.addEventListener('resize', () => { if(!document.body.classList.contains('home') && $('view').value==='map' && !$('modal').classList.contains('open')) buildMap(); });
 
 /* ---------- Visor ---------- */
-const V = {s:1,x:0,y:0,fit:1,iw:0,ih:0,pts:new Map(),lastTap:0,swap:false,tok:0,crop:null,tt:0};
+const V = {s:1,x:0,y:0,fit:1,iw:0,ih:0,pts:new Map(),lastTap:0,swap:false,tok:0,crop:null,tt:0,padB:0};
 const vw_ = () => $('viewer').clientWidth, vh_ = () => $('viewer').clientHeight;
 function apply(){
   const minS = V.fit*0.9, maxS = Math.max(V.fit*10, 1.5);
   V.s = Math.min(maxS, Math.max(minS, V.s));
   const w = V.iw*V.s, h = V.ih*V.s, m = 60;
   V.x = w <= vw_() ? (vw_()-w)/2 : Math.min(m, Math.max(vw_()-w-m, V.x));
-  V.y = h <= vh_() ? (vh_()-h)/2 : Math.min(m, Math.max(vh_()-h-m, V.y));
+  const vis = vh_() - V.padB;  // alto visible: en móvil la hoja tapa la parte de abajo
+  V.y = h <= vis ? (vis-h)/2 : Math.min(m, Math.max(vis-h-m, V.y));
   $('pic').style.transform = `translate(${V.x}px,${V.y}px) scale(${V.s})`;
 }
-function home(){ if(!V.iw) return; V.fit = Math.min(vw_()/V.iw, vh_()/V.ih); V.s = V.fit; apply(); }
+function home(){ if(!V.iw) return; V.fit = Math.min(vw_()/V.iw, (vh_()-V.padB)/V.ih); V.s = V.fit; apply(); }
 function zoomAt(f, cx, cy){
   const ns = Math.min(Math.max(V.fit*0.9, V.s*f), Math.max(V.fit*10,1.5)), k = ns/V.s;
   V.x = cx - (cx - V.x)*k; V.y = cy - (cy - V.y)*k; V.s = ns; apply();
@@ -838,7 +859,9 @@ vEl.addEventListener('pointerdown', e => {
   $('pic').style.transition = '';
   if(SL.on && !SL.paused) slowPause(true);
   vEl.setPointerCapture(e.pointerId); V.pts.set(e.pointerId, rel(e));
+  if(V.pts.size === 2) sheetFor('zoom');
   const now = Date.now();
+  if(V.pts.size===1 && now - V.lastTap < 300 && V.s <= V.fit*1.5) sheetFor('zoom');
   if(V.pts.size===1 && now - V.lastTap < 300){ const [cx,cy]=rel(e); zoomAt(V.s>V.fit*1.5 ? V.fit/V.s : 2.5, cx, cy); }
   if(V.pts.size===1) V.lastTap = now;
 });
@@ -924,7 +947,7 @@ function open_(a, crop){
   const rows = a.fields.filter(([,v])=>v).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
   const voices = a.voices.map(v=>`<div class="box"><b>${esc(v.label)}</b>${esc(v.text)}<cite>— ${esc(v.by)}</cite></div>`).join('');
   setAccent(a);
-  $('info').innerHTML = `<div class="head"><span class="srcl">${esc(SRC_NAME[a.src])}</span><button id="bSave" class="${isSaved?'on':''}" aria-pressed="${isSaved}">${isSaved?'Guardada':'Guardar'}</button><h2>${esc(a.title)}</h2><p>${esc((a.artist||'').replace(/\n/g,' · '))}</p></div>
+  $('info').innerHTML = `<div class="grab" aria-hidden="true"><i></i></div><div class="head"><span class="srcl">${esc(SRC_NAME[a.src])}</span><h2>${esc(a.title)}</h2><p>${esc((a.artist||'').replace(/\n/g,' · '))}</p></div>
   <div class="pal" id="pal"></div>
   <details class="ficha"><summary>Ficha de la obra</summary><div class="in">
     ${voices}<dl>${rows}</dl>
@@ -932,22 +955,20 @@ function open_(a, crop){
       ${a.voices.length?'<button id="bSpeak" data-l="Escuchar el texto del museo (en inglés)">Escuchar el texto del museo (en inglés)</button>':''}
       ${REC?'':'<button id="bCmp">Comparar con otra obra</button>'}
       <button id="bPost">Hacer una postal con lo que estás viendo</button>
-      <button id="bLink">Compartir enlace a esta obra</button>
       <a href="${esc(a.url)}" target="_blank" rel="noopener">Ver en la web del museo</a>
     </div>
   </div></details>
   ${medSection(voz)}
   ${!REC && opts.length?`<nav class="seguir"><b>Seguir por</b>${opts.map((o,k)=>`<button data-d="${k}">${esc(o.label)}</button>`).join('')}</nav>`:''}`;
-  $('bSave').onclick = toggleSave;
   if($('bCmp')) $('bCmp').onclick = startPick;
   if($('bSpeak')) $('bSpeak').onclick = speak;
   $('bPost').onclick = postal;
-  $('bLink').onclick = shareLink;
+  barUpdate(isSaved);
   $('info').querySelectorAll('[data-d]').forEach(b => b.onclick = () => { drift = opts[+b.dataset.d]; close_(); load(1); });
   medWire(); medRestore(MED);
   renderPal(a);
   $('info').scrollTop = 0;
-  $('modal').classList.add('open');
+  $('modal').classList.add('open'); setSheet('half');
   $('loading').style.display='flex'; $('loading').textContent='Cargando imagen…';
   V.iw=0; $('pic').removeAttribute('style'); $('pic').src = a.big;
   sampleColor(a, true).then(() => { if(art===a){ setAccent(a); renderPal(a); } });
@@ -1036,7 +1057,8 @@ function speak(){
 /* ---------- Enlace a una obra ---------- */
 async function shareLink(){
   const url = location.href.split('#')[0] + '#' + art.key;
-  if(navigator.share){ try{ await navigator.share({title:art.title, url}); return; }catch(e){ if(e.name==='AbortError') return; } }
+  const text = [art.title, firstLine(art.artist)].filter(Boolean).join(' · ');
+  if(navigator.share){ try{ await navigator.share({title:art.title, text, url}); return; }catch(e){ if(e.name==='AbortError') return; } }
   try{ await navigator.clipboard.writeText(url); toast('Enlace copiado'); }catch(e){ toast(url, 7000); }
 }
 async function openFromHash(){
@@ -1128,8 +1150,8 @@ function toggleSave(){
   else EXPO.items.push({...a, note:''});
   expoSave();
   const s = saved(a);
-  $('bSave').textContent = s ? 'Guardada' : 'Guardar'; $('bSave').classList.toggle('on', s); $('bSave').setAttribute('aria-pressed', String(s));
-  toast(s ? `Añadida a tu exposición (${EXPO.items.length})` : 'Quitada de tu exposición');
+  $('bSave').setAttribute('aria-pressed', String(s)); $('bSave').setAttribute('aria-label', s ? 'Quitar de mi recorrido' : 'Guardar en mi recorrido');
+  toast(s ? `Guardada en tu recorrido (${EXPO.items.length})` : 'Quitada de tu recorrido');
 }
 function expoRender(){
   $('expoTitle').value = EXPO.title; $('expoTema').value = EXPO.tema || '';
@@ -1329,6 +1351,7 @@ function medWire(){
   $('medGo').onclick = () => medTurn(MED_START, false);
   $('medSend').onclick = () => { const v = $('medAsk').value.trim(); if(v){ $('medAsk').value = ''; medTurn(v, true); } };
   $('medAsk').onkeydown = e => { if(e.key==='Enter') $('medSend').click(); };
+  $('medAsk').onfocus = () => { if(isMob()) setSheet('full'); };
   $('medVoz').onclick = () => {
     medVoz = !medVoz; ls.set('medVoz', medVoz?'1':'0');
     $('medVoz').setAttribute('aria-pressed', String(medVoz));
@@ -1490,6 +1513,7 @@ async function medTurn(userText, visible){
     M.lastOpts = opts; M.busy = false;
     if(MED !== M) return;
     $('medLog').querySelectorAll('.dots').forEach(d => d.remove());
+    if(isMob() && SH.st==='peek') setSheet('half');
     const el = medAdd('say', text);
     await reveal(el, text);
     if(MED !== M) return;
@@ -1593,7 +1617,7 @@ async function recIntro(r, cur){
   $('riGo').onclick = () => { $('recIntro').hidden = true; if(indice) close_(); else recStart(r, items, 0); };
 }
 $('riX').onclick = () => $('recIntro').hidden = true;
-function recStart(r, items, i){ REC = {r, items, i:0, meds:{}}; $('modal').classList.add('rec'); $('recBar').hidden = false; recGo(i || 0); }
+function recStart(r, items, i){ REC = {r, items, i:0, meds:{}}; recGo(i || 0); }
 function recCtx(a){
   const i = REC.items.findIndex(x => x.key === a.key);
   return {titulo:REC.r.titulo, tema:REC.r.tema || '', pos:i+1, n:REC.items.length, nota:(REC.r.notas || {})[a.key] || '',
@@ -1603,16 +1627,78 @@ function recGo(i){
   if(!REC) return;
   REC.i = clamp(i, 0, REC.items.length-1);
   open_(REC.items[REC.i]);
-  const last = REC.i === REC.items.length-1;
-  $('recTitle').textContent = REC.r.titulo;
-  $('recPos').textContent = `${REC.i+1} de ${REC.items.length}`;
-  $('recPrev').disabled = REC.i === 0;
-  $('recNext').textContent = last ? 'Terminar' : 'Siguiente obra →';
   // Se espera un momento antes de pedir la presentación: si el visitante pasa rápido, no se gasta una llamada.
   const M = MED; clearTimeout(REC.t);
   if(!M.log.length && !M.busy){ $('medStart').hidden = true; medAdd('wait', '', true); REC.t = setTimeout(() => { if(MED === M){ $('medLog').querySelectorAll('.dots').forEach(d => d.remove()); medTurn(MED_START, false); } }, 900); }
 }
-function recEnd(){ REC = null; $('recBar').hidden = true; $('modal').classList.remove('rec'); }
+function recEnd(){ REC = null; }
+// Barra inferior del visor: en un recorrido, anterior/siguiente y posición; fuera, el título de la obra.
+function barUpdate(isSaved){
+  const r = !!REC;
+  $('recPrev').hidden = $('recNext').hidden = !r;
+  $('recIdx').disabled = !r;
+  if(r){
+    const last = REC.i === REC.items.length-1;
+    $('recTitle').textContent = REC.r.titulo;
+    $('recPos').textContent = `${REC.i+1} de ${REC.items.length}`;
+    $('recPrev').disabled = REC.i === 0;
+    $('recNext').innerHTML = last ? '<span class="lbl">Terminar </span>✓' : '<span class="lbl">Siguiente obra </span>→';
+    $('recNext').setAttribute('aria-label', last ? 'Terminar el recorrido' : 'Siguiente obra');
+  } else {
+    $('recTitle').textContent = art.title;
+    $('recPos').textContent = firstLine(art.artist);
+  }
+  $('bSave').setAttribute('aria-pressed', String(!!isSaved));
+}
+$('bSave').onclick = toggleSave;
+$('bShare').onclick = shareLink;
+
+/* ---------- Hoja deslizable (móvil) ----------
+   Tres alturas: asomada (solo el título), media y completa. Se arrastra por el asa o por la cabecera;
+   un toque en el asa cambia de altura. Al hacer zoom en la imagen, la hoja se baja sola. */
+const SH = {st:'half', drag:null};
+const isMob = () => innerWidth < 900;
+function sheetPx(st){
+  const H = $('modal').clientHeight - $('recBar').offsetHeight;
+  return st==='peek' ? Math.min(140, H*0.3) : st==='full' ? H - 40 : Math.round(H*0.5);
+}
+function setSheet(st){
+  const info = $('info');
+  if(!isMob()){ info.style.height = ''; V.padB = 0; return; }
+  SH.st = st;
+  const h = sheetPx(st);
+  info.style.height = h + 'px'; V.padB = h;
+  if(V.iw && V.s <= V.fit*1.05) setTimeout(() => smooth(home, 350), 0);
+}
+function sheetFor(motivo){
+  if(!isMob()) return;
+  if(motivo==='zoom' && SH.st !== 'peek') setSheet('peek');
+}
+$('info').addEventListener('pointerdown', e => {
+  if(!isMob() || !e.target.closest('.grab, .head')) return;
+  const info = $('info');
+  SH.drag = {y0:e.clientY, h0:info.offsetHeight, t0:Date.now(), id:e.pointerId, moved:0};
+  info.setPointerCapture(e.pointerId); info.classList.add('drag');
+});
+$('info').addEventListener('pointermove', e => {
+  const d = SH.drag; if(!d || d.id !== e.pointerId) return;
+  const dy = e.clientY - d.y0; d.moved = Math.max(d.moved, Math.abs(dy));
+  $('info').style.height = clamp(d.h0 - dy, sheetPx('peek'), sheetPx('full')) + 'px';
+});
+const sheetEnd = e => {
+  const d = SH.drag; if(!d || d.id !== e.pointerId) return;
+  SH.drag = null; $('info').classList.remove('drag');
+  if(d.moved < 6){ setSheet(SH.st==='peek' ? 'half' : SH.st==='half' ? 'full' : 'half'); return; }
+  const h = $('info').offsetHeight, v = (d.h0 - h) / Math.max(1, Date.now() - d.t0);  // velocidad: positiva = hacia arriba
+  const opts = ['peek','half','full'];
+  let st = opts.reduce((b, o) => Math.abs(sheetPx(o) - h) < Math.abs(sheetPx(b) - h) ? o : b, 'half');
+  if(v > 0.6) st = h > sheetPx('half') ? 'full' : 'half';
+  if(v < -0.6) st = h < sheetPx('half') ? 'peek' : 'half';
+  setSheet(st);
+};
+$('info').addEventListener('pointerup', sheetEnd);
+$('info').addEventListener('pointercancel', sheetEnd);
+window.addEventListener('resize', () => { if($('modal').classList.contains('open')) setSheet(SH.st); });
 $('recPrev').onclick = () => recGo(REC.i - 1);
 $('recNext').onclick = () => { if(REC.i < REC.items.length-1) recGo(REC.i + 1); else { close_(); setTab('exp'); toast('Has terminado el recorrido'); } };
 $('recIdx').onclick = () => recIntro(REC.r, REC.i);
