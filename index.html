@@ -884,7 +884,10 @@ $('pic').addEventListener('load', () => {
     hi.src = a.hi;
   }
 });
-$('pic').addEventListener('error', () => { if($('pic').getAttribute('src')) $('loading').textContent='No se pudo cargar la imagen (¿bloqueo del servidor?). Prueba con otro museo.'; });
+$('pic').addEventListener('error', () => {
+  const s = $('pic').getAttribute('src') || '';
+  if(s.includes('/full/1686,')){ $('pic').src = s.replace('/full/1686,', '/full/843,'); return; }  // Chicago no sirve todas las obras a 1686 px
+  if(s) $('loading').textContent='No se pudo cargar la imagen (¿bloqueo del servidor?). Prueba con otro museo.'; });
 
 function setInfo(hidden){
   $('info').classList.toggle('hidden', hidden);
@@ -1525,7 +1528,7 @@ async function loadRecorridos(){
 function autorRec(i){ const x = AUTORES[i]; return {id:'autor-'+i, tipo:'autor', autorIdx:i, titulo:`Conoce a ${x.nombre}`, tema:`La trayectoria de ${x.nombre}, obra a obra.`}; }
 function renderHome(){
   const rs = [...RECORRIDOS].sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''));
-  $('expos').innerHTML = `<section class="xsec"><h2>Exposiciones</h2><div class="xgrid">${rs.map(r => `<button class="xcard" data-r="${esc(r.id)}"><span class="im" style="background-image:url('${esc(r.portada || '')}')">${vistos.has(r.id) ? '' : '<i class="new">Nuevo</i>'}</span><b>${esc(r.titulo)}</b><p>${esc(r.tema)}</p><small>${r.obras.length} obras${r.fecha ? ' · ' + esc(fmtDate(r.fecha)) : ''}</small></button>`).join('')}</div></section>
+  $('expos').innerHTML = `<section class="xsec"><h2>Exposiciones</h2><div class="xgrid">${rs.map(r => `<button class="xcard" data-r="${esc(r.id)}"><span class="im" style="background-image:url('${esc(LOCAL.has(r.obras[0]) ? `img/${r.obras[0]}-1600.jpg` : (r.portada || ''))}')">${vistos.has(r.id) ? '' : '<i class="new">Nuevo</i>'}</span><b>${esc(r.titulo)}</b><p>${esc(r.tema)}</p><small>${r.obras.length} obras${r.fecha ? ' · ' + esc(fmtDate(r.fecha)) : ''}</small></button>`).join('')}</div></section>
   <section class="xsec"><h2>Conoce a…</h2><ul class="alist">${AUTORES.map((x, i) => `<li><button data-a="${i}">${esc(x.nombre)}<span>${esc(x.vida)}${x.dossier ? ' · con dossier' : ''}</span></button></li>`).join('')}</ul></section>`;
 }
 $('expos').onclick = e => {
@@ -1533,11 +1536,29 @@ $('expos').onclick = e => {
   if(c) recIntro(RECORRIDOS.find(r => r.id === c.dataset.r));
   else if(au) recIntro(autorRec(+au.dataset.a));
 };
+// Fichas e imágenes propias: las deja en el repositorio la Action de GitHub (scripts/descargar.py).
+let LOCAL = new Set();
+async function loadLocal(){
+  try{ const r = await fetch('img/manifest.json', {cache:'no-cache'}); if(r.ok){ const j = await r.json(); LOCAL = new Set(j.obras || []); } }catch(e){}
+}
+function localize(a){
+  if(a && LOCAL.has(a.key)){ a.thumb = `img/${a.key}-400.jpg`; a.mid = a.big = `img/${a.key}-1600.jpg`; a.hi = ''; }
+  return a;
+}
 async function getItem(key){
   if(ITEMS[key]) return ITEMS[key];
   const i = key.indexOf('-'), src = key.slice(0, i), id = key.slice(i+1);
   if(!APIS[src]) return null;
-  const a = await APIS[src].get(id); if(a) ITEMS[key] = a; return a;
+  let a = null;
+  if(LOCAL.has(key)){
+    try{
+      const r = await fetch(`data/${key}.json`);
+      if(r.ok){ const j = await r.json(); a = src==='aic' ? AIC.norm(j.raw, j.base) : APIS[src].norm(j.raw); }
+    }catch(e){}
+  }
+  if(!a) a = await APIS[src].get(id);
+  if(a) ITEMS[key] = localize(a);
+  return a;
 }
 async function recItems(r){
   if(r._items) return r._items;
@@ -1665,7 +1686,7 @@ document.addEventListener('keydown', e => {
   if($('modal').classList.contains('open')) close_();
 });
 setTab(ls.get('tab','exp'));
-loadRecorridos().then(() => { if(document.body.classList.contains('home')) renderHome(); });
+Promise.all([loadRecorridos(), loadLocal()]).then(() => { if(document.body.classList.contains('home')) renderHome(); });
 openFromHash();
 </script>
 </body>

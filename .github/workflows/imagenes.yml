@@ -1,0 +1,31 @@
+name: Imágenes de los recorridos
+
+# Cada vez que cambia recorridos.json, descarga las fichas e imágenes que falten
+# y las guarda en el repositorio (data/ e img/). También se puede lanzar a mano.
+on:
+  push:
+    branches: [main]
+    paths:
+      - recorridos.json
+      - scripts/descargar.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  descargar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests pillow
+      - run: python scripts/descargar.py
+      - name: Guardar fichas e imágenes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add data img
+          git diff --cached --quiet || (git commit -m "Fichas e imágenes de los recorridos" && git push)
