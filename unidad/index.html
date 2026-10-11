@@ -241,6 +241,8 @@ async function iniciar(datos, desde){
   if(!OBRA.mediadores[P.guia]) P.guia = defecto; if(!OBRA.visitas[P.perfil]) P.perfil = Object.keys(OBRA.visitas)[0];
   U = {caps:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, sel:null, zona:'__', manual:false, gesto:0, dedo:false, asked:new Set(), fin:false, sWhole:1, voz:M().voz};
   document.title = OBRA.titulo;
+  // Obras verticales: algo más de sitio para la imagen y algo menos para el relato
+  if(OBRA.ih > OBRA.iw*1.1) document.documentElement.style.setProperty('--letraH', innerWidth >= 900 ? '36vh' : '38vh');
   $('tTit').textContent = OBRA.titulo; $('tSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
   $('pic').src = OBRA.img; $('pic').alt = `${OBRA.titulo}, de ${OBRA.autor}`; $('unidad').setAttribute('aria-label', $('pic').alt);
   document.querySelectorAll('.fondo').forEach(f => f.style.backgroundImage = `url(${OBRA.fondo || OBRA.img})`);

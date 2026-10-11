@@ -1,0 +1,31 @@
+{
+ "@context": "http://iiif.io/api/image/2/context.json",
+ "@id": "https://alsase10x.github.io/neoars/unidad/iiif/monet-panuelo-rojo",
+ "protocol": "http://iiif.io/api/image",
+ "width": 2732,
+ "height": 3400,
+ "profile": [
+  "http://iiif.io/api/image/2/level0.json"
+ ],
+ "sizes": [
+  {
+   "width": 96,
+   "height": 119
+  },
+  {
+   "width": 1200,
+   "height": 1493
+  }
+ ],
+ "tiles": [
+  {
+   "width": 512,
+   "scaleFactors": [
+    1,
+    2,
+    4,
+    8
+   ]
+  }
+ ]
+}
