@@ -1,0 +1,14 @@
+{
+ "titulo": "Prueba de la unidad generativa",
+ "salir": "../",
+ "obras": [
+  {
+   "obra": "obras/el-panuelo-rojo.json",
+   "titulo": "El pañuelo rojo"
+  },
+  {
+   "obra": "../unidad/obras/noche-estrellada.json",
+   "titulo": "La noche estrellada"
+  }
+ ]
+}

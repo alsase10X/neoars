@@ -1,0 +1,912 @@
+{
+ "titulo": "El pañuelo rojo",
+ "autor": "Claude Monet",
+ "fecha": "hacia 1868–1873",
+ "iiif": "../../unidad/iiif/monet-panuelo-rojo",
+ "musica": {
+  "src": "../../unidad/obras/satie-gymnopedie-1.mp3",
+  "titulo": "Satie, Gymnopédie n.º 1"
+ },
+ "tema": "Un instante visto a través de un cristal: lo que dura un vistazo, pintado con unos pocos toques y guardado toda una vida.",
+ "zonas": {
+  "camille": {
+   "n": "Camille",
+   "poly": [
+    [
+     0.53,
+     0.26
+    ],
+    [
+     0.65,
+     0.26
+    ],
+    [
+     0.68,
+     0.4
+    ],
+    [
+     0.66,
+     0.55
+    ],
+    [
+     0.69,
+     0.7
+    ],
+    [
+     0.53,
+     0.7
+    ],
+    [
+     0.46,
+     0.65
+    ],
+    [
+     0.45,
+     0.53
+    ],
+    [
+     0.52,
+     0.45
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde mira la mujer?",
+   "vista": "Una mujer de pie al otro lado del cristal, en el jardín nevado, un poco a la derecha del montante central de las puertas. Lleva una capucha y una esclavina rojas sobre ropa azul muy oscura, y mira hacia la casa."
+  },
+  "rostro": {
+   "n": "El rostro",
+   "poly": [
+    [
+     0.635,
+     0.326
+    ],
+    [
+     0.6332,
+     0.3396
+    ],
+    [
+     0.6281,
+     0.3519
+    ],
+    [
+     0.6202,
+     0.3616
+    ],
+    [
+     0.6101,
+     0.3678
+    ],
+    [
+     0.599,
+     0.37
+    ],
+    [
+     0.5879,
+     0.3678
+    ],
+    [
+     0.5778,
+     0.3616
+    ],
+    [
+     0.5699,
+     0.3519
+    ],
+    [
+     0.5648,
+     0.3396
+    ],
+    [
+     0.563,
+     0.326
+    ],
+    [
+     0.5648,
+     0.3124
+    ],
+    [
+     0.5699,
+     0.3001
+    ],
+    [
+     0.5778,
+     0.2904
+    ],
+    [
+     0.5879,
+     0.2842
+    ],
+    [
+     0.599,
+     0.282
+    ],
+    [
+     0.6101,
+     0.2842
+    ],
+    [
+     0.6202,
+     0.2904
+    ],
+    [
+     0.6281,
+     0.3001
+    ],
+    [
+     0.6332,
+     0.3124
+    ]
+   ],
+   "rel": [
+    "camille"
+   ],
+   "mira": "¿Qué expresión tiene su cara?",
+   "vista": "Un rostro ovalado y pálido dentro de la capucha roja, resuelto con muy pocas pinceladas: dos toques oscuros para los ojos y apenas sombra para la nariz y la boca."
+  },
+  "jardin": {
+   "n": "La nieve y los árboles",
+   "poly": [
+    [
+     [
+      0.455,
+      0.1
+     ],
+     [
+      0.48,
+      0.1
+     ],
+     [
+      0.48,
+      0.68
+     ],
+     [
+      0.27,
+      0.68
+     ],
+     [
+      0.29,
+      0.58
+     ],
+     [
+      0.35,
+      0.36
+     ]
+    ],
+    [
+     [
+      0.69,
+      0.5
+     ],
+     [
+      0.735,
+      0.5
+     ],
+     [
+      0.735,
+      0.67
+     ],
+     [
+      0.69,
+      0.67
+     ]
+    ]
+   ],
+   "rel": [],
+   "mira": "¿De qué colores está hecha la nieve?",
+   "vista": "El jardín nevado al otro lado del cristal: un árbol de hoja perenne en forma de triángulo, verde oliva salpicado de manchas blancas, y abajo una franja de nieve blanca con reflejos azulados."
+  },
+  "puertas": {
+   "n": "Las puertas de cristal",
+   "poly": [
+    [
+     0.13,
+     0.05
+    ],
+    [
+     0.84,
+     0.05
+    ],
+    [
+     0.84,
+     0.92
+    ],
+    [
+     0.13,
+     0.92
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Dónde estás tú: dentro o fuera?",
+   "vista": "Unas puertas acristaladas de dos hojas, de madera gris oscura, con montantes y travesaños. Ocupan casi todo el cuadro: arriba, cristal; abajo, paneles de madera."
+  },
+  "cortinas": {
+   "n": "Las cortinas",
+   "poly": [
+    [
+     [
+      0.2,
+      0.06
+     ],
+     [
+      0.47,
+      0.06
+     ],
+     [
+      0.46,
+      0.11
+     ],
+     [
+      0.36,
+      0.32
+     ],
+     [
+      0.29,
+      0.55
+     ],
+     [
+      0.27,
+      0.7
+     ],
+     [
+      0.25,
+      0.88
+     ],
+     [
+      0.15,
+      0.88
+     ],
+     [
+      0.15,
+      0.3
+     ],
+     [
+      0.18,
+      0.08
+     ]
+    ],
+    [
+     [
+      0.53,
+      0.06
+     ],
+     [
+      0.72,
+      0.06
+     ],
+     [
+      0.76,
+      0.22
+     ],
+     [
+      0.8,
+      0.42
+     ],
+     [
+      0.82,
+      0.62
+     ],
+     [
+      0.81,
+      0.87
+     ],
+     [
+      0.69,
+      0.88
+     ],
+     [
+      0.7,
+      0.7
+     ],
+     [
+      0.72,
+      0.52
+     ],
+     [
+      0.7,
+      0.36
+     ],
+     [
+      0.62,
+      0.22
+     ],
+     [
+      0.55,
+      0.15
+     ]
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hay entre ella y tú?",
+   "vista": "Visillos blancos y transparentes recogidos a los dos lados de las puertas. Dejan ver el exterior por el centro y forman diagonales que encuadran a Camille."
+  },
+  "capa": {
+   "n": "La capa roja",
+   "poly": [
+    [
+     0.535,
+     0.27
+    ],
+    [
+     0.6,
+     0.262
+    ],
+    [
+     0.642,
+     0.28
+    ],
+    [
+     0.648,
+     0.34
+    ],
+    [
+     0.64,
+     0.385
+    ],
+    [
+     0.665,
+     0.42
+    ],
+    [
+     0.66,
+     0.468
+    ],
+    [
+     0.6,
+     0.472
+    ],
+    [
+     0.535,
+     0.472
+    ],
+    [
+     0.528,
+     0.4
+    ],
+    [
+     0.54,
+     0.35
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuánto sitio ocupa el rojo en todo el cuadro?",
+   "vista": "La capucha y la esclavina rojas de Camille: la única mancha de rojo intenso del cuadro, con pinceladas gruesas y planas y algún toque oscuro en los pliegues. Un trocito de rojo asoma también a la izquierda del montante."
+  },
+  "manilla": {
+   "n": "La manilla",
+   "poly": [
+    [
+     0.494,
+     0.514
+    ],
+    [
+     0.526,
+     0.514
+    ],
+    [
+     0.526,
+     0.556
+    ],
+    [
+     0.494,
+     0.556
+    ]
+   ],
+   "rel": [],
+   "mira": "¿De qué está hecha la manilla?",
+   "vista": "La manilla de la puerta, en el montante central, a la altura de la cintura de Camille: dos o tres trazos amarillos sobre la madera oscura."
+  },
+  "interior": {
+   "n": "La habitación en penumbra",
+   "poly": [
+    [
+     [
+      0,
+      0
+     ],
+     [
+      0.135,
+      0
+     ],
+     [
+      0.135,
+      0.925
+     ],
+     [
+      0,
+      0.925
+     ]
+    ],
+    [
+     [
+      0.845,
+      0
+     ],
+     [
+      1,
+      0
+     ],
+     [
+      1,
+      0.925
+     ],
+     [
+      0.845,
+      0.925
+     ]
+    ],
+    [
+     [
+      0.135,
+      0
+     ],
+     [
+      0.845,
+      0
+     ],
+     [
+      0.845,
+      0.045
+     ],
+     [
+      0.135,
+      0.045
+     ]
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué luz hay dentro de la casa?",
+   "vista": "Las paredes de la habitación, a los lados y por encima de las puertas, en grises y verdes muy oscuros, casi en penumbra."
+  },
+  "suelo": {
+   "n": "El suelo",
+   "poly": [
+    [
+     0,
+     0.925
+    ],
+    [
+     1,
+     0.925
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Desde dónde estás mirando?",
+   "vista": "Una franja del suelo de la habitación, en ocres y marrones, con tablas en diagonal. Es el sitio desde donde se mira el cuadro."
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  },
+  "mira": {
+   "n": "Mira conmigo",
+   "d": "Te pregunta antes de explicar",
+   "preguntaZonas": true
+  },
+  "ninos": {
+   "n": "Con niños",
+   "d": "Más corta, con juegos de mirar",
+   "lenta": true
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "Guía del museo",
+   "por": "la guía del museo",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "¿Qué está pasando en este cuadro?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "k": "pregunta",
+     "z": null,
+     "t": "Antes de que te cuente nada: ¿qué está pasando en este cuadro?",
+     "p": "mira"
+    },
+    {
+     "z": null,
+     "t": "Esto es El pañuelo rojo, de Claude Monet. Lo pintó hacia 1868–1873, y retrata a Camille, su primera mujer, un día de nieve.",
+     "x": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Este cuadro lo pintó Claude Monet hace unos ciento cincuenta años. Estamos dentro de una casa, mirando un jardín nevado a través de una puerta de cristal.",
+     "p": "ninos"
+    },
+    {
+     "z": "puertas",
+     "t": "Estamos dentro de su casa de Argenteuil, cerca de París, mirando a través de las puertas de cristal que dan al jardín. La madera oscura y las cortinas enmarcan la escena.",
+     "x": "ninos"
+    },
+    {
+     "z": "camille",
+     "t": "Camille pasa por fuera y nos mira un instante. Su capa roja es el único color intenso del cuadro: hacia ella va la mirada, más allá del cristal.",
+     "x": "ninos"
+    },
+    {
+     "z": "camille",
+     "t": "Fuera nieva, y pasa una mujer con una capa roja. Es Camille, la mujer del pintor. ¿Veis que os mira?",
+     "p": "ninos"
+    },
+    {
+     "z": "rostro",
+     "t": "Acércate a su cara. No hay detalle: son unas pocas manchas de pintura, puestas deprisa. Para su época, era una forma de pintar radicalmente atrevida.",
+     "x": "ninos"
+    },
+    {
+     "z": "rostro",
+     "t": "Acercaos a su cara: no tiene ojos ni boca dibujados, solo unas manchas de pintura. Y, aun así, sabemos que nos mira.",
+     "p": "ninos"
+    },
+    {
+     "z": "jardin",
+     "t": "La nieve y los árboles están hechos igual: pinceladas anchas y quebradas de blanco y verde puros.",
+     "x": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Es un momento breve, casi un vistazo, detenido para siempre. El cuadro era muy especial para Monet: lo tuvo consigo toda su vida.",
+     "x": "ninos"
+    },
+    {
+     "k": "pregunta",
+     "z": "camille",
+     "t": "Tapa con el dedo la capa roja. ¿Qué le pasa al cuadro?",
+     "p": "general mira"
+    },
+    {
+     "k": "pregunta",
+     "z": null,
+     "t": "Si pudierais entrar en el cuadro, ¿abriríais la puerta?",
+     "p": "ninos"
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Quién es la mujer?",
+     "d": "obra",
+     "z": "camille",
+     "a": "Camille, la primera mujer de Monet. Pasa por fuera de las puertas de cristal de su casa de Argenteuil, un día de nieve."
+    },
+    {
+     "q": "¿Por qué su cara está tan poco definida?",
+     "d": "obra",
+     "z": "rostro",
+     "a": "Monet la resolvió con unas pocas manchas de pintura aplicadas deprisa. El museo lo describe como una técnica impresionista radicalmente atrevida: le interesaba el instante, no el retrato detallado."
+    },
+    {
+     "q": "¿Qué pasó después con el cuadro?",
+     "d": "obra",
+     "a": "Monet lo conservó toda su vida. En 1931 pasó de su herencia a su hijo Michel; en 1939, a Edouard Molyneux, en París; en 1948 lo compró Leonard C. Hanna Jr., que lo legó al Museo de Arte de Cleveland en 1958.",
+     "z": null
+    },
+    {
+     "q": "¿Qué fue de Camille?",
+     "d": "fuera",
+     "ia": true,
+     "a": "Camille Doncieux se casó con Monet en 1870 y murió en 1879, muy joven. Aparece en muchos de sus cuadros de esos años."
+    },
+    {
+     "q": "¿Qué es el impresionismo?",
+     "d": "fuera",
+     "ia": true,
+     "a": "Un grupo de pintores, Monet entre ellos, que en la década de 1870 buscó pintar la luz y el instante con pinceladas sueltas y visibles. El nombre salió de un cuadro de Monet, Impresión, sol naciente."
+    },
+    {
+     "q": "¿Dónde está el único color fuerte?",
+     "d": "mirar",
+     "z": "camille",
+     "a": "En la capa roja de Camille. Todo lo demás son grises, blancos y verdes apagados. Tápala con el dedo y el cuadro se queda sin centro."
+    },
+    {
+     "q": "¿Qué hay entre Camille y nosotros?",
+     "d": "mirar",
+     "z": "cortinas",
+     "a": "Un cristal, unas cortinas finas y la madera oscura de la puerta. Ella está fuera, en la luz de la nieve; nosotros, dentro, en la penumbra."
+    },
+    {
+     "q": "¿Qué tamaño tiene en realidad?",
+     "d": "mirar",
+     "a": "Mide 99 centímetros de alto por casi 80 de ancho: casi un metro. Es más o menos del tamaño de una ventana pequeña."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "The Red Kerchief (El pañuelo rojo). En francés, Femme à la capeline rouge"
+  ],
+  [
+   "Autor",
+   "Claude Monet (1840–1926)"
+  ],
+  [
+   "Fecha",
+   "Hacia 1868–1873"
+  ],
+  [
+   "Técnica",
+   "Óleo sobre tela"
+  ],
+  [
+   "Medidas",
+   "99 × 79,8 cm"
+  ],
+  [
+   "Firma",
+   "No está firmado"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://clevelandart.org/art/1958.39\" target=\"_blank\" rel=\"noopener\">Cleveland Museum of Art</a>. Legado de Leonard C. Hanna Jr., 1958 (1958.39)"
+  ],
+  [
+   "Imagen y textos",
+   "Open Access del Cleveland Museum of Art, dominio público (CC0). La visita general adapta y traduce la descripción del museo"
+  ],
+  [
+   "Música",
+   "«Gymnopédie n.º 1», de Erik Satie, en versión de Kevin MacLeod (incompetech.com). Licencia <a href=\"https://creativecommons.org/licenses/by/3.0/\" target=\"_blank\" rel=\"noopener\">CC BY 3.0</a>"
+  ],
+  [
+   "Base documental",
+   "Ficha, descripción, procedencia, exposiciones, bibliografía y biografía del Cleveland Museum of Art (CC0), traducidas por nosotros"
+  ]
+ ],
+ "nota": "Unidad v2. La visita general adapta la descripción del Cleveland Museum of Art (CC0). Las miradas las escribe un modelo a partir de la base documental y de la imagen, y cada cápsula dice de dónde sale. Las miradas «preparadas» se escribieron antes y se pueden validar; las «nuevas» se escriben en el momento. Tu visita, tu recorrido y lo que cuentes de ti se guardan solo en este dispositivo.",
+ "base": [
+  {
+   "id": "B1",
+   "f": "Cleveland Museum of Art · descripción",
+   "t": "Retrata a Camille, la primera mujer de Monet, fuera, un día de nieve, pasando junto a las puertas de cristal de su casa de Argenteuil. Su rostro está resuelto con una técnica impresionista radicalmente atrevida, a base de simples toques de pintura aplicados deprisa, igual que la nieve y los árboles se definen con pinceladas anchas y quebradas de blanco y verde puros."
+  },
+  {
+   "id": "B2",
+   "f": "Cleveland Museum of Art · ¿Sabías que…?",
+   "t": "La capa roja de Madame Monet lleva la atención del espectador más allá del cristal de las puertas y atrapa su mirada: un instante breve congelado en el tiempo. El cuadro era muy especial para Monet, que lo tuvo consigo toda su vida."
+  },
+  {
+   "id": "B3",
+   "f": "Cleveland Museum of Art · ficha",
+   "t": "Título original: Femme à la capeline rouge; también catalogado como La Capeline Rouge – Madame Monet. Claude Monet (1840–1926). Hacia 1868–73. Óleo sobre tela, 99 × 79,8 cm; con marco, 128,3 × 105,7 cm. No está firmado. Legado de Leonard C. Hanna Jr., 1958 (n.º 1958.39). Se expone en la sala 222, Impresionismo y Postimpresionismo, y el museo lo destaca entre sus obras principales."
+  },
+  {
+   "id": "B4",
+   "f": "Cleveland Museum of Art · procedencia",
+   "t": "1931: pasó de la herencia del artista a su hijo Michel Monet (1878–1966), en Giverny. 1939: Edouard Molyneux (1891–1974), París. 1948: galería Carroll Carstairs, Nueva York, que lo vendió a Leonard C. Hanna Jr. (1889–1958), de Cleveland. Hanna lo legó al Cleveland Museum of Art, donde está desde 1958."
+  },
+  {
+   "id": "B5",
+   "f": "Cleveland Museum of Art · exposiciones",
+   "t": "Entre otras: retrospectiva de Monet en el Musée de l'Orangerie, París (1931); Claude Monet: Seasons and Moments, MoMA, Nueva York (1960); Hommage à Claude Monet, París (1980); Impressionists in Winter: Effets de Neige, Phillips Collection, Washington, San Francisco y Brooklyn (1998–99); Faces of Impressionism: Portraits from American Collections, Baltimore, Houston y Cleveland (1999–2000); Claude Monet, Grand Palais, París (2010–11); Monet: The Early Years, Kimbell Art Museum, Fort Worth, y San Francisco (2016–17), cuyo catálogo lo reproduce en la cubierta; Claude Monet, Albertina, Viena (2018–19)."
+  },
+  {
+   "id": "B6",
+   "f": "Cleveland Museum of Art · biografía de Monet",
+   "t": "En 1868 Monet tuvo que dejar París huyendo de sus acreedores y se llevó a su compañera, Camille Doncieux, y al hijo de ambos, Jean, a Fécamp, Étretat y Saint-Michel. En 1870 se casó con Camille y, para escapar de la guerra franco-prusiana, se fue a Londres nueve meses. En el verano de 1871 se instaló en Argenteuil, al oeste de París, donde convirtió una barca en taller. En 1874 ayudó a organizar la primera exposición impresionista. En 1878 se mudó con Camille a Vétheuil, y Camille murió al año siguiente. Hacia 1883 se instaló en Giverny, donde vivió el resto de su vida."
+  },
+  {
+   "id": "B7",
+   "f": "Cleveland Museum of Art · bibliografía",
+   "t": "La obra aparece reproducida o comentada, entre otras, en estas publicaciones (de ellas solo consta el título, no lo que dicen): Nordenfalk, «Outdoors-Indoors: A 2000-Year-Old Space Problem in Western Art» (1973); Arnason, «Motherwell: The Window and the Wall» (1969); Borowitz, «The Rembrandt and Monet of Marcel Proust» (1983); Borzello, «At Home: The Domestic Interior in Art» (2006); Cachorro Fernández, «Habitaciones con vistas. Pulsión escópica a través de la ventana» (2015); Patin, «Monet's Private Picture Gallery at Giverny» (2016); Dombrowski, «Monet's Minutes: Impressionism and the Industrialization of Time» (2023); Knight, «Snow Effects: Poems on Impressionists in Winter» (2000)."
+  }
+ ],
+ "miradas": {
+  "angulos": [
+   "dentro-fuera",
+   "sin-firma",
+   "vistazo"
+  ],
+  "banco": {
+   "dentro-fuera": {
+    "titulo": "Dentro y fuera",
+    "gancho": "Tú estás en la penumbra; ella, en la luz de la nieve.",
+    "foco": "suelo",
+    "tema": "El cuadro está pintado desde dentro de casa: entre quien mira y Camille hay una puerta, un cristal y unos visillos.",
+    "caps": [
+     {
+      "z": "suelo",
+      "e": "vista",
+      "t": "Empieza por abajo, por esa franja de suelo. Son tablas de madera en diagonal, en ocres y marrones. Es el sitio desde donde miras tú."
+     },
+     {
+      "z": "interior",
+      "e": "vista",
+      "t": "A los lados, las paredes de la habitación casi no tienen luz: grises y verdes muy oscuros."
+     },
+     {
+      "z": "puertas",
+      "e": "vista",
+      "t": "Las puertas ocupan casi todo el cuadro. Abajo, madera; arriba, cristal y travesaños. Es un marco dentro de otro marco."
+     },
+     {
+      "z": "cortinas",
+      "e": "lectura",
+      "t": "Los visillos, recogidos a los lados, dejan un hueco en el centro. Se pueden ver como un telón que se descorre para que pase alguien."
+     },
+     {
+      "z": "camille",
+      "e": "fuente",
+      "f": "B1",
+      "t": "Y por ese hueco pasa Camille, la primera mujer de Monet, por fuera, un día de nieve, junto a las puertas de cristal de su casa de Argenteuil."
+     },
+     {
+      "z": "camille",
+      "k": "pregunta",
+      "t": "Ella está en la luz y tú en la penumbra. ¿Quién está mirando a quién?"
+     }
+    ],
+    "angulos": [
+     "vistazo",
+     "sin-firma"
+    ]
+   },
+   "sin-firma": {
+    "titulo": "Un cuadro sin firma",
+    "gancho": "Monet no lo vendió: lo tuvo consigo toda su vida.",
+    "foco": null,
+    "tema": "Algunos cuadros se pintan para venderlos. Este se quedó en casa.",
+    "caps": [
+     {
+      "z": null,
+      "e": "fuente",
+      "f": "B3",
+      "t": "Busca la firma de Monet en el cuadro. No la vas a encontrar: según la ficha del museo, no está firmado."
+     },
+     {
+      "z": "camille",
+      "e": "fuente",
+      "f": "B2",
+      "t": "El museo cuenta que este cuadro era muy especial para Monet y que lo tuvo consigo toda su vida."
+     },
+     {
+      "z": "rostro",
+      "e": "lectura",
+      "t": "Quizá por eso no necesitaba firma. No era un cuadro para el mercado, sino un retrato de Camille hecho para quedarse en casa."
+     },
+     {
+      "z": null,
+      "e": "fuente",
+      "f": "B4",
+      "t": "Tras la muerte de Monet, en 1931, pasó de su herencia a su hijo Michel. Después fue de Edouard Molyneux, en París, y de Leonard C. Hanna Jr., que lo legó al museo de Cleveland en 1958."
+     },
+     {
+      "z": "capa",
+      "e": "fuente",
+      "f": "B5",
+      "t": "El cuadro que se quedó en casa ha viajado mucho después: París, Washington, Fort Worth, Viena. En 2016 fue la portada del catálogo de una exposición sobre los primeros años de Monet."
+     },
+     {
+      "z": "rostro",
+      "k": "pregunta",
+      "t": "Mírala otra vez. ¿Te parece un cuadro pintado para otros o para uno mismo?"
+     }
+    ],
+    "angulos": [
+     "vistazo",
+     "dentro-fuera"
+    ]
+   },
+   "vistazo": {
+    "titulo": "Lo que dura un vistazo",
+    "gancho": "Unos pocos toques de pintura para un instante que no vuelve.",
+    "foco": "rostro",
+    "tema": "Monet pinta el tiempo de una mirada: lo que da tiempo a ver mientras alguien pasa por delante.",
+    "caps": [
+     {
+      "z": "manilla",
+      "e": "vista",
+      "t": "Mira la manilla de la puerta. Son dos o tres trazos amarillos, nada más. Bastan para que la reconozcas."
+     },
+     {
+      "z": "rostro",
+      "e": "fuente",
+      "f": "B1",
+      "t": "El rostro de Camille está hecho igual: simples toques de pintura aplicados deprisa. El museo lo llama una técnica impresionista radicalmente atrevida."
+     },
+     {
+      "z": "jardin",
+      "e": "fuente",
+      "f": "B1",
+      "t": "La nieve y el árbol también: pinceladas anchas y quebradas de blanco y verde puros."
+     },
+     {
+      "z": "rostro",
+      "e": "lectura",
+      "t": "Es lo que ves cuando alguien pasa por delante de una ventana: un color, una cara, un gesto. No da tiempo a más, y Monet no pinta más."
+     },
+     {
+      "z": "capa",
+      "e": "fuente",
+      "f": "B2",
+      "t": "El museo lo describe como un instante breve congelado en el tiempo: la capa roja lleva tu atención más allá del cristal, hasta la mirada de ella."
+     },
+     {
+      "z": null,
+      "e": "fuente",
+      "f": "B7",
+      "t": "Un libro de 2023 sobre Monet y la industrialización del tiempo lo reproduce y lo comenta."
+     },
+     {
+      "z": "rostro",
+      "k": "pregunta",
+      "t": "Cierra los ojos un segundo y vuelve a abrirlos. ¿Qué es lo primero que has visto?"
+     }
+    ],
+    "angulos": [
+     "dentro-fuera",
+     "sin-firma"
+    ]
+   },
+   "para-ti-foto": {
+    "titulo": "Para quien fotografía",
+    "gancho": "Encuadre, fuera de campo y un solo color.",
+    "foco": "puertas",
+    "perfil": "Me gusta la fotografía",
+    "tema": "Monet hace lo que hace una buena foto robada: encuadra, deja cosas fuera y elige el instante.",
+    "caps": [
+     {
+      "z": "puertas",
+      "e": "lectura",
+      "t": "Si te gusta la fotografía, fíjate primero en el encuadre. Monet pone un marco dentro de otro: el del cuadro y el de las puertas."
+     },
+     {
+      "z": "camille",
+      "e": "vista",
+      "t": "Camille no está en el centro. Está un poco a la derecha del montante, y el visillo la tapa por un lado."
+     },
+     {
+      "z": "capa",
+      "e": "lectura",
+      "t": "Es como una foto casi en blanco y negro con un único color: grises, verdes apagados, blanco y una mancha roja que manda."
+     },
+     {
+      "z": "rostro",
+      "e": "fuente",
+      "f": "B1",
+      "t": "Y la cara no está definida: simples toques de pintura aplicados deprisa, según el museo."
+     },
+     {
+      "z": null,
+      "e": "general",
+      "t": "Cuando Monet pintó este cuadro, la fotografía tenía unos treinta años."
+     },
+     {
+      "z": "camille",
+      "k": "pregunta",
+      "t": "Si tuvieras que hacer esta foto, ¿dispararías ahora o un segundo después?"
+     }
+    ],
+    "angulos": [
+     "dentro-fuera",
+     "vistazo",
+     "sin-firma"
+    ]
+   }
+  }
+ }
+}
