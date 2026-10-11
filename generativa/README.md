@@ -1,5 +1,7 @@
 # Unidad generativa (v2)
 
+**Estado: camino a integrar.** La versión de trabajo es la v1, en `unidad/`: primero se depura esa, y después se integra lo de aquí.
+
 Prueba de la unidad de obra mediada con una capa generativa encima de la visita del museo. Es una copia aparte: `unidad/` no se toca.
 
 - En la web: [alsase10x.github.io/neoars/generativa/](https://alsase10x.github.io/neoars/generativa/)
