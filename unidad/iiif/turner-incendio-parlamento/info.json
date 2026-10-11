@@ -1,0 +1,31 @@
+{
+ "@context": "http://iiif.io/api/image/2/context.json",
+ "@id": "https://alsase10x.github.io/neoars/unidad/iiif/turner-incendio-parlamento",
+ "protocol": "http://iiif.io/api/image",
+ "width": 3400,
+ "height": 2525,
+ "profile": [
+  "http://iiif.io/api/image/2/level0.json"
+ ],
+ "sizes": [
+  {
+   "width": 96,
+   "height": 71
+  },
+  {
+   "width": 1200,
+   "height": 891
+  }
+ ],
+ "tiles": [
+  {
+   "width": 512,
+   "scaleFactors": [
+    1,
+    2,
+    4,
+    8
+   ]
+  }
+ ]
+}

@@ -1,0 +1,479 @@
+{
+ "titulo": "El incendio del Parlamento",
+ "autor": "J. M. W. Turner",
+ "fecha": "1835",
+ "iiif": "../iiif/turner-incendio-parlamento",
+ "musica": {
+  "src": "satie-gymnopedie-1.mp3",
+  "titulo": "Satie, Gymnopédie n.º 1"
+ },
+ "siguiente": {
+  "titulo": "La noche estrellada",
+  "obra": "noche-estrellada.json"
+ },
+ "salir": "../../",
+ "tema": "Un incendio que Londres miró como un espectáculo: Turner lo agranda hasta que lo que vemos es lo pequeños que somos ante él.",
+ "zonas": {
+  "fuego": {
+   "n": "El fuego",
+   "poly": [
+    [
+     0.14,
+     0.08
+    ],
+    [
+     0.3,
+     0.05
+    ],
+    [
+     0.45,
+     0.1
+    ],
+    [
+     0.55,
+     0.22
+    ],
+    [
+     0.6,
+     0.36
+    ],
+    [
+     0.6,
+     0.48
+    ],
+    [
+     0.57,
+     0.55
+    ],
+    [
+     0.45,
+     0.53
+    ],
+    [
+     0.38,
+     0.42
+    ],
+    [
+     0.28,
+     0.28
+    ],
+    [
+     0.16,
+     0.2
+    ]
+   ],
+   "rel": [
+    "reflejo"
+   ],
+   "mira": "¿Hacia dónde se mueve el fuego?"
+  },
+  "reflejo": {
+   "n": "El reflejo en el río",
+   "poly": [
+    [
+     0.44,
+     0.62
+    ],
+    [
+     0.62,
+     0.62
+    ],
+    [
+     0.64,
+     0.8
+    ],
+    [
+     0.61,
+     1.0
+    ],
+    [
+     0.45,
+     1.0
+    ],
+    [
+     0.47,
+     0.8
+    ]
+   ],
+   "rel": [
+    "fuego"
+   ],
+   "mira": "¿Dónde termina el fuego y empieza el agua?"
+  },
+  "puente": {
+   "n": "El puente",
+   "poly": [
+    [
+     0.15,
+     0.535
+    ],
+    [
+     0.6,
+     0.535
+    ],
+    [
+     0.6,
+     0.62
+    ],
+    [
+     0.15,
+     0.62
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuántos arcos puedes contar?"
+  },
+  "multitud": {
+   "n": "La gente de la orilla",
+   "poly": [
+    [
+     0,
+     0.58
+    ],
+    [
+     0.07,
+     0.6
+    ],
+    [
+     0.11,
+     0.68
+    ],
+    [
+     0.11,
+     0.84
+    ],
+    [
+     0.16,
+     0.86
+    ],
+    [
+     0.33,
+     0.86
+    ],
+    [
+     0.33,
+     1.0
+    ],
+    [
+     0,
+     1.0
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hace la gente de la orilla?"
+  },
+  "barcas": {
+   "n": "Las barcas",
+   "poly": [
+    [
+     0.64,
+     0.66
+    ],
+    [
+     0.68,
+     0.66
+    ],
+    [
+     0.7,
+     0.73
+    ],
+    [
+     0.95,
+     0.76
+    ],
+    [
+     0.96,
+     0.88
+    ],
+    [
+     0.7,
+     0.88
+    ],
+    [
+     0.64,
+     0.8
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde van esas barcas?"
+  },
+  "torres": {
+   "n": "Las torres pálidas",
+   "poly": [
+    [
+     0.68,
+     0.41
+    ],
+    [
+     0.74,
+     0.41
+    ],
+    [
+     0.74,
+     0.53
+    ],
+    [
+     0.68,
+     0.53
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hay al fondo, a la derecha?"
+  },
+  "luz": {
+   "n": "La luz blanca del agua",
+   "poly": [
+    [
+     0.095,
+     0.64
+    ],
+    [
+     0.17,
+     0.64
+    ],
+    [
+     0.175,
+     0.97
+    ],
+    [
+     0.1,
+     0.97
+    ]
+   ],
+   "rel": [],
+   "mira": "¿De qué color es esta otra luz?"
+  }
+ },
+ "camara": {
+  "pincelada": [
+   0.32,
+   0.26,
+   0.16,
+   0.14
+  ]
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  },
+  "mira": {
+   "n": "Mira conmigo",
+   "d": "Te pregunta antes de explicar",
+   "preguntaZonas": true
+  },
+  "ninos": {
+   "n": "Con niños",
+   "d": "Más corta, con juegos de mirar",
+   "lenta": true
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "Guía del museo",
+   "por": "la guía del museo",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "¿Qué está pasando en este cuadro?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "k": "pregunta",
+     "z": null,
+     "t": "Antes de que te cuente nada: ¿qué está pasando en este cuadro?",
+     "p": "mira"
+    },
+    {
+     "z": null,
+     "t": "Esto es El incendio del Parlamento, de J. M. W. Turner, pintado en 1835. La noche del 16 de octubre de 1834, el fuego devoró el Parlamento de Londres.",
+     "x": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Este cuadro lo pintó Turner hace casi doscientos años. Una noche, en Londres, se quemó el edificio del Parlamento, y él lo convirtió en pintura.",
+     "p": "ninos"
+    },
+    {
+     "z": "multitud",
+     "t": "Empieza abajo, a la izquierda. Esas manchas oscuras son personas: la gente se juntó en las orillas del Támesis para contemplar, asombrada, aquel espectáculo terrible.",
+     "x": "ninos"
+    },
+    {
+     "z": "fuego",
+     "t": "Y esto es lo que miraban. Turner partió de un incendio real, pero pintó las llamas mucho más altas de lo que fueron.",
+     "x": "ninos"
+    },
+    {
+     "z": "barcas",
+     "t": "Abajo a la derecha, unas barcas van hacia las llamas. La marea estaba baja: costaba bombear el agua, y los barcos que remolcaban el material contra incendios apenas avanzaban.",
+     "x": "ninos"
+    },
+    {
+     "z": "reflejo",
+     "t": "Mira cómo el fuego baja también por el río. El reflejo arde casi tanto como las llamas.",
+     "x": "ninos"
+    },
+    {
+     "z": "pincelada",
+     "t": "De cerca, las llamas son solo franjas de color: amarillo, naranja, rojo. El museo dice que rozan la abstracción.",
+     "x": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Turner no pinta solo un suceso. Lo usa para hablar de lo indefensos que estamos ante la fuerza destructora de la naturaleza.",
+     "x": "ninos"
+    },
+    {
+     "k": "pregunta",
+     "z": "multitud",
+     "t": "Busca a alguien entre la gente de la orilla. ¿Qué crees que siente?",
+     "p": "general mira"
+    },
+    {
+     "z": "fuego",
+     "t": "¿Ves el fuego? Turner lo pintó más grande de lo que fue, para que nos impresione.",
+     "p": "ninos"
+    },
+    {
+     "z": "multitud",
+     "t": "Abajo a la izquierda hay mucha gente mirando. ¿Cuántas personas eres capaz de contar?",
+     "p": "ninos"
+    },
+    {
+     "z": "barcas",
+     "t": "Y aquí, unas barcas van hacia el fuego para intentar apagarlo.",
+     "p": "ninos"
+    },
+    {
+     "k": "pregunta",
+     "z": "reflejo",
+     "t": "Si tú fueras en una de esas barcas, ¿te acercarías al fuego?",
+     "p": "ninos"
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué edificio es el que arde?",
+     "d": "obra",
+     "z": "fuego",
+     "a": "El Parlamento de Londres: las Cámaras de los Lores y de los Comunes. Ardió la noche del 16 de octubre de 1834."
+    },
+    {
+     "q": "¿Por qué no podían apagarlo?",
+     "d": "obra",
+     "z": "barcas",
+     "a": "Al principio la marea estaba baja. Costaba bombear el agua hasta tierra, y los barcos de vapor que remolcaban el material contra incendios apenas podían avanzar por el río. El fuego ardió sin control durante horas."
+    },
+    {
+     "q": "¿Lo pintó tal como fue?",
+     "d": "obra",
+     "z": "fuego",
+     "a": "No del todo. Partió de un hecho real, pero agrandó la altura de las llamas. Le interesaba expresar lo indefensos que estamos ante la fuerza destructora de la naturaleza."
+    },
+    {
+     "q": "¿Hay otra versión?",
+     "d": "obra",
+     "a": "Sí. Turner pintó dos versiones del incendio. La de Cleveland lo mira río abajo, desde la orilla sureste del Támesis; la del Museo de Arte de Filadelfia, desde justo enfrente del puente de Westminster."
+    },
+    {
+     "q": "¿Dónde se expuso por primera vez?",
+     "d": "obra",
+     "a": "En la Royal Academy de Londres, en 1835, el mismo año en que lo pintó. Al año siguiente se vio en la British Institution."
+    },
+    {
+     "q": "¿Qué pasó después con el cuadro?",
+     "d": "obra",
+     "a": "Se lo compró al propio Turner John Garth Marshall, de Leeds, y pasó a sus descendientes. En 1922 lo compró en Londres John L. Severance, de Cleveland, que lo legó al museo en 1936. Forma parte de su colección desde 1942."
+    },
+    {
+     "q": "¿Quién era Turner?",
+     "d": "fuera",
+     "a": "Joseph Mallord William Turner, hijo de un barbero y fabricante de pelucas de Covent Garden que apoyó su vocación. Entró en las escuelas de la Royal Academy en 1789 y fue académico de pleno derecho en 1802. Para el museo, es el gran paisajista del romanticismo."
+    },
+    {
+     "q": "¿Qué es lo sublime?",
+     "d": "fuera",
+     "ia": true,
+     "a": "Una idea muy presente en tiempos de Turner: el placer mezclado con miedo que se siente ante lo que nos supera, como una tormenta, un abismo o un incendio. Mucha pintura romántica lo busca."
+    },
+    {
+     "q": "¿Qué hay hoy en su lugar?",
+     "d": "fuera",
+     "ia": true,
+     "a": "El Palacio de Westminster que se ve hoy, con la torre del Big Ben, se construyó después del incendio."
+    },
+    {
+     "q": "¿Dónde hay más luz?",
+     "d": "mirar",
+     "z": "reflejo",
+     "a": "En el fuego y en su reflejo: una franja de amarillos y naranjas que baja de las llamas al agua. Síguela con el dedo: empieza en el cielo y no termina hasta el borde del cuadro."
+    },
+    {
+     "q": "¿Hay otra luz además del fuego?",
+     "d": "mirar",
+     "z": "luz",
+     "a": "Sí, a la izquierda: un reflejo blanco y frío en el agua, distinto del naranja del incendio. Compáralos: uno calienta y el otro enfría."
+    },
+    {
+     "q": "¿Qué hay en la otra orilla?",
+     "d": "mirar",
+     "z": "torres",
+     "a": "Al fondo, a la derecha, unas torres pálidas, casi borradas por el humo, y una franja de luces diminutas. Turner las deja en gris: todo el color se lo queda el incendio."
+    },
+    {
+     "q": "¿Qué tamaño tiene en realidad?",
+     "d": "mirar",
+     "a": "Mide 92 centímetros de alto por algo más de 1,2 metros de ancho. Con el marco, pasa de metro y medio."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "The Burning of the Houses of Lords and Commons, 16 October 1834 (El incendio de las Cámaras de los Lores y de los Comunes, 16 de octubre de 1834). También catalogado como Burning of the Houses of Parliament, 1834"
+  ],
+  [
+   "Autor",
+   "Joseph Mallord William Turner (1775–1851)"
+  ],
+  [
+   "Fecha",
+   "1835"
+  ],
+  [
+   "Técnica",
+   "Óleo sobre lienzo"
+  ],
+  [
+   "Medidas",
+   "92 × 123,2 cm"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://clevelandart.org/art/1942.647\" target=\"_blank\" rel=\"noopener\">Cleveland Museum of Art</a>. Legado de John L. Severance (1942.647)"
+  ],
+  [
+   "Imagen y textos",
+   "Open Access del Cleveland Museum of Art, dominio público (CC0). La visita general adapta y traduce la descripción del museo"
+  ],
+  [
+   "Música",
+   "«Gymnopédie n.º 1», de Erik Satie, en versión de Kevin MacLeod (incompetech.com). Licencia <a href=\"https://creativecommons.org/licenses/by/3.0/\" target=\"_blank\" rel=\"noopener\">CC BY 3.0</a>"
+  ]
+ ],
+ "nota": "Maqueta de diseño: la visita general se basa en la descripción del Cleveland Museum of Art (CC0), traducida y adaptada; las preguntas marcadas con «verifícalo» usan conocimiento general. Sin modelo real. La visita se guarda solo en este dispositivo."
+}
