@@ -1,0 +1,2 @@
+# Imágenes de dominio público que no vienen de las APIs de museos. Una por línea: nombre-de-fichero  URL
+noche-estrellada.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg?width=2000
