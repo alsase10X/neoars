@@ -1,0 +1,328 @@
+{
+ "titulo": "El dormitorio",
+ "autor": "Vincent van Gogh",
+ "fecha": "1889",
+ "iiif": "https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d",
+ "musica": {
+  "src": "satie-gymnopedie-1.mp3",
+  "titulo": "Satie, Gymnopédie n.º 1"
+ },
+ "siguiente": {
+  "titulo": "La noche estrellada",
+  "obra": "noche-estrellada.json"
+ },
+ "salir": "../../",
+ "tema": "Un cuarto pintado para descansar, en el que nada está del todo quieto.",
+ "zonas": {
+  "cama": {
+   "n": "La cama",
+   "poly": [
+    [
+     0.48,
+     0.27
+    ],
+    [
+     0.68,
+     0.25
+    ],
+    [
+     0.92,
+     0.3
+    ],
+    [
+     0.93,
+     0.77
+    ],
+    [
+     0.62,
+     0.86
+    ],
+    [
+     0.58,
+     0.62
+    ],
+    [
+     0.5,
+     0.5
+    ]
+   ],
+   "rel": [],
+   "mira": "¿De qué color es la manta?"
+  },
+  "suelo": {
+   "n": "El suelo",
+   "poly": [
+    [
+     0,
+     0.62
+    ],
+    [
+     0.15,
+     0.52
+    ],
+    [
+     0.4,
+     0.48
+    ],
+    [
+     0.5,
+     0.55
+    ],
+    [
+     0.6,
+     0.86
+    ],
+    [
+     0.93,
+     0.78
+    ],
+    [
+     1,
+     0.8
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde parece inclinarse el suelo?"
+  },
+  "ventana": {
+   "n": "La ventana",
+   "poly": [
+    [
+     0.24,
+     0
+    ],
+    [
+     0.39,
+     0
+    ],
+    [
+     0.385,
+     0.28
+    ],
+    [
+     0.24,
+     0.27
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Está abierta o cerrada?"
+  },
+  "silla": {
+   "n": "Las sillas",
+   "poly": [
+    [
+     0,
+     0.42
+    ],
+    [
+     0.12,
+     0.39
+    ],
+    [
+     0.17,
+     0.56
+    ],
+    [
+     0.17,
+     0.85
+    ],
+    [
+     0.03,
+     0.82
+    ],
+    [
+     0,
+     0.7
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuántas sillas hay en el cuarto?"
+  },
+  "cuadros": {
+   "n": "Los cuadros de la pared",
+   "poly": [
+    [
+     0.42,
+     0.07
+    ],
+    [
+     0.55,
+     0.07
+    ],
+    [
+     0.55,
+     0.18
+    ],
+    [
+     0.42,
+     0.18
+    ],
+    [
+     0.6,
+     0.0
+    ],
+    [
+     0.82,
+     0
+    ],
+    [
+     0.87,
+     0.25
+    ],
+    [
+     0.6,
+     0.18
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué cuadros cuelgan en la pared?"
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  },
+  "autor": {
+   "pitch": 0.82,
+   "rate": 0.92,
+   "fem": false
+  }
+ },
+ "citas": {
+  "705": {
+   "t": "Esta vez es sencillamente mi dormitorio, pero aquí el color tiene que hacerlo todo […] sugerir el descanso o el sueño en general. En suma, mirar el cuadro debería hacer descansar la mente, o más bien la imaginación.",
+   "ref": "Vincent a Theo · Arlés, 16 de octubre de 1888 · carta 705",
+   "url": "https://vangoghletters.org/vg/letters/let705/letter.html",
+   "voz": "autor"
+  }
+ },
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "Guía del museo",
+   "por": "la guía del museo",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "¿Qué está pasando en este cuarto?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esto es El dormitorio, de Vincent van Gogh. Es su cuarto en la Casa Amarilla de Arlés, en el sur de Francia, la casa donde se instaló en 1888."
+    },
+    {
+     "z": null,
+     "t": "Cuando pintó la primera versión, en octubre de 1888, le explicó a su hermano Theo lo que buscaba:",
+     "c": "705"
+    },
+    {
+     "z": "cama",
+     "t": "En esa misma carta nombra los colores uno a uno: la cama y las sillas, amarillo de mantequilla fresca; la manta, rojo escarlata; la ventana, verde."
+    },
+    {
+     "z": "suelo",
+     "t": "Y, sin embargo, el cuarto no está quieto. El suelo parece levantarse hacia ti y las líneas huyen deprisa hacia el fondo. El museo ve en ellas, y en la pincelada gruesa y quebrada, cierta energía nerviosa."
+    },
+    {
+     "z": null,
+     "t": "Lo que ves no es el primero. Es la segunda de tres versiones: la pintó en septiembre de 1889, un año después, cuando ya no vivía en esa casa."
+    },
+    {
+     "k": "pregunta",
+     "z": null,
+     "t": "Míralo otra vez. ¿Te parece un cuarto para descansar?"
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Por qué hay tres versiones?",
+     "d": "obra",
+     "a": "La primera es de octubre de 1888. En septiembre de 1889 pintó esta segunda y, a la vez, una tercera más pequeña, como regalo para su madre y su hermana."
+    },
+    {
+     "q": "¿Qué buscaba con este cuadro?",
+     "d": "obra",
+     "a": "Descanso. Se lo explicó a Theo:",
+     "c": "705"
+    },
+    {
+     "q": "¿Dónde están las otras versiones?",
+     "d": "fuera",
+     "ia": true,
+     "a": "La primera está en el Museo Van Gogh de Ámsterdam, y la tercera, la pequeña, en el Museo de Orsay de París."
+    },
+    {
+     "q": "¿Por qué el suelo parece inclinado?",
+     "d": "mirar",
+     "z": "suelo",
+     "a": "Las líneas del suelo y de la cama huyen muy deprisa hacia el fondo, y el suelo parece levantarse hacia ti. Compáralo con la calma que él buscaba."
+    },
+    {
+     "q": "¿Qué colores nombra en su carta?",
+     "d": "mirar",
+     "z": "cama",
+     "a": "Paredes violeta pálido, suelo de baldosas rojas, cama y sillas amarillo mantequilla fresca, sábanas y almohadas verde limón, manta rojo escarlata, ventana verde, mesita naranja, palangana azul y puertas lila. Lo escribió sobre la primera versión: compáralos con los que ves aquí."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "The Bedroom (El dormitorio)"
+  ],
+  [
+   "Autor",
+   "Vincent van Gogh (1853–1890)"
+  ],
+  [
+   "Fecha",
+   "1889. Segunda de tres versiones; la primera es de octubre de 1888"
+  ],
+  [
+   "Técnica",
+   "Óleo sobre lienzo"
+  ],
+  [
+   "Medidas",
+   "73,6 × 92,3 cm"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://www.artic.edu/artworks/28560/the-bedroom\" target=\"_blank\" rel=\"noopener\">Art Institute of Chicago</a>. Helen Birch Bartlett Memorial Collection"
+  ],
+  [
+   "Imagen",
+   "Art Institute of Chicago, servida por IIIF. Dominio público (CC0)"
+  ],
+  [
+   "Cartas",
+   "Cita traducida al castellano a partir de la edición de <a href=\"https://vangoghletters.org\" target=\"_blank\" rel=\"noopener\">vangoghletters.org</a>"
+  ],
+  [
+   "Música",
+   "«Gymnopédie n.º 1», de Erik Satie, en versión de Kevin MacLeod (incompetech.com). Licencia <a href=\"https://creativecommons.org/licenses/by/3.0/\" target=\"_blank\" rel=\"noopener\">CC BY 3.0</a>"
+  ]
+ ],
+ "nota": "Prueba del motor con otra obra: imagen cargada por IIIF desde el Art Institute of Chicago. Textos escritos a mano a partir de la ficha del museo y de la carta 705, sin modelo real."
+}

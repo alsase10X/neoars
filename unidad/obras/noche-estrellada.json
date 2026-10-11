@@ -1,0 +1,1127 @@
+{
+ "titulo": "La noche estrellada",
+ "autor": "Vincent van Gogh",
+ "fecha": "1889",
+ "musica": {
+  "src": "satie-gymnopedie-1.mp3",
+  "titulo": "Satie, Gymnopédie n.º 1"
+ },
+ "siguiente": {
+  "titulo": "El dormitorio",
+  "obra": "el-dormitorio.json"
+ },
+ "tema": "No es el retrato de una noche: es una noche compuesta, pintada de día, con lo que veía desde una ventana, lo que recordaba y lo que imaginaba.",
+ "zonas": {
+  "cielo": {
+   "n": "El cielo",
+   "poly": [
+    [
+     0.8,
+     0.27
+    ],
+    [
+     0.7932,
+     0.3078
+    ],
+    [
+     0.7733,
+     0.3438
+    ],
+    [
+     0.7411,
+     0.376
+    ],
+    [
+     0.6983,
+     0.4029
+    ],
+    [
+     0.6471,
+     0.4232
+    ],
+    [
+     0.5901,
+     0.4357
+    ],
+    [
+     0.53,
+     0.44
+    ],
+    [
+     0.4699,
+     0.4357
+    ],
+    [
+     0.4129,
+     0.4232
+    ],
+    [
+     0.3617,
+     0.4029
+    ],
+    [
+     0.3189,
+     0.376
+    ],
+    [
+     0.2867,
+     0.3438
+    ],
+    [
+     0.2668,
+     0.3078
+    ],
+    [
+     0.26,
+     0.27
+    ],
+    [
+     0.2668,
+     0.2322
+    ],
+    [
+     0.2867,
+     0.1962
+    ],
+    [
+     0.3189,
+     0.164
+    ],
+    [
+     0.3617,
+     0.1371
+    ],
+    [
+     0.4129,
+     0.1168
+    ],
+    [
+     0.4699,
+     0.1043
+    ],
+    [
+     0.53,
+     0.1
+    ],
+    [
+     0.5901,
+     0.1043
+    ],
+    [
+     0.6471,
+     0.1168
+    ],
+    [
+     0.6983,
+     0.1371
+    ],
+    [
+     0.7411,
+     0.164
+    ],
+    [
+     0.7733,
+     0.1962
+    ],
+    [
+     0.7932,
+     0.2322
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde empuja el remolino grande?"
+  },
+  "ciprés": {
+   "n": "El ciprés",
+   "poly": [
+    [
+     0.19,
+     0.06
+    ],
+    [
+     0.21,
+     0.2
+    ],
+    [
+     0.24,
+     0.35
+    ],
+    [
+     0.27,
+     0.5
+    ],
+    [
+     0.3,
+     0.62
+    ],
+    [
+     0.36,
+     0.75
+    ],
+    [
+     0.38,
+     0.9
+    ],
+    [
+     0.36,
+     1
+    ],
+    [
+     0.12,
+     1
+    ],
+    [
+     0.13,
+     0.85
+    ],
+    [
+     0.15,
+     0.7
+    ],
+    [
+     0.16,
+     0.55
+    ],
+    [
+     0.17,
+     0.4
+    ],
+    [
+     0.175,
+     0.25
+    ]
+   ],
+   "rel": [
+    "cielo"
+   ],
+   "mira": "Sigue el contorno del ciprés con la vista: ¿dónde termina?"
+  },
+  "estrella": {
+   "n": "La estrella de la mañana",
+   "poly": [
+    [
+     0.42,
+     0.52
+    ],
+    [
+     0.4184,
+     0.5378
+    ],
+    [
+     0.4136,
+     0.5547
+    ],
+    [
+     0.4058,
+     0.5699
+    ],
+    [
+     0.3955,
+     0.5825
+    ],
+    [
+     0.3832,
+     0.5921
+    ],
+    [
+     0.3695,
+     0.598
+    ],
+    [
+     0.355,
+     0.6
+    ],
+    [
+     0.3405,
+     0.598
+    ],
+    [
+     0.3268,
+     0.5921
+    ],
+    [
+     0.3145,
+     0.5825
+    ],
+    [
+     0.3042,
+     0.5699
+    ],
+    [
+     0.2964,
+     0.5547
+    ],
+    [
+     0.2916,
+     0.5378
+    ],
+    [
+     0.29,
+     0.52
+    ],
+    [
+     0.2916,
+     0.5022
+    ],
+    [
+     0.2964,
+     0.4853
+    ],
+    [
+     0.3042,
+     0.4701
+    ],
+    [
+     0.3145,
+     0.4575
+    ],
+    [
+     0.3268,
+     0.4479
+    ],
+    [
+     0.3405,
+     0.442
+    ],
+    [
+     0.355,
+     0.44
+    ],
+    [
+     0.3695,
+     0.442
+    ],
+    [
+     0.3832,
+     0.4479
+    ],
+    [
+     0.3955,
+     0.4575
+    ],
+    [
+     0.4058,
+     0.4701
+    ],
+    [
+     0.4136,
+     0.4853
+    ],
+    [
+     0.4184,
+     0.5022
+    ]
+   ],
+   "rel": [
+    "ciprés"
+   ],
+   "mira": "¿Qué estrella brilla más para ti?"
+  },
+  "luna": {
+   "n": "La luna",
+   "poly": [
+    [
+     0.975,
+     0.17
+    ],
+    [
+     0.9727,
+     0.1956
+    ],
+    [
+     0.9661,
+     0.2199
+    ],
+    [
+     0.9554,
+     0.2417
+    ],
+    [
+     0.9411,
+     0.2599
+    ],
+    [
+     0.924,
+     0.2736
+    ],
+    [
+     0.905,
+     0.2821
+    ],
+    [
+     0.885,
+     0.285
+    ],
+    [
+     0.865,
+     0.2821
+    ],
+    [
+     0.846,
+     0.2736
+    ],
+    [
+     0.8289,
+     0.2599
+    ],
+    [
+     0.8146,
+     0.2417
+    ],
+    [
+     0.8039,
+     0.2199
+    ],
+    [
+     0.7973,
+     0.1956
+    ],
+    [
+     0.795,
+     0.17
+    ],
+    [
+     0.7973,
+     0.1444
+    ],
+    [
+     0.8039,
+     0.1201
+    ],
+    [
+     0.8146,
+     0.0983
+    ],
+    [
+     0.8289,
+     0.0801
+    ],
+    [
+     0.846,
+     0.0664
+    ],
+    [
+     0.865,
+     0.0579
+    ],
+    [
+     0.885,
+     0.055
+    ],
+    [
+     0.905,
+     0.0579
+    ],
+    [
+     0.924,
+     0.0664
+    ],
+    [
+     0.9411,
+     0.0801
+    ],
+    [
+     0.9554,
+     0.0983
+    ],
+    [
+     0.9661,
+     0.1201
+    ],
+    [
+     0.9727,
+     0.1444
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Te parece una luz que calma o que inquieta?"
+  },
+  "colinas": {
+   "n": "Las colinas",
+   "poly": [
+    [
+     0.42,
+     0.63
+    ],
+    [
+     0.6,
+     0.56
+    ],
+    [
+     0.75,
+     0.55
+    ],
+    [
+     0.88,
+     0.5
+    ],
+    [
+     1,
+     0.5
+    ],
+    [
+     1,
+     0.72
+    ],
+    [
+     0.8,
+     0.74
+    ],
+    [
+     0.6,
+     0.71
+    ],
+    [
+     0.42,
+     0.71
+    ]
+   ],
+   "rel": [
+    "pueblo"
+   ],
+   "mira": "¿Dónde termina la tierra y empieza el cielo?"
+  },
+  "pueblo": {
+   "n": "El pueblo",
+   "poly": [
+    [
+     0.38,
+     0.74
+    ],
+    [
+     0.55,
+     0.72
+    ],
+    [
+     0.75,
+     0.76
+    ],
+    [
+     0.97,
+     0.8
+    ],
+    [
+     1,
+     0.98
+    ],
+    [
+     0.38,
+     0.98
+    ]
+   ],
+   "rel": [],
+   "mira": "Mira el pueblo: ¿qué ves encendido?"
+  },
+  "campanario": {
+   "n": "El campanario",
+   "poly": [
+    [
+     0.565,
+     0.56
+    ],
+    [
+     0.575,
+     0.66
+    ],
+    [
+     0.59,
+     0.74
+    ],
+    [
+     0.595,
+     0.86
+    ],
+    [
+     0.54,
+     0.86
+    ],
+    [
+     0.545,
+     0.74
+    ],
+    [
+     0.555,
+     0.66
+    ]
+   ],
+   "rel": [
+    "ciprés"
+   ],
+   "mira": "Busca entre las casas la única línea recta. ¿La encuentras?"
+  }
+ },
+ "camara": {
+  "pincelada": [
+   0.5,
+   0.18,
+   0.2,
+   0.18
+  ]
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  },
+  "autor": {
+   "pitch": 0.82,
+   "rate": 0.92,
+   "fem": false
+  },
+  "theo": {
+   "pitch": 1,
+   "rate": 0.95,
+   "fem": false
+  }
+ },
+ "citas": {
+  "638": {
+   "t": "Ver las estrellas siempre me hace soñar, tan sencillamente como me hacen soñar los puntos negros del mapa que representan ciudades y pueblos.",
+   "ref": "Vincent a Theo · Arlés, 9 o 10 de julio de 1888 · carta 638",
+   "url": "https://vangoghletters.org/vg/letters/let638/letter.html",
+   "voz": "autor"
+  },
+  "691": {
+   "t": "Tengo una tremenda necesidad de, ¿diré la palabra?, de religión. Entonces salgo de noche a pintar las estrellas.",
+   "ref": "Vincent a Theo · Arlés, hacia el 29 de septiembre de 1888 · carta 691",
+   "url": "https://vangoghletters.org/vg/letters/let691/letter.html",
+   "voz": "autor"
+  },
+  "776": {
+   "t": "A través de la ventana con barrotes de hierro distingo un cuadrado de trigo en un cercado, una perspectiva a la manera de Van Goyen, sobre el que por la mañana veo salir el sol en toda su gloria.",
+   "ref": "Vincent a Theo · Saint-Rémy, hacia el 23 de mayo de 1889 · carta 776",
+   "url": "https://vangoghletters.org/vg/letters/let776/letter.html",
+   "voz": "autor"
+  },
+  "777": {
+   "t": "Esta mañana he visto el campo desde mi ventana mucho antes de que saliera el sol, sin nada más que la estrella de la mañana, que parecía muy grande.",
+   "ref": "Vincent a Theo · Saint-Rémy, entre el 31 de mayo y el 6 de junio de 1889 · carta 777",
+   "url": "https://vangoghletters.org/vg/letters/let777/letter.html",
+   "voz": "autor"
+  },
+  "783": {
+   "t": "Es hermoso en sus líneas y proporciones, como un obelisco egipcio. […] Es la mancha oscura en un paisaje bañado de sol, pero es una de las notas oscuras más interesantes, la más difícil de acertar que pueda imaginar.",
+   "ref": "Vincent a Theo · Saint-Rémy, 25 de junio de 1889 · carta 783",
+   "url": "https://vangoghletters.org/vg/letters/let783/letter.html",
+   "voz": "autor"
+  },
+  "813": {
+   "t": "Percibo claramente lo que te preocupa en los nuevos lienzos, como el pueblo a la luz de la luna […], pero siento que la búsqueda del estilo les quita a las cosas su sentimiento real.",
+   "ref": "Theo a Vincent · París, 22 de octubre de 1889 · carta 813",
+   "url": "https://vangoghletters.org/vg/letters/let813/letter.html",
+   "voz": "theo"
+  },
+  "822": {
+   "t": "Sin embargo, una vez más me permito hacer estrellas demasiado grandes, etc., nuevo fracaso, y ya tengo bastante de eso.",
+   "ref": "Vincent a Émile Bernard · Saint-Rémy, hacia el 26 de noviembre de 1889 · carta 822",
+   "url": "https://vangoghletters.org/vg/letters/let822/letter.html",
+   "voz": "autor"
+  },
+  "638b": {
+   "t": "Igual que tomamos el tren para ir a Tarascón o a Ruan, tomamos la muerte para ir a una estrella.",
+   "ref": "Vincent a Theo · Arlés, 9 o 10 de julio de 1888 · carta 638",
+   "url": "https://vangoghletters.org/vg/letters/let638/letter.html",
+   "voz": "autor"
+  }
+ },
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  },
+  "profundidad": {
+   "n": "En profundidad",
+   "d": "Más contexto, sus cartas y lo que se discute"
+  },
+  "mira": {
+   "n": "Mira conmigo",
+   "d": "Te pregunta antes de explicar",
+   "preguntaZonas": true
+  },
+  "ninos": {
+   "n": "Con niños",
+   "d": "Más corta, con juegos de mirar",
+   "lenta": true
+  },
+  "tecnica": {
+   "n": "Cómo está hecho",
+   "d": "Pincelada, color y materia"
+  },
+  "calma": {
+   "n": "Para desconectar",
+   "d": "Más lenta, con música",
+   "lenta": true,
+   "musica": true
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "Guía del museo",
+   "por": "la guía del museo",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "¿Qué está pasando en este cuadro?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "k": "pregunta",
+     "z": null,
+     "t": "Antes de que te cuente nada: ¿qué está pasando en este cuadro?",
+     "p": "mira"
+    },
+    {
+     "z": null,
+     "t": "Esto es La noche estrellada, de Vincent van Gogh. La pintó en junio de 1889 en Saint-Rémy, en el sur de Francia, donde vivía ingresado en un asilo.",
+     "x": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Este cuadro lo pintó Vincent van Gogh hace más de cien años, en el sur de Francia. Vivía en un hospital, porque estaba enfermo, y allí le dejaban pintar. Vamos a mirarlo juntos.",
+     "p": "ninos"
+    },
+    {
+     "z": "colinas",
+     "t": "Había pedido ingresar él mismo, después de varias crisis en Arlés. Tenía un cuarto para dormir y otro para pintar, y así le describió a su hermano Theo la vista desde su ventana:",
+     "c": 776,
+     "p": "profundidad"
+    },
+    {
+     "z": "estrella",
+     "t": "Desde su ventana veía el campo. Una madrugada le escribió a su hermano Theo:",
+     "c": 777,
+     "x": "ninos profundidad"
+    },
+    {
+     "z": "estrella",
+     "t": "Pocos días después volvió a escribirle:",
+     "c": 777,
+     "p": "profundidad"
+    },
+    {
+     "z": "estrella",
+     "t": "Esa estrella está en el cuadro: es la más grande, junto al ciprés. Suele identificarse con Venus, la estrella de la mañana.",
+     "x": "ninos"
+    },
+    {
+     "z": "estrella",
+     "t": "Una mañana, muy temprano, vio desde su ventana una estrella enorme, y la pintó. ¿La encontráis? Es la más grande, junto al árbol oscuro.",
+     "p": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Pero no lo pintó de noche ni delante de la ventana. Lo pintó de día, en su taller, de memoria. Y cambió cosas.",
+     "x": "ninos"
+    },
+    {
+     "z": "pueblo",
+     "t": "El pueblo no se veía desde su cuarto: lo añadió él. Su campanario, afilado, recuerda a las iglesias de Holanda, donde creció.",
+     "x": "ninos"
+    },
+    {
+     "z": "campanario",
+     "t": "Buscad la torre de la iglesia, entre las casas. Es lo único recto de todo el cuadro.",
+     "p": "ninos"
+    },
+    {
+     "z": "ciprés",
+     "t": "Y el ciprés lo acercó hasta casi tocar el borde de arriba. Une la tierra con el cielo.",
+     "x": "ninos profundidad"
+    },
+    {
+     "z": "ciprés",
+     "t": "Y el ciprés lo acercó hasta casi tocar el borde de arriba. Esos días los cipreses le obsesionaban. Le escribió a Theo:",
+     "c": 783,
+     "tras": "En el Mediterráneo es el árbol de los cementerios; muchos lo leen como un puente entre la vida y la muerte.",
+     "p": "profundidad"
+    },
+    {
+     "z": "ciprés",
+     "t": "El árbol oscuro es un ciprés, enorme, como una llama que sube hasta el cielo. ¿A qué se parece? ¿A una llama? ¿A un monstruo?",
+     "p": "ninos"
+    },
+    {
+     "z": "cielo",
+     "t": "El cielo no está quieto. Las pinceladas giran y empujan unas a otras, y cada estrella late dentro de su halo.",
+     "x": "ninos"
+    },
+    {
+     "z": "pincelada",
+     "t": "Acércate: el óleo va tan cargado que en algunas zonas tiene relieve. Las pinceladas, cortas, siguen la forma de cada cosa: giran en el cielo, suben en el ciprés, ondulan en las colinas.",
+     "p": "tecnica profundidad"
+    },
+    {
+     "z": "luna",
+     "t": "Arriba a la derecha, la luna, en un halo naranja. Su luz está hecha solo de color: amarillo junto a azul, que se intensifican el uno al otro.",
+     "p": "tecnica profundidad"
+    },
+    {
+     "k": "pregunta",
+     "z": "cielo",
+     "t": "Sigue el remolino con la vista. ¿Hacia dónde te lleva?",
+     "p": "mira profundidad"
+    },
+    {
+     "k": "pregunta",
+     "z": null,
+     "t": "Contad las estrellas del cielo. ¿Cuántas encontráis?",
+     "p": "ninos"
+    },
+    {
+     "k": "pregunta",
+     "z": "cielo",
+     "t": "Respira. Deja que la mirada siga el remolino, sin prisa.",
+     "p": "calma"
+    },
+    {
+     "z": null,
+     "t": "Las estrellas le ocupaban desde hacía tiempo. Un año antes, en Arlés, había escrito:",
+     "c": 638,
+     "p": "profundidad"
+    },
+    {
+     "z": null,
+     "t": "Él lo llamaba «un estudio de cielo estrellado», y no quedó del todo satisfecho. En octubre, Theo le escribió desde París:",
+     "c": 813,
+     "p": "profundidad"
+    },
+    {
+     "z": null,
+     "t": "Y en noviembre, Vincent le confesó a su amigo Émile Bernard que se había vuelto a permitir «estrellas demasiado grandes». Muchos lo leen como una alusión a este cuadro.",
+     "p": "profundidad"
+    },
+    {
+     "z": null,
+     "t": "No es el retrato de una noche. Es una noche compuesta con lo que veía, lo que recordaba y lo que imaginaba.",
+     "x": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Una noche pintada de día, con lo que veía, lo que recordaba y lo que imaginaba. ¿Qué parte os gusta más?",
+     "p": "ninos"
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué es esa estrella tan grande?",
+     "d": "obra",
+     "z": "estrella",
+     "a": "Se suele identificar con Venus, la estrella de la mañana. Van Gogh le contó a Theo que la había visto desde su ventana antes del amanecer:",
+     "c": 777
+    },
+    {
+     "q": "¿Por qué estaba en un asilo?",
+     "d": "obra",
+     "a": "Tras varias crisis en Arlés, pidió ingresar en el asilo de Saint-Paul en mayo de 1889. Se quedó un año y pudo seguir pintando: fue uno de sus periodos más productivos. Las causas de su enfermedad se siguen discutiendo."
+    },
+    {
+     "q": "¿Pintaba las estrellas de noche?",
+     "d": "obra",
+     "a": "Un año antes, en Arlés, sí salía a pintarlas al aire libre. Este, en cambio, lo pintó de día y de memoria. Así se lo contaba a Theo desde Arlés:",
+     "c": 691
+    },
+    {
+     "q": "¿Le gustó el resultado?",
+     "d": "obra",
+     "a": "No del todo. En noviembre de 1889 le escribió a su amigo Émile Bernard:",
+     "c": 822
+    },
+    {
+     "q": "¿Qué simbolizan los cipreses?",
+     "d": "fuera",
+     "z": "ciprés",
+     "ia": true,
+     "a": "En el Mediterráneo se asocian con los cementerios y el duelo desde la Antigüedad. Van Gogh, en sus cartas, habla sobre todo de su forma y de su color. No hay una sola lectura."
+    },
+    {
+     "q": "¿Se puede visitar hoy aquel lugar?",
+     "d": "fuera",
+     "ia": true,
+     "a": "El antiguo monasterio de Saint-Paul-de-Mausole, en Saint-Rémy-de-Provence, sigue funcionando como centro de salud, y una parte se puede visitar, con una reconstrucción de su habitación."
+    },
+    {
+     "q": "¿Qué pasó después con él y con el cuadro?",
+     "d": "fuera",
+     "a": "Van Gogh murió en julio de 1890 en Auvers-sur-Oise, cerca de París, un año después de pintarlo. En vida vendió muy poco. El cuadro llegó al Museum of Modern Art de Nueva York en 1941, a través del legado de Lillie P. Bliss."
+    },
+    {
+     "q": "¿Qué tamaño tiene en realidad?",
+     "d": "mirar",
+     "a": "En pantalla parece enorme, pero mide 92 centímetros de ancho por 74 de alto: algo menos de un metro. Separa las manos con los brazos medio abiertos y tendrás su anchura."
+    },
+    {
+     "q": "¿Dónde está la línea más recta del cuadro?",
+     "d": "mirar",
+     "z": "campanario",
+     "a": "Busca el campanario, entre las casas del pueblo. Es la única vertical rígida: todo lo demás, el cielo, las colinas y el ciprés, se curva a su alrededor."
+    },
+    {
+     "q": "¿Hacia dónde gira el cielo?",
+     "d": "mirar",
+     "z": "cielo",
+     "a": "Sigue el remolino grande del centro: arrastra la mirada de izquierda a derecha, hacia la luna. Las estrellas pequeñas giran sobre sí mismas, cada una en su halo."
+    }
+   ]
+  },
+  "autor": {
+   "nombre": "Vincent van Gogh",
+   "desc": "en primera persona",
+   "por": "Van Gogh, en primera persona",
+   "corto": "Vincent",
+   "ini": "VG",
+   "acc": "#e7c33f",
+   "voz": "autor",
+   "placeholder": "Pregúntale a Vincent…",
+   "conversa": "Conversa con Van Gogh",
+   "te": "Vincent te pregunta",
+   "vts": "Dime: ¿qué ves aquí que se mueva?",
+   "rol": "Eres Vincent van Gogh (1853–1890) y presentas tu obra. Solo sabes lo que viviste; lo posterior lo remites a la guía.",
+   "relato": [
+    {
+     "k": "pregunta",
+     "z": null,
+     "t": "Antes de que te cuente nada: ¿qué crees que está pasando aquí?",
+     "p": "mira"
+    },
+    {
+     "z": null,
+     "t": "Soy Vincent. Este cuadro lo pinté en junio de 1889 en Saint-Rémy, en el sur de Francia, donde vivía en un asilo.",
+     "x": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Hola, soy Vincent, y este cuadro lo pinté yo, hace mucho tiempo, en el sur de Francia. Vivía en un hospital, porque estaba enfermo, y allí me dejaban pintar. ¿Lo miramos juntos?",
+     "p": "ninos"
+    },
+    {
+     "z": "colinas",
+     "t": "Pedí ingresar yo mismo, después de unos meses muy malos en Arlés. Tenía un cuarto para dormir y otro para pintar. A Theo, mi hermano, le conté lo que veía desde la ventana:",
+     "c": 776,
+     "p": "profundidad"
+    },
+    {
+     "z": "estrella",
+     "t": "Desde mi ventana veía el campo. Una madrugada le escribí a Theo, mi hermano:",
+     "c": 777,
+     "x": "ninos profundidad"
+    },
+    {
+     "z": "estrella",
+     "t": "Pocos días después volví a escribirle:",
+     "c": 777,
+     "p": "profundidad"
+    },
+    {
+     "z": "estrella",
+     "t": "Ahí la tienes: la estrella grande, junto al ciprés. No la pinté como un punto, sino como anillos de color.",
+     "x": "ninos"
+    },
+    {
+     "z": "estrella",
+     "t": "Una mañana, muy temprano, vi desde mi ventana una estrella enorme, y la pinté. ¿La encuentras? Es la más grande, junto al árbol oscuro.",
+     "p": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Pero esto no lo pinté de noche, ni delante de la ventana. Lo pinté de día, en el taller, con lo que recordaba. Y cambié cosas.",
+     "x": "ninos"
+    },
+    {
+     "z": "pueblo",
+     "t": "El pueblo no se veía desde mi cuarto: lo puse yo. Y su campanario es afilado, como los de las iglesias de Holanda, donde crecí.",
+     "x": "ninos"
+    },
+    {
+     "z": "campanario",
+     "t": "Busca la torre de la iglesia, entre las casas. Es lo único recto de todo el cuadro.",
+     "p": "ninos"
+    },
+    {
+     "z": "ciprés",
+     "t": "El ciprés lo traje hasta delante, hasta que casi tocara el borde de arriba. De la tierra al cielo.",
+     "x": "ninos profundidad"
+    },
+    {
+     "z": "ciprés",
+     "t": "El ciprés lo traje hasta delante, hasta que casi tocara el borde de arriba. Esos días los cipreses no me dejaban en paz. Le escribí a Theo:",
+     "c": 783,
+     "p": "profundidad"
+    },
+    {
+     "z": "ciprés",
+     "t": "El árbol oscuro es un ciprés. Lo puse enorme, como una llama que sube hasta el cielo. ¿A qué se parece? ¿A una llama? ¿A un monstruo?",
+     "p": "ninos"
+    },
+    {
+     "z": "cielo",
+     "t": "Y el cielo. Las pinceladas giran, se enroscan, empujan unas a otras. No hay nada quieto.",
+     "x": "ninos"
+    },
+    {
+     "z": "pincelada",
+     "t": "Acércate a la pintura: va muy cargada, en algunas zonas tiene relieve. Cada pincelada sigue la forma de lo que pinta: gira en el cielo, sube en el ciprés, ondula en las colinas.",
+     "p": "tecnica profundidad"
+    },
+    {
+     "z": "luna",
+     "t": "Arriba, la luna, con su halo naranja. Su luz la hice solo con color: amarillo junto a azul.",
+     "p": "tecnica profundidad"
+    },
+    {
+     "k": "pregunta",
+     "z": "cielo",
+     "t": "Sigue el remolino con la vista. ¿Hacia dónde te lleva?",
+     "p": "mira profundidad"
+    },
+    {
+     "k": "pregunta",
+     "z": null,
+     "t": "Contad las estrellas del cielo. ¿Cuántas encontráis?",
+     "p": "ninos"
+    },
+    {
+     "k": "pregunta",
+     "z": "cielo",
+     "t": "Respira. Deja que la mirada siga el remolino, sin prisa.",
+     "p": "calma"
+    },
+    {
+     "z": null,
+     "t": "Las estrellas me hacían soñar desde hacía tiempo. En Arlés le escribí a Theo:",
+     "c": "638b",
+     "p": "profundidad"
+    },
+    {
+     "z": null,
+     "t": "Para mí era un estudio de cielo estrellado. No sé si me salió bien: Theo me escribió que la búsqueda del estilo les quita a las cosas su sentimiento real. Y yo se lo confesé a mi amigo Bernard:",
+     "c": 822,
+     "p": "profundidad"
+    },
+    {
+     "z": null,
+     "t": "No es el retrato de una noche. Es una noche hecha con lo que veía, lo que recordaba y lo que imaginaba.",
+     "x": "ninos"
+    },
+    {
+     "z": null,
+     "t": "Una noche pintada de día. ¿Qué parte te gusta más?",
+     "p": "ninos"
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué es esa estrella tan grande?",
+     "d": "obra",
+     "z": "estrella",
+     "a": "La estrella de la mañana. Se lo conté a Theo:",
+     "c": 777
+    },
+    {
+     "q": "¿Por qué estabas en el asilo?",
+     "d": "obra",
+     "a": "En Arlés pasé meses muy malos, con crisis que me dejaban sin fuerzas. Pedí ingresar para estar tranquilo y poder seguir pintando. Theo me sostenía desde París."
+    },
+    {
+     "q": "¿Pintabas las estrellas de noche?",
+     "d": "obra",
+     "a": "En Arlés, sí: salía a pintarlas al aire libre. Este no; lo pinté de día, de memoria. Se lo conté a Theo desde Arlés:",
+     "c": 691
+    },
+    {
+     "q": "¿Te gustó cómo quedó?",
+     "d": "obra",
+     "a": "No del todo. Se lo dije a mi amigo Bernard:",
+     "c": 822
+    },
+    {
+     "q": "¿Qué significan los cipreses?",
+     "d": "fuera",
+     "z": "ciprés",
+     "ia": true,
+     "a": "En el Mediterráneo se asocian con los cementerios. Pero yo los miraba sobre todo por su forma y su color, tan oscuro frente al cielo."
+    },
+    {
+     "q": "¿Llegaste a ser famoso?",
+     "d": "fuera",
+     "a": "Vendí muy poco. Lo que pasó después con mis cuadros ya no lo viví. Pregúntaselo a la guía.",
+     "pasa": {
+      "a": "guia",
+      "t": "No en vida. Vendió muy poco y era conocido sobre todo entre otros artistas. La fama le llegó después de su muerte, en 1890. Hoy este cuadro es una de las imágenes más reconocidas del mundo."
+     }
+    },
+    {
+     "q": "¿Dónde está hoy este cuadro?",
+     "d": "fuera",
+     "a": "Eso ya no lo viví. Pregúntaselo a la guía.",
+     "pasa": {
+      "a": "guia",
+      "t": "En el Museum of Modern Art de Nueva York. Llegó en 1941, a través del legado de Lillie P. Bliss, una de las fundadoras del museo."
+     }
+    },
+    {
+     "q": "¿Qué tamaño tiene en realidad?",
+     "d": "mirar",
+     "a": "Mide 92 centímetros de ancho por 74 de alto: menos de un metro. Separa las manos con los brazos medio abiertos y tendrás su anchura."
+    },
+    {
+     "q": "¿Dónde está la línea más recta?",
+     "d": "mirar",
+     "z": "campanario",
+     "a": "Busca el campanario entre las casas. Es lo único recto: todo lo demás se curva a su alrededor."
+    },
+    {
+     "q": "¿Hacia dónde gira el cielo?",
+     "d": "mirar",
+     "z": "cielo",
+     "a": "Sigue el remolino grande: va hacia la derecha, hacia la luna. Las estrellas pequeñas giran cada una en su halo."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "The Starry Night. Van Gogh lo llamó «estudio de cielo estrellado»"
+  ],
+  [
+   "Autor",
+   "Vincent van Gogh (1853–1890)"
+  ],
+  [
+   "Fecha",
+   "Junio de 1889, Saint-Rémy-de-Provence"
+  ],
+  [
+   "Técnica",
+   "Óleo sobre lienzo"
+  ],
+  [
+   "Medidas",
+   "73,7 × 92,1 cm: algo menos de un metro de ancho"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://www.moma.org/collection/works/79802\" target=\"_blank\" rel=\"noopener\">Museum of Modern Art, Nueva York</a>. Adquirido mediante el legado de Lillie P. Bliss (por intercambio), 1941"
+  ],
+  [
+   "Cartas",
+   "Citas traducidas al castellano a partir de la edición de <a href=\"https://vangoghletters.org\" target=\"_blank\" rel=\"noopener\">vangoghletters.org</a> (Van Gogh Museum y Huygens ING). Cada cita enlaza a su carta"
+  ],
+  [
+   "Imagen",
+   "Google Art Project, vía Wikimedia Commons. Dominio público. Servida como IIIF estático desde este mismo sitio"
+  ],
+  [
+   "Música",
+   "«Gymnopédie n.º 1», de Erik Satie, en versión de Kevin MacLeod (incompetech.com). Licencia <a href=\"https://creativecommons.org/licenses/by/3.0/\" target=\"_blank\" rel=\"noopener\">CC BY 3.0</a>, vía Wikimedia Commons"
+  ]
+ ],
+ "nota": "Maqueta de diseño: textos escritos a mano a partir de la ficha del MoMA y de las cartas, sin modelo real. La voz de Van Gogh está interpretada: solo son palabras suyas las que van entre comillas, con su carta. Las respuestas con borde discontinuo y «Conocimiento general · verifícalo» no salen de la base documental. La visita se guarda solo en este dispositivo.",
+ "salir": "../../",
+ "iiif": "../iiif/noche-estrellada"
+}

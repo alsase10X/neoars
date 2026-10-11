@@ -1,0 +1,31 @@
+{
+ "@context": "http://iiif.io/api/image/2/context.json",
+ "@id": "https://alsase10x.github.io/neoars/unidad/iiif/noche-estrellada",
+ "protocol": "http://iiif.io/api/image",
+ "width": 3840,
+ "height": 3041,
+ "profile": [
+  "http://iiif.io/api/image/2/level0.json"
+ ],
+ "sizes": [
+  {
+   "width": 96,
+   "height": 76
+  },
+  {
+   "width": 1200,
+   "height": 950
+  }
+ ],
+ "tiles": [
+  {
+   "width": 512,
+   "scaleFactors": [
+    1,
+    2,
+    4,
+    8
+   ]
+  }
+ ]
+}
