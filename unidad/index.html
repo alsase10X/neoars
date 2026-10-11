@@ -93,6 +93,9 @@ a{color:inherit}
 .sheet .pn{background:#0d0d0e;border-top:2px solid var(--fg);display:flex;flex-direction:column;height:100%;animation:rise .35s cubic-bezier(.2,.8,.2,1)}
 @keyframes rise{from{transform:translateY(30px);opacity:0}}
 #hablarS{top:36%;bottom:var(--barH)}
+/* Con el teclado abierto, la conversación ocupa exactamente la parte visible de la pantalla */
+html.teclado #hablarS{top:var(--vvTop,0px);bottom:auto;height:calc(var(--vvH,100vh) - var(--barH))}
+html.teclado .askbar{bottom:auto;top:calc(var(--vvTop,0px) + var(--vvH,100vh) - var(--barH));padding-bottom:0}
 #ajS,#fichaS{top:0;bottom:0;z-index:45;background:rgba(0,0,0,.4);padding-top:14%}
 .sheet .hd{display:flex;align-items:center;gap:10px;padding:10px 6px 10px var(--pad);border-bottom:1px solid var(--hair)}
 .sheet .hd b{flex:1;font-size:.95rem;font-weight:800}
@@ -614,7 +617,21 @@ function abrirHablar(){
   $('hablarS').hidden = false;
   requestAnimationFrame(() => reencuadrar(500));
 }
-$('askI').addEventListener('focus', abrirHablar);
+$('askI').addEventListener('focus', () => { abrirHablar(); setTimeout(teclado, 300); });
+$('askI').addEventListener('blur', () => setTimeout(teclado, 60));
+// Teclado del móvil: el navegador desplaza la vista para mostrar el campo y la parte de arriba quedaba fuera.
+// Se sigue el «visual viewport» y se colocan la conversación y la barra dentro de lo que se ve.
+let hMax = innerHeight;
+function teclado(){
+  const vv = window.visualViewport; if(!vv) return;
+  hMax = Math.max(hMax, innerHeight);
+  const r = document.documentElement, abierto = vv.height < hMax*.8 && document.activeElement === $('askI');
+  r.style.setProperty('--vvTop', vv.offsetTop + 'px'); r.style.setProperty('--vvH', vv.height + 'px');
+  r.classList.toggle('teclado', abierto);
+  if(abierto){ const d = $('deep'); d.scrollTop = d.scrollHeight; }
+}
+if(window.visualViewport){ visualViewport.addEventListener('resize', teclado); visualViewport.addEventListener('scroll', teclado); }
+addEventListener('orientationchange', () => { hMax = 0; setTimeout(teclado, 400); });
 $('askI').addEventListener('pointerdown', abrirHablar);
 // Tres preguntas sugeridas, una por dirección: sobre la obra, más allá de ella, volver a mirar
 function elegir(){
