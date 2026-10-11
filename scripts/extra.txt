@@ -3,3 +3,5 @@ noche-estrellada.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Van_Go
 satie-gymnopedie-1-macleod.mp3  https://commons.wikimedia.org/wiki/Special:FilePath/Gymnopedie_No._1_(ISRC_USUAN1100787).mp3
 monet-panuelo-rojo.jpg  https://openaccess-cdn.clevelandart.org/1958.39/1958.39_print.jpg
 cma-1958.39.json  https://openaccess-api.clevelandart.org/api/artworks/135382
+turner-incendio-parlamento.jpg  https://openaccess-cdn.clevelandart.org/1942.647/1942.647_print.jpg
+cma-1942.647.json  https://openaccess-api.clevelandart.org/api/artworks/122351
