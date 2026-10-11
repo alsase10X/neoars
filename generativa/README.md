@@ -3,7 +3,15 @@
 Prueba de la unidad de obra mediada con una capa generativa encima de la visita del museo. Es una copia aparte: `unidad/` no se toca.
 
 - En la web: [alsase10x.github.io/neoars/generativa/](https://alsase10x.github.io/neoars/generativa/)
+- Variante de diseño para comparar: [generativa/reproductor.html](https://alsase10x.github.io/neoars/generativa/reproductor.html)
 - Imágenes y música: las de `unidad/`, sin copiarlas.
+
+## Variante «reproductor»
+
+Mismo motor y mismos datos; solo cambia la interfaz.
+
+- **Abajo, un reproductor.** Una barra de progreso con un segmento por cápsula, largo según lo que dura, con el tiempo transcurrido y el total aproximado. Tocar un segmento salta a esa cápsula, igual que tocar el texto. Debajo, reproducir, la pregunta y el micrófono; al escribir, el botón de reproducir deja sitio al de enviar. Sin botones de atrás y adelante: el relato se sigue recorriendo con el dedo.
+- **Arriba, un solo menú «⋯».** Junta la ficha y las fuentes, la música, quién te la cuenta, la visita y lo que sé de ti. La cabecera queda con la flecha, el título y la fecha.
 
 ## Dónde funciona lo generativo
 
