@@ -8,7 +8,7 @@ Prueba de la unidad de obra mediada con una capa generativa encima de la visita 
 
 ## Variante «reproductor»
 
-Mismo motor y mismos datos; solo cambia la interfaz.
+Mismo motor y mismos datos; solo cambia la interfaz. El menú «⋯» ya está también en la versión principal; la barra-reproductor se queda solo aquí, pendiente de darle otra vuelta.
 
 - **Abajo, un reproductor.** Una barra de progreso con un segmento por cápsula, largo según lo que dura, con el tiempo transcurrido y el total aproximado. Tocar un segmento salta a esa cápsula, igual que tocar el texto. Debajo, reproducir, la pregunta y el micrófono; al escribir, el botón de reproducir deja sitio al de enviar. Sin botones de atrás y adelante: el relato se sigue recorriendo con el dedo.
 - **Arriba, un solo menú «⋯».** Junta la ficha y las fuentes, la música, quién te la cuenta, la visita y lo que sé de ti. La cabecera queda con la flecha, el título y la fecha.

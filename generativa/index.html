@@ -118,6 +118,16 @@ a{color:inherit}
 .askbar button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
 .askbar .send{background:var(--fg);color:var(--ink)}
 .askbar .rec{animation:inv 1s steps(2) infinite}
+/* Menú «⋯»: ficha, música, quién te la cuenta, visita y lo que sé de ti */
+.menu{display:flex;flex-direction:column;border-top:1px solid var(--hair)}
+.fila-m{display:flex;align-items:center;gap:12px;text-align:left;padding:12px 0;border-bottom:1px solid var(--hair);min-height:58px}
+.fila-m>span:first-child{flex:1;min-width:0}
+.fila-m b{display:block;font-size:.98rem;font-weight:800}
+.fila-m small{display:block;font-size:.8rem;font-weight:500;color:var(--muted);margin-top:2px}
+.tog{width:40px;height:22px;border:2px solid var(--muted);position:relative;flex:none}
+.tog::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;background:var(--muted);transition:left .2s}
+.fila-m[aria-pressed=true] .tog{border-color:var(--fg);background:var(--fg)}
+.fila-m[aria-pressed=true] .tog::after{left:20px;background:var(--ink)}
 @keyframes inv{50%{background:var(--fg);color:var(--ink)}}
 
 .sheet{position:fixed;left:0;right:0;z-index:30;display:flex;flex-direction:column}
@@ -215,9 +225,7 @@ summary{cursor:pointer;font-size:.95rem;font-weight:800;padding:12px 0}
   <div class="top">
     <button class="ib" id="salir" aria-label="Volver a la exposición"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="who"><b id="tTit"></b><small id="tSub"></small></div>
-    <button class="ib" id="musicaB" aria-pressed="false" aria-label="Música" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></button>
-    <button class="ib" id="fichaB" aria-label="Ficha, fuentes y créditos">i</button>
-    <button class="ib" id="ajustesB" aria-label="Quién te la cuenta, otras visitas y lo que sé de ti"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+    <button class="ib" id="ajustesB" aria-label="Más: ficha, música, quién te la cuenta y lo que sé de ti"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></button>
   </div>
   <button class="pill" id="encuadre" hidden>Volver al encuadre</button>
   <div id="letra">
@@ -245,6 +253,10 @@ summary{cursor:pointer;font-size:.95rem;font-weight:800;padding:12px 0}
   <div class="pn" role="dialog" aria-label="Tu visita">
     <div class="hd"><b>Tu visita</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="deep">
+      <div class="menu">
+        <button class="fila-m" type="button" id="mFicha"><span><b>Ficha y fuentes</b><small>Créditos, base documental y cómo leer las miradas</small></span><span aria-hidden="true">→</span></button>
+        <button class="fila-m" type="button" id="musicaB" aria-pressed="false" hidden><span><b>Música</b><small id="mMus"></small></span><span class="tog" aria-hidden="true"></span></button>
+      </div>
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
       <fieldset><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
       <fieldset><legend>Sobre ti</legend><p class="note" id="tuTxt"></p><div class="fila2"><button class="b2" type="button" id="tuCambiar">Contarte algo</button><button class="b2" type="button" id="tuBorrar">Borrar</button></div></fieldset>
@@ -377,7 +389,7 @@ async function iniciar(datos, desde){
   $('tTit').textContent = OBRA.titulo; $('tSub').innerHTML = `${esc(OBRA.autor)} · <span class="nw">${esc(OBRA.fecha)}</span>`;
   $('pic').src = OBRA.img; $('pic').alt = `${OBRA.titulo}, de ${OBRA.autor}`; $('unidad').setAttribute('aria-label', $('pic').alt);
   document.querySelectorAll('.fondo').forEach(f => f.style.backgroundImage = `url("${OBRA.fondo || OBRA.img}")`);
-  $('musicaB').hidden = !OBRA.musica;
+  $('musicaB').hidden = !OBRA.musica; $('mMus').textContent = OBRA.musica ? OBRA.musica.titulo : '';
   pintarFicha();
   $('fsGuia').hidden = meds.length < 2; $('fPerfil').parentNode.hidden = Object.keys(OBRA.visitas).length < 2;
   $('fGuia').innerHTML = meds.map((k, n) => `<button data-v="${k}">${esc(MED(k).nombre)}<small>${n === 0 ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
@@ -1249,7 +1261,7 @@ function abrirFicha(bid){
   const li = bid && document.getElementById('b-' + bid);
   if(li){ $('fBaseD').open = true; li.classList.add('on'); requestAnimationFrame(() => li.scrollIntoView({block:'center'})); }
 }
-$('fichaB').onclick = () => abrirFicha();
+$('mFicha').onclick = () => { $('ajS').hidden = true; const a = ajAntes; ajAntes = false; abrirFicha(); fichaAntes = a; };
 function cerrarFicha(){ $('fichaS').hidden = true; if(fichaAntes && $('hablarS').hidden) play(); fichaAntes = false; }
 $('salir').onclick = () => { const s = (EXPO && EXPO.salir) || (OBRA && OBRA.salir); if(s) location.href = s; else toast('En la exposición, esto te devuelve al recorrido'); };
 const cierres = {hablarS:cerrarHablar, ajS:cerrarAjustes, fichaS:cerrarFicha, pideS:cerrarPide};
