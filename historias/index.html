@@ -57,11 +57,12 @@ a{color:inherit}
 .play{height:42px;padding:0 16px 0 13px;display:flex;align-items:center;gap:8px;background:var(--fg);color:#000;font-size:.95rem;font-weight:800;flex:none}
 .play svg{width:16px;height:16px;fill:currentColor}
 #lista{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:0 var(--pad);scroll-snap-type:y mandatory;
-  -webkit-mask-image:linear-gradient(transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(transparent,#000 8%,#000 92%,transparent)}
+  -webkit-mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent)}
 #lista::-webkit-scrollbar{display:none}
+#lista .tope,#lista .cola{height:50%}
 .cap{display:block;width:100%;text-align:left;padding:18px 0;font-size:clamp(1.12rem,4.8vw,1.34rem);font-weight:700;letter-spacing:-.012em;line-height:1.38;max-width:34ch;opacity:.28;transition:opacity .4s;cursor:pointer}
-/* Una cápsula por pantalla: todas del mismo alto, el texto centrado y el desplazamiento se ancla en cada una */
-#lista .cap{display:flex;flex-direction:column;justify-content:center;min-height:100%;padding:24px 0;scroll-snap-align:start;scroll-snap-stop:always}
+/* La cápsula se ancla en el centro; la anterior y la siguiente asoman arriba y abajo */
+#lista .cap{padding:22px 0;scroll-snap-align:center;scroll-snap-stop:always}
 .cap p+p,.cap p+div,.cap div+p{margin-top:.55em}
 .cap.ya{opacity:.5}
 .cap.ahora,.cap.apunta{opacity:1;cursor:default}
@@ -372,7 +373,7 @@ function duracion(){
 }
 
 function pintarLista(){
-  const L = $('lista'); U.dur = duracion(); L.innerHTML = '';
+  const L = $('lista'); U.dur = duracion(); L.innerHTML = '<div class="tope" aria-hidden="true"></div>';
   $('pTexto').querySelectorAll('.cap').forEach(el => el.remove());
   U.caps.forEach((C, i) => {
     const el = document.createElement('div'); el.className = 'cap' + (C.k === 'pregunta' ? ' pregunta' : '') + (C.k === 'silencio' ? ' silencio' : ''); el.dataset.i = i; el.setAttribute('role', 'button'); el.tabIndex = 0;
@@ -388,6 +389,7 @@ function pintarLista(){
     });
     (C.tipo === 'intro' ? $('pTexto') : L).appendChild(el);   // la entrada se cuenta en la portada
   });
+  L.insertAdjacentHTML('beforeend', '<div class="cola" aria-hidden="true"></div>');
   marcarActual(false);
 }
 const capEl = i => document.querySelector(`.cap[data-i="${i}"]`);
@@ -398,7 +400,7 @@ function marcarActual(scroll = true){
   if(scroll && !U.dedo && !U.fin) centrar(capEl(U.i));
   estadoPlay();
 }
-function centrar(el, suave = true){ if(!el || !$('lista').contains(el)) return; $('lista').scrollTo({top:el.offsetTop, behavior:suave && !RM ? 'smooth' : 'auto'}); }
+function centrar(el, suave = true){ if(!el || !$('lista').contains(el)) return; const L = $('lista'), top = el.offsetHeight > L.clientHeight ? el.offsetTop : el.offsetTop + el.offsetHeight/2 - L.clientHeight/2; L.scrollTo({top, behavior:suave && !RM ? 'smooth' : 'auto'}); }
 // Solo se mueve dentro de una cápsula que no cabe en la pantalla
 function seguirPalabra(w){
   if(U.dedo || !w || !$('lista').contains(w)) return; const L = $('lista'), c = w.closest('.cap');
