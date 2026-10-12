@@ -61,13 +61,14 @@ a{color:inherit}
 #lista::-webkit-scrollbar{display:none}
 #lista .tope{height:var(--foco,60px)}
 #lista .cola{height:70%}
-.cap{display:block;width:100%;text-align:left;padding:12px 0;font-size:clamp(1.12rem,4.8vw,1.34rem);font-weight:700;letter-spacing:-.012em;line-height:1.38;max-width:34ch;opacity:.28;transition:opacity .4s;cursor:pointer}
+.cap{display:block;width:100%;text-align:left;padding:18px 0;font-size:clamp(1.12rem,4.8vw,1.34rem);font-weight:700;letter-spacing:-.012em;line-height:1.38;max-width:34ch;opacity:.28;transition:opacity .4s;cursor:pointer}
+/* Un solo tamaño para todas las cápsulas y una línea fina entre ellas: se ve dónde empieza y acaba cada una */
+#lista .cap + .cap{border-top:1px solid var(--hair)}
 .cap p+p,.cap p+div,.cap div+p{margin-top:.55em}
 .cap.ya{opacity:.5}
 .cap.ahora,.cap.apunta{opacity:1;cursor:default}
 #lista.moviendo .cap.ahora:not(.apunta){opacity:.5}
-.cap.pregunta{font-size:clamp(1.3rem,5.6vw,1.6rem);font-weight:800;letter-spacing:-.025em;line-height:1.18}
-.cap blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;padding-left:12px}
+.cap blockquote{font-style:normal;font-weight:inherit;border:0;padding:0}
 .cap .ref{font-size:.85rem;font-weight:500;font-style:normal;color:var(--muted);line-height:1.35;margin-top:8px;letter-spacing:0}
 .cap .ref a{text-decoration:underline;text-underline-offset:2px}
 .w{transition:opacity .25s}
@@ -187,7 +188,6 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 .tira button:hover span{color:var(--fg)}
 .nw{white-space:nowrap}
 a.fila-m{text-decoration:none}
-.cap.silencio{font-style:italic;font-weight:600}
 #unidad:not(.sonando) #lista .cap{opacity:1}
 .p-acc .b2{min-width:120px}
 .finh{font-size:.8rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
