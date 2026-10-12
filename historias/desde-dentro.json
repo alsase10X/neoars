@@ -1,0 +1,103 @@
+{
+ "titulo": "Desde dentro",
+ "tema": "Mirar desde dentro: un cuarto que se recuerda, una ventana desde la que se sueña y un cristal a través del cual alguien nos devuelve la mirada.",
+ "musica": {
+  "src": "../unidad/obras/satie-gymnopedie-1.mp3",
+  "titulo": "Satie, Gymnopédie n.º 1"
+ },
+ "intro": [
+  {
+   "z": null,
+   "t": "Esta historia va de mirar desde dentro. Tres cuadros, tres interiores: un cuarto, una ventana y una puerta de cristal."
+  },
+  {
+   "z": null,
+   "t": "En cada uno, alguien está dentro y algo pasa fuera. Fíjate en dónde te coloca el pintor a ti."
+  }
+ ],
+ "paradas": [
+  {
+   "obra": "../unidad/obras/el-dormitorio.json",
+   "unidad": "../unidad/?obra=obras/el-dormitorio.json",
+   "caps": [
+    {
+     "z": null,
+     "t": "Empezamos dentro del todo: el dormitorio de Van Gogh en la Casa Amarilla de Arlés, la casa donde se instaló en 1888."
+    },
+    {
+     "z": "cama",
+     "t": "Cuando pintó la primera versión, le explicó a su hermano Theo qué buscaba:",
+     "c": "705"
+    },
+    {
+     "z": null,
+     "t": "Esta que ves la pintó un año después, en septiembre de 1889, cuando ya no vivía allí: estaba ingresado en un asilo de Saint-Rémy. Pintaba un cuarto que ya no era suyo."
+    },
+    {
+     "k": "pregunta",
+     "z": "ventana",
+     "t": "Mira la ventana. ¿Está abierta o cerrada?"
+    }
+   ]
+  },
+  {
+   "obra": "../unidad/obras/noche-estrellada.json",
+   "unidad": "../unidad/?obra=obras/noche-estrellada.json",
+   "caps": [
+    {
+     "z": null,
+     "t": "En ese mismo asilo, tres meses antes, Van Gogh había mirado por otra ventana. Así se lo contaba a Theo:",
+     "c": "776"
+    },
+    {
+     "z": "estrella",
+     "t": "Esa estrella grande, junto al ciprés, es la que veía de madrugada desde su ventana, antes de que saliera el sol."
+    },
+    {
+     "z": "pueblo",
+     "t": "Pero el cuadro no copia la vista. Lo pintó de día y de memoria, y añadió un pueblo que desde su cuarto no se veía."
+    },
+    {
+     "k": "silencio",
+     "z": "cielo",
+     "pausa": 7,
+     "t": "Míralo en silencio unos segundos."
+    },
+    {
+     "z": null,
+     "t": "Desde dentro, quizá la ventana no encierra la mirada: le deja sitio para imaginar."
+    }
+   ]
+  },
+  {
+   "obra": "../unidad/obras/el-panuelo-rojo.json",
+   "unidad": "../unidad/?obra=obras/el-panuelo-rojo.json",
+   "caps": [
+    {
+     "z": "puertas",
+     "t": "Último interior. También aquí estamos dentro, detrás de unas puertas de cristal: en la casa de Monet en Argenteuil."
+    },
+    {
+     "z": "camille",
+     "t": "Pero esta vez, lo que pasa fuera nos mira. Camille, la primera mujer de Monet, pasa por la nieve y nos mira un instante."
+    },
+    {
+     "z": "rostro",
+     "t": "Su cara son unas pocas manchas de pintura, puestas deprisa. Es lo que dura un vistazo."
+    }
+   ]
+  }
+ ],
+ "cierre": [
+  {
+   "z": null,
+   "t": "Un cuarto que se recuerda, una ventana desde la que se sueña y un cristal que nos devuelve la mirada."
+  },
+  {
+   "k": "pregunta",
+   "z": null,
+   "t": "Y tú, ahora mismo, ¿desde dónde estás mirando?"
+  }
+ ],
+ "nota": "Prototipo de historia: tres obras encadenadas con textos escritos para el tema, a partir de la base documental de cada obra. Cada obra conserva su unidad completa, a la que se llega desde la historia. Sin modelo real. La historia se guarda solo en este dispositivo."
+}
