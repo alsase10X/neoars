@@ -163,9 +163,25 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 .parada{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;padding:16px 0 2px;margin-top:6px;border-top:1px solid var(--hair);max-width:34ch;opacity:.5;transition:opacity .4s;cursor:pointer;font-size:.85rem;font-weight:800}
 .parada .num{color:var(--muted);font-variant-numeric:tabular-nums}
 .parada.ahora{opacity:1}
-.portada{display:flex;flex-direction:column;gap:10px;padding:2px 0 16px;max-width:40ch}
-.portada h1{font-size:clamp(1.8rem,8vw,2.3rem);font-weight:900;letter-spacing:-.03em;line-height:1.02;text-wrap:balance}
-.portada p{font-size:.98rem;font-weight:600;line-height:1.4;color:var(--muted)}
+/* ---------- Portada: pantalla propia, como la carátula de un disco ---------- */
+.portadaS{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;transition:opacity .7s,transform .7s}
+.portadaS.fuera{opacity:0;transform:scale(.96);pointer-events:none}
+.portadaS > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.p-velo{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,0) 18%,rgba(0,0,0,0) 36%,rgba(10,10,11,.72) 60%,rgba(10,10,11,.97))}
+.p-top{position:absolute;top:0;left:0;right:0;display:flex;padding:calc(env(safe-area-inset-top,0px) + 8px) 6px 0 4px;z-index:2}
+.p-cuerpo{position:relative;z-index:2;display:flex;flex-direction:column;gap:14px;padding:0 var(--pad) calc(env(safe-area-inset-bottom,0px) + 24px);max-width:600px}
+.p-kick{font-size:.8rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.p-cuerpo h1{font-size:clamp(2.6rem,13vw,4.4rem);font-weight:900;letter-spacing:-.04em;line-height:.95;text-wrap:balance}
+.p-texto{min-height:5.6em}
+.p-tema{font-size:clamp(1.1rem,4.8vw,1.35rem);font-weight:700;line-height:1.35;max-width:30ch}
+.p-texto .cap{display:none;padding:0;opacity:1;font-size:clamp(1.2rem,5.4vw,1.5rem);max-width:30ch;cursor:default}
+.portadaS.empezada .p-tema,.portadaS:not(.empezada) .p-texto .cap{display:none}
+.portadaS.empezada .p-texto .cap.ahora{display:block}
+.portadaS.sonando .cap.ahora .w{opacity:.32}
+.portadaS.sonando .cap.ahora .w.on{opacity:1}
+.p-acc{display:flex;align-items:center;gap:6px 20px;flex-wrap:wrap}
+.p-acc .b1{min-width:210px;max-width:none}
+@media (prefers-reduced-motion:reduce){ .portadaS{transition:none} }
 .tira{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px var(--pad) 2px 0;margin-right:calc(-1*var(--pad))}
 .tira::-webkit-scrollbar{display:none}
 .tira button{flex:none;width:64px;display:flex;flex-direction:column;gap:5px;text-align:left}
@@ -249,6 +265,22 @@ dd{min-width:0;overflow-wrap:anywhere}
     <div class="deep"><dl id="fDl"></dl><p class="note" id="fNotaO"></p><div class="hist" id="fHist"></div></div>
   </div>
 </div>
+<section class="portadaS" id="portadaS" aria-label="Portada de la historia">
+  <img id="pImg" alt="">
+  <div class="p-velo" aria-hidden="true"></div>
+  <div class="p-top"><button class="ib" id="pSalir" aria-label="Volver"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button></div>
+  <div class="p-cuerpo">
+    <span class="p-kick" id="pKick"></span>
+    <h1 id="pTit"></h1>
+    <div class="p-texto" id="pTexto" aria-live="polite"><p class="p-tema" id="pTema"></p></div>
+    <div class="p-acc">
+      <button class="b1" id="pPlay"><span id="pPlayT">Escuchar</span> <span id="pPlayF" aria-hidden="true">→</span></button>
+      <button class="lk" id="pObras" aria-expanded="false">Ver las obras</button>
+      <button class="lk" id="pSaltar" hidden>Saltar la entrada</button>
+    </div>
+    <div class="tira" id="pTira" hidden></div>
+  </div>
+</section>
 <div id="toast" role="status"></div>
 
 <script>
@@ -327,7 +359,8 @@ function iniciar(){
   let V = null; try{ V = JSON.parse(store.get('visita', '') || 'null'); }catch(e){}
   U.asked = new Set(V && V.a || []); U.i = V && !V.fin ? Math.max(0, Math.min(V.i || 0, U.caps.length - 1)) : 0;
   musicaUI();
-  cambiarObra(U.caps[U.i].p, true).then(() => { pintarLista(); if(U.i === 0) $('lista').scrollTop = 0; else centrar(capEl(U.i), false); U.zona = '__'; camaraCap(true); });
+  pintarPortada();
+  cambiarObra(U.caps[U.i].p, true).then(() => { pintarLista(); centrar(capEl(U.i), false); U.zona = '__'; camaraCap(true); });
 }
 
 /* ======================= Las pistas: entrada, una parada por obra, cierre ======================= */
@@ -353,13 +386,10 @@ function duracion(){
   U.segundos = Math.round(pal/2.5 + U.caps.length*1.2 + U.caps.reduce((a, C) => a + (C.k === 'silencio' ? (C.pausa || 7) : 0), 0));
   return U.segundos < 90 ? `${Math.max(30, Math.round(U.segundos/15)*15)} s` : `${Math.round(U.segundos/60*2)/2} min`.replace('.5', ',5');
 }
-// La portada: título, tema y una tira con todas las obras
-function portadaHTML(){
-  return `<div class="portada" id="portada"><h1>${esc(S.titulo)}</h1><div class="tira">`
-    + OBRAS.map((O, p) => `<button type="button" data-tira="${p}" aria-label="Ir a la obra ${p + 1}: ${esc(O.titulo)}"><img src="${esc(O.fondo || O.img)}" alt=""><span>${p + 1}. ${esc(O.titulo)}</span></button>`).join('') + `</div><p>${esc(S.tema)}</p></div>`;
-}
+
 function pintarLista(){
-  const L = $('lista'); duracion(); L.innerHTML = '<div class="tope" aria-hidden="true"></div>' + portadaHTML();
+  const L = $('lista'); U.dur = duracion(); L.innerHTML = '<div class="tope" aria-hidden="true"></div>';
+  $('pTexto').querySelectorAll('.cap').forEach(el => el.remove());
   U.caps.forEach((C, i) => {
     if(C.tipo === 'inicio') L.insertAdjacentHTML('beforeend', cabeceraParada(C.p));
     if(C.tipo === 'cierre') L.insertAdjacentHTML('beforeend', '<div class="parada" data-cierre="1"><span class="num">Para terminar</span></div>');
@@ -374,7 +404,7 @@ function pintarLista(){
       SENT(s.t).forEach(f => { const n = f.split(/\s+/).length; C.frases.push({t:f, voz:s.voz, w:spans.slice(k, k + n)}); k += n; });
       if(k < spans.length && C.frases.length) C.frases[C.frases.length - 1].w.push(...spans.slice(k));
     });
-    L.appendChild(el);
+    (C.tipo === 'intro' ? $('pTexto') : L).appendChild(el);   // la entrada se cuenta en la portada
   });
   const fin = document.createElement('div'); fin.className = 'fin'; fin.id = 'fin';
   fin.innerHTML = '<p class="finh">Las obras de esta historia</p><div class="obras">' + OBRAS.map((O, p) => `<a class="obraL" href="${esc(S.paradas[p].unidad || '#')}"><img src="${esc(O.fondo || O.img)}" alt=""><span><b>${esc(O.titulo)}</b><small>${esc(O.autor)} · ${esc(O.fecha)}. Ver la obra completa</small></span></a>`).join('') + '</div>'
@@ -383,22 +413,46 @@ function pintarLista(){
   L.insertAdjacentHTML('beforeend', '<div class="cola" aria-hidden="true"></div>');
   marcarActual(false);
 }
-const capEl = i => document.querySelector(`#lista .cap[data-i="${i}"]`);
+const capEl = i => document.querySelector(`.cap[data-i="${i}"]`);
 const primeraDe = p => U.caps.findIndex(C => C.p === p && C.tipo === 'inicio');
 function foco(){ return Math.round($('lista').clientHeight*.16); }
 function marcarActual(scroll = true){
-  document.querySelectorAll('#lista .cap').forEach((el, n) => { el.classList.toggle('ya', n < U.i); el.classList.toggle('ahora', n === U.i && !U.fin); });
-  marcarParada(); cabecera();
+  document.querySelectorAll('.cap[data-i]').forEach(el => { const n = +el.dataset.i; el.classList.toggle('ya', n < U.i); el.classList.toggle('ahora', n === U.i && !U.fin); });
+  marcarParada(); cabecera(); portada();
   $('fin') && $('fin').classList.toggle('ahora', U.fin);
   if(scroll && !U.dedo) centrar(U.fin ? $('fin') : capEl(U.i));
   estadoPlay();
 }
 function marcarParada(){ const C = U.caps[U.i]; document.querySelectorAll('#lista .parada[data-p]').forEach(el => el.classList.toggle('ahora', !!C && +el.dataset.p === C.p && C.tipo !== 'intro' && C.tipo !== 'cierre' && C.tipo !== 'fin')); }
-function centrar(el, suave = true){ if(!el) return; const L = $('lista'); L.style.setProperty('--foco', foco() + 'px'); L.scrollTo({top:Math.max(0, el.offsetTop - foco()), behavior:suave && !RM ? 'smooth' : 'auto'}); }
+function centrar(el, suave = true){ if(!el || !$('lista').contains(el)) return; const L = $('lista'); L.style.setProperty('--foco', foco() + 'px'); L.scrollTo({top:Math.max(0, el.offsetTop - foco()), behavior:suave && !RM ? 'smooth' : 'auto'}); }
 function seguirPalabra(w){
-  if(U.dedo || !w) return; const L = $('lista'), y = w.offsetTop - L.scrollTop;
+  if(U.dedo || !w || !$('lista').contains(w)) return; const L = $('lista'), y = w.offsetTop - L.scrollTop;
   if(y > L.clientHeight*.66) L.scrollTo({top:w.offsetTop - L.clientHeight*.36, behavior:RM ? 'auto' : 'smooth'});
 }
+
+/* ======================= Portada: imagen a sangre, título, tema y Escuchar ======================= */
+function pintarPortada(){
+  const O = OBRAS[S.portada.obra], e = S.portada.encuadre;
+  $('pImg').src = O.img; $('pImg').alt = `${O.titulo}, de ${O.autor}`;
+  if(e) $('pImg').style.objectPosition = `${((e[0] + e[2]/2)*100).toFixed(1)}% ${((e[1] + e[3]/2)*100).toFixed(1)}%`;
+  $('pTit').textContent = S.titulo; $('pTema').textContent = S.tema;
+  $('pTira').innerHTML = OBRAS.map((O, p) => `<button type="button" data-tira="${p}" aria-label="Empezar por la obra ${p + 1}: ${esc(O.titulo)}"><img src="${esc(O.fondo || O.img)}" alt=""><span>${p + 1}. ${esc(O.titulo)}</span></button>`).join('');
+}
+// Se ve antes de empezar y mientras suena la entrada; se retira al llegar a la primera obra
+function portada(){
+  if(!U || !U.caps.length) return;
+  const C = U.caps[U.i], ver = !U.fin && ((!U.started && U.i === 0) || (C && C.tipo === 'intro'));
+  const el = $('portadaS'); el.classList.toggle('fuera', !ver); el.setAttribute('aria-hidden', !ver);
+  el.classList.toggle('empezada', !!U.started); el.classList.toggle('sonando', U.playing);
+  $('pKick').textContent = `Historia · ${OBRAS.length} obras${U.dur ? ' · ' + U.dur : ''}`;
+  $('pPlayT').textContent = U.playing ? 'Pausa' : U.started ? 'Seguir' : 'Escuchar'; $('pPlayF').hidden = U.playing;
+  $('pSaltar').hidden = !U.started || !U.caps.some(X => X.tipo === 'intro');
+}
+$('pPlay').onclick = () => { if(!U) return; U.playing ? pausa() : play(); };
+$('pSaltar').onclick = () => { if(!U) return; ir(primeraDe(0)); if(!U.playing) play(); };
+$('pObras').onclick = () => { const t = $('pTira'); t.hidden = !t.hidden; $('pObras').setAttribute('aria-expanded', !t.hidden); };
+$('pTira').onclick = e => { const b = e.target.closest('[data-tira]'); if(!b || !U) return; ir(primeraDe(+b.dataset.tira)); if(!U.playing) play(); };
+$('pSalir').onclick = () => $('salir').click();
 
 /* ======================= Cambio de obra: fundido y nueva imagen ======================= */
 let cambioGen = 0, cambio = null;
@@ -430,11 +484,10 @@ function estadoPlay(){
   $('playT').textContent = U.playing ? 'Pausa' : U.fin ? 'De nuevo' : U.started || U.i > 0 ? 'Seguir' : `Escuchar · ${dur}`;
   $('play').setAttribute('aria-label', U.playing ? 'Pausar' : 'Escuchar');
   $('unidad').classList.toggle('sonando', U.playing);
-  nivelMusica();
+  nivelMusica(); portada();
 }
 function play(){
   if(U.fin){ U.fin = false; U.i = 0; U.si = 0; marcarActual(); camaraCap(true); }
-  if(!U.started && U.i === 0) centrar(capEl(0));   // de la portada a la primera frase
   U.playing = true; U.started = true;
   if(P.musica) musica(true);
   estadoPlay(); sonar(); deriva();
