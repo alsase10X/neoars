@@ -280,6 +280,7 @@ function resolver(desde){
   const abs = v => v && !/^(data:|blob:|https?:)/.test(v) ? new URL(v, desde).href : v;
   OBRA.img = abs(OBRA.img); OBRA.fondo = abs(OBRA.fondo); OBRA.salir = abs(OBRA.salir); OBRA.iiif = abs(OBRA.iiif);
   if(OBRA.musica) OBRA.musica.src = abs(OBRA.musica.src);
+  Object.values(OBRA.mediadores || {}).forEach(m => { if(m.audio) m.audio.src = abs(m.audio.src); });
   if(OBRA.siguiente && OBRA.siguiente.obra) OBRA.siguiente.obra = abs(OBRA.siguiente.obra);
 }
 /* ======================= Imagen: archivo único o IIIF (teselas a la resolución que pide el zoom) ======================= */
@@ -321,14 +322,15 @@ function pintarTeselas(){
 
 /* ======================= El relato: cápsulas, frases, palabras ======================= */
 function construir(){
-  const out = [], vistas = new Set();
+  const out = [], vistas = new Set(), grabada = audioVisita();
+  if(grabada) precargarVoz();
   M().relato.filter(incl).forEach(c => {
     if(VIS().preguntaZonas && c.z && OBRA.zonas[c.z] && OBRA.zonas[c.z].mira && !vistas.has(c.z) && c.k !== 'pregunta') out.push({k:'pregunta', z:c.z, segs:[{t:OBRA.zonas[c.z].mira}]});
     if(c.z) vistas.add(c.z);
     const segs = [{t:c.t}];
     if(c.c){ const C = OBRA.citas[c.c]; segs.push({t:C.t, voz:C.voz, cita:c.c}); }
     if(c.tras) segs.push({t:c.tras});
-    out.push({k:c.k || 'texto', z:c.z === undefined ? null : c.z, segs});
+    out.push({k:c.k || 'texto', z:c.z === undefined ? null : c.z, segs, au:grabada && c.au ? c.au : null});
   });
   return out;
 }
@@ -347,6 +349,8 @@ function pintarLista(){
       SENT(s.t).forEach(f => { const n = f.split(/\s+/).length; C.frases.push({t:f, voz:s.voz, w:spans.slice(k, k + n)}); k += n; });
       if(k < spans.length && C.frases.length) C.frases[C.frases.length - 1].w.push(...spans.slice(k));
     });
+    // El audio grabado solo vale si tiene un tiempo por cada palabra del texto actual
+    if(C.au && (!C.au.w || C.au.w.length !== palabrasDe(C))){ console.warn(`Cápsula ${i}: el audio no corresponde al texto; suena con la voz del navegador`); C.au = null; }
     L.appendChild(el);
   });
   const otros = Object.keys(OBRA.mediadores).filter(k => k !== P.guia);
@@ -355,10 +359,10 @@ function pintarLista(){
     otros.map(k => `<button class="lk" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join('');
   L.appendChild(fin); finPreguntas();
   L.insertAdjacentHTML('beforeend', '<div class="cola" aria-hidden="true"></div>');
-  const palabras = U.caps.reduce((a, C) => a + C.frases.reduce((b, f) => b + f.w.length, 0), 0);
-  U.segundos = Math.round(palabras/2.5 + U.caps.length*1.2);
+  U.segundos = Math.round(U.caps.reduce((a, C) => a + (C.au ? C.au.a - C.au.de : palabrasDe(C)/2.5), 0) + U.caps.length*1.2);
   marcarActual(false);
 }
+const palabrasDe = C => C.frases.reduce((a, f) => a + f.w.length, 0);
 const capEl = i => document.querySelector(`#lista .cap[data-i="${i}"]`);
 function foco(){ return Math.round($('lista').clientHeight*.16); }
 function marcarActual(scroll = true){
@@ -411,6 +415,7 @@ function sonar(){
     U.timer = setTimeout(() => { if(tok !== U.tok || !U.playing) return; if(U.i >= U.caps.length - 1) return terminar(); U.i++; U.si = 0; marcarActual(); guardar(); sonar(); }, espera);
     return;
   }
+  if(C.au && !VOZ.fallo) return decirCapsula(C, tok);
   const f = C.frases[U.si];
   decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); U.si++; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 180); });
 }
@@ -744,7 +749,59 @@ function guardar(){ store.set('visita', JSON.stringify({i:U.i, a:[...U.asked], f
 addEventListener('pagehide', () => U && guardar());
 
 /* ======================= Voz y música ======================= */
-function callar(){ try{ speechSynthesis.cancel(); }catch(e){} }
+function callar(){
+  try{ speechSynthesis.cancel(); }catch(e){}
+  cancelAnimationFrame(VOZ.raf);
+  if(VOZ.nodo){ const n = VOZ.nodo; VOZ.nodo = null; n.onended = null; try{ n.stop(); }catch(e){} }
+}
+/* Voz grabada: si el mediador trae audio para esta visita («audio» con «src» y «visitas»), cada cápsula
+   suena desde su tramo del archivo («au»: de, a y el inicio de cada palabra, en segundos) y las palabras
+   se encienden con esos tiempos. Va por Web Audio, como la música, porque el visor no deja usar <audio>.
+   Sin audio, si el texto no coincide o si no carga, suena la voz del navegador como siempre. */
+const VOZ = {src:null, bytes:null, carga:null, fallo:false, nodo:null, raf:0};
+function audioVisita(){ const a = M().audio; return a && a.src && (!a.visitas || tiene(a.visitas, P.perfil)) ? a : null; }
+function bytesDe(src){
+  if(src.startsWith('data:')) return Promise.resolve((() => { const s = atob(src.split(',')[1]), u = new Uint8Array(s.length); for(let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u.buffer; })());
+  return fetch(src).then(r => { if(!r.ok) throw new Error(r.status); return r.arrayBuffer(); });
+}
+function precargarVoz(){
+  const a = audioVisita(); if(!a || VOZ.src === a.src) return;
+  Object.assign(VOZ, {src:a.src, carga:null, fallo:false, bytes:bytesDe(a.src)}); VOZ.bytes.catch(() => {});
+}
+function vozGrabada(){
+  if(!VOZ.carga){ const src = VOZ.src; VOZ.carga = VOZ.bytes.then(buf => new Promise((res, rej) => contexto().decodeAudioData(buf, res, rej))); VOZ.carga.catch(() => { if(VOZ.src === src) VOZ.fallo = true; }); }
+  return VOZ.carga;
+}
+// Una cápsula grabada, desde la frase por la que se iba (U.si) hasta su final
+function decirCapsula(C, tok){
+  const ws = C.frases.flatMap(f => f.w), au = C.au, si0 = U.si;
+  let k = 0; for(let i = 0; i < si0; i++) k += C.frases[i].w.length;
+  const desde = Math.max(0, (k ? au.w[k] : au.de) - .06), hasta = au.a + .2;
+  vozGrabada().then(buf => {
+    if(tok !== U.tok || !U.playing) return;
+    const ac = contexto(), src = ac.createBufferSource(); src.buffer = buf; src.connect(ac.destination);
+    const t0 = ac.currentTime + .05; src.start(t0, desde, Math.max(.1, hasta - desde)); VOZ.nodo = src;
+    let n0 = -1;
+    const paso = () => {
+      if(tok !== U.tok) return;
+      const t = desde + Math.max(0, ac.currentTime - t0);
+      let n = k; while(n < ws.length && au.w[n] <= t + .04) n++;
+      if(n !== n0){
+        n0 = n; ws.slice(0, n).forEach(w => w.classList.add('on')); seguirPalabra(ws[n - 1]);
+        // La frase que suena, para retomar desde su principio tras una pausa
+        let a = 0, si = 0; while(si < C.frases.length - 1 && a + C.frases[si].w.length < n){ a += C.frases[si].w.length; si++; }
+        U.si = Math.max(si0, si);
+      }
+      VOZ.raf = requestAnimationFrame(paso);
+    };
+    src.onended = () => {
+      if(tok !== U.tok) return;
+      cancelAnimationFrame(VOZ.raf); VOZ.nodo = null; C.frases.forEach(f => encender(f)); U.si = C.frases.length;
+      U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 180);
+    };
+    paso();
+  }).catch(() => { if(tok === U.tok && U.playing){ VOZ.fallo = true; sonar(); } });
+}
 function vozPara(k){
   let vs = []; try{ vs = (speechSynthesis.getVoices() || []).filter(x => /^es/i.test(x.lang)); }catch(e){}
   if(!vs.length) return null;
@@ -775,9 +832,7 @@ function contexto(){
 function pista(){
   if(MBUF) return Promise.resolve(MBUF);
   if(!MCARGA){
-    const src = OBRA.musica.src;
-    const bytes = src.startsWith('data:') ? Promise.resolve((() => { const s = atob(src.split(',')[1]), u = new Uint8Array(s.length); for(let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u.buffer; })()) : fetch(src).then(r => r.arrayBuffer());
-    MCARGA = bytes.then(buf => new Promise((res, rej) => AC.decodeAudioData(buf, res, rej))).then(b => (MBUF = b));
+    MCARGA = bytesDe(OBRA.musica.src).then(buf => new Promise((res, rej) => AC.decodeAudioData(buf, res, rej))).then(b => (MBUF = b));
   }
   return MCARGA;
 }

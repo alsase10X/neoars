@@ -276,6 +276,10 @@
    "ini": "G",
    "acc": "#f6f5f2",
    "voz": "guia",
+   "audio": {
+    "src": "el-panuelo-rojo-guia.mp3",
+    "visitas": "general"
+   },
    "placeholder": "Pregunta a la guía…",
    "conversa": "Conversa con la guía",
    "te": "La guía te pregunta",
@@ -291,7 +295,8 @@
     {
      "z": null,
      "t": "Esto es El pañuelo rojo, de Claude Monet. Lo pintó hacia 1868–1873, y retrata a Camille, su primera mujer, un día de nieve.",
-     "x": "ninos"
+     "x": "ninos",
+     "au": {"de": 0.08, "a": 12.14, "w": [0.08, 0.49, 0.89, 1.09, 1.65, 2.26, 2.44, 2.78, 3.74, 3.95, 4.34, 4.73, 8.58, 8.73, 9.15, 9.3, 10.01, 10.18, 10.65, 11.23, 11.39, 11.68, 11.84]}
     },
     {
      "z": null,
@@ -301,12 +306,14 @@
     {
      "z": "puertas",
      "t": "Estamos dentro de su casa de Argenteuil, cerca de París, mirando a través de las puertas de cristal que dan al jardín. La madera oscura y las cortinas enmarcan la escena.",
-     "x": "ninos"
+     "x": "ninos",
+     "au": {"de": 12.92, "a": 23.6, "w": [12.92, 13.42, 13.77, 13.95, 14.13, 14.47, 14.65, 15.42, 15.76, 15.94, 16.71, 17.19, 17.36, 17.7, 17.88, 18.06, 18.41, 18.59, 18.94, 19.12, 19.31, 19.48, 20.5, 20.66, 21.11, 21.55, 21.71, 21.89, 22.47, 22.95, 23.13]}
     },
     {
      "z": "camille",
      "t": "Camille pasa por fuera y nos mira un instante. Su capa roja es el único color intenso del cuadro: hacia ella va la mirada, más allá del cristal.",
-     "x": "ninos"
+     "x": "ninos",
+     "au": {"de": 24.31, "a": 34.07, "w": [24.31, 24.78, 25.1, 25.28, 25.61, 25.77, 25.96, 26.27, 26.45, 27.55, 27.72, 28.04, 28.36, 28.53, 28.71, 29.16, 29.49, 29.96, 30.14, 31.14, 31.44, 31.73, 31.89, 32.04, 32.85, 33.06, 33.45, 33.66]}
     },
     {
      "z": "camille",
@@ -316,7 +323,8 @@
     {
      "z": "rostro",
      "t": "Acércate a su cara. No hay detalle: son unas pocas manchas de pintura, puestas deprisa. Para su época, era una forma de pintar radicalmente atrevida.",
-     "x": "ninos"
+     "x": "ninos",
+     "au": {"de": 34.73, "a": 44.9, "w": [34.73, 35.29, 35.44, 35.59, 36.4, 36.58, 36.78, 37.77, 37.95, 38.29, 38.63, 38.99, 39.17, 39.79, 40.15, 41.2, 41.47, 41.61, 42.16, 42.46, 42.76, 43.07, 43.24, 43.56, 44.31]}
     },
     {
      "z": "rostro",
@@ -326,18 +334,21 @@
     {
      "z": "jardin",
      "t": "La nieve y los árboles están hechos igual: pinceladas anchas y quebradas de blanco y verde puros.",
-     "x": "ninos"
+     "x": "ninos",
+     "au": {"de": 45.62, "a": 51.95, "w": [45.62, 45.8, 46.15, 46.33, 46.52, 47.02, 47.37, 47.72, 48.71, 49.4, 49.77, 49.95, 50.49, 50.68, 51.05, 51.23, 51.59]}
     },
     {
      "z": null,
      "t": "Es un momento breve, casi un vistazo, detenido para siempre. El cuadro era muy especial para Monet: lo tuvo consigo toda su vida.",
-     "x": "ninos"
+     "x": "ninos",
+     "au": {"de": 53.12, "a": 62.99, "w": [53.12, 53.29, 53.47, 53.95, 54.78, 55.12, 55.3, 56.33, 56.97, 57.3, 58.36, 58.54, 58.9, 59.23, 59.42, 59.94, 60.28, 61.16, 61.32, 61.63, 62.23, 62.52, 62.69]}
     },
     {
      "k": "pregunta",
      "z": "camille",
      "t": "Tapa con el dedo la capa roja. ¿Qué le pasa al cuadro?",
-     "p": "general mira"
+     "p": "general mira",
+     "au": {"de": 63.72, "a": 67.25, "w": [63.72, 64.05, 64.23, 64.41, 64.73, 64.91, 65.24, 66.17, 66.33, 66.49, 66.78, 66.94]}
     },
     {
      "k": "pregunta",
