@@ -50,19 +50,15 @@ a{color:inherit}
 
 /* ---------- El relato, como letras ---------- */
 #letra{position:absolute;left:0;right:0;bottom:var(--barH);height:var(--letraH);z-index:6;display:flex;flex-direction:column;background:linear-gradient(rgba(10,10,11,0),rgba(10,10,11,.88) 34px,rgba(10,10,11,.96))}
-.lhd{display:flex;align-items:center;gap:10px;padding:14px var(--pad) 4px}
-.lhd .quien{flex:1;min-width:0}
-.lhd .quien b{display:block;font-size:.95rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lhd .quien small{display:block;font-size:.85rem;color:var(--muted);margin-top:2px}
-.play{height:42px;padding:0 16px 0 13px;display:flex;align-items:center;gap:8px;background:var(--fg);color:#000;font-size:.95rem;font-weight:800;flex:none}
-.play svg{width:16px;height:16px;fill:currentColor}
+.ib.play,.ib.play:hover{background:var(--fg);color:#000}
+.ib.play svg{width:18px;height:18px;fill:currentColor;stroke:none}
 #lista{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:0 var(--pad);scroll-snap-type:y mandatory;
-  -webkit-mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(transparent,#000 18%,#000 82%,transparent)}
+  -webkit-mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(transparent,#000 10%,#000 90%,transparent)}
 #lista::-webkit-scrollbar{display:none}
 #lista .tope,#lista .cola{height:50%}
 .cap{display:block;width:100%;text-align:left;padding:18px 0;font-size:clamp(1.12rem,4.8vw,1.34rem);font-weight:700;letter-spacing:-.012em;line-height:1.38;max-width:34ch;opacity:.28;transition:opacity .4s;cursor:pointer}
-/* La cápsula se ancla en el centro; la anterior y la siguiente asoman arriba y abajo */
-#lista .cap{padding:22px 0;scroll-snap-align:center;scroll-snap-stop:always}
+/* La cápsula se ancla en el centro; la anterior y la siguiente asoman arriba y abajo. Mismo hueco entre todas; el tamaño de letra lo fija ajustarLetra() */
+#lista .cap{padding:14px 0;font-size:var(--fL,1.2rem);scroll-snap-align:center;scroll-snap-stop:always}
 .cap p+p,.cap p+div,.cap div+p{margin-top:.55em}
 .cap.ya{opacity:.5}
 .cap.ahora,.cap.apunta{opacity:1;cursor:default}
@@ -210,14 +206,11 @@ dd{min-width:0;overflow-wrap:anywhere}
   <div class="top">
     <button class="ib" id="salir" aria-label="Volver a la exposición"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="who"><b id="tTit"></b><small id="tSub"></small></div>
+    <button class="ib play" id="play" aria-label="Escuchar"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="playP" d="M7 5l12 7-12 7z"/></svg></button>
     <button class="ib" id="ajustesB" aria-label="Más: ficha de la obra y música"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></button>
   </div>
   <button class="pill" id="encuadre" hidden>Volver al encuadre</button>
   <div id="letra">
-    <div class="lhd">
-      <div class="quien"><b id="lName"></b><small id="lSub"></small></div>
-      <button class="play" id="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="playP" d="M7 5l12 7-12 7z"/></svg><span id="playT">Escuchar</span></button>
-    </div>
     <div id="lista" aria-live="polite"></div>
   </div>
 </section>
@@ -390,7 +383,16 @@ function pintarLista(){
     (C.tipo === 'intro' ? $('pTexto') : L).appendChild(el);   // la entrada se cuenta en la portada
   });
   L.insertAdjacentHTML('beforeend', '<div class="cola" aria-hidden="true"></div>');
-  marcarActual(false);
+  ajustarLetra(); marcarActual(false);
+}
+// Un solo tamaño de letra para toda la historia: el mayor (de 20 a 16 px) con el que la cápsula más larga cabe y aún asoma una línea de la anterior y otra de la siguiente
+function ajustarLetra(){
+  const L = $('lista'), H = L.clientHeight, caps = [...L.querySelectorAll('.cap')]; if(!H || !caps.length) return;
+  const hueco = parseFloat(getComputedStyle(caps[0]).paddingTop)*2;
+  for(let f = 20; f >= 16; f -= .5){
+    L.style.setProperty('--fL', f + 'px');
+    if(Math.max(...caps.map(c => c.offsetHeight)) + hueco + 2*f*1.38 <= H) return;
+  }
 }
 const capEl = i => document.querySelector(`.cap[data-i="${i}"]`);
 const primeraDe = p => U.caps.findIndex(C => C.p === p && C.tipo === 'inicio');
@@ -458,8 +460,6 @@ function cambiarObra(k, ya){
 /* ======================= Reproducción: voz y texto a la vez ======================= */
 function estadoPlay(){
   $('playP').setAttribute('d', U.playing ? 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z' : 'M7 5l12 7-12 7z');
-  const dur = U.segundos < 90 ? `${Math.max(30, Math.round(U.segundos/15)*15)} s` : `${Math.round(U.segundos/60*2)/2} min`.replace('.5', ',5');
-  $('playT').textContent = U.playing ? 'Pausa' : U.fin ? 'De nuevo' : U.started || U.i > 0 ? 'Seguir' : `Escuchar · ${dur}`;
   $('play').setAttribute('aria-label', U.playing ? 'Pausar' : 'Escuchar');
   $('unidad').classList.toggle('sonando', U.playing);
   nivelMusica(); portada();
@@ -661,7 +661,8 @@ function camaraCap(forzar){
 function soltarManual(){ if(U) U.manual = false; $('encuadre').hidden = true; }
 $('encuadre').onclick = () => { soltarManual(); U.zona = '__'; camaraCap(); };
 function reencuadrar(dur){ if(U.manual) return; volar(hayEncuadre(U.zona) ? caja(U.zona) : null, dur, U.zona === null ? deriva : null); }
-let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if(!U || !OBRA) return; reencuadrar(0); centrar(capEl(U.i), false); }, 120); });
+let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if(!U || !OBRA) return; reencuadrar(0); ajustarLetra(); centrar(capEl(U.i), false); }, 120); });
+document.fonts && document.fonts.ready.then(() => { if(U && OBRA){ ajustarLetra(); centrar(capEl(U.i), false); } });
 function marcar(z){
   if(U) U.sel = z;
   if(!OBRA) return;
@@ -733,8 +734,6 @@ function cabecera(){
   $('hName').textContent = m.conversa; $('askI').placeholder = m.placeholder;
   if(O){ $('tTit').textContent = O.titulo; $('tSub').innerHTML = `${esc(O.autor)} · <span class="nw">${esc(O.fecha)}</span>`; }
   else { $('tTit').textContent = S.titulo; $('tSub').textContent = `Historia · ${OBRAS.length} obras`; }
-  $('lName').textContent = m.nombre;
-  $('lSub').textContent = `${S.titulo} · ${O ? `${C.p + 1} de ${OBRAS.length}` : C && C.tipo === 'intro' ? 'Entrada' : 'Para terminar'}`; $('lSub').hidden = false;
   $('mObra').textContent = `${OBRA.titulo}, de ${OBRA.autor}`;
   const un = O && S.paradas[C.p].unidad; $('mUnidad').hidden = !un; if(un){ $('mUnidad').href = un; $('mUnidadT').textContent = `${O.titulo}, con su visita, sus capas y sus preguntas`; }
 }
