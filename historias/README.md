@@ -8,7 +8,7 @@ Prototipo del nivel que está por encima de la unidad: varias obras encadenadas,
 ## Cómo funciona
 
 - **El tema manda.** Cada historia tiene sus propios textos para cada obra, escritos para su tema. No repite la visita de la unidad.
-- **Portada.** Una pantalla propia, como la carátula de un disco: una sola imagen a sangre (una obra entera o un encuadre de ella), el título, el tema, la duración y «Escuchar», que empieza por la primera obra. «Ver las obras» despliega la tira para empezar por cualquiera. Sirve igual para tres obras que para treinta.
+- **Portada.** Una pantalla propia, como la carátula de un disco: una sola imagen a sangre (una obra entera o un encuadre de ella), el título, el tema, la duración, «Escuchar» y «Leer». «Leer» entra al relato sin voz, con todo el texto del mismo color, para avanzar a tu ritmo; la cámara sigue al texto. «Ver las obras» despliega la tira para empezar por cualquiera. Sirve igual para tres obras que para treinta.
 - **Suena seguida.** Una parada por obra y un cierre. Al pasar de una obra a otra, la imagen se funde con la siguiente mientras la voz sigue.
 - **Arriba, lo que estás viendo.** En cada parada, la cabecera muestra la obra, su autor y su fecha; en la entrada y el cierre, la historia. Sobre el relato se ve dónde estás: «Desde dentro · 2 de 3».
 - **Cada obra sigue siendo una parada.** «Ver la obra completa», que abre su unidad, está en el menú «⋯».

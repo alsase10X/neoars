@@ -188,6 +188,8 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 .nw{white-space:nowrap}
 a.fila-m{text-decoration:none}
 .cap.silencio{font-style:italic;font-weight:600}
+#unidad:not(.sonando) #lista .cap{opacity:1}
+.p-acc .b2{min-width:120px}
 .finh{font-size:.8rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
 .hist{display:flex;flex-direction:column;gap:6px}
 .hist b{font-size:1.15rem;font-weight:800;letter-spacing:-.01em}
@@ -265,6 +267,7 @@ dd{min-width:0;overflow-wrap:anywhere}
     <div class="p-texto" id="pTexto" aria-live="polite"><p class="p-tema" id="pTema"></p></div>
     <div class="p-acc">
       <button class="b1" id="pPlay"><span id="pPlayT">Escuchar</span> <span id="pPlayF" aria-hidden="true">→</span></button>
+      <button class="b2" id="pLeer">Leer</button>
       <button class="lk" id="pObras" aria-expanded="false">Ver las obras</button>
     </div>
     <div class="tira" id="pTira" hidden></div>
@@ -423,13 +426,15 @@ function pintarPortada(){
 // Se ve antes de empezar y mientras suena la entrada; se retira al llegar a la primera obra
 function portada(){
   if(!U || !U.caps.length) return;
-  const C = U.caps[U.i], ver = !U.fin && ((!U.started && U.i === 0) || (C && C.tipo === 'intro'));
+  const C = U.caps[U.i], ver = !U.fin && !U.leyendo && ((!U.started && U.i === 0) || (C && C.tipo === 'intro'));
   const el = $('portadaS'); el.classList.toggle('fuera', !ver); el.setAttribute('aria-hidden', !ver);
   el.classList.toggle('empezada', !!U.started); el.classList.toggle('sonando', U.playing);
   $('pKick').textContent = `Historia · ${OBRAS.length} obras${U.dur ? ' · ' + U.dur : ''}`;
   $('pPlayT').textContent = U.playing ? 'Pausa' : U.started ? 'Seguir' : 'Escuchar'; $('pPlayF').hidden = U.playing;
 }
 $('pPlay').onclick = () => { if(!U) return; U.playing ? pausa() : play(); };
+// Leer: se entra al relato sin voz y se avanza desplazando el texto
+$('pLeer').onclick = () => { if(!U) return; U.leyendo = true; portada(); centrar(capEl(U.i), false); U.zona = '__'; camaraCap(true); };
 $('pObras').onclick = () => { const t = $('pTira'); t.hidden = !t.hidden; $('pObras').setAttribute('aria-expanded', !t.hidden); };
 $('pTira').onclick = e => { const b = e.target.closest('[data-tira]'); if(!b || !U) return; ir(primeraDe(+b.dataset.tira)); if(!U.playing) play(); };
 $('pSalir').onclick = () => $('salir').click();
