@@ -56,14 +56,12 @@ a{color:inherit}
 .lhd .quien small{display:block;font-size:.85rem;color:var(--muted);margin-top:2px}
 .play{height:42px;padding:0 16px 0 13px;display:flex;align-items:center;gap:8px;background:var(--fg);color:#000;font-size:.95rem;font-weight:800;flex:none}
 .play svg{width:16px;height:16px;fill:currentColor}
-#lista{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:0 var(--pad);
-  -webkit-mask-image:linear-gradient(transparent,#000 13%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 13%,#000 78%,transparent)}
+#lista{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;padding:0 var(--pad);scroll-snap-type:y mandatory;
+  -webkit-mask-image:linear-gradient(transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(transparent,#000 8%,#000 92%,transparent)}
 #lista::-webkit-scrollbar{display:none}
-#lista .tope{height:var(--foco,60px)}
-#lista .cola{height:70%}
 .cap{display:block;width:100%;text-align:left;padding:18px 0;font-size:clamp(1.12rem,4.8vw,1.34rem);font-weight:700;letter-spacing:-.012em;line-height:1.38;max-width:34ch;opacity:.28;transition:opacity .4s;cursor:pointer}
-/* Un solo tamaño para todas las cápsulas y una línea fina entre ellas: se ve dónde empieza y acaba cada una */
-#lista .cap + .cap{border-top:1px solid var(--hair)}
+/* Una cápsula por pantalla: todas del mismo alto, el texto centrado y el desplazamiento se ancla en cada una */
+#lista .cap{display:flex;flex-direction:column;justify-content:center;min-height:100%;padding:24px 0;scroll-snap-align:start;scroll-snap-stop:always}
 .cap p+p,.cap p+div,.cap div+p{margin-top:.55em}
 .cap.ya{opacity:.5}
 .cap.ahora,.cap.apunta{opacity:1;cursor:default}
@@ -74,10 +72,6 @@ a{color:inherit}
 .w{transition:opacity .25s}
 #unidad.sonando .cap.ahora .w{opacity:.32}
 #unidad.sonando .cap.ahora .w.on{opacity:1}
-.fin{display:flex;flex-direction:column;gap:10px;padding:22px 0 0;opacity:.3;transition:opacity .4s}
-.fin .qs{margin-bottom:8px}
-.fin .b1 span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fin.ahora,.fin.apunta{opacity:1}
 .b1{height:54px;background:var(--fg);color:#000;font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:space-between;padding:0 18px;max-width:420px}
 .lk{font-size:.9rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:6px 0;text-align:left;align-self:flex-start}
 
@@ -378,7 +372,7 @@ function duracion(){
 }
 
 function pintarLista(){
-  const L = $('lista'); U.dur = duracion(); L.innerHTML = '<div class="tope" aria-hidden="true"></div>';
+  const L = $('lista'); U.dur = duracion(); L.innerHTML = '';
   $('pTexto').querySelectorAll('.cap').forEach(el => el.remove());
   U.caps.forEach((C, i) => {
     const el = document.createElement('div'); el.className = 'cap' + (C.k === 'pregunta' ? ' pregunta' : '') + (C.k === 'silencio' ? ' silencio' : ''); el.dataset.i = i; el.setAttribute('role', 'button'); el.tabIndex = 0;
@@ -394,25 +388,22 @@ function pintarLista(){
     });
     (C.tipo === 'intro' ? $('pTexto') : L).appendChild(el);   // la entrada se cuenta en la portada
   });
-  const fin = document.createElement('div'); fin.className = 'fin'; fin.id = 'fin';
-  L.appendChild(fin);
-  L.insertAdjacentHTML('beforeend', '<div class="cola" aria-hidden="true"></div>');
   marcarActual(false);
 }
 const capEl = i => document.querySelector(`.cap[data-i="${i}"]`);
 const primeraDe = p => U.caps.findIndex(C => C.p === p && C.tipo === 'inicio');
-function foco(){ return Math.round($('lista').clientHeight*.16); }
 function marcarActual(scroll = true){
   document.querySelectorAll('.cap[data-i]').forEach(el => { const n = +el.dataset.i; el.classList.toggle('ya', n < U.i); el.classList.toggle('ahora', n === U.i && !U.fin); });
   cabecera(); portada();
-  $('fin') && $('fin').classList.toggle('ahora', U.fin);
-  if(scroll && !U.dedo) centrar(U.fin ? $('fin') : capEl(U.i));
+  if(scroll && !U.dedo && !U.fin) centrar(capEl(U.i));
   estadoPlay();
 }
-function centrar(el, suave = true){ if(!el || !$('lista').contains(el)) return; const L = $('lista'); L.style.setProperty('--foco', foco() + 'px'); L.scrollTo({top:Math.max(0, el.offsetTop - foco()), behavior:suave && !RM ? 'smooth' : 'auto'}); }
+function centrar(el, suave = true){ if(!el || !$('lista').contains(el)) return; $('lista').scrollTo({top:el.offsetTop, behavior:suave && !RM ? 'smooth' : 'auto'}); }
+// Solo se mueve dentro de una cápsula que no cabe en la pantalla
 function seguirPalabra(w){
-  if(U.dedo || !w || !$('lista').contains(w)) return; const L = $('lista'), y = w.offsetTop - L.scrollTop;
-  if(y > L.clientHeight*.66) L.scrollTo({top:w.offsetTop - L.clientHeight*.36, behavior:RM ? 'auto' : 'smooth'});
+  if(U.dedo || !w || !$('lista').contains(w)) return; const L = $('lista'), c = w.closest('.cap');
+  if(!c || c.offsetHeight <= L.clientHeight + 1) return;
+  if(w.offsetTop - L.scrollTop > L.clientHeight*.66) L.scrollTo({top:Math.min(w.offsetTop - L.clientHeight*.36, c.offsetTop + c.offsetHeight - L.clientHeight), behavior:RM ? 'auto' : 'smooth'});
 }
 
 /* ======================= Portada: imagen a sangre, título, tema y Escuchar ======================= */
@@ -551,8 +542,8 @@ lista.addEventListener('scroll', () => {
   clearTimeout(asentarT); asentarT = setTimeout(asentar, 420);
 }, {passive:true});
 function capEnFoco(){
-  const y = lista.scrollTop + foco() + 24; let mejor = 0, d = 1e9;
-  document.querySelectorAll('#lista .cap, #fin').forEach(el => { const top = el.offsetTop, bot = top + el.offsetHeight, dd = y < top ? top - y : y > bot ? y - bot : 0; if(dd < d){ d = dd; mejor = el.id === 'fin' ? 'fin' : +el.dataset.i; } });
+  const y = lista.scrollTop + lista.clientHeight/2; let mejor = 0, d = 1e9;
+  document.querySelectorAll('#lista .cap').forEach(el => { const top = el.offsetTop, bot = top + el.offsetHeight, dd = y < top ? top - y : y > bot ? y - bot : 0; if(dd < d){ d = dd; mejor = +el.dataset.i; } });
   return mejor;
 }
 function apuntar(n){
@@ -572,7 +563,7 @@ function asentar(){
   const seguir = U.reanudar; U.reanudar = false;
   if(n === 'fin'){ terminar(); return; }
   if(n !== U.i || U.fin){ U.playing = seguir; ir(n, 650); }
-  else { centrar(capEl(n)); if(seguir){ U.playing = true; const tok = U.tok; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 500); } }
+  else { const c = capEl(n); if(lista.scrollTop < c.offsetTop || lista.scrollTop > c.offsetTop + c.offsetHeight - lista.clientHeight) centrar(c); if(seguir){ U.playing = true; const tok = U.tok; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 500); } }
   estadoPlay();
 }
 

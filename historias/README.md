@@ -26,6 +26,6 @@ Prototipo del nivel que está por encima de la unidad: varias obras encadenadas,
 | `cierre` | Cápsulas finales; suenan sobre el encuadre de la portada |
 | `musica`, `nota`, `salir` | Pista, nota de créditos y vuelta a la portada |
 
-Las cápsulas son las de la unidad: `t`, `z` (una zona de esa obra), `c` (una cita de esa obra), `k: "pregunta"` y, nuevo, `k: "silencio"` con `pausa` en segundos. La primera cápsula de cada parada hace de puente con la anterior.
+Las cápsulas son las de la unidad: `t`, `z` (una zona de esa obra), `c` (una cita de esa obra), `k: "pregunta"` y, nuevo, `k: "silencio"` con `pausa` en segundos. La primera cápsula de cada parada hace de puente con la anterior. Cada cápsula ocupa la zona del relato entera, con el texto centrado; si no cabe, crece.
 
 Se abre otra historia con `?historia=<archivo>.json`, solo del mismo sitio.
