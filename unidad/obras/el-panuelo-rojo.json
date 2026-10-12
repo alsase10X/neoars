@@ -55,7 +55,8 @@
     ]
    ],
    "rel": [],
-   "mira": "¿Hacia dónde mira la mujer?"
+   "mira": "¿Hacia dónde mira la mujer?",
+   "vista": "Una mujer de pie al otro lado del cristal, en el jardín nevado, un poco a la derecha del montante central de las puertas. Lleva una capucha y una esclavina rojas sobre ropa azul muy oscura, y mira hacia la casa."
   },
   "rostro": {
    "n": "El rostro",
@@ -160,7 +161,8 @@
    "rel": [
     "camille"
    ],
-   "mira": "¿Qué expresión tiene su cara?"
+   "mira": "¿Qué expresión tiene su cara?",
+   "vista": "Un rostro ovalado y pálido dentro de la capucha roja, resuelto con muy pocas pinceladas: dos toques oscuros para los ojos y apenas sombra para la nariz y la boca."
   },
   "jardin": {
    "n": "La nieve y los árboles",
@@ -187,7 +189,8 @@
     ]
    ],
    "rel": [],
-   "mira": "¿De qué colores está hecha la nieve?"
+   "mira": "¿De qué colores está hecha la nieve?",
+   "vista": "El jardín nevado al otro lado del cristal: un árbol de hoja perenne en forma de triángulo, verde oliva salpicado de manchas blancas, y abajo una franja de nieve blanca con reflejos azulados."
   },
   "puertas": {
    "n": "Las puertas de cristal",
@@ -210,7 +213,8 @@
     ]
    ],
    "rel": [],
-   "mira": "¿Dónde estás tú: dentro o fuera?"
+   "mira": "¿Dónde estás tú: dentro o fuera?",
+   "vista": "Unas puertas acristaladas de dos hojas, de madera gris oscura, con montantes y travesaños. Ocupan casi todo el cuadro: arriba, cristal; abajo, paneles de madera."
   },
   "cortinas": {
    "n": "Las cortinas",
@@ -241,7 +245,8 @@
     ]
    ],
    "rel": [],
-   "mira": "¿Qué hay entre ella y tú?"
+   "mira": "¿Qué hay entre ella y tú?",
+   "vista": "Visillos blancos y transparentes recogidos a los dos lados de las puertas. Dejan ver el exterior por el centro y forman diagonales que encuadran a Camille."
   }
  },
  "voces": {
@@ -441,5 +446,42 @@
    "«Gymnopédie n.º 1», de Erik Satie, en versión de Kevin MacLeod (incompetech.com). Licencia <a href=\"https://creativecommons.org/licenses/by/3.0/\" target=\"_blank\" rel=\"noopener\">CC BY 3.0</a>"
   ]
  ],
- "nota": "Maqueta de diseño: la visita general se basa en la descripción del Cleveland Museum of Art (CC0), traducida y adaptada; las preguntas marcadas con «verifícalo» usan conocimiento general. Sin modelo real. La visita se guarda solo en este dispositivo."
+ "nota": "Maqueta de diseño: la visita general se basa en la descripción del Cleveland Museum of Art (CC0), traducida y adaptada; las preguntas marcadas con «verifícalo» usan conocimiento general. Sin modelo real. La visita se guarda solo en este dispositivo.",
+ "base": [
+  {
+   "id": "B1",
+   "f": "Cleveland Museum of Art · descripción",
+   "t": "Retrata a Camille, la primera mujer de Monet, fuera, un día de nieve, pasando junto a las puertas de cristal de su casa de Argenteuil. Su rostro está resuelto con una técnica impresionista radicalmente atrevida, a base de simples toques de pintura aplicados deprisa, igual que la nieve y los árboles se definen con pinceladas anchas y quebradas de blanco y verde puros."
+  },
+  {
+   "id": "B2",
+   "f": "Cleveland Museum of Art · ¿Sabías que…?",
+   "t": "La capa roja de Madame Monet lleva la atención del espectador más allá del cristal de las puertas y atrapa su mirada: un instante breve congelado en el tiempo. El cuadro era muy especial para Monet, que lo tuvo consigo toda su vida."
+  },
+  {
+   "id": "B3",
+   "f": "Cleveland Museum of Art · ficha",
+   "t": "Título original: Femme à la capeline rouge; también catalogado como La Capeline Rouge – Madame Monet. Claude Monet (1840–1926). Hacia 1868–73. Óleo sobre tela, 99 × 79,8 cm; con marco, 128,3 × 105,7 cm. No está firmado. Legado de Leonard C. Hanna Jr., 1958 (n.º 1958.39). Se expone en la sala 222, Impresionismo y Postimpresionismo, y el museo lo destaca entre sus obras principales."
+  },
+  {
+   "id": "B4",
+   "f": "Cleveland Museum of Art · procedencia",
+   "t": "1931: pasó de la herencia del artista a su hijo Michel Monet (1878–1966), en Giverny. 1939: Edouard Molyneux (1891–1974), París. 1948: galería Carroll Carstairs, Nueva York, que lo vendió a Leonard C. Hanna Jr. (1889–1958), de Cleveland. Hanna lo legó al Cleveland Museum of Art, donde está desde 1958."
+  },
+  {
+   "id": "B5",
+   "f": "Cleveland Museum of Art · exposiciones",
+   "t": "Entre otras: retrospectiva de Monet en el Musée de l'Orangerie, París (1931); Claude Monet: Seasons and Moments, MoMA, Nueva York (1960); Hommage à Claude Monet, París (1980); Impressionists in Winter: Effets de Neige, Phillips Collection, Washington, San Francisco y Brooklyn (1998–99); Faces of Impressionism: Portraits from American Collections, Baltimore, Houston y Cleveland (1999–2000); Claude Monet, Grand Palais, París (2010–11); Monet: The Early Years, Kimbell Art Museum, Fort Worth, y San Francisco (2016–17), cuyo catálogo lo reproduce en la cubierta; Claude Monet, Albertina, Viena (2018–19)."
+  },
+  {
+   "id": "B6",
+   "f": "Cleveland Museum of Art · biografía de Monet",
+   "t": "En 1868 Monet tuvo que dejar París huyendo de sus acreedores y se llevó a su compañera, Camille Doncieux, y al hijo de ambos, Jean, a Fécamp, Étretat y Saint-Michel. En 1870 se casó con Camille y, para escapar de la guerra franco-prusiana, se fue a Londres nueve meses. En el verano de 1871 se instaló en Argenteuil, al oeste de París, donde convirtió una barca en taller. En 1874 ayudó a organizar la primera exposición impresionista. En 1878 se mudó con Camille a Vétheuil, y Camille murió al año siguiente. Hacia 1883 se instaló en Giverny, donde vivió el resto de su vida."
+  },
+  {
+   "id": "B7",
+   "f": "Cleveland Museum of Art · bibliografía",
+   "t": "La obra aparece reproducida o comentada, entre otras, en estas publicaciones (de ellas solo consta el título, no lo que dicen): Nordenfalk, «Outdoors-Indoors: A 2000-Year-Old Space Problem in Western Art» (1973); Arnason, «Motherwell: The Window and the Wall» (1969); Borowitz, «The Rembrandt and Monet of Marcel Proust» (1983); Borzello, «At Home: The Domestic Interior in Art» (2006); Cachorro Fernández, «Habitaciones con vistas. Pulsión escópica a través de la ventana» (2015); Patin, «Monet's Private Picture Gallery at Giverny» (2016); Dombrowski, «Monet's Minutes: Impressionism and the Industrialization of Time» (2023); Knight, «Snow Effects: Poems on Impressionists in Winter» (2000)."
+  }
+ ]
 }

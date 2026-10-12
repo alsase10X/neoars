@@ -118,6 +118,15 @@ html.teclado .askbar{bottom:auto;top:calc(var(--vvTop,0px) + var(--vvH,100vh) - 
 .ans blockquote{font-style:italic;border-left:2px solid var(--fg);padding-left:12px}
 .ans .ref{font-size:.85rem;color:var(--muted);margin-top:6px}
 .src{font-size:.85rem;color:var(--muted)}
+/* Respuestas del modelo: cada parte lleva su etiqueta de origen */
+.ans .parte{display:flex;flex-direction:column;gap:4px}
+.ep{font-size:.8rem;font-weight:500;line-height:1.4;color:var(--muted);letter-spacing:0;max-width:44ch}
+.ep b{font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--fg)}
+.ep::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;vertical-align:0;border:1.5px solid var(--fg)}
+.ep-fuente::before{background:var(--fg)}
+.ep-vista::before{border-radius:50%}
+.ep-lectura::before{transform:rotate(45deg) scale(.85)}
+.ep-general::before{border-style:dashed}
 .dots{display:flex;gap:6px;height:20px;align-items:center}
 .dots i{width:7px;height:7px;background:var(--fg);opacity:.15;animation:dt 1.2s ease-in-out infinite}
 .dots i:nth-child(2){animation-delay:.2s}
@@ -235,6 +244,10 @@ const OBRA_INCRUSTADA = null;
    MOTOR — igual para cualquier obra
    ═════════════════════════════════════════════════════════════════════ */
 const DIR = {obra:'Sobre la obra', fuera:'Más allá de la obra', mirar:'Vuelve a mirar'};
+// Modelo para las preguntas libres y las sugeridas. Dentro de Claude responde Claude; en la web, Puter
+// (cada visitante con su propia cuenta) o, si se rellena «api», el servidor intermedio del proyecto.
+// «puterModelo» vacío usa el modelo por defecto de Puter.
+const CONFIG = {api:'', puterModelo:''};
 const $ = id => document.getElementById(id);
 const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
 let OBRA, P, U, KEY;
@@ -254,7 +267,7 @@ async function iniciar(datos, desde){
   const meds = Object.keys(OBRA.mediadores), defecto = meds[0];
   P = {guia:store.get('guia', defecto), perfil:store.get('perfil', Object.keys(OBRA.visitas)[0]), musica:store.get('musica','0') === '1'};
   if(!OBRA.mediadores[P.guia]) P.guia = defecto; if(!OBRA.visitas[P.perfil]) P.perfil = Object.keys(OBRA.visitas)[0];
-  U = {caps:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, sel:null, zona:'__', manual:false, gesto:0, dedo:false, asked:new Set(), fin:false, sWhole:1, voz:M().voz};
+  U = {caps:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, sel:null, zona:'__', manual:false, gesto:0, dedo:false, asked:new Set(), fin:false, sWhole:1, voz:M().voz, gen:[], genClave:'', genCtl:null, chat:[], chatCtl:null};
   document.title = OBRA.titulo;
   // Obras verticales: algo más de sitio para la imagen y algo menos para el relato
   if(OBRA.ih > OBRA.iw*1.1) document.documentElement.style.setProperty('--letraH', innerWidth >= 900 ? '36vh' : '38vh');
@@ -405,7 +418,7 @@ function limpiarPalabras(C){ if(C) C.frases.forEach(f => f.w.forEach(w => w.clas
 function encender(f, n){ const ws = f.w.slice(0, n == null ? f.w.length : n); ws.forEach(w => w.classList.add('on')); seguirPalabra(ws[ws.length - 1]); }
 function sonar(){
   const C = U.caps[U.i]; if(!C) return terminar();
-  if(U.si === 0){ limpiarPalabras(C); camaraCap(); }
+  if(U.si === 0){ limpiarPalabras(C); camaraCap(); if(U.i === U.caps.length - 1) sugerirIA(); }
   C.frases.slice(0, U.si).forEach(f => encender(f));
   const tok = ++U.tok;
   if(U.si >= C.frases.length){
@@ -419,7 +432,7 @@ function sonar(){
   const f = C.frases[U.si];
   decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); U.si++; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 180); });
 }
-function terminar(){ parar(); U.playing = false; U.fin = true; guardar(); marcarActual(); marcar(null); U.zona = null; if(!U.manual) volar(null, 1200); }
+function terminar(){ parar(); U.playing = false; U.fin = true; guardar(); marcarActual(); marcar(null); U.zona = null; if(!U.manual) volar(null, 1200); sugerirIA(); }
 // Una frase: las palabras se encienden con la voz; si la voz no arranca, el texto sigue a ritmo de lectura
 function decirFrase(f, tok, fin){
   clearInterval(U.reloj);
@@ -448,6 +461,7 @@ const lista = $('lista');
 lista.addEventListener('click', e => {
   if(e.target.closest('a')) return;
   if(e.target.closest('#sigObra')){ if(OBRA.siguiente && OBRA.siguiente.obra){ pausa(); location.search = '?obra=' + encodeURIComponent(OBRA.siguiente.obra); } else toast('En la exposición, aquí pasarías a la siguiente obra'); return; }
+  const g = e.target.closest('[data-g]'); if(g){ abrirHablar(); preguntarIA(U.gen[+g.dataset.g].q); return; }
   const fq = e.target.closest('[data-fq]'); if(fq){ abrirHablar(); const x = M().qa[+fq.dataset.fq]; U.asked.add(x.q); guardar(); responder(x.q, x, P.guia); finPreguntas(); return; }
   const vz = e.target.closest('[data-voz]'); if(vz){ cambiarVoz(vz.dataset.voz); return; }
   const c = e.target.closest('.cap'); if(!c) return;
@@ -625,10 +639,12 @@ function cabecera(){
 }
 function abrirHablar(){
   if(!$('hablarS').hidden) return;
+  if(IA.modo === 'puter') cargarPuter().catch(() => {});   // listo antes de enviar: el inicio de sesión tiene que abrirse dentro del gesto
   hablarAntes = U.playing; if(U.playing) pausa();
   movioCamara = false; cabecera();
   const d = $('deep');
   if(!d.children.length){ const v = document.createElement('p'); v.className = 'vts'; v.innerHTML = `${esc(U.sel && OBRA.zonas[U.sel] && OBRA.zonas[U.sel].mira || M().vts)}`; d.appendChild(v); }
+  if(IA.modo === 'puter' && !puterDentro() && !d.querySelector('.aviso')){ const a = document.createElement('p'); a.className = 'src aviso'; a.textContent = 'A lo que escribas te responde un modelo de IA a través de Puter. La primera vez te pedirá entrar con tu cuenta de Puter, que es gratuita.'; d.appendChild(a); }
   preguntas();
   $('hablarS').hidden = false;
   requestAnimationFrame(() => reencuadrar(500));
@@ -658,21 +674,36 @@ function elegir(){
   return elegidas.slice(0, 3);
 }
 const qBoton = (k, attr) => { const x = M().qa[k]; return `<button class="q${x.ia ? ' ia' : ''}" ${attr}="${k}">${esc(x.q)}</button>`; };
-function finPreguntas(){ const box = $('finQs'); if(!box) return; const e = elegir(); box.innerHTML = e.map(k => qBoton(k, 'data-fq')).join(''); box.hidden = !e.length; }
+// Si el modelo ha propuesto preguntas a partir de lo escuchado, van primero (una por dirección); las preparadas completan
+function sugeridas(){
+  const gen = U.gen.map((x, g) => ({g, x})).filter(o => !U.asked.has(o.x.q)), out = [];
+  ['obra','fuera','mirar'].forEach(dir => { const o = gen.find(o => o.x.d === dir); if(o) out.push(o); });
+  gen.forEach(o => { if(out.length < 3 && !out.includes(o)) out.push(o); });
+  elegir().forEach(k => { if(out.length < 3) out.push({k}); });
+  return out.slice(0, 3);
+}
+const sBoton = (o, attr) => o.x ? `<button class="q" data-g="${o.g}">${esc(o.x.q)}</button>` : qBoton(o.k, attr);
+const notaGen = s => s.some(o => o.x) ? '<p class="src">Propuestas por IA a partir de lo que has escuchado</p>' : '';
+function finPreguntas(){ const box = $('finQs'); if(!box) return; const s = sugeridas(); box.innerHTML = s.map(o => sBoton(o, 'data-fq')).join('') + notaGen(s); box.hidden = !s.length; }
 function preguntas(){
   const d = $('deep'); d.querySelector('.qs')?.remove();
-  const elegidas = elegir(); finPreguntas();
-  if(!elegidas.length) return;
-  const m = M(), box = document.createElement('div'); box.className = 'qs';
-  box.innerHTML = elegidas.map(k => qBoton(k, 'data-k')).join('');
+  const s = sugeridas(); finPreguntas();
+  if(!s.length) return;
+  const box = document.createElement('div'); box.className = 'qs';
+  box.innerHTML = s.map(o => sBoton(o, 'data-k')).join('') + notaGen(s);
   d.appendChild(box);
 }
-$('deep').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if(!b) return; const x = M().qa[+b.dataset.k]; U.asked.add(x.q); guardar(); responder(x.q, x, P.guia); });
+$('deep').addEventListener('click', e => {
+  const g = e.target.closest('[data-g]'); if(g){ preguntarIA(U.gen[+g.dataset.g].q); return; }
+  const c = e.target.closest('.conectar'); if(c){ const q = c.dataset.q; c.remove(); preguntarIA(q); return; }
+  const b = e.target.closest('[data-k]'); if(!b) return; const x = M().qa[+b.dataset.k]; U.asked.add(x.q); guardar(); responder(x.q, x, P.guia);
+});
 $('askF').onsubmit = e => {
   e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; $('askI').blur();
   abrirHablar();
+  if(IA.modo){ preguntarIA(q); return; }
   const vts = !/[?¿]/.test(q);   // si responde a la pregunta de mirar, se le devuelve a la obra (VTS)
-  responder(q, {a: vts ? '¿Qué ves en el cuadro que te hace decir eso?' : 'En esta maqueta las respuestas están preparadas. En la versión real contestaría a partir de la ficha del museo y de las fuentes de la obra, y marcaría lo que venga de conocimiento general.', maqueta:!vts}, P.guia);
+  responder(q, {a: vts ? '¿Qué ves en el cuadro que te hace decir eso?' : 'Sin un modelo conectado solo tengo las respuestas preparadas por el museo. Con él te contestaría a partir de la base documental de la obra y te diría de dónde sale cada cosa.', maqueta:!vts}, P.guia);
 };
 function responder(q, x, quien){
   const d = $('deep'); d.querySelector('.qs')?.remove();
@@ -736,7 +767,7 @@ $('aplicar').onclick = () => {
   if(cambia){ $('deep').innerHTML = ''; rehacer(); toast(`${VIS().n} · ${M().nombre}`); }
   if(ajAntes || (cambia && U.started)) play(); else estadoPlay();
 };
-function rehacer(){ parar(); U.voz = M().voz; U.caps = construir(); U.i = 0; U.si = 0; U.fin = false; cabecera(); pintarLista(); U.zona = '__'; camaraCap(true); centrar(capEl(0), false); guardar(); }
+function rehacer(){ parar(); U.voz = M().voz; U.gen = []; U.genClave = ''; U.chat = []; if(U.genCtl) U.genCtl.abort(); U.caps = construir(); U.i = 0; U.si = 0; U.fin = false; cabecera(); pintarLista(); U.zona = '__'; camaraCap(true); centrar(capEl(0), false); guardar(); }
 function cambiarVoz(k){ P.guia = k; store.set('guia', k); $('deep').innerHTML = ''; rehacer(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); play(); }
 let fichaAntes = false;
 $('mFicha').onclick = () => { $('ajS').hidden = true; fichaAntes = ajAntes; ajAntes = false; $('fichaS').hidden = false; };
@@ -747,6 +778,244 @@ document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres
 ['ajS','fichaS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
 function guardar(){ store.set('visita', JSON.stringify({i:U.i, a:[...U.asked], fin:U.fin})); }
 addEventListener('pagehide', () => U && guardar());
+
+/* ======================= El modelo: respuestas libres y preguntas sugeridas ======================= */
+// El modelo responde siempre como la guía: el autor solo habla con sus palabras comprobadas
+const MEDG = () => Object.keys(OBRA.mediadores)[0];
+const ZONA = z => typeof z === 'string' && OBRA.zonas[z] ? z : null;
+const txt = h => { try{ return new DOMParser().parseFromString(String(h), 'text/html').body.textContent || ''; }catch(e){ return String(h); } };
+const EP = {fuente:'Fuente', vista:'A la vista', lectura:'Lectura', general:'Conocimiento general'}, EPS = Object.keys(EP);
+const gstore = {get(k, d){ try{ const v = localStorage.getItem('uo.' + k); return v == null ? d : v; }catch(e){ return d; } }, set(k, v){ try{ localStorage.setItem('uo.' + k, v); }catch(e){} }};
+// Base documental: lo único que el modelo puede presentar como dato. Si la obra no la trae, se monta con su ficha, citas y textos preparados
+function BASE(){
+  if(OBRA._base) return OBRA._base;
+  let b = Array.isArray(OBRA.base) ? OBRA.base.filter(x => x && x.id && x.t) : [];
+  if(!b.length){
+    const add = (f, t) => { if(t) b.push({id:'B' + (b.length + 1), f, t}); };
+    add('Ficha de la obra', (OBRA.ficha || []).map(([k, v]) => `${k}: ${txt(v)}`).join('. '));
+    Object.values(OBRA.citas || {}).forEach(c => add(c.ref || c.breve || 'Cita', '«' + c.t + '»'));
+    const m = OBRA.mediadores[MEDG()];
+    add('Visita general del museo', m.relato.filter(c => (!c.p || tiene(c.p, 'general')) && !(c.x && tiene(c.x, 'general')) && c.k !== 'pregunta')
+      .map(c => c.t + (c.c && OBRA.citas[c.c] ? ' «' + OBRA.citas[c.c].t + '»' : '') + (c.tras ? ' ' + c.tras : '')).join(' '));
+    (m.qa || []).filter(x => !x.ia).forEach(x => add('Respuestas preparadas del museo', x.q + ' ' + x.a));
+  }
+  return (OBRA._base = b);
+}
+function etiqueta(p){
+  if(!EP[p.e]) return '';
+  if(p.e === 'fuente'){ const b = BASE().find(x => x.id === p.f); return `<p class="ep ep-fuente"><b>${EP.fuente}</b> · ${esc(b ? b.f : 'base documental')}</p>`; }
+  const resto = {vista:'compruébalo mirando', lectura:'una forma de mirarla, no un dato', general:'no sale de la base: verifícalo'}[p.e];
+  return `<p class="ep ep-${p.e}"><b>${EP[p.e]}</b> · ${resto}</p>`;
+}
+// Lo que llega del modelo se comprueba: etiquetas válidas, y una «fuente» sin referencia que exista baja a «verifícalo»
+function limpiaParte(o){
+  const c = {t:String(o.t).replace(/\s+/g, ' ').trim().slice(0, 700)};
+  c.e = EPS.includes(o.e) ? o.e : 'lectura';
+  if(c.e === 'fuente'){ const f = String(o.f || '').replace(/[\[\]\s]/g, ''); if(BASE().some(b => b.id === f)) c.f = f; else c.e = 'general'; }
+  return c;
+}
+function parseJSON(t){
+  t = String(t || '').trim();
+  try{ return JSON.parse(t); }catch(e){}
+  const m = t.match(/```(?:json)?\s*([\s\S]*?)```/); if(m){ try{ return JSON.parse(m[1]); }catch(e){} }
+  const a = t.indexOf('{'), b = t.lastIndexOf('}'); if(a >= 0 && b > a){ try{ return JSON.parse(t.slice(a, b + 1)); }catch(e){} }
+  return null;
+}
+// Lo que el visitante ya ha oído de la visita (hasta la cápsula que suena)
+function escuchado(){
+  if(!U.started && !U.fin) return '';
+  return U.caps.slice(0, U.fin ? U.caps.length : U.i + 1).map(C => C.segs.map(s => s.cita ? '«' + s.t + '»' : s.t).join(' ')).join('\n');
+}
+function textoObra(){
+  const zonas = Object.entries(OBRA.zonas).map(([k, z]) => `- ${k}: ${z.n}${z.vista ? '. ' + z.vista : ''}`).join('\n');
+  return `OBRA: «${OBRA.titulo}», de ${OBRA.autor} (${OBRA.fecha}).
+IDEA QUE VERTEBRA LA OBRA: ${OBRA.tema}
+
+ZONAS (el único vocabulario que mueve la cámara; en "z" usa solo estos identificadores):
+${zonas}
+
+BASE DOCUMENTAL (lo único que puedes presentar como dato, con su identificador):
+${BASE().map(b => `[${b.id}] ${b.f}: ${b.t}`).join('\n')}`;
+}
+function textoVisitante(){
+  const oido = escuchado();
+  return `VISITANTE
+- Visita que eligió: ${VIS().n}${VIS().d ? ' (' + VIS().d + ')' : ''}
+- Zona de la obra que tiene señalada: ${U.sel && OBRA.zonas[U.sel] ? OBRA.zonas[U.sel].n : 'ninguna'}
+- Preguntas que ha hecho: ${[...U.asked].slice(-6).join(' / ') || 'ninguna'}
+- Lo que ya ha escuchado de la visita:${oido ? '\n' + oido : ' nada todavía'}`;
+}
+const REGLAS = `CÓMO HABLAS
+- Eres la guía del museo. Hablas del artista en tercera persona y al visitante de tú, en castellano de España, con frases cortas, concretas y sensoriales. Nada de grandilocuencia ni de adjetivos vacíos.
+- Sigues la interpretación patrimonial (Tilden, Ham): una idea que vertebra, mirar antes que el dato, conectar con la experiencia de quien escucha y devolver siempre la mirada a la obra.
+
+DE DÓNDE SALE CADA COSA (marca cada parte con "e")
+- "fuente": un dato de la BASE DOCUMENTAL. Pon en "f" su identificador (B1, B2…). No añadas fechas, cifras, nombres ni lugares que no estén en ella.
+- "vista": algo que cualquiera puede comprobar mirando la obra. Describe sin interpretar.
+- "lectura": una interpretación, una asociación, una hipótesis o una conexión con la vida de quien escucha. Es libre y bienvenida, pero se dice como lectura («se puede ver como», «quizá», «a mí me hace pensar en»), nunca como un hecho.
+- "general": conocimiento general fiable que no está en la base; se mostrará con «verifícalo». Úsalo poco y nunca para datos de esta obra.
+- Si una parte mezclaría dato y lectura, divídela en dos.
+- No pongas entre comillas nada que no esté literalmente entre comillas en la base. No inventes palabras del artista ni de las personas retratadas.
+- De la bibliografía solo conoces los títulos: puedes decir que la obra aparece en una publicación, nunca lo que dice.
+- Si algo no tiene respaldo, no lo digas.`;
+function promptChat(){
+  return [textoObra(), textoVisitante(), REGLAS, `CONVERSACIÓN
+El visitante te escribe desde el móvil mientras mira la obra.
+- Si pregunta, responde en dos a cuatro frases, en partes separadas según de dónde sale cada cosa.
+- Si la respuesta ya está en lo que ha escuchado, recuérdala en una frase y añade algo que no haya oído, o llévale a mirar.
+- Si describe lo que ve o da una opinión, haz de facilitadora al estilo de Visual Thinking Strategies: recoge lo que dice sin juzgarlo, señala la zona y pregúntale qué ve que le hace decir eso o qué más ve.
+- Si la base no respalda lo que pregunta, dilo con naturalidad.
+- Termina devolviendo la mirada a un detalle de la obra.
+
+FORMATO
+Responde solo con un objeto JSON, sin texto antes ni después:
+{"partes":[{"t":"…","e":"fuente","f":"B1"},{"t":"…","e":"lectura"}],"z":"identificador o null"}`].join('\n\n');
+}
+function promptSugerencias(){
+  return [textoObra(), `LO QUE ACABA DE ESCUCHAR (visita «${VIS().n}», contada por ${M().nombre})
+${escuchado()}`, `TAREA
+Propón las tres preguntas que haría una persona atenta justo después de escuchar esto, una por dirección:
+- "obra": sobre esta obra.
+- "fuera": más allá de la obra: el artista, su época, las personas.
+- "mirar": una que lleve a volver a mirar algo concreto del cuadro.
+Reglas:
+- Cada pregunta tira de algo que el relato deja abierto o solo menciona. Nunca preguntes algo cuya respuesta ya esté en lo que ha escuchado.
+- Que se pueda responder con la base documental o mirando la obra; la de "fuera" puede necesitar conocimiento general.
+- Escríbelas como las haría el visitante: en castellano de España, de 4 a 10 palabras, sin tecnicismos.
+- No repitas ninguna de estas, que ya ha hecho: ${[...U.asked].join(' / ') || 'ninguna'}.
+- En "z", la zona a la que se refiere la pregunta, o null.
+
+FORMATO
+Responde solo con un objeto JSON, sin texto antes ni después:
+{"preguntas":[{"q":"¿…?","d":"obra","z":"identificador o null"},{"q":"¿…?","d":"fuera","z":null},{"q":"¿…?","d":"mirar","z":"identificador"}]}`].join('\n\n');
+}
+
+// Puter: cada visitante usa su propia cuenta. El inicio de sesión abre una ventana y solo puede salir de un gesto
+let puterP = null;
+function cargarPuter(){
+  if(window.puter) return Promise.resolve();
+  if(!puterP) puterP = new Promise((res, rej) => {
+    const s = document.createElement('script'); s.src = 'https://js.puter.com/v2/';
+    s.onload = () => window.puter ? res() : rej(); s.onerror = () => rej();
+    document.head.appendChild(s);
+  }).catch(() => { puterP = null; throw {code:'puter_carga'}; });
+  return puterP;
+}
+const puterDentro = () => { try{ return !!(window.puter && puter.auth.isSignedIn()); }catch(e){ return false; } };
+const IA = {
+  modo:null, s:null, perm:null, concedido:false,
+  async iniciar(){
+    try{
+      if(window.claude && claude.use){
+        const s = await claude.use('sample');
+        if(s){ this.s = s; this.modo = 'claude'; try{ this.perm = await claude.use('permissions'); }catch(e){} }
+      }
+    }catch(e){}
+    if(!this.modo && CONFIG.api) this.modo = 'api';
+    if(!this.modo && !window.claude){ this.modo = 'puter'; if(gstore.get('puter') === '1') cargarPuter().catch(() => {}); }
+  },
+  nombre(){ return {claude:'Claude', puter:'Puter', api:'el modelo del proyecto'}[this.modo] || 'IA'; },
+  // ¿Se puede llamar sin pedir nada al visitante? Las sugerencias no salen de un gesto, así que solo se piden si ya hay permiso
+  async listo(){
+    if(this.modo === 'api') return true;
+    if(this.modo === 'puter') return puterDentro();
+    if(this.modo === 'claude'){ if(this.concedido) return true; try{ return !!this.perm && (await this.perm.state('sample')) === 'granted'; }catch(e){ return false; } }
+    return false;
+  },
+  // Se llama dentro del gesto (enviar, tocar una pregunta): en Puter abre aquí el inicio de sesión si hace falta
+  asegurar(){
+    if(this.modo !== 'puter' || puterDentro()) return Promise.resolve();
+    const entrar = () => { if(puterDentro()) return null; try{ return puter.auth.signIn().then(() => gstore.set('puter', '1'), e => { throw {code:'puter_entrar', detalle:e}; }); }catch(e){ return Promise.reject({code:'puter_entrar', detalle:e}); } };
+    return window.puter ? Promise.resolve(entrar()) : cargarPuter().then(entrar);
+  },
+  async texto(input, o = {}){
+    if(this.modo === 'claude'){
+      const opts = {modelTier:o.tier || 'default'}; if(o.signal) opts.signal = o.signal; if(o.cache === false) opts.cache = false;
+      const r = await this.s(input, opts); this.concedido = true; return r.text;
+    }
+    const turnos = typeof input === 'string' ? [{role:'user', content:input}] : input;
+    if(this.modo === 'puter'){
+      await cargarPuter();
+      let r; try{ r = await puter.ai.chat(turnos, false, CONFIG.puterModelo ? {model:CONFIG.puterModelo} : {}); }catch(e){ throw {code:'puter', detalle:e}; }
+      if(o.signal && o.signal.aborted) throw {code:'cancelled'};
+      const c = r && r.message ? r.message.content : r;
+      return typeof c === 'string' ? c : Array.isArray(c) ? c.map(p => (p && p.text) || '').join('') : String(c || '');
+    }
+    if(this.modo === 'api'){
+      let r; try{ r = await fetch(CONFIG.api, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({input:turnos}), signal:o.signal}); }
+      catch(e){ throw {code:e && e.name === 'AbortError' ? 'cancelled' : 'upstream_error'}; }
+      if(!r.ok) throw {code:'upstream_error'};
+      return await r.text();
+    }
+    throw {code:'not_granted'};
+  },
+  fallo(e){
+    const c = e && e.code;
+    if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(c)){ this.modo = null; toast('Sin acceso al modelo: siguen las respuestas preparadas'); return; }
+    if(c === 'puter_carga') return toast('No se ha podido cargar Puter. Revisa la conexión');
+    if(c === 'rate_limited') return toast('Demasiadas preguntas seguidas. Prueba dentro de un momento');
+    if(c === 'session_expired') return toast('Vuelve a iniciar sesión para seguir');
+    if(c === 'refused') return toast('El modelo no ha querido responder a eso. Prueba a preguntarlo de otra manera');
+    toast('No se ha podido completar. Prueba otra vez');
+  }
+};
+// Pregunta libre o sugerida: responde el modelo por partes, cada una con su etiqueta de origen, y la cámara va a la zona
+async function preguntarIA(q){
+  const listo = IA.asegurar();   // primero, para que el inicio de sesión de Puter salga dentro del gesto
+  U.asked.add(q); guardar();
+  const d = $('deep'); d.querySelector('.qs')?.remove(); d.querySelector('.conectar')?.remove();
+  const y = document.createElement('p'); y.className = 'you'; y.textContent = q; d.appendChild(y);
+  const dots = document.createElement('div'); dots.className = 'dots'; dots.innerHTML = '<i></i><i></i><i></i>'; d.appendChild(dots);
+  d.scrollTop = d.scrollHeight;
+  if(U.chatCtl) U.chatCtl.abort();
+  const ctl = U.chatCtl = new AbortController();
+  let r = null;
+  try{
+    await listo;
+    r = parseJSON(await IA.texto([{role:'user', content:promptChat()}, ...U.chat.slice(-8), {role:'user', content:q}], {signal:ctl.signal, cache:false}));
+  }catch(e){
+    dots.remove(); if(e && e.code === 'cancelled') return;
+    if(e && e.code === 'puter_entrar'){
+      // La ventana no se abrió o se cerró: un botón para entrar con un toque y repetir la pregunta
+      y.remove(); U.asked.delete(q);
+      const b = document.createElement('button'); b.className = 'pasar conectar'; b.dataset.q = q; b.textContent = 'Entrar en Puter para que te responda →';
+      d.appendChild(b); preguntas(); return;
+    }
+    IA.fallo(e); preguntas(); return;
+  }
+  dots.remove(); if(U.chatCtl === ctl) U.chatCtl = null;
+  const partes = (r && Array.isArray(r.partes) ? r.partes : []).filter(p => p && typeof p.t === 'string' && p.t.trim()).map(limpiaParte);
+  if(!partes.length){ toast('No he sabido contestar a eso. Prueba a preguntarlo de otra manera'); preguntas(); return; }
+  U.chat.push({role:'user', content:q}, {role:'assistant', content:partes.map(p => p.t).join(' ')});
+  const z = ZONA(r.z); if(z){ marcar(z); movioCamara = true; volar(caja(z), 1100); }
+  const g = MED(MEDG());
+  if(MEDG() !== P.guia){ const qn = document.createElement('p'); qn.className = 'qn'; qn.textContent = g.nombre; d.appendChild(qn); }
+  const box = document.createElement('div'); box.className = 'ans';
+  partes.forEach(p => { const w = document.createElement('div'); w.className = 'parte'; const t = document.createElement('p'); t.textContent = p.t; w.appendChild(t); w.insertAdjacentHTML('beforeend', etiqueta(p)); box.appendChild(w); });
+  d.appendChild(box);
+  const s = document.createElement('p'); s.className = 'src'; s.textContent = `Respuesta generada con IA (${IA.nombre()})`; d.appendChild(s);
+  hablarSeguido(partes.map(p => [p.t, g.voz]));
+  preguntas();
+  y.scrollIntoView && y.scrollIntoView({block:'start', behavior:RM ? 'auto' : 'smooth'});
+}
+// Al llegar a la última cápsula, el modelo propone tres preguntas a partir de lo escuchado (una vez por visita).
+// Si falla o no hay permiso todavía, siguen las preparadas, sin avisar.
+async function sugerirIA(){
+  const clave = P.guia + '|' + P.perfil;
+  if(!IA.modo || !U.caps.length || U.genClave === clave) return;
+  U.genClave = clave;
+  if(!(await IA.listo())){ if(U.genClave === clave) U.genClave = ''; return; }
+  if(U.genCtl) U.genCtl.abort();
+  const ctl = U.genCtl = new AbortController();
+  try{
+    const r = parseJSON(await IA.texto(promptSugerencias(), {signal:ctl.signal}));
+    if(ctl !== U.genCtl || clave !== P.guia + '|' + P.perfil) return;
+    const lista = (r && Array.isArray(r.preguntas) ? r.preguntas : []).filter(x => x && typeof x.q === 'string' && x.q.trim() && DIR[x.d])
+      .slice(0, 3).map(x => ({q:x.q.replace(/\s+/g, ' ').trim().slice(0, 120), d:x.d, z:ZONA(x.z)}));
+    if(!lista.length){ U.genClave = ''; return; }
+    U.gen = lista; finPreguntas(); if(!$('hablarS').hidden) preguntas();
+  }catch(e){ if(U.genClave === clave) U.genClave = ''; }
+}
 
 /* ======================= Voz y música ======================= */
 function callar(){
@@ -870,6 +1139,7 @@ function promptPara(contexto){
 
 /* ======================= Arranque: directamente en la obra ======================= */
 (() => {
+  IA.iniciar();
   let q = null; try{ q = new URLSearchParams(location.search).get('obra'); }catch(e){}
   q = q || (OBRA_INCRUSTADA ? null : 'obras/noche-estrellada.json');
   if(!q) return iniciar(OBRA_INCRUSTADA);
