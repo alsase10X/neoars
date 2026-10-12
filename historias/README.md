@@ -8,10 +8,10 @@ Prototipo del nivel que está por encima de la unidad: varias obras encadenadas,
 ## Cómo funciona
 
 - **El tema manda.** Cada historia tiene sus propios textos para cada obra, escritos para su tema. No repite la visita de la unidad.
-- **Portada.** Una pantalla propia, como la carátula de un disco: una sola imagen a sangre (una obra entera o un encuadre de ella), el título, el tema, la duración y «Escuchar». Sirve igual para tres obras que para treinta. Al pulsar, la entrada se cuenta sobre la propia portada, a pantalla completa, y la portada se retira al empezar la primera obra. «Ver las obras» despliega la tira de miniaturas para empezar por cualquiera, y «Saltar la entrada» va directo a la primera. El cierre suena en el reproductor, sobre el mismo encuadre.
-- **Suena seguida.** Entrada, una parada por obra y cierre. Al pasar de una obra a otra, la imagen se funde con la siguiente mientras la voz sigue.
+- **Portada.** Una pantalla propia, como la carátula de un disco: una sola imagen a sangre (una obra entera o un encuadre de ella), el título, el tema, la duración y «Escuchar», que empieza por la primera obra. «Ver las obras» despliega la tira para empezar por cualquiera. Sirve igual para tres obras que para treinta.
+- **Suena seguida.** Una parada por obra y un cierre. Al pasar de una obra a otra, la imagen se funde con la siguiente mientras la voz sigue.
 - **Arriba, lo que estás viendo.** En cada parada, la cabecera muestra la obra, su autor y su fecha; en la entrada y el cierre, la historia. Sobre el relato se ve dónde estás: «Desde dentro · 2 de 3».
-- **Cada obra sigue siendo una parada.** En el relato, una línea fina marca dónde empieza, y tocarla salta a esa obra. «Ver la obra completa», que abre su unidad, está en el menú «⋯».
+- **Cada obra sigue siendo una parada.** «Ver la obra completa», que abre su unidad, está en el menú «⋯».
 - **Ritmo variado.** Una cápsula `"k": "silencio"` muestra la frase, calla unos segundos (`pausa`) y deja subir la música para mirar.
 - **De cada obra se toma** la imagen, las zonas, la ficha, las citas (con su voz) y las preguntas preparadas, que cambian según la obra que se está viendo.
 - **La música es de la historia** y sigue al cambiar de obra.
@@ -22,7 +22,6 @@ Prototipo del nivel que está por encima de la unidad: varias obras encadenadas,
 | --- | --- |
 | `titulo`, `tema` | Nombre y la idea que vertebra la historia |
 | `portada` | `obra` (número de la parada cuya imagen hace de portada, desde 0) y, si se quiere, `encuadre` `[x, y, ancho, alto]` |
-| `intro` | Cápsulas de entrada; se cuentan en la portada, a pantalla completa |
 | `paradas` | Una por obra: `obra` (su archivo), `unidad` (enlace a su unidad completa) y `caps` |
 | `cierre` | Cápsulas finales; suenan sobre el encuadre de la portada |
 | `musica`, `nota`, `salir` | Pista, nota de créditos y vuelta a la portada |

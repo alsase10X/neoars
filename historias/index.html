@@ -160,9 +160,6 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 @media (prefers-reduced-motion:reduce){ *{animation:none!important} .w,#ov,.cap,.fin{transition:none!important} }
 /* ---------- Historia: varias obras encadenadas, como las pistas de un disco ---------- */
 #stage{transition:opacity .3s}
-.parada{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;padding:16px 0 2px;margin-top:6px;border-top:1px solid var(--hair);max-width:34ch;opacity:.5;transition:opacity .4s;cursor:pointer;font-size:.85rem;font-weight:800}
-.parada .num{color:var(--muted);font-variant-numeric:tabular-nums}
-.parada.ahora{opacity:1}
 /* ---------- Portada: pantalla propia, como la carátula de un disco ---------- */
 .portadaS{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;transition:opacity .7s,transform .7s}
 .portadaS.fuera{opacity:0;transform:scale(.96);pointer-events:none}
@@ -192,13 +189,6 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 a.fila-m{text-decoration:none}
 .cap.silencio{font-style:italic;font-weight:600}
 .finh{font-size:.8rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.obras{display:flex;flex-direction:column;gap:8px;max-width:420px}
-.obraL{display:flex;gap:12px;align-items:center;border:1px solid var(--hair);padding:8px;text-decoration:none}
-.obraL:hover{border-color:var(--fg)}
-.obraL img{width:56px;height:56px;object-fit:cover;flex:none;background:#222}
-.obraL span{min-width:0}
-.obraL b{display:block;font-size:.98rem;font-weight:800}
-.obraL small{display:block;font-size:.85rem;color:var(--muted);margin-top:2px}
 .hist{display:flex;flex-direction:column;gap:6px}
 .hist b{font-size:1.15rem;font-weight:800;letter-spacing:-.01em}
 dd{min-width:0;overflow-wrap:anywhere}
@@ -276,7 +266,6 @@ dd{min-width:0;overflow-wrap:anywhere}
     <div class="p-acc">
       <button class="b1" id="pPlay"><span id="pPlayT">Escuchar</span> <span id="pPlayF" aria-hidden="true">→</span></button>
       <button class="lk" id="pObras" aria-expanded="false">Ver las obras</button>
-      <button class="lk" id="pSaltar" hidden>Saltar la entrada</button>
     </div>
     <div class="tira" id="pTira" hidden></div>
   </div>
@@ -378,8 +367,6 @@ function construir(){
   return out;
 }
 const refHTML = C => { const t = esc(C.breve || C.ref || ''); return `<p class="ref">${C.url ? `<a href="${esc(C.url)}" target="_blank" rel="noopener">${t}</a>` : t}</p>`; };
-// En el relato, una línea fina por obra: dónde empieza y un toque para saltar a ella
-function cabeceraParada(p){ return `<div class="parada" data-p="${p}" role="button" tabindex="0"><span class="num">${p + 1}</span><span>${esc(OBRAS[p].titulo)}</span></div>`; }
 // Duración aproximada a partir del texto, antes de pintar nada
 function duracion(){
   const pal = U.caps.reduce((a, C) => a + C.segs.reduce((b, s) => b + s.t.split(/\s+/).length, 0), 0);
@@ -391,8 +378,6 @@ function pintarLista(){
   const L = $('lista'); U.dur = duracion(); L.innerHTML = '<div class="tope" aria-hidden="true"></div>';
   $('pTexto').querySelectorAll('.cap').forEach(el => el.remove());
   U.caps.forEach((C, i) => {
-    if(C.tipo === 'inicio') L.insertAdjacentHTML('beforeend', cabeceraParada(C.p));
-    if(C.tipo === 'cierre') L.insertAdjacentHTML('beforeend', '<div class="parada" data-cierre="1"><span class="num">Para terminar</span></div>');
     const el = document.createElement('div'); el.className = 'cap' + (C.k === 'pregunta' ? ' pregunta' : '') + (C.k === 'silencio' ? ' silencio' : ''); el.dataset.i = i; el.setAttribute('role', 'button'); el.tabIndex = 0;
     C.frases = [];
     C.segs.forEach(s => {
@@ -407,9 +392,7 @@ function pintarLista(){
     (C.tipo === 'intro' ? $('pTexto') : L).appendChild(el);   // la entrada se cuenta en la portada
   });
   const fin = document.createElement('div'); fin.className = 'fin'; fin.id = 'fin';
-  fin.innerHTML = '<p class="finh">Las obras de esta historia</p><div class="obras">' + OBRAS.map((O, p) => `<a class="obraL" href="${esc(S.paradas[p].unidad || '#')}"><img src="${esc(O.fondo || O.img)}" alt=""><span><b>${esc(O.titulo)}</b><small>${esc(O.autor)} · ${esc(O.fecha)}. Ver la obra completa</small></span></a>`).join('') + '</div>'
-    + '<div class="qs" id="finQs"></div><button class="b1" id="deNuevo"><span>Escucharla de nuevo</span> <span aria-hidden="true">↺</span></button>';
-  L.appendChild(fin); finPreguntas();
+  L.appendChild(fin);
   L.insertAdjacentHTML('beforeend', '<div class="cola" aria-hidden="true"></div>');
   marcarActual(false);
 }
@@ -418,12 +401,11 @@ const primeraDe = p => U.caps.findIndex(C => C.p === p && C.tipo === 'inicio');
 function foco(){ return Math.round($('lista').clientHeight*.16); }
 function marcarActual(scroll = true){
   document.querySelectorAll('.cap[data-i]').forEach(el => { const n = +el.dataset.i; el.classList.toggle('ya', n < U.i); el.classList.toggle('ahora', n === U.i && !U.fin); });
-  marcarParada(); cabecera(); portada();
+  cabecera(); portada();
   $('fin') && $('fin').classList.toggle('ahora', U.fin);
   if(scroll && !U.dedo) centrar(U.fin ? $('fin') : capEl(U.i));
   estadoPlay();
 }
-function marcarParada(){ const C = U.caps[U.i]; document.querySelectorAll('#lista .parada[data-p]').forEach(el => el.classList.toggle('ahora', !!C && +el.dataset.p === C.p && C.tipo !== 'intro' && C.tipo !== 'cierre' && C.tipo !== 'fin')); }
 function centrar(el, suave = true){ if(!el || !$('lista').contains(el)) return; const L = $('lista'); L.style.setProperty('--foco', foco() + 'px'); L.scrollTo({top:Math.max(0, el.offsetTop - foco()), behavior:suave && !RM ? 'smooth' : 'auto'}); }
 function seguirPalabra(w){
   if(U.dedo || !w || !$('lista').contains(w)) return; const L = $('lista'), y = w.offsetTop - L.scrollTop;
@@ -446,10 +428,8 @@ function portada(){
   el.classList.toggle('empezada', !!U.started); el.classList.toggle('sonando', U.playing);
   $('pKick').textContent = `Historia · ${OBRAS.length} obras${U.dur ? ' · ' + U.dur : ''}`;
   $('pPlayT').textContent = U.playing ? 'Pausa' : U.started ? 'Seguir' : 'Escuchar'; $('pPlayF').hidden = U.playing;
-  $('pSaltar').hidden = !U.started || !U.caps.some(X => X.tipo === 'intro');
 }
 $('pPlay').onclick = () => { if(!U) return; U.playing ? pausa() : play(); };
-$('pSaltar').onclick = () => { if(!U) return; ir(primeraDe(0)); if(!U.playing) play(); };
 $('pObras').onclick = () => { const t = $('pTira'); t.hidden = !t.hidden; $('pObras').setAttribute('aria-expanded', !t.hidden); };
 $('pTira').onclick = e => { const b = e.target.closest('[data-tira]'); if(!b || !U) return; ir(primeraDe(+b.dataset.tira)); if(!U.playing) play(); };
 $('pSalir').onclick = () => $('salir').click();
@@ -551,16 +531,13 @@ const lista = $('lista');
 lista.addEventListener('click', e => {
   if(!U) return;
   if(e.target.closest('a')) return;
-  if(e.target.closest('#deNuevo')){ U.fin = false; ir(0); play(); return; }
   const fq = e.target.closest('[data-fq]'); if(fq){ abrirHablar(); const x = M().qa[+fq.dataset.fq]; U.asked.add(x.q); guardar(); responder(x.q, x, GK()); finPreguntas(); return; }
-  const pa = e.target.closest('.parada[data-p]'); if(pa){ ir(primeraDe(+pa.dataset.p)); if(!U.playing) play(); return; }
-  const ti = e.target.closest('[data-tira]'); if(ti){ ir(primeraDe(+ti.dataset.tira)); if(!U.playing) play(); return; }
   const c = e.target.closest('.cap'); if(!c) return;
   const n = +c.dataset.i;
   if(n === U.i && !U.fin){ U.playing ? pausa() : play(); return; }
   ir(n); if(!U.playing) play();
 });
-lista.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.target.classList.contains('cap') || e.target.classList.contains('parada'))){ e.preventDefault(); e.target.click(); } });
+lista.addEventListener('keydown', e => { if(e.key === 'Enter' && e.target.classList.contains('cap')){ e.preventDefault(); e.target.click(); } });
 let asentarT = 0, apuntada = -1, apuntaCamT = 0;
 ['touchmove','wheel'].forEach(ev => lista.addEventListener(ev, () => { if(!U) return; if(!U.dedo){ U.dedo = true; U.reanudar = U.playing; if(U.playing){ parar(); } lista.classList.add('moviendo'); } }, {passive:true}));
 lista.addEventListener('scroll', () => {

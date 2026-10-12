@@ -14,16 +14,6 @@
   "src": "../unidad/obras/satie-gymnopedie-1.mp3",
   "titulo": "Satie, Gymnopédie n.º 1"
  },
- "intro": [
-  {
-   "z": null,
-   "t": "Esta historia va de mirar desde dentro. Tres cuadros, tres interiores: un cuarto, una ventana y una puerta de cristal."
-  },
-  {
-   "z": null,
-   "t": "En cada uno, alguien está dentro y algo pasa fuera. Fíjate en dónde te coloca el pintor a ti."
-  }
- ],
  "paradas": [
   {
    "obra": "../unidad/obras/el-dormitorio.json",
