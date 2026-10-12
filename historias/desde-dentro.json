@@ -1,6 +1,15 @@
 {
  "titulo": "Desde dentro",
  "tema": "Mirar desde dentro: un cuarto que se recuerda, una ventana desde la que se sueña y un cristal a través del cual alguien nos devuelve la mirada.",
+ "portada": {
+  "obra": 2,
+  "encuadre": [
+   0.25,
+   0.08,
+   0.55,
+   0.6
+  ]
+ },
  "musica": {
   "src": "../unidad/obras/satie-gymnopedie-1.mp3",
   "titulo": "Satie, Gymnopédie n.º 1"
