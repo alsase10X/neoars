@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-adn-registro="inmersivo">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,17 +9,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="adn/adn.css">
 <style>
-/* Sistema de la unidad v1: oscuro, neutro y Archivo. El color lo pone la obra.
+/* ADN común (adn/adn.css), registro inmersivo: oscuro, neutro y Archivo. El color lo pone la obra.
    Arriba, solo las pestañas, la lupa y el menú «⋯»; lo demás vive dentro del menú.
-   Las imágenes llevan las esquinas redondeadas; el resto, en ángulo recto como en la v1. */
+   Esquinas rectas en todo, como en la unidad y en NeoARS. */
 :root{
   color-scheme:dark;
-  --font:"Archivo","Helvetica Neue",Arial,sans-serif;
-  --ink:#f6f5f2;--paper:#0a0a0b;--grey:#a29e97;--soft:rgba(246,245,242,.2);
-  --tile:#161618;--stage:#0a0a0b;--panel:#0d0d0e;--barbg:#141416;--velo:rgba(10,10,11,.82);
+  --font:var(--fuente,"Archivo","Helvetica Neue",Arial,sans-serif);
+  --ink:var(--c-texto,#f6f5f2);--paper:var(--c-fondo,#0a0a0b);--grey:var(--c-apagado,#a29e97);--soft:var(--c-filete,rgba(246,245,242,.2));
+  --tile:#161618;--stage:var(--c-fondo,#0a0a0b);--panel:var(--c-panel,#0d0d0e);--barbg:#141416;--velo:var(--c-velo,rgba(10,10,11,.82));
   --accent:#f6f5f2;--on-accent:#000;
-  --r:10px;--r2:6px;
+  --r:var(--radio,0);--r2:var(--radio,0);
   --s1:8px;--s2:16px;--s3:24px;--s4:48px;
 }
 *{box-sizing:border-box;border-radius:0}

@@ -1,0 +1,68 @@
+/* ================================================================
+   ADN · sistema de diseño común de NeoARS y artmedium
+   Solo tokens: color, tipografía, escala, espaciado y forma.
+   Los componentes viven en cada aplicación y leen estos valores.
+
+   Tres registros (data-adn-registro en <html>):
+     museo      Por defecto. Negro, escala en múltiplos de 3 y un acento sacado de la obra.
+     neutro     Claro y discreto, para salas y muestras que no quieren marca.
+     inmersivo  Una obra en pantalla, sobre el color de la propia obra. Solo oscuro.
+   Dos temas (data-tema en <html>): oscuro y claro. Museo arranca en oscuro, neutro en claro.
+
+   Reglas que no cambian con el registro:
+   - Una sola familia, Archivo.
+   - Esquinas rectas. Solo los indicadores redondos (puntos, el sello) son círculos.
+   - El color lo pone la obra: la interfaz es neutra y el acento sale de la imagen.
+   - Texto alineado a la izquierda (el sello es la única excepción centrada).
+   - El texto de lectura va junto a la imagen, nunca encima.
+   - Ningún texto por debajo de 12 px.
+   ================================================================ */
+
+:root{
+  --fuente:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --radio:0;
+  --margen:24px;          /* margen lateral en móvil */
+  --fila:56px;            /* alto de una fila tocable */
+  --ancho-max:430px;      /* ancho de la columna de lectura */
+  --cabecera:44px;
+  --sup:env(safe-area-inset-top,0px);
+  --inf:env(safe-area-inset-bottom,0px);
+  --columnas-catalogo:2;
+}
+
+/* ---- Registro museo (por defecto) · oscuro ---- */
+:root,
+:root[data-adn-registro="museo"]{
+  --c-fondo:#000000; --c-texto:#FFFFFF; --c-apagado:#8C8C8C; --c-filete:rgba(255,255,255,.25);
+  --c-acento:var(--c-texto);
+  --t-titulo:42px; --t-obra:27px; --t-cuerpo:18px; --t-pieza:15px; --t-cabecera:15px; --t-dato:12px;
+  --e-1:9px; --e-2:18px; --e-3:27px; --e-4:45px; --e-5:72px;
+  --grosor-filete:1px; --interlineado:1.45; --ancho-texto:33ch;
+}
+/* museo · claro */
+:root[data-tema="claro"]:not([data-adn-registro="neutro"]):not([data-adn-registro="inmersivo"]){
+  --c-fondo:#FFFFFF; --c-texto:#000000; --c-apagado:#6B6B6B; --c-filete:rgba(0,0,0,.25);
+}
+
+/* ---- Registro neutro · claro ---- */
+:root[data-adn-registro="neutro"]{
+  --c-fondo:#FAFAF8; --c-texto:#1A1A1A; --c-apagado:#8A8A85; --c-filete:rgba(26,26,26,.12);
+  --c-acento:var(--c-texto);
+  --t-titulo:36px; --t-obra:24px; --t-cuerpo:17px; --t-pieza:15px; --t-cabecera:15px; --t-dato:13px;
+  --e-1:8px; --e-2:16px; --e-3:24px; --e-4:40px; --e-5:64px;
+  --grosor-filete:.5px; --interlineado:1.5; --ancho-texto:34ch;
+}
+/* neutro · oscuro */
+:root[data-adn-registro="neutro"][data-tema="oscuro"]{
+  --c-fondo:#0E0E0D; --c-texto:#F2F1ED; --c-apagado:#8A8A85; --c-filete:rgba(242,241,237,.14);
+}
+
+/* ---- Registro inmersivo · solo oscuro ----
+   La obra ocupa la pantalla sobre un fondo difuminado de su propio color.
+   Hereda la escala de museo; la unidad v1 todavía usa sus tamaños propios en rem. */
+:root[data-adn-registro="inmersivo"]{
+  color-scheme:dark;
+  --c-fondo:#0A0A0B; --c-texto:#F6F5F2; --c-apagado:#A29E97; --c-filete:rgba(246,245,242,.2);
+  --c-acento:var(--c-texto);
+  --c-panel:#0D0D0E; --c-velo:rgba(10,10,11,.82);
+}

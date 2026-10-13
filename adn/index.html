@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" data-adn-registro="museo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ADN · sistema de diseño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="adn.css">
+<style>
+/* Muestra del ADN: todo lo que se ve aquí sale de adn.css; los valores se leen en vivo. */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;background:var(--c-fondo);color:var(--c-texto);font-family:var(--fuente)}
+body{font-size:var(--t-cuerpo);-webkit-font-smoothing:antialiased;padding:var(--sup) 0 var(--inf)}
+.col{max-width:var(--ancho-max);margin:0 auto;padding:0 var(--margen)}
+.cab{position:sticky;top:0;z-index:2;background:var(--c-fondo);padding:var(--e-2) 0 var(--e-2);border-bottom:var(--grosor-filete) solid var(--c-filete)}
+.cab p{margin:0 0 var(--e-1);font-size:var(--t-dato);color:var(--c-apagado)}
+.seg{display:flex;border:var(--grosor-filete) solid var(--c-filete);margin-top:var(--e-1)}
+.seg button{all:unset;flex:1;height:40px;text-align:center;font-size:var(--t-pieza);cursor:pointer;color:var(--c-apagado)}
+.seg button[aria-pressed="true"]{background:var(--c-texto);color:var(--c-fondo)}
+.seg button[disabled]{opacity:.3;cursor:default}
+h2{margin:var(--e-5) 0 var(--e-3);padding-top:var(--e-3);border-top:var(--grosor-filete) solid var(--c-filete);font-size:var(--t-pieza);font-weight:500}
+.dato{font-size:var(--t-dato);line-height:1.4;color:var(--c-apagado)}
+.titulo{margin:var(--e-2) 0 0;font-size:var(--t-titulo);font-weight:500;line-height:1.02;letter-spacing:-.015em}
+.cuerpo{margin:var(--e-2) 0 0;line-height:var(--interlineado);max-width:var(--ancho-texto)}
+.principal{display:flex;align-items:center;justify-content:space-between;margin-top:var(--e-4);padding:0 20px;height:var(--fila);
+  background:var(--c-acento);color:var(--c-fondo);font-weight:500;text-decoration:none;border-radius:var(--radio)}
+.lista{list-style:none;margin:var(--e-4) 0 0;padding:0}
+.lista li{display:flex;align-items:center;justify-content:space-between;height:var(--fila)}
+.lista li+li{border-top:var(--grosor-filete) solid var(--c-filete)}
+.lista span{color:var(--c-apagado)}
+.obra{margin-top:var(--e-4);aspect-ratio:5/4;border-radius:var(--radio);
+  background:radial-gradient(80% 70% at 40% 45%,#b9ad8a,#4a4334 60%,#141210)}
+.obra-tit{margin:var(--e-2) 0 0;font-size:var(--t-obra);font-weight:500;line-height:1.15}
+.ficha{margin:var(--e-2) 0 0}
+.ficha div{display:flex;gap:var(--e-2);padding:10px 0;border-bottom:var(--grosor-filete) solid var(--c-filete);font-size:var(--t-pieza)}
+.ficha dt{min-width:88px;color:var(--c-apagado);font-size:var(--t-dato);padding-top:2px}
+.ficha dd{margin:0}
+.fila{display:flex;align-items:center;gap:var(--e-2);min-height:44px;border-bottom:var(--grosor-filete) solid var(--c-filete);font-size:var(--t-pieza)}
+.fila code{margin-left:auto;font:var(--t-dato)/1 ui-monospace,Menlo,monospace;color:var(--c-apagado)}
+.muestra-color{width:28px;height:28px;flex:none;border:var(--grosor-filete) solid var(--c-filete)}
+.barra{height:10px;background:var(--c-texto);flex:none}
+.reglas{margin:0;padding:0 0 0 1.1em;line-height:var(--interlineado);max-width:var(--ancho-texto);font-size:var(--t-pieza)}
+.reglas li+li{margin-top:var(--e-1)}
+.pie{margin:var(--e-5) 0;font-size:var(--t-dato);color:var(--c-apagado);line-height:1.6}
+</style>
+</head>
+<body>
+<div class="cab"><div class="col">
+  <p>ADN · sistema de diseño común de NeoARS y artmedium</p>
+  <div class="seg" id="registro" role="group" aria-label="Registro">
+    <button data-r="museo">Museo</button><button data-r="neutro">Neutro</button><button data-r="inmersivo">Inmersivo</button>
+  </div>
+  <div class="seg" id="tema" role="group" aria-label="Tema">
+    <button data-t="oscuro">Oscuro</button><button data-t="claro">Claro</button>
+  </div>
+</div></div>
+
+<main class="col">
+  <h2>Así se ve</h2>
+  <div class="dato">Sala de exposiciones · 17.07 – 18.10.2026</div>
+  <div class="titulo">Título de la muestra</div>
+  <p class="cuerpo">Un párrafo de lectura con el interlineado y el ancho de texto del registro. El color lo pone la obra; la interfaz se queda neutra.</p>
+  <a class="principal" href="#" onclick="return false"><span>Comenzar la historia</span><span aria-hidden="true">→</span></a>
+  <ul class="lista"><li>Catálogo <span>→</span></li><li>La artista <span>→</span></li><li>Sobre la muestra <span>→</span></li></ul>
+  <div class="obra" role="img" aria-label="Obra de ejemplo"></div>
+  <div class="obra-tit">Título de la obra, 1998</div>
+  <dl class="ficha"><div><dt>Técnica</dt><dd>Gelatina de plata</dd></div><div><dt>Medidas</dt><dd>101,6 × 127 cm</dd></div></dl>
+
+  <h2>Color</h2>
+  <div id="colores"></div>
+
+  <h2>Tipografía</h2>
+  <div id="tipos"></div>
+
+  <h2>Espaciado</h2>
+  <div id="espacios"></div>
+
+  <h2>Forma</h2>
+  <div id="forma"></div>
+
+  <h2>Reglas</h2>
+  <ul class="reglas">
+    <li>Una sola familia, Archivo.</li>
+    <li>Esquinas rectas. Solo los indicadores redondos son círculos.</li>
+    <li>El color lo pone la obra: la interfaz es neutra y el acento sale de la imagen.</li>
+    <li>Texto alineado a la izquierda; el sello es la única excepción.</li>
+    <li>El texto de lectura va junto a la imagen, nunca encima.</li>
+    <li>Ningún texto por debajo de 12 px.</li>
+  </ul>
+  <p class="pie">Los valores se leen en vivo de adn.css. Para usarlo: enlazar adn.css y poner data-adn-registro y data-tema en &lt;html&gt;.</p>
+</main>
+
+<script>
+const H = document.documentElement;
+const v = n => getComputedStyle(H).getPropertyValue(n).trim();
+function fila(nombre, valor, extra=''){ return `<div class="fila">${extra}<span>${nombre}</span><code>${valor}</code></div>`; }
+function pintar(){
+  const r = H.dataset.adnRegistro, t = H.dataset.tema || (r === 'neutro' ? 'claro' : 'oscuro');
+  document.querySelectorAll('#registro button').forEach(b => b.setAttribute('aria-pressed', b.dataset.r === r));
+  document.querySelectorAll('#tema button').forEach(b => { b.disabled = r === 'inmersivo'; b.setAttribute('aria-pressed', r === 'inmersivo' ? b.dataset.t === 'oscuro' : b.dataset.t === t); });
+  document.getElementById('colores').innerHTML = [['Fondo','--c-fondo'],['Texto','--c-texto'],['Apagado','--c-apagado'],['Filete','--c-filete'],['Acento','--c-acento']]
+    .map(([n,k]) => fila(n, `${k} · ${v(k)}`, `<span class="muestra-color" style="background:var(${k})"></span>`)).join('');
+  document.getElementById('tipos').innerHTML = [['Título','--t-titulo'],['Obra','--t-obra'],['Cuerpo','--t-cuerpo'],['Pieza','--t-pieza'],['Cabecera','--t-cabecera'],['Dato','--t-dato']]
+    .map(([n,k]) => `<div class="fila" style="font-size:var(${k});min-height:calc(var(${k}) * 1.8)"><span>${n}</span><code>${k} · ${v(k)}</code></div>`).join('');
+  document.getElementById('espacios').innerHTML = ['--e-1','--e-2','--e-3','--e-4','--e-5']
+    .map(k => fila('', `${k} · ${v(k)}`, `<span class="barra" style="width:var(${k})"></span>`)).join('');
+  document.getElementById('forma').innerHTML = [['Radio','--radio'],['Filete','--grosor-filete'],['Fila tocable','--fila'],['Margen','--margen'],['Interlineado','--interlineado'],['Ancho de texto','--ancho-texto']]
+    .map(([n,k]) => fila(n, `${k} · ${v(k)}`)).join('');
+}
+document.getElementById('registro').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  H.dataset.adnRegistro = b.dataset.r; delete H.dataset.tema; pintar();
+});
+document.getElementById('tema').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return;
+  H.dataset.tema = b.dataset.t; pintar();
+});
+pintar();
+</script>
+</body>
+</html>

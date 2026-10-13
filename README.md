@@ -66,6 +66,7 @@ El scrollytelling y el recorrido son, en el fondo, lo mismo: una lista ordenada 
 - **Los colores salen de la obra**, no son aleatorios.
 - **En móvil:** la imagen ocupa la pantalla y la ficha y la voz del autor van en una **hoja deslizable**. Abajo, una **barra con botones sencillos**: anterior, título, guardar, compartir (con el menú del propio móvil) y siguiente. *Implementado; pendiente de revisión en el móvil. Guardar usa un icono de marcador.*
 - El **sistema de diseño** debe ser muy claro y aplicarse a toda la aplicación.
+- **Sistema común con NeoARS:** el ADN de [`adn/`](adn/README.md). El inicio, la unidad y miradas usan su registro inmersivo. **Esquinas rectas** en todo.
 
 ### 3.8 Alojamiento
 - **GitHub Pages**, en este repositorio.
@@ -95,6 +96,8 @@ El scrollytelling y el recorrido son, en el fondo, lo mismo: una lista ordenada 
 | `scripts/descargar.py` | Descarga la ficha y la imagen de cada obra de las exposiciones. |
 | `.github/workflows/imagenes.yml` | Ejecuta ese script en GitHub cada vez que cambia `recorridos.json`. |
 | `data/`, `img/` | Fichas e imágenes propias, generadas por el script. La app las usa si existen y, si no, las pide al museo. |
+| `adn/` | El sistema de diseño común con NeoARS: `adn.css` (tokens), su documentación y una [muestra en vivo](https://alsase10x.github.io/neoars/adn/). |
+| `muestras/sally-mann/` | La app de NeoARS para *Macula et Materia* (Sally Mann): microapp e historia, autónomas y pensadas para visitarla desde el móvil fuera de la sala. Se montan con `scripts/sally_mann.py`. |
 
 La versión publicada **no lleva ninguna clave** de modelo: cada persona usa Puter o pega su propia clave en Ajustes.
 
