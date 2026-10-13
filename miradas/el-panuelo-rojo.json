@@ -1,0 +1,196 @@
+{
+ "nota": "Maqueta. Las miradas y las primeras miradas son ejemplos escritos para enseñar el funcionamiento; no son de visitantes reales.",
+ "obra": "../generativa/obras/el-panuelo-rojo.json",
+ "imagen": "../unidad/iiif/monet-panuelo-rojo/full/1200,/0/default.jpg",
+ "puerta": "¿Dónde se te va la mirada primero?",
+ "voz_artista": null,
+ "primeras": [
+  [0.651, 0.942],
+  [0.533, 0.449],
+  [0.355, 0.609],
+  [0.578, 0.32],
+  [0.584, 0.309],
+  [0.565, 0.287],
+  [0.583, 0.363],
+  [0.513, 0.523],
+  [0.444, 0.559],
+  [0.615, 0.334],
+  [0.496, 0.536],
+  [0.565, 0.344],
+  [0.549, 0.437],
+  [0.604, 0.336],
+  [0.499, 0.532],
+  [0.595, 0.398],
+  [0.577, 0.375],
+  [0.522, 0.404],
+  [0.601, 0.334],
+  [0.599, 0.407],
+  [0.298, 0.524],
+  [0.591, 0.318],
+  [0.593, 0.355],
+  [0.556, 0.407],
+  [0.509, 0.531],
+  [0.324, 0.399],
+  [0.581, 0.439],
+  [0.614, 0.33],
+  [0.6, 0.324],
+  [0.458, 0.585],
+  [0.564, 0.437],
+  [0.52, 0.39],
+  [0.491, 0.447],
+  [0.749, 0.342],
+  [0.257, 0.502],
+  [0.567, 0.371],
+  [0.589, 0.323],
+  [0.313, 0.954],
+  [0.414, 0.506],
+  [0.502, 0.527],
+  [0.59, 0.336],
+  [0.673, 0.403],
+  [0.266, 0.516],
+  [0.041, 0.742],
+  [0.074, 0.653],
+  [0.604, 0.311],
+  [0.602, 0.329],
+  [0.579, 0.315],
+  [0.605, 0.351]
+ ],
+ "miradas": [
+  {
+   "id": "m1",
+   "x": 0.596,
+   "y": 0.322,
+   "t": "No tiene ojos ni boca y aun así sé que me mira. Me ha dado un poco de vergüenza, como si me hubiera pillado espiando.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "sala",
+   "ahora": 14
+  },
+  {
+   "id": "m2",
+   "x": 0.505,
+   "y": 0.536,
+   "t": "Si abro la puerta, entra el frío y ella se va.",
+   "quien": {
+    "rol": "invitada",
+    "como": "una niña de ocho años"
+   },
+   "origen": "sala",
+   "ahora": 12,
+   "destacada": "la mediación"
+  },
+  {
+   "id": "m3",
+   "x": 0.5,
+   "y": 0.3,
+   "t": "El montante del centro parte el cuadro en dos y deja a Camille justo al otro lado. Un paso más y desaparece detrás de la madera.",
+   "quien": {
+    "rol": "mediacion"
+   },
+   "ahora": 11
+  },
+  {
+   "id": "m4",
+   "x": 0.6,
+   "y": 0.41,
+   "t": "El rojo es lo único caliente del cuadro. Todo lo demás tiene frío, hasta la habitación donde estoy.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "casa",
+   "ahora": 9
+  },
+  {
+   "id": "m5",
+   "x": 0.1,
+   "y": 0.6,
+   "t": "Yo estoy en la parte oscura, dentro. Me ha recordado a cuando miraba por la ventana de pequeño y no me dejaban salir.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "sala",
+   "ahora": 7
+  },
+  {
+   "id": "m6",
+   "x": 0.4,
+   "y": 0.635,
+   "t": "La nieve no es blanca.",
+   "porque": "Me he acercado mucho: al lado del marco es casi azul, y debajo del árbol, gris y verde.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "sala",
+   "ahora": 6
+  },
+  {
+   "id": "m7",
+   "x": 0.24,
+   "y": 0.42,
+   "t": "Las cortinas recogidas parecen un telón. Ella sale a escena un segundo y se acabó la función.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "casa",
+   "ahora": 5
+  },
+  {
+   "id": "m8",
+   "x": 0.6,
+   "y": 0.335,
+   "t": "En el móvil la amplío y la cara se deshace en manchas. Me alejo y vuelve a ser una cara.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "casa",
+   "ahora": 4
+  },
+  {
+   "id": "m9",
+   "x": 0.42,
+   "y": 0.34,
+   "t": "El árbol es un triángulo verde con manchas blancas, como los que dibujan los niños.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "casa",
+   "ahora": 3
+  },
+  {
+   "id": "m10",
+   "x": 0.55,
+   "y": 0.965,
+   "t": "El suelo me mete en la habitación: el cuadro empieza en mis pies.",
+   "quien": {
+    "rol": "invitada",
+    "como": "una fotógrafa"
+   },
+   "origen": "sala",
+   "ahora": 3
+  },
+  {
+   "id": "m11",
+   "x": 0.62,
+   "y": 0.45,
+   "t": "Lleva algo verde en las manos, como una rama.",
+   "porque": "Debajo del rojo hay un manchón verde que no es del jardín.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "sala",
+   "ahora": 2
+  },
+  {
+   "id": "m12",
+   "x": 0.76,
+   "y": 0.25,
+   "t": "La cortina de la derecha casi la tapa. Parece que el viento la mueve.",
+   "quien": {
+    "rol": "visitante"
+   },
+   "origen": "casa",
+   "ahora": 1
+  }
+ ]
+}

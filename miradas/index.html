@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0b">
+<title>Miradas · El pañuelo rojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<style>
+/* PIEZA CON MIRADAS · maqueta para NeoARS, con el sistema de la unidad v1.
+   La obra manda. Primero miras tú (un toque); después descubres lo que vieron otros,
+   cada mirada clavada en el punto de la obra al que se refiere. Sin muro, sin hilos, sin perfiles. */
+:root{
+  color-scheme:dark;
+  --bg:#0a0a0b; --fg:#f6f5f2; --muted:#a29e97; --hair:rgba(246,245,242,.2); --panel:#0d0d0e; --velo:rgba(10,10,11,.82);
+  --font:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --pad:18px; --kb:0px;
+}
+*{box-sizing:border-box;margin:0;padding:0;border-radius:0}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.25}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--fg);outline-offset:-3px}
+[hidden]{display:none!important}
+
+#vp{position:fixed;inset:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
+.fondo{position:absolute;inset:-60px;background-size:cover;background-position:center;filter:blur(30px) brightness(.38) saturate(1.1)}
+#stage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+#stage.vuela{transition:transform .9s cubic-bezier(.45,0,.2,1)}
+#pic{display:block;width:100%;height:100%;pointer-events:none;-webkit-user-drag:none}
+/* Lo que va encima de la obra: el mapa de primeras miradas y los puntos de las miradas */
+#calor{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.2s}
+#calor.on{opacity:1}
+#calor i{position:absolute;width:9%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,250,235,.5),rgba(255,250,235,0) 68%)}
+#pins{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;width:16px;height:16px;transform:translate(-50%,-50%) scale(var(--inv,1));border-radius:50%;border:2px solid var(--fg);background:rgba(10,10,11,.35);box-shadow:0 0 0 1px rgba(0,0,0,.45);opacity:.6;transition:opacity .3s,width .3s,height .3s}
+.pin.sel{opacity:1;width:20px;height:20px}
+.pin.mia{background:var(--fg)}
+.pin.yo{border-style:dashed;background:none;opacity:1}
+.pin.pulso{animation:pulso 1.4s ease-out 2}
+@keyframes pulso{0%{box-shadow:0 0 0 0 rgba(246,245,242,.7)}100%{box-shadow:0 0 0 22px rgba(246,245,242,0)}}
+
+.scrim-t{position:fixed;left:0;right:0;top:0;height:96px;background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,0));pointer-events:none;z-index:4}
+.top{position:fixed;left:0;right:0;top:0;display:flex;align-items:center;gap:4px;padding:calc(env(safe-area-inset-top,0px) + 8px) 6px 0 4px;z-index:5}
+.who{flex:1;min-width:0;padding-left:2px}
+.who b{display:block;font-size:.95rem;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who small{display:block;font-size:.85rem;color:rgba(246,245,242,.75);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:44px;height:44px;display:grid;place-items:center;flex:none}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
+.ib:hover{background:var(--fg);color:#000}
+.pill{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 64px);transform:translateX(-50%);z-index:6;height:38px;padding:0 14px;background:var(--velo);border:1px solid rgba(246,245,242,.5);font-size:.9rem;font-weight:700;white-space:nowrap}
+.pill:hover{background:var(--fg);color:#000}
+
+/* Panel de abajo: cambia según el momento (mirar, leer miradas, añadir la tuya) */
+#panel{position:fixed;left:0;right:0;bottom:var(--kb);z-index:6;max-height:52vh;display:flex;flex-direction:column;
+  padding:22px var(--pad) calc(env(safe-area-inset-bottom,0px) + 14px);
+  background:linear-gradient(rgba(10,10,11,0),rgba(10,10,11,.9) 26px,rgba(10,10,11,.97))}
+html.teclado #panel{padding-bottom:12px;max-height:calc(100% - var(--kb) - 60px)}
+.pre{font-size:.8rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.big{font-size:clamp(1.3rem,5.6vw,1.6rem);font-weight:800;letter-spacing:-.025em;line-height:1.18;margin-top:6px;max-width:24ch;text-wrap:balance}
+.eco{font-size:.98rem;font-weight:600;line-height:1.35;color:var(--muted);margin-bottom:12px;max-width:40ch}
+.eco b{color:var(--fg);font-weight:800}
+.lk{font-size:.9rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:12px 0 2px;text-align:left;align-self:flex-start;color:var(--muted)}
+.lk:hover{color:var(--fg)}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 calc(var(--pad) * -1);padding:0 var(--pad) 2px;flex:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:36px;padding:0 12px;border:1px solid var(--hair);font-size:.88rem;font-weight:700;white-space:nowrap}
+.chip small{font-weight:500;color:var(--muted);margin-left:4px}
+.chip[aria-pressed=true]{background:var(--fg);color:#000;border-color:var(--fg)}
+.chip[aria-pressed=true] small{color:#000}
+.nota{font-size:.78rem;color:var(--muted);margin:12px 0 2px}
+.lista{list-style:none;overflow-y:auto;overscroll-behavior:contain;min-height:0;flex:1 1 auto;display:flex;flex-direction:column;scrollbar-width:none}
+.lista::-webkit-scrollbar{display:none}
+.mirada{padding:14px 0;border-bottom:1px solid var(--hair);cursor:pointer}
+.mirada:first-child{padding-top:8px}
+.mirada .t{font-size:clamp(1.05rem,4.4vw,1.2rem);font-weight:700;line-height:1.38;letter-spacing:-.01em;max-width:36ch}
+.mirada .pq{font-size:.95rem;font-weight:500;line-height:1.4;color:var(--muted);margin-top:6px;max-width:38ch}
+.mirada .pq b{font-weight:700;color:var(--fg)}
+.mirada.sel .t::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--fg);margin-right:8px;vertical-align:.15em}
+.meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;margin-top:10px;font-size:.8rem;color:var(--muted)}
+.meta .quien{font-weight:700;color:var(--fg)}
+.meta .dest{border:1px solid var(--hair);padding:2px 6px}
+.ahora{margin-left:auto;height:32px;padding:0 10px;border:1px solid var(--hair);font-size:.82rem;font-weight:700;display:flex;align-items:center;gap:6px}
+.ahora::before{content:"";width:10px;height:10px;border-radius:50%;border:1.5px solid currentColor}
+.ahora[aria-pressed=true]{background:var(--fg);color:#000;border-color:var(--fg)}
+.ahora[aria-pressed=true]::before{background:#000;border-color:#000}
+.mas{font-size:.9rem;font-weight:700;padding:12px 0 0;text-align:left;text-decoration:underline;text-underline-offset:3px;flex:none}
+.acciones{display:flex;gap:8px;margin-top:14px;flex:none}
+.b1{height:52px;flex:1;background:var(--fg);color:#000;font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.b1:disabled{opacity:.3;cursor:default}
+.b2{height:52px;padding:0 16px;border:1px solid var(--hair);font-size:.92rem;font-weight:700}
+.campo{display:flex;align-items:flex-end;gap:6px;border-bottom:1px solid var(--hair);margin-top:12px}
+.campo:focus-within{border-color:var(--fg)}
+.campo textarea{flex:1;min-width:0;background:none;border:0;resize:none;font-size:1.1rem;font-weight:600;line-height:1.35;padding:8px 0;min-height:3.2em;max-height:30vh}
+.campo textarea:focus{outline:none}
+.campo textarea::placeholder{color:#8f8b85}
+.campo .ib.rec{background:var(--fg);color:#000}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--hair);margin-top:12px}
+.seg button{padding:10px 6px;font-size:.88rem;font-weight:700;border-left:1px solid var(--hair)}
+.seg button:first-child{border-left:0}
+.seg button[aria-pressed=true]{background:var(--fg);color:#000}
+.cita{font-size:1.05rem;font-weight:700;line-height:1.35;border-left:2px solid var(--fg);padding-left:12px;margin-top:10px;max-width:36ch}
+
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.45);display:flex;flex-direction:column;padding-top:16%}
+.sheet .pn{background:var(--panel);border-top:2px solid var(--fg);display:flex;flex-direction:column;height:100%;animation:rise .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{transform:translateY(30px);opacity:0}}
+.sheet .hd{display:flex;align-items:center;gap:10px;padding:10px 6px 10px var(--pad);border-bottom:1px solid var(--hair)}
+.sheet .hd b{flex:1;font-size:.95rem;font-weight:800}
+.deep{flex:1;min-height:0;overflow-y:auto;padding:16px var(--pad) calc(env(safe-area-inset-bottom,0px) + 22px);display:flex;flex-direction:column;gap:18px}
+.deep h3{font-size:.95rem;font-weight:800}
+.deep p{font-size:.92rem;line-height:1.5;color:var(--muted);max-width:52ch}
+dl{display:grid;grid-template-columns:100px 1fr;font-size:.88rem;line-height:1.4}
+dt,dd{padding:10px 0;border-top:1px solid var(--hair)}
+dt{font-size:.85rem;font-weight:700;color:var(--muted)}
+dd a{text-decoration:underline;text-underline-offset:2px}
+#toast{position:fixed;left:var(--pad);right:var(--pad);top:calc(env(safe-area-inset-top,0px) + 60px);max-width:520px;margin:0 auto;z-index:60;background:var(--fg);color:#000;padding:11px 14px;font-size:.88rem;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s}
+#toast.on{opacity:1}
+@media (min-width:900px){
+  :root{--pad:28px}
+  #panel{left:50%;right:auto;width:720px;margin-left:-360px}
+  .sheet .pn{max-width:620px;width:100%;margin:0 auto}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="vp" aria-label="La obra. Toca para elegir un punto.">
+  <div class="fondo" id="fondo"></div>
+  <div id="stage"><img id="pic" alt=""><div id="calor"></div><div id="pins"></div></div>
+</div>
+<div class="scrim-t"></div>
+<header class="top">
+  <button class="ib" id="salir" aria-label="Volver"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <div class="who"><b id="tTit"></b><small id="tSub"></small></div>
+  <button class="ib" id="masB" aria-label="Ficha de la obra y sobre las miradas"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></button>
+</header>
+<button class="pill" id="entera" hidden>Ver la obra entera</button>
+<section id="panel" aria-live="polite"></section>
+
+<div class="sheet" id="fichaS" hidden>
+  <div class="pn" role="dialog" aria-labelledby="fT">
+    <div class="hd"><b id="fT">Ficha y miradas</b><button class="ib" id="fX" aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="deep">
+      <dl id="fDl"></dl>
+      <div><h3>Sobre las miradas</h3>
+        <p>Cada mirada está clavada en el punto de la obra del que habla. Primero miras tú; después ves lo que vieron otros: visitantes en la sala o desde casa, invitados y la mediación, cada uno con su nombre de rol. «Ahora lo veo» no es un «me gusta»: dice que una mirada te hizo ver algo nuevo.</p>
+        <p id="fNota"></p>
+      </div>
+      <button class="b2" id="reset" type="button">Empezar de nuevo</button>
+    </div>
+  </div>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const DATOS_INCRUSTADOS = null;   // la versión para Claude lleva aquí la obra, la imagen y las miradas
+let D, OBRA, Z = [], S;           // datos, obra, zonas (de la más pequeña a la más grande), estado
+const CLAVE = 'miradas.panuelo-rojo.v1';
+const leer = () => { try{ return JSON.parse(localStorage.getItem(CLAVE)) || {}; }catch(e){ return {}; } };
+const guardar = () => { try{ localStorage.setItem(CLAVE, JSON.stringify({primera:S.primera, mias:S.mias, ahora:S.ahora, origen:S.origen})); }catch(e){} };
+
+/* ======================= Zonas: a qué parte de la obra pertenece un punto ======================= */
+const polys = z => Array.isArray(z.poly[0][0]) ? z.poly : [z.poly];
+const area = p => Math.abs(p.reduce((a, q, i) => { const r = p[(i + 1) % p.length]; return a + q[0]*r[1] - r[0]*q[1]; }, 0))/2;
+const dentro = (x, y, p) => { let c = false; for(let i = 0, j = p.length - 1; i < p.length; j = i++){ const [xi, yi] = p[i], [xj, yj] = p[j]; if((yi > y) !== (yj > y) && x < (xj - xi)*(y - yi)/(yj - yi) + xi) c = !c; } return c; };
+const zonaDe = (x, y) => (Z.find(z => polys(z).some(p => dentro(x, y, p))) || {id:'obra', n:'la obra'}).id;
+const nombre = id => id === 'obra' ? 'Toda la obra' : (OBRA.zonas[id] || {}).n || id;
+const centro = id => { const ps = polys(OBRA.zonas[id]).flat(); const xs = ps.map(p => p[0]), ys = ps.map(p => p[1]); return {x:(Math.min(...xs) + Math.max(...xs))/2, y:(Math.min(...ys) + Math.max(...ys))/2, w:Math.max(...xs) - Math.min(...xs), h:Math.max(...ys) - Math.min(...ys)}; };
+
+/* ======================= Cámara: zoom libre y vuelos a un punto ======================= */
+const T = {s:1, x:0, y:0, fit:1}; let IW = 1, IH = 1;
+function area_(){ const top = 64, bottom = $('panel').getBoundingClientRect().top; return {W:innerWidth, top, H:Math.max(120, bottom - top)}; }
+function aplicar(){ $('stage').style.transform = `translate(${T.x}px,${T.y}px) scale(${T.s})`; $('stage').style.setProperty('--inv', (1/T.s).toFixed(4)); $('entera').hidden = T.s < T.fit*1.15; }
+function encajar(suave){
+  const a = area_(); T.fit = Math.min(a.W*.94/IW, a.H*.94/IH);
+  volarA(.5, .5, 1, suave);
+}
+function volarA(cx, cy, z, suave){
+  const a = area_(), s = T.fit*z;
+  T.s = s; T.x = a.W/2 - cx*IW*s; T.y = a.top + a.H/2 - cy*IH*s;
+  $('stage').classList.toggle('vuela', !!suave && !RM); aplicar();
+}
+function volarZona(id){
+  if(id === 'obra' || !OBRA.zonas[id]) return encajar(true);
+  const c = centro(id), a = area_(), z = Math.max(1, Math.min(3.2, Math.min(a.W/(c.w*IW*T.fit), a.H/(c.h*IH*T.fit))*.8));
+  volarA(c.x, c.y, z, true);
+}
+// Gestos: arrastrar, pellizcar, rueda, doble toque; un toque corto elige un punto de la obra
+const PT = new Map(); let gesto = null, ultimoToque = 0;
+const vp = $('vp');
+vp.addEventListener('pointerdown', e => {
+  vp.setPointerCapture(e.pointerId); PT.set(e.pointerId, [e.clientX, e.clientY]); $('stage').classList.remove('vuela');
+  if(PT.size === 1) gesto = {x0:e.clientX, y0:e.clientY, t0:Date.now(), movido:0};
+});
+vp.addEventListener('pointermove', e => {
+  if(!PT.has(e.pointerId)) return;
+  const prev = PT.get(e.pointerId), cur = [e.clientX, e.clientY]; PT.set(e.pointerId, cur);
+  if(PT.size === 1){ T.x += cur[0] - prev[0]; T.y += cur[1] - prev[1]; if(gesto) gesto.movido += Math.abs(cur[0] - prev[0]) + Math.abs(cur[1] - prev[1]); aplicar(); }
+  else if(PT.size === 2){
+    const otro = [...PT.entries()].find(([id]) => id !== e.pointerId)[1];
+    const d0 = Math.hypot(prev[0] - otro[0], prev[1] - otro[1]), d1 = Math.hypot(cur[0] - otro[0], cur[1] - otro[1]);
+    if(d0 > 0) zoomEn(d1/d0, (cur[0] + otro[0])/2, (cur[1] + otro[1])/2);
+    if(gesto) gesto.movido += 99;
+  }
+});
+const fin = e => {
+  if(!PT.has(e.pointerId)) return; PT.delete(e.pointerId);
+  if(e.type === 'pointerup' && gesto && PT.size === 0 && gesto.movido < 10 && Date.now() - gesto.t0 < 500){
+    const r = $('stage').getBoundingClientRect(), x = (e.clientX - r.left)/r.width, y = (e.clientY - r.top)/r.height;
+    const ahora = Date.now();
+    if(ahora - ultimoToque < 300 && S.fase === 'miradas'){ zoomEn(T.s > T.fit*1.5 ? T.fit/T.s : 2.2, e.clientX, e.clientY); ultimoToque = 0; }
+    else { ultimoToque = ahora; if(x >= 0 && x <= 1 && y >= 0 && y <= 1) toque(x, y, e.clientX, e.clientY); }
+  }
+  if(PT.size === 0) gesto = null;
+};
+vp.addEventListener('pointerup', fin); vp.addEventListener('pointercancel', fin);
+vp.addEventListener('wheel', e => { e.preventDefault(); $('stage').classList.remove('vuela'); zoomEn(e.deltaY < 0 ? 1.15 : 1/1.15, e.clientX, e.clientY); }, {passive:false});
+function zoomEn(f, cx, cy){ const ns = Math.max(T.fit*.9, Math.min(T.fit*6, T.s*f)), k = ns/T.s; T.x = cx - (cx - T.x)*k; T.y = cy - (cy - T.y)*k; T.s = ns; aplicar(); }
+$('entera').onclick = () => encajar(true);
+
+/* ======================= Mapa de primeras miradas y puntos de miradas ======================= */
+function calor(on){
+  if(on && !$('calor').children.length) $('calor').innerHTML = D.primeras.map(([x, y]) => `<i style="left:${x*100}%;top:${y*100}%"></i>`).join('');
+  $('calor').classList.toggle('on', on);
+}
+const todas = () => [...S.mias, ...D.miradas];
+function pintarPins(){
+  if(S.fase === 'mirar'){ $('pins').innerHTML = ''; return; }
+  const yo = S.primera ? `<span class="pin yo" style="left:${S.primera.x*100}%;top:${S.primera.y*100}%" title="Tu primera mirada"></span>` : '';
+  const ancla = S.nueva && S.nueva.x != null ? `<span class="pin mia sel pulso" style="left:${S.nueva.x*100}%;top:${S.nueva.y*100}%"></span>` : '';
+  $('pins').innerHTML = yo + ancla + todas().map(m => `<span class="pin${m.propia ? ' mia' : ''}${S.zona === 'obra' || zonaDe(m.x, m.y) === S.zona ? ' sel' : ''}${S.foco === m.id ? ' pulso' : ''}" data-id="${m.id}" style="left:${m.x*100}%;top:${m.y*100}%"></span>`).join('');
+}
+
+/* ======================= Momentos del panel ======================= */
+const ROL = {visitante:'Visitante', invitada:'Invitada', invitado:'Invitado', mediacion:'Mediación', artista:'Artista'};
+const quien = m => m.propia ? 'Tu mirada' : (ROL[m.quien.rol] || 'Visitante') + (m.quien.como ? ': ' + m.quien.como : '');
+const origen = m => m.origen === 'sala' ? 'en la sala' : m.origen === 'casa' ? 'desde casa' : '';
+const cuenta = m => (m.ahora || 0) + (S.ahora[m.id] ? 1 : 0);
+// Orden: las tuyas primero; después por «Ahora lo veo», procurando que las primeras sean de voces distintas
+function ordenar(lista){
+  const mias = lista.filter(m => m.propia), resto = lista.filter(m => !m.propia).sort((a, b) => cuenta(b) - cuenta(a));
+  const vistos = new Set(), primero = [], despues = [];
+  resto.forEach(m => { const k = m.quien.rol + (m.origen || ''); if(!vistos.has(k) && primero.length < 4){ vistos.add(k); primero.push(m); } else despues.push(m); });
+  return [...mias, ...primero, ...despues];
+}
+function tarjeta(m){
+  const o = origen(m);
+  return `<li class="mirada${S.foco === m.id ? ' sel' : ''}" data-id="${m.id}">
+    <p class="t">${esc(m.t)}</p>
+    ${m.porque ? `<p class="pq"><b>Lo que ve:</b> ${esc(m.porque)}</p>` : ''}
+    <div class="meta"><span class="quien">${esc(quien(m))}</span>${o ? `<span>${o}</span>` : ''}${m.destacada ? `<span class="dest">Destacada por ${esc(m.destacada)}</span>` : ''}
+      ${m.propia ? '<span>solo en este dispositivo</span>' : `<button class="ahora" type="button" data-ahora="${m.id}" aria-pressed="${!!S.ahora[m.id]}">Ahora lo veo · ${cuenta(m)}</button>`}</div>
+  </li>`;
+}
+function pintar(){
+  const P = $('panel');
+  if(S.fase === 'mirar'){
+    P.innerHTML = `<p class="pre">Antes de nada</p><p class="big">${esc(D.puerta)} Tócala en la obra.</p>
+      <button class="lk" type="button" data-a="saltar">Ver directamente lo que vieron otros</button>`;
+  } else if(S.fase === 'miradas'){
+    const zonas = {}; todas().forEach(m => { const z = zonaDe(m.x, m.y); zonas[z] = (zonas[z] || 0) + 1; });
+    const ids = Object.keys(zonas).sort((a, b) => zonas[b] - zonas[a]);
+    const lista = ordenar(todas().filter(m => S.zona === 'obra' || zonaDe(m.x, m.y) === S.zona)), n = S.todas ? lista.length : 4;
+    P.innerHTML = `${S.eco ? `<p class="eco">${S.eco}</p>` : ''}
+      <div class="chips" role="group" aria-label="Partes de la obra"><button class="chip" type="button" data-z="obra" aria-pressed="${S.zona === 'obra'}">Toda la obra<small>${todas().length}</small></button>${ids.map(z => `<button class="chip" type="button" data-z="${z}" aria-pressed="${S.zona === z}">${esc(nombre(z))}<small>${zonas[z]}</small></button>`).join('')}</div>
+      <p class="nota">Miradas de ejemplo para la maqueta</p>
+      <ol class="lista">${lista.slice(0, n).map(tarjeta).join('')}</ol>
+      ${lista.length > n ? `<button class="mas" type="button" data-a="todas">Ver ${lista.length - n} más</button>` : ''}
+      <div class="acciones"><button class="b1" type="button" data-a="nueva">Añade tu mirada <span aria-hidden="true">+</span></button></div>`;
+  } else if(S.fase === 'anclar'){
+    P.innerHTML = `<p class="pre">Tu mirada</p><p class="big">Toca en la obra el sitio de lo que ves.</p>
+      <div class="acciones"><button class="b2" type="button" data-a="cancelar">Cancelar</button></div>`;
+  } else if(S.fase === 'escribir'){
+    P.innerHTML = `<p class="pre">Tu mirada · ${esc(nombre(zonaDe(S.nueva.x, S.nueva.y)))}</p><p class="big">¿Qué ves ahí?</p>
+      <div class="campo"><textarea id="txt" rows="2" maxlength="280" placeholder="Lo que ves, lo que te recuerda…" aria-label="Lo que ves">${esc(S.nueva.t || '')}</textarea>${SR ? '<button class="ib" type="button" data-a="dictar" aria-label="Dictar con la voz"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>' : ''}</div>
+      <div class="seg" role="group" aria-label="Desde dónde miras"><button type="button" data-o="sala" aria-pressed="${S.origen === 'sala'}">Estoy delante de la obra</button><button type="button" data-o="casa" aria-pressed="${S.origen === 'casa'}">Desde casa</button></div>
+      <div class="acciones"><button class="b1" type="button" data-a="seguir" ${(S.nueva.t || '').trim() && S.origen ? '' : 'disabled'}>Seguir <span aria-hidden="true">→</span></button><button class="b2" type="button" data-a="cancelar">Cancelar</button></div>`;
+  } else if(S.fase === 'porque'){
+    P.innerHTML = `<p class="cita">${esc(S.nueva.t)}</p><p class="big" style="margin-top:14px">¿Qué ves ahí que te hace decir eso?</p>
+      <div class="campo"><textarea id="txt2" rows="2" maxlength="280" placeholder="Opcional" aria-label="Qué ves que te hace decirlo">${esc(S.nueva.porque || '')}</textarea></div>
+      <div class="acciones"><button class="b1" type="button" data-a="guardar">Guardar mi mirada <span aria-hidden="true">→</span></button><button class="b2" type="button" data-a="guardar">Sin añadir</button></div>`;
+  }
+  pintarPins();
+  const ch = P.querySelector('.chip[aria-pressed="true"]'); if(ch) ch.scrollIntoView({inline:'nearest', block:'nearest'});
+  requestAnimationFrame(() => { const t = $('txt') || $('txt2'); if(t && S.enfocar){ S.enfocar = false; t.focus(); } });
+}
+
+/* ======================= Lo que pasa al tocar ======================= */
+function toque(x, y, px, py){
+  if(S.fase === 'mirar'){
+    S.primera = {x, y}; guardar();
+    const z = zonaDe(x, y), iguales = D.primeras.filter(([a, b]) => zonaDe(a, b) === z).length;
+    S.eco = `Tu mirada fue a <b>${esc(z === 'obra' ? 'la obra' : nombre(z).replace(/^(El|La|Las|Los) /, m => m.toLowerCase()))}</b>. ` +
+      (iguales ? `A ${iguales} ${iguales === 1 ? 'persona le pasó' : 'personas les pasó'} lo mismo.` : 'Casi nadie miró ahí primero.');
+    S.fase = 'miradas'; S.zona = z === 'obra' || !todas().some(m => zonaDe(m.x, m.y) === z) ? 'obra' : z;
+    calor(true); setTimeout(() => calor(false), 6000);
+    pintar(); return;
+  }
+  if(S.fase === 'anclar' || S.fase === 'escribir'){ S.nueva = {...S.nueva, x, y}; S.fase = 'escribir'; S.enfocar = true; pintar(); return; }
+  if(S.fase !== 'miradas') return;
+  // ¿Ha tocado un punto de una mirada? Si no, la parte de la obra
+  const cerca = [...document.querySelectorAll('.pin[data-id]')].map(el => { const r = el.getBoundingClientRect(); return {id:el.dataset.id, d:Math.hypot(r.left + r.width/2 - px, r.top + r.height/2 - py)}; }).sort((a, b) => a.d - b.d)[0];
+  if(cerca && cerca.d < 26) return abrir(cerca.id);
+  S.zona = zonaDe(x, y); if(!todas().some(m => zonaDe(m.x, m.y) === S.zona)) S.zona = 'obra';
+  S.foco = null; S.todas = false; S.eco = ''; pintar(); volarZona(S.zona);
+}
+function abrir(id){
+  const m = todas().find(x => x.id === id); if(!m) return;
+  S.zona = zonaDe(m.x, m.y); S.foco = id; S.eco = ''; S.todas = true; pintar();
+  volarA(m.x, m.y, 2.4, true);
+  const el = document.querySelector(`.mirada[data-id="${id}"]`); if(el) el.scrollIntoView({block:'nearest', behavior:RM ? 'auto' : 'smooth'});
+}
+$('panel').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if(b && b.dataset.z){ S.zona = b.dataset.z; S.foco = null; S.todas = false; S.eco = ''; pintar(); volarZona(S.zona); return; }
+  if(b && b.dataset.ahora){ const id = b.dataset.ahora; S.ahora[id] = !S.ahora[id]; if(!S.ahora[id]) delete S.ahora[id]; guardar(); pintar(); return; }
+  if(b && b.dataset.o){ S.origen = b.dataset.o; guardar(); S.nueva.t = $('txt') ? $('txt').value : S.nueva.t; pintar(); return; }
+  const a = b && b.dataset.a;
+  if(a === 'saltar'){ S.fase = 'miradas'; S.zona = 'obra'; pintar(); return; }
+  if(a === 'todas'){ S.todas = true; pintar(); return; }
+  if(a === 'nueva'){ S.nueva = {}; S.fase = 'anclar'; S.eco = ''; encajar(true); pintar(); return; }
+  if(a === 'cancelar'){ S.nueva = null; S.fase = 'miradas'; pintar(); return; }
+  if(a === 'seguir'){ S.nueva.t = $('txt').value.trim(); if(!S.nueva.t) return; S.fase = 'porque'; S.enfocar = true; pintar(); return; }
+  if(a === 'guardar'){
+    const pq = b.textContent.startsWith('Guardar') && $('txt2') ? $('txt2').value.trim() : '';
+    const m = {id:'mia-' + Date.now(), x:S.nueva.x, y:S.nueva.y, t:S.nueva.t, porque:pq || undefined, quien:{rol:'visitante'}, origen:S.origen, propia:true};
+    S.mias.unshift(m); guardar(); S.nueva = null; S.fase = 'miradas'; S.zona = zonaDe(m.x, m.y); S.foco = m.id; S.todas = false;
+    toast('Guardada. En la maqueta solo la ves tú, en este dispositivo'); pintar(); volarA(m.x, m.y, 2, true); return;
+  }
+  if(a === 'dictar'){ dictar(b); return; }
+  const li = e.target.closest('.mirada'); if(li && !b) abrir(li.dataset.id);
+});
+$('panel').addEventListener('input', e => {
+  if(e.target.id === 'txt'){ S.nueva.t = e.target.value; const s = $('panel').querySelector('[data-a="seguir"]'); if(s) s.disabled = !(e.target.value.trim() && S.origen); }
+  if(e.target.id === 'txt2') S.nueva.porque = e.target.value;
+});
+// Dictar con la voz (si el navegador lo permite): se escribe lo que dices
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition; let rec = null;
+function dictar(b){
+  if(rec){ rec.stop(); return; }
+  try{
+    rec = new SR(); rec.lang = 'es-ES'; rec.interimResults = false;
+    rec.onstart = () => b.classList.add('rec');
+    rec.onresult = e => { const t = $('txt'); if(t){ t.value = (t.value ? t.value + ' ' : '') + e.results[0][0].transcript; t.dispatchEvent(new Event('input', {bubbles:true})); } };
+    rec.onend = () => { b.classList.remove('rec'); rec = null; };
+    rec.onerror = () => { toast('No se ha podido usar el micrófono. Escribe tu mirada'); };
+    rec.start();
+  }catch(e){ rec = null; toast('Este navegador no permite dictar. Escribe tu mirada'); }
+}
+
+/* ======================= Ficha, salir, teclado del móvil ======================= */
+$('masB').onclick = () => { $('fichaS').hidden = false; };
+$('fX').onclick = () => { $('fichaS').hidden = true; };
+$('fichaS').onclick = e => { if(e.target === $('fichaS')) $('fichaS').hidden = true; };
+$('reset').onclick = () => { try{ localStorage.removeItem(CLAVE); }catch(e){} location.reload(); };
+$('salir').onclick = () => { location.href = '../'; };
+addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('fichaS').hidden) $('fichaS').hidden = true; else if(S && (S.fase === 'anclar' || S.fase === 'escribir' || S.fase === 'porque')){ S.nueva = null; S.fase = 'miradas'; pintar(); } } });
+function teclado(){
+  const vv = window.visualViewport; if(!vv) return;
+  const kb = Math.max(0, innerHeight - vv.height - vv.offsetTop);
+  document.documentElement.style.setProperty('--kb', kb + 'px'); document.documentElement.classList.toggle('teclado', kb > 80);
+}
+if(window.visualViewport){ visualViewport.addEventListener('resize', teclado); visualViewport.addEventListener('scroll', teclado); }
+function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2800); }
+// Si el panel cambia de alto, la obra se recoloca en el hueco que queda (solo si estaba entera)
+new ResizeObserver(() => { if(T.s <= T.fit*1.02 && !PT.size){ encajar(false); } }).observe($('panel'));
+addEventListener('resize', () => encajar(false));
+
+/* ======================= Arranque ======================= */
+(async () => {
+  try{
+    D = DATOS_INCRUSTADOS || await fetch('el-panuelo-rojo.json').then(r => r.json());
+    OBRA = D.obraDatos || await fetch(D.obra).then(r => r.json());
+  }catch(e){ $('panel').innerHTML = '<p class="big">No se ha podido cargar la obra.</p>'; return; }
+  Z = Object.entries(OBRA.zonas).map(([id, z]) => ({id, n:z.n, poly:z.poly, a:polys(z).reduce((s, p) => s + area(p), 0)})).sort((a, b) => a.a - b.a);
+  const L = leer();
+  S = {fase:L.primera ? 'miradas' : 'mirar', primera:L.primera || null, mias:L.mias || [], ahora:L.ahora || {}, origen:L.origen || null, zona:'obra', foco:null, eco:'', todas:false, nueva:null};
+  $('tTit').textContent = OBRA.titulo; $('tSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`; document.title = `Miradas · ${OBRA.titulo}`;
+  // De la ficha de la unidad, solo los datos de la obra: aquí no hay música ni visita guiada
+  $('fDl').innerHTML = (OBRA.ficha || []).filter(([k]) => !['Música', 'Base documental'].includes(k)).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('');
+  $('fNota').textContent = D.nota || '';
+  const img = $('pic'); img.alt = `${OBRA.titulo}, de ${OBRA.autor}`;
+  img.onload = () => { IW = img.naturalWidth; IH = img.naturalHeight; $('stage').style.width = IW + 'px'; $('stage').style.height = IH + 'px'; pintar(); encajar(false); };
+  img.src = D.imagenDatos || D.imagen; $('fondo').style.backgroundImage = `url(${D.imagenDatos || D.imagen})`;
+})();
+</script>
+</body>
+</html>
