@@ -1,0 +1,8 @@
+{
+ "nota": "Obras del catálogo que tienen unidad preparada. «clave» es la del catálogo: museo y su identificador en la API (Chicago y Cleveland usan su número interno, no el de acceso).",
+ "obras": [
+  {"clave": "aic-28560", "obra": "el-dormitorio.json"},
+  {"clave": "cma-135382", "obra": "el-panuelo-rojo.json"},
+  {"clave": "cma-122351", "obra": "el-incendio-del-parlamento.json"}
+ ]
+}

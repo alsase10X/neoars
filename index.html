@@ -309,7 +309,9 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 #pcv{max-width:100%;max-height:55vh;width:auto;height:auto;display:block}
 #pphrase{width:100%;max-width:480px}
 #postMsg{font-size:14px;color:var(--grey);text-align:center;max-width:480px;margin:0}
-#toast{position:fixed;left:50%;bottom:calc(var(--s3) + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;background:var(--ink);color:#000;padding:11px 14px;font-size:14px;font-weight:700;max-width:calc(100% - 32px);overflow-wrap:anywhere}
+/* La obra se abre en la unidad, en una capa encima del catálogo: al cerrarla, el mapa sigue donde estaba */
+#uni{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:20;background:var(--paper)}
+#toast{position:fixed;left:var(--s2);right:var(--s2);top:calc(env(safe-area-inset-top,0px) + 60px);max-width:520px;margin:0 auto;z-index:50;background:var(--ink);color:#000;padding:11px 14px;font-size:14px;font-weight:700;overflow-wrap:anywhere}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -764,7 +766,7 @@ function order(list){
 async function buildCols(){
   cancelAnimationFrame(M.raf); const token = ++M.token;
   await prepare(false, $('order').value==='color'); if(token!==M.token) return;
-  $('grid').innerHTML = '<div class="cols">' + order(current).map(i => { const a = current[i]; return `<figure data-i="${i}"><img loading="lazy" src="${esc(a.thumb)}" alt="${esc(a.alt||a.title)}"><figcaption>${esc(a.title)}<small>${esc(firstLine(a.artist))} · ${esc(a.date)}</small>${autorDe(a)?'<em>Habla el autor</em>':''}</figcaption></figure>`; }).join('') + '</div>';
+  $('grid').innerHTML = '<div class="cols">' + order(current).map(i => { const a = current[i]; return `<figure data-i="${i}"><img loading="lazy" src="${esc(a.thumb)}" alt="${esc(a.alt||a.title)}"><figcaption>${esc(a.title)}<small>${esc(firstLine(a.artist))} · ${esc(a.date)}</small></figcaption></figure>`; }).join('') + '</div>';
   $('grid').scrollTop = 0;
 }
 function cropFor(a, d){
@@ -830,7 +832,6 @@ async function buildMap(){
     const col = colorFor(a), sp = document.createElement('span');
     sp.style.background = col; sp.style.color = onColor(col); sp.textContent = a.title; el.appendChild(sp);
     if(mode==='date' && a.year != null){ const b = document.createElement('i'); b.textContent = fmtYear(a.year); el.appendChild(b); }
-    if(autorDe(a)){ const e = document.createElement('em'); e.textContent = 'Habla el autor'; el.appendChild(e); }
     frag.appendChild(el);
     M.tiles.push({el, w:cw, h:it.h, bx:it.c*cw, by:it.y, H:heights[it.c], i:it.i, crop});
   });
@@ -985,8 +986,45 @@ function driftOpts(a){
 }
 function openArt(a, crop){
   if(cmpA){ const A = cmpA; cancelPick(); cmpOpen(A, a); return; }
-  open_(a, crop);
+  abrirUnidad(a, crop);
 }
+
+/* ---------- La obra, en la unidad ----------
+   Si la obra tiene unidad preparada (unidad/obras/indice.json), se abre esa; si no, la unidad la monta con los
+   datos del museo. Va en una capa encima del catálogo; el gesto de atrás del móvil la cierra. */
+let UNI = null, PREP = {};
+async function loadUnidades(){
+  try{ const r = await fetch('unidad/obras/indice.json', {cache:'no-cache'}); if(r.ok) (await r.json()).obras.forEach(o => PREP[o.clave] = o.obra); }catch(e){}
+}
+function abrirUnidad(a, crop){
+  if(UNI) cerrarUnidad(true);
+  const f = document.createElement('iframe'), foco = crop ? '&foco=' + [crop.x, crop.y, crop.w, crop.h].map(v => clamp(v, 0, 1).toFixed(3)).join(',') : '';
+  f.id = 'uni'; f.title = a.title; f.allow = 'autoplay; microphone';
+  f.src = PREP[a.key] ? `unidad/?obra=obras/${encodeURIComponent(PREP[a.key])}` : `unidad/?museo=${encodeURIComponent(a.key)}${foco}`;
+  document.body.appendChild(f); UNI = {a, f};
+  cancelAnimationFrame(M.raf);
+  try{ history.pushState({uni:true}, ''); }catch(e){}
+  setTimeout(() => { try{ f.contentWindow.focus(); }catch(e){} }, 300);
+}
+function cerrarUnidad(desdeAtras){
+  if(!UNI) return;
+  UNI.f.remove(); UNI = null;
+  if(!document.body.classList.contains('home') && $('view').value === 'map' && M.tiles.length) loop();
+  if(!desdeAtras) try{ history.back(); }catch(e){}
+}
+function extras(){
+  if(!UNI) return;
+  UNI.f.contentWindow.postMessage({tipo:'unidad-extras', guardado:saved(UNI.a), seguir:driftOpts(UNI.a).map(o => o.label)}, location.origin);
+}
+addEventListener('message', e => {
+  if(!UNI || e.origin !== location.origin || e.source !== UNI.f.contentWindow) return;
+  const m = e.data || {};
+  if(m.tipo === 'unidad-lista') extras();
+  else if(m.tipo === 'unidad-cerrar') cerrarUnidad();
+  else if(m.tipo === 'unidad-guardar'){ art = UNI.a; toggleSave(); extras(); }
+  else if(m.tipo === 'unidad-seguir'){ const o = driftOpts(UNI.a)[m.k]; if(o){ cerrarUnidad(); drift = o; load(1); } }
+});
+addEventListener('popstate', () => { if(UNI) cerrarUnidad(true); });
 function setAccent(a){
   const col = colorFor(a);
   $('info').style.setProperty('--accent', col);
@@ -1846,6 +1884,7 @@ $('close').onclick = close_;
 $('toggle').onclick = () => { setInfo(!$('info').classList.contains('hidden')); setTimeout(home, 60); };
 document.addEventListener('keydown', e => {
   if(e.key!=='Escape') return;
+  if(UNI){ cerrarUnidad(); return; }
   if(!$('menuS').hidden){ menu(false); return; }
   if(!$('post').hidden){ $('post').hidden = true; return; }
   if(!$('cmp').hidden){ cmpClose(); return; }
@@ -1857,8 +1896,9 @@ document.addEventListener('keydown', e => {
   if($('modal').classList.contains('open')) close_();
 });
 setTab(ls.get('tab','exp'));
-Promise.all([loadRecorridos(), loadLocal()]).then(() => { if(document.body.classList.contains('home')) renderHome(); });
-openFromHash();
+const UNIS = loadUnidades();
+Promise.all([loadRecorridos(), loadLocal(), UNIS]).then(() => { if(document.body.classList.contains('home')) renderHome(); });
+UNIS.then(openFromHash);
 </script>
 </body>
 </html>
