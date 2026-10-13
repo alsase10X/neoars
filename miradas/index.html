@@ -297,7 +297,8 @@ function toque(x, y, px, py){
   if(S.fase === 'mirar'){
     S.primera = {x, y}; guardar();
     const z = zonaDe(x, y), iguales = D.primeras.filter(([a, b]) => zonaDe(a, b) === z).length;
-    S.eco = `Tu mirada fue a <b>${esc(z === 'obra' ? 'la obra' : nombre(z).replace(/^(El|La|Las|Los) /, m => m.toLowerCase()))}</b>. ` +
+    const dest = z === 'obra' ? 'la obra' : nombre(z).replace(/^(El|La|Las|Los) /, m => m.toLowerCase());
+    S.eco = `Tu mirada fue ${dest.startsWith('el ') ? 'al' : 'a'} <b>${esc(dest.startsWith('el ') ? dest.slice(3) : dest)}</b>. ` +
       (iguales ? `A ${iguales} ${iguales === 1 ? 'persona le pasó' : 'personas les pasó'} lo mismo.` : 'Casi nadie miró ahí primero.');
     S.fase = 'miradas'; S.zona = z === 'obra' || !todas().some(m => zonaDe(m.x, m.y) === z) ? 'obra' : z;
     calor(true); setTimeout(() => calor(false), 6000);
