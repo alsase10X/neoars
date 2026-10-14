@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="es" data-adn-registro="inmersivo">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="stylesheet" href="../../adn/adn.css">
+<title>artmedium en sala</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<style>
+/* artmedium · versión en sala. El visitante tiene la obra delante: la voz manda,
+   la pantalla señala en una miniatura dónde mirar y se apaga cuando toca levantar la vista.
+   ADN de artmedium, registro inmersivo (solo oscuro): fondo con el color de la propia obra,
+   una sola familia (Archivo), esquinas rectas, texto a la izquierda, nada por debajo de 12 px. */
+:root{
+  color-scheme:dark;
+  --bg:var(--c-fondo,#0A0A0B); --fg:var(--c-texto,#F6F5F2); --muted:var(--c-apagado,#A29E97); --hair:var(--c-filete,rgba(246,245,242,.2)); --panel:var(--c-panel,#0D0D0E); --campo:#141416; --tinta:#000;
+  --font:var(--fuente,"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif);
+  --col:560px;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;border-radius:0}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.2;font-size:16px}
+button,input{font:inherit;color:inherit;background:none;border:0}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--fg);outline-offset:-3px}
+.col{width:100%;max-width:calc(var(--col) + 32px);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+#app{position:relative;height:100%;overflow:hidden}
+.vista{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
+.fondo{position:absolute;inset:-60px;background-size:cover;background-position:center;filter:blur(30px) brightness(.42) saturate(1.2);transform:translateZ(0);transition:filter .9s}
+
+/* ---------- La sala ---------- */
+#salaF{filter:blur(40px) brightness(.26) saturate(1.1)}
+.salaIn{position:relative;height:100%;overflow-y:auto;padding-block:28px 28px}
+.eyb{font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;line-height:1;margin:12px 0 14px;text-wrap:balance;max-width:14ch}
+.salaD{font-size:1.06rem;line-height:1.45;color:rgba(246,245,242,.86);max-width:36ch}
+.qr{display:flex;gap:12px;align-items:flex-start;font-size:.9rem;line-height:1.4;color:var(--muted);padding:16px 0;margin-top:24px;border-top:1px solid var(--hair)}
+.qr svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--fg);stroke-width:1.8}
+.obras{list-style:none;border-top:1px solid var(--hair)}
+.ob{display:grid;grid-template-columns:26px 72px 1fr 20px;gap:14px;align-items:center;width:100%;padding:14px 0;border-bottom:1px solid var(--hair);text-align:left}
+.ob img{width:72px;height:72px;object-fit:cover;display:block;max-width:none}
+.num{font-size:1.35rem;font-weight:900;font-variant-numeric:tabular-nums}
+.obt{min-width:0}
+.obt b{display:block;font-size:1.12rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.obt small{display:block;font-size:.85rem;color:var(--muted);margin-top:4px;line-height:1.3}
+.ob .fl{font-weight:700;color:var(--muted)}
+.ob:hover .obt b{text-decoration:underline;text-underline-offset:3px}
+.pie{font-size:.8rem;line-height:1.5;color:var(--muted);margin-top:22px}
+.pie b{color:var(--fg);font-weight:900;letter-spacing:-.01em}
+
+/* ---------- La obra ---------- */
+.o-in{position:relative;height:100%;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:4px;height:58px;flex:none;transition:opacity .8s}
+.who{flex:1;min-width:0;padding-left:2px}
+.who b{display:block;font-size:1rem;font-weight:900;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who small{display:block;font-size:.85rem;color:rgba(246,245,242,.75);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{width:44px;height:44px;display:grid;place-items:center;flex:none}
+.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
+.ib:hover{background:var(--fg);color:var(--tinta)}
+.top .ib:first-child{margin-left:-12px}
+.top .ib:last-child{margin-right:-12px}
+
+#mini{position:relative;height:clamp(170px,36vh,430px);overflow:hidden;cursor:pointer;transition:opacity .8s;touch-action:manipulation}
+#stage{position:absolute;left:0;top:0;transform-origin:0 0;transition:transform 1.3s cubic-bezier(.65,0,.35,1);box-shadow:0 20px 60px rgba(0,0,0,.55)}
+#pic{display:block;width:100%;height:100%;max-width:none;pointer-events:none;-webkit-user-drag:none;user-select:none}
+#ov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity .7s}
+#ov.on{opacity:1}
+.chip{flex:none;min-height:38px;display:flex;align-items:center;gap:9px;font-size:.88rem;font-weight:700;transition:opacity .6s}
+.chip:not(:empty)::before{content:"";width:8px;height:8px;flex:none;background:var(--fg)}
+
+#texto{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+#texto::-webkit-scrollbar{display:none}
+.tx{padding-block:0 22px}
+.segs{display:flex;gap:4px;padding:2px 0 14px}
+.segs button{flex:1;height:22px;position:relative}
+.segs button::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:var(--hair);transition:background .4s}
+.segs .ya::before{background:rgba(246,245,242,.62)}
+.segs .ahora::before{background:var(--fg)}
+.segs .pq{flex:0 0 14px}
+.segs .pq::before{left:3px;right:3px;height:8px;margin-top:-4px}
+.lead{font-size:.88rem;color:var(--muted);line-height:1.4;margin-bottom:12px}
+
+#caps{position:relative}
+.cap{font-size:clamp(1.32rem,5.5vw,1.62rem);font-weight:700;letter-spacing:-.015em;line-height:1.3;max-width:28ch;animation:entra .55s cubic-bezier(.2,.8,.2,1)}
+.cap.sale{position:absolute;left:0;right:0;top:0;animation:sale .4s forwards;pointer-events:none}
+@keyframes entra{from{opacity:0;transform:translateY(14px)}}
+@keyframes sale{to{opacity:0;transform:translateY(-14px)}}
+.cap:not(.activa){opacity:.6}
+.cap p+p,.cap p+div,.cap div+p{margin-top:.5em}
+.cap.preg{font-size:clamp(1.6rem,6.8vw,2.05rem);font-weight:800;letter-spacing:-.025em;line-height:1.14}
+blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;padding-left:12px}
+.ref{font-size:.85rem;font-weight:500;font-style:normal;color:var(--muted);line-height:1.35;margin-top:8px;letter-spacing:0}
+.ref a{text-decoration:underline;text-underline-offset:2px}
+.w{transition:opacity .25s}
+#obraV.sonando .cap .w{opacity:.3}
+#obraV.sonando .cap .w.on{opacity:1}
+
+/* Pausa para mirar: la pantalla se apaga y el visitante levanta la vista hacia el cuadro real */
+.mirlab{display:none;align-items:center;gap:10px;flex-wrap:wrap;font-size:.88rem;font-weight:700;margin-bottom:14px;color:var(--fg)}
+.ring{width:22px;height:22px;transform:rotate(-90deg);flex:none}
+.ring circle{fill:none;stroke-width:2.5}
+.ring .rb{stroke:var(--hair)}
+.ring .rf{stroke:var(--fg);stroke-dasharray:62.83;stroke-dashoffset:62.83}
+.mirlab .lk{margin-left:auto}
+#obraV.mirando .mirlab{display:flex}
+#obraV.mirando #mini{opacity:.08}
+#obraV.mirando .chip{opacity:0}
+#obraV.mirando .top,#obraV.mirando .bar{opacity:.4}
+#obraV.mirando .fondo{filter:blur(30px) brightness(.16) saturate(1.1)}
+
+/* Final y conversación */
+.fin{display:flex;flex-direction:column;gap:12px;animation:entra .55s cubic-bezier(.2,.8,.2,1)}
+.fin h2{font-size:clamp(1.32rem,5.5vw,1.62rem);font-weight:800;letter-spacing:-.02em;line-height:1.2;max-width:24ch}
+.qs{display:flex;flex-direction:column;gap:6px}
+.q{text-align:left;border:1px solid var(--hair);padding:10px 12px;font-size:1rem;font-weight:700;line-height:1.28;min-height:48px;background:rgba(10,10,11,.35)}
+.q small{display:block;font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.q.ia{border-style:dashed}
+.q:hover{border-color:var(--fg)}
+.b1{height:56px;background:var(--fg);color:var(--tinta);font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;text-align:left}
+.b1 span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lk{font-size:.9rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:6px 0;text-align:left;align-self:flex-start}
+#conv{display:flex;flex-direction:column;gap:16px;animation:entra .5s cubic-bezier(.2,.8,.2,1)}
+.you{font-size:1rem;font-weight:700;color:var(--muted);line-height:1.35}
+.you small{display:block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;margin-bottom:4px}
+.qn{font-size:.85rem;font-weight:800;margin-bottom:-6px}
+.ans{font-size:clamp(1.16rem,4.7vw,1.36rem);font-weight:600;line-height:1.38;max-width:32ch;display:flex;flex-direction:column;gap:14px}
+.ans.ia{border-left:2px dashed var(--hair);padding-left:12px}
+.parte{display:flex;flex-direction:column;gap:5px}
+#conv.hablando .ans .w{opacity:.3}
+#conv.hablando .ans .w.on{opacity:1}
+.ep{font-size:.8rem;font-weight:500;line-height:1.4;color:var(--muted);letter-spacing:0;max-width:44ch}
+.ep b{font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--fg)}
+.ep::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;vertical-align:0;border:1.5px solid var(--fg)}
+.ep-fuente::before{background:var(--fg)}
+.ep-vista::before{border-radius:50%}
+.ep-lectura::before{transform:rotate(45deg) scale(.85)}
+.ep-general::before{border-style:dashed}
+.src{font-size:.85rem;color:var(--muted);line-height:1.4}
+.dots{display:flex;gap:6px;height:24px;align-items:center}
+.dots i{width:7px;height:7px;background:var(--fg);opacity:.15;animation:dt 1.2s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.2s}
+.dots i:nth-child(3){animation-delay:.4s}
+@keyframes dt{40%{opacity:1}}
+.pasar{align-self:flex-start;height:44px;padding:0 14px;border:1px solid var(--fg);font-size:.95rem;font-weight:700}
+.pasar:hover{background:var(--fg);color:var(--tinta)}
+
+/* Barra: escribir, escuchar, hablar */
+#askF{flex:none;padding-top:6px}
+.askin{display:flex;border:1px solid var(--hair);background:var(--campo)}
+.askin input{flex:1;min-width:0;height:54px;padding:0 14px;font-size:1rem}
+.askin input::placeholder{color:#c9c5be}
+.askin input:focus{outline:none}
+.askin button{width:54px;flex:none;display:grid;place-items:center;background:var(--fg);color:var(--tinta)}
+.askin svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
+.bar{display:flex;gap:8px;padding-block:10px 12px;flex:none;transition:opacity .8s}
+.sq{width:56px;height:56px;border:1px solid var(--hair);display:grid;place-items:center;flex:none;background:rgba(10,10,11,.5)}
+.sq svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
+.sq[aria-pressed=true]{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+.sq.rec{animation:inv 1s steps(2) infinite}
+@keyframes inv{50%{background:var(--fg);color:var(--tinta)}}
+.play{flex:1;min-width:0;height:56px;background:var(--fg);color:var(--tinta);display:flex;align-items:center;justify-content:center;gap:10px;font-size:1rem;font-weight:800;white-space:nowrap}
+.play svg{width:16px;height:16px;fill:currentColor;flex:none}
+.play span{overflow:hidden;text-overflow:ellipsis}
+
+/* Hojas: tu visita y ficha */
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.5);display:flex;flex-direction:column;justify-content:flex-end}
+.sheet .pn{background:var(--panel);border-top:2px solid var(--fg);display:flex;flex-direction:column;max-height:88%;width:100%;max-width:620px;margin:0 auto;animation:rise .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{transform:translateY(30px);opacity:0}}
+.sheet .hd{display:flex;align-items:center;gap:10px;padding:8px max(6px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--hair)}
+.sheet .hd b{flex:1;font-size:.95rem;font-weight:800}
+.deep{flex:1;min-height:0;overflow-y:auto;padding-block:16px 22px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.menu{display:flex;flex-direction:column;border-top:1px solid var(--hair)}
+.fila-m{display:flex;align-items:center;gap:12px;text-align:left;padding:12px 0;border-bottom:1px solid var(--hair);min-height:58px}
+.fila-m>span:first-child{flex:1;min-width:0}
+.fila-m b{display:block;font-size:.98rem;font-weight:800}
+.fila-m small{display:block;font-size:.8rem;font-weight:500;color:var(--muted);margin-top:2px}
+.tog{width:40px;height:22px;border:2px solid var(--muted);position:relative;flex:none}
+.tog::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;background:var(--muted);transition:left .2s}
+.fila-m[aria-pressed=true] .tog{border-color:var(--fg);background:var(--fg)}
+.fila-m[aria-pressed=true] .tog::after{left:20px;background:var(--tinta)}
+fieldset{border:0;display:flex;flex-direction:column;gap:8px}
+legend{font-size:.95rem;font-weight:800;margin-bottom:8px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border:1px solid var(--hair)}
+.seg button{padding:12px 6px;font-size:.92rem;font-weight:700;border-left:1px solid var(--hair);line-height:1.2}
+.seg button:first-child{border-left:0}
+.seg button small{display:block;font-size:.8rem;font-weight:500;margin-top:3px;opacity:.75}
+.seg button[aria-pressed=true]{background:var(--fg);color:var(--tinta)}
+.opts{display:flex;flex-direction:column;border-top:1px solid var(--hair)}
+.opts button{display:flex;align-items:flex-start;gap:12px;text-align:left;padding:12px 0;border-bottom:1px solid var(--hair);font-size:.98rem;font-weight:700;line-height:1.25}
+.opts button::before{content:"";width:16px;height:16px;flex:none;margin-top:2px;border:2px solid var(--muted);border-radius:50%}
+.opts button[aria-pressed=true]::before{background:var(--fg);border-color:var(--fg);box-shadow:inset 0 0 0 3px var(--panel)}
+.opts small{display:block;font-size:.8rem;font-weight:500;color:var(--muted);margin-top:2px}
+.sheet .foot{display:flex;gap:8px;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-top:1px solid var(--hair)}
+.sheet .foot .b1{flex:1}
+.b2{height:56px;padding:0 18px;border:1px solid var(--hair);font-size:.92rem;font-weight:700}
+.note{font-size:.85rem;line-height:1.45;color:var(--muted)}
+dl{display:grid;grid-template-columns:96px 1fr;font-size:.88rem;line-height:1.4}
+dt,dd{padding:10px 0;border-top:1px solid var(--hair)}
+dt{font-size:.85rem;font-weight:700;color:var(--muted);padding-right:10px}
+dd{min-width:0;overflow-wrap:anywhere}
+dd a{text-decoration:underline;text-underline-offset:2px}
+#toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 64px);z-index:60;max-width:528px;margin:0 auto;background:var(--fg);color:var(--tinta);padding:11px 14px;font-size:.88rem;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s}
+#toast.on{opacity:1}
+@media (min-height:820px){ #mini{height:clamp(170px,40vh,470px)} }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important} #stage,.w,#ov,.fondo,#mini,.top,.bar,.chip{transition:none!important} }
+</style>
+
+<div id="app">
+  <section id="salaV" class="vista" aria-label="La sala">
+    <div class="fondo" id="salaF" aria-hidden="true"></div>
+    <div class="salaIn">
+      <div class="col">
+        <p class="eyb">artmedium · en sala</p>
+        <h1 id="salaT"></h1>
+        <p class="salaD" id="salaD"></p>
+        <p class="qr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v2M14 18h2v2M18 18h2v2"/></svg><span>Junto a cada obra hay un código. Escanéalo y la obra empieza a contarse mientras la miras. Aquí puedes elegirla a mano.</span></p>
+        <ol class="obras" id="obras"></ol>
+        <p class="pie">Prototipo de la versión en sala. Imágenes y fichas de colecciones en acceso abierto. Mejor con auriculares. · <b>artmedium</b></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="obraV" class="vista" hidden>
+    <div class="fondo" id="obraF" aria-hidden="true"></div>
+    <div class="o-in">
+      <header class="top col">
+        <button class="ib" id="atras" aria-label="Volver a la sala"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div class="who"><b id="oTit"></b><small id="oSub"></small></div>
+        <button class="ib" id="ajB" aria-label="Tu visita: quién te la cuenta, música y ficha"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></button>
+      </header>
+      <div class="col">
+        <div id="mini" title="Toca un lugar del cuadro para escuchar lo que se cuenta de él">
+          <div id="stage">
+            <img id="pic" alt="">
+            <svg id="ov" aria-hidden="true" preserveAspectRatio="none">
+              <defs>
+                <filter id="pluma" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+                <mask id="mk" maskUnits="userSpaceOnUse"><rect id="mkr" fill="#fff"/><g id="huecos" filter="url(#pluma)"></g></mask>
+              </defs>
+              <rect id="velo" fill="#000" fill-opacity=".62" mask="url(#mk)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <p class="chip col" id="chip" aria-live="polite"></p>
+      <div id="texto">
+        <div class="col tx">
+          <div class="segs" id="segs" aria-label="Partes del relato"></div>
+          <div class="mirlab" id="mirlab"><svg class="ring" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" class="rb"/><circle cx="12" cy="12" r="10" class="rf" id="ringF"/></svg><span>Levanta la vista y mira el cuadro</span><button class="lk" id="seguirB" type="button">Ya he mirado →</button></div>
+          <p class="lead" id="lead"></p>
+          <div id="caps" aria-live="polite"></div>
+          <div class="fin" id="fin" hidden></div>
+          <div id="conv" hidden aria-live="polite"></div>
+        </div>
+      </div>
+      <form id="askF" class="col" hidden autocomplete="off">
+        <div class="askin"><input id="askI" enterkeyhint="send" aria-label="Tu pregunta"><button aria-label="Enviar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      </form>
+      <nav class="bar col" aria-label="Escuchar y preguntar">
+        <button class="sq" id="kb" type="button" aria-label="Escribir una pregunta" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg></button>
+        <button class="play" id="play" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="playI" d="M7 5l12 7-12 7z"/></svg><span id="playT">Escuchar</span></button>
+        <button class="sq" id="mic" type="button" aria-label="Preguntar con la voz"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+      </nav>
+    </div>
+  </section>
+</div>
+
+<div class="sheet" id="ajS" hidden>
+  <div class="pn" role="dialog" aria-label="Tu visita">
+    <div class="hd"><b>Tu visita</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="deep">
+      <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
+      <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
+      <div class="menu">
+        <button class="fila-m" type="button" id="musicaB" aria-pressed="false"><span><b>Música</b><small id="mMus"></small></span><span class="tog" aria-hidden="true"></span></button>
+        <button class="fila-m" type="button" id="fichaB"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+    <div class="foot" id="ajFoot"><button class="b1" id="aplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b2" type="button" data-close>Cancelar</button></div>
+  </div>
+</div>
+<div class="sheet" id="fichaS" hidden>
+  <div class="pn" role="dialog" aria-label="Ficha de la obra">
+    <div class="hd"><b id="fTit"></b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="deep"><dl id="fDl"></dl><p class="note" id="fNota"></p></div>
+  </div>
+</div>
+<div id="toast" role="status"></div>
+
+<script>
+/* La sala: un tema y una lista de obras. En la web lee los mismos archivos de obra que la unidad
+   (un motor, una obra por archivo); la versión que se ve dentro de Claude los lleva incrustados. */
+let SALA = /*__SALA__*/null;
+const SALA_WEB = {
+  nombre:'Cuatro maneras de mirar',
+  d:'Una noche pintada de día, un cuarto para descansar, un vistazo a través del cristal y un incendio visto desde la orilla. Cuatro obras de colecciones abiertas, contadas mientras las miras.',
+  musica:{src:'../obras/satie-gymnopedie-1.mp3', titulo:'Satie, Gymnopédie n.º 1'},
+  obras:['../obras/noche-estrellada.json', '../obras/el-dormitorio.json', '../obras/el-panuelo-rojo.json', '../obras/el-incendio-del-parlamento.json']
+};
+// Modelo para las preguntas libres. Dentro de Claude responde Claude; en la web, Puter (cada visitante
+// con su propia cuenta) o, si se rellena «api», el servidor intermedio del proyecto.
+const CONFIG = {api:'', puterModelo:''};
+
+/* ======================= Utilidades ======================= */
+const $ = id => document.getElementById(id);
+const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const txt = h => { try{ return new DOMParser().parseFromString(String(h), 'text/html').body.textContent || ''; }catch(e){ return String(h); } };
+const tiene = (s, p) => String(s).split(' ').includes(p);
+const SENT = t => { const s = t.replace(/\[…\]/g, '⁣'); return (s.match(/[^.!?…]+[.!?…»]+|[^.!?…]+$/g) || [s]).map(x => x.trim().replace(/⁣/g, '[…]')).filter(Boolean); };
+const HABLA = t => t.replace(/[«»]/g, '').replace(/\[…\]/g, ',');
+const DIR = {obra:'Sobre la obra', fuera:'Más allá de la obra', mirar:'Vuelve a mirar'};
+const st = {get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : v; }catch(e){ return d; } }, set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }};
+let OBRA = null, P = null, U = null, KEY = 'am.sala.';
+const store = {get:(k, d) => st.get(KEY + k, d), set:(k, v) => st.set(KEY + k, v)};
+const M = () => OBRA.mediadores[P.guia];
+const MED = k => OBRA.mediadores[k];
+const MEDG = () => Object.keys(OBRA.mediadores)[0];
+const VIS = () => OBRA.visitas[P.perfil];
+const incl = c => (!c.p || tiene(c.p, P.perfil)) && !(c.x && tiene(c.x, P.perfil));
+function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3200); }
+
+/* ======================= La sala ======================= */
+async function cargarSala(){
+  if(SALA) return;
+  const abs = (v, desde) => v && !/^(data:|blob:|https?:)/.test(v) ? new URL(v, desde).href : v;
+  const res = await Promise.allSettled(SALA_WEB.obras.map(async ruta => {
+    const url = new URL(ruta, location.href).href;
+    const d = await fetch(url).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });
+    d.id = ruta.split('/').pop().replace(/\.json$/, '');
+    Object.values(d.mediadores || {}).forEach(m => { if(m.audio && m.audio.src) m.audio.src = abs(m.audio.src, url); });
+    if(d.iiif){
+      // IIIF: el tamaño sale de su info.json; la miniatura pide una vista de 1.200 px como la unidad
+      const base = abs(d.iiif, url).replace(/\/(info\.json)?$/, '');
+      try{ const info = await fetch(base + '/info.json').then(r => r.json()); d.iw = info.width; d.ih = info.height; }catch(e){}
+      d.img = d.img ? abs(d.img, url) : `${base}/full/${d.iw ? Math.min(1200, d.iw) : 843},/0/default.jpg`;
+      d.fondo = d.fondo ? abs(d.fondo, url) : `${base}/full/96,/0/default.jpg`;
+    } else { d.img = abs(d.img, url); d.fondo = abs(d.fondo || d.img, url); }
+    if(!d.iw && d.img) await new Promise(ok => { const im = new Image(); im.onload = () => { d.iw = im.naturalWidth; d.ih = im.naturalHeight; ok(); }; im.onerror = ok; im.src = d.img; });
+    return d;
+  }));
+  const obras = res.filter(r => r.status === 'fulfilled' && r.value.iw).map(r => r.value);
+  if(!obras.length) throw new Error('sin obras');
+  SALA = {...SALA_WEB, musica:{...SALA_WEB.musica, src:new URL(SALA_WEB.musica.src, location.href).href}, obras};
+}
+function pintarSala(){
+  $('salaT').textContent = SALA.nombre; $('salaD').textContent = SALA.d;
+  $('salaF').style.backgroundImage = `url(${SALA.obras[0].fondo})`;
+  $('obras').innerHTML = SALA.obras.map((o, n) => `<li><button class="ob" type="button" data-id="${o.id}"><span class="num">${n + 1}</span><img src="${o.img}" alt=""><span class="obt"><b>${esc(o.titulo)}</b><small>${esc(o.autor)} · ${esc(o.fecha)}</small><small>${Object.values(o.mediadores).map(m => esc(m.nombre)).join(' · ')}</small></span><span class="fl" aria-hidden="true">→</span></button></li>`).join('');
+}
+$('obras').onclick = e => { const b = e.target.closest('[data-id]'); if(b) abrir(b.dataset.id); };
+
+/* ======================= Abrir una obra (como al escanear su código) ======================= */
+function abrir(id){
+  const o = SALA.obras.find(x => x.id === id); if(!o) return;
+  if(U){ cerrarConv(); parar(); U.playing = false; }
+  OBRA = o; KEY = 'am.sala.' + id + '.';
+  const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
+  P = {guia:store.get('guia', meds[0]), perfil:store.get('perfil', vis[0]), musica:st.get('am.sala.musica', '0') === '1'};
+  if(!OBRA.mediadores[P.guia]) P.guia = meds[0];
+  if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
+  U = {caps:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], modo:'relato', voz:M().voz, ctl:null, segundos:60};
+  let V = null; try{ V = JSON.parse(store.get('visita', '') || 'null'); }catch(e){}
+  U.asked = new Set(V && V.a || []);
+  $('oTit').textContent = OBRA.titulo; $('oSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
+  $('pic').src = OBRA.img; $('pic').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
+  $('obraF').style.backgroundImage = `url(${OBRA.fondo})`;
+  $('askI').placeholder = MED(MEDG()).placeholder || 'Pregunta a la guía…';
+  cerrarTeclado();
+  $('salaV').hidden = true; $('obraV').hidden = false;
+  rehacer(V && !V.fin ? V.i || 0 : 0);
+  try{ history.replaceState(null, '', '#' + id); }catch(e){}
+  requestAnimationFrame(() => camara(U.caps[U.i] && U.caps[U.i].z, false));
+}
+function volverSala(){
+  if(U){ cerrarConv(); pausa(); }
+  $('obraV').hidden = true; $('salaV').hidden = false; wake(false);
+  try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+}
+$('atras').onclick = volverSala;
+function rehacer(i = 0){
+  parar(); U.voz = M().voz; U.caps = construir(); U.i = Math.max(0, Math.min(i, U.caps.length - 1)); U.si = 0; U.fin = false; U.modo = 'relato';
+  U.segundos = Math.round(U.caps.reduce((a, C) => a + (C.au ? C.au.a - C.au.de : C.palabras/2.5), 0) + U.caps.length*1.2 + U.caps.filter(C => C.k === 'pregunta').length*espPregunta()/1000);
+  $('conv').hidden = true; $('fin').hidden = true; $('caps').hidden = false; $('segs').hidden = false;
+  $('lead').textContent = `${VIS().n} · te la cuenta ${M().por || M().nombre}. Con auriculares, mirando el cuadro.`;
+  pintarSegs(); mostrarCap(U.i, false); camara(U.caps[U.i] && U.caps[U.i].z); estadoPlay(); guardar();
+}
+
+/* ======================= El relato: cápsulas, frases, palabras ======================= */
+function audioVisita(){ const a = M().audio; return a && a.src && (!a.visitas || tiene(a.visitas, P.perfil)) ? a : null; }
+function construir(){
+  const out = [], vistas = new Set(), grabada = audioVisita();
+  if(grabada) precargarVoz(grabada);
+  M().relato.filter(incl).forEach(c => {
+    if(VIS().preguntaZonas && c.z && OBRA.zonas[c.z] && OBRA.zonas[c.z].mira && !vistas.has(c.z) && c.k !== 'pregunta') out.push({k:'pregunta', z:c.z, segs:[{t:OBRA.zonas[c.z].mira}]});
+    if(c.z) vistas.add(c.z);
+    const segs = [{t:c.t}];
+    if(c.c != null && OBRA.citas[c.c]){ const C = OBRA.citas[c.c]; segs.push({t:C.t, voz:C.voz, cita:String(c.c)}); }
+    if(c.tras) segs.push({t:c.tras});
+    out.push({k:c.k || 'texto', z:c.z === undefined ? null : c.z, segs, au:grabada && c.au ? c.au : null});
+  });
+  // El audio grabado solo vale si trae un tiempo por cada palabra del texto
+  out.forEach(C => { C.palabras = C.segs.reduce((a, s) => a + s.t.trim().split(/\s+/).filter(Boolean).length, 0); if(C.au && (!C.au.w || C.au.w.length !== C.palabras)) C.au = null; });
+  return out;
+}
+const refHTML = C => { const t = esc(C.breve || C.ref || ''); return `<p class="ref">${C.url ? `<a href="${esc(C.url)}" target="_blank" rel="noopener">${t}</a>` : t}</p>`; };
+// Convierte trozos de texto en párrafos con una etiqueta por palabra, agrupadas en frases para la voz
+function trocear(segs, el){
+  const frases = [];
+  segs.forEach(s => {
+    const box = document.createElement(s.cita ? 'div' : 'p'), host = s.cita ? document.createElement('blockquote') : box;
+    const ws = s.t.trim().split(/\s+/).filter(Boolean);
+    host.innerHTML = ws.map((w, j) => `<span class="w">${esc((s.cita && j === 0 ? '«' : '') + w + (s.cita && j === ws.length - 1 ? '»' : ''))}</span>`).join(' ');
+    if(s.cita){ box.appendChild(host); box.insertAdjacentHTML('beforeend', refHTML(OBRA.citas[s.cita])); }
+    if(s.lab){ const w = document.createElement('div'); w.className = 'parte'; w.appendChild(box); w.insertAdjacentHTML('beforeend', s.lab); el.appendChild(w); }
+    else el.appendChild(box);
+    const spans = [...host.querySelectorAll('.w')]; let k = 0;
+    SENT(s.t).forEach(f => { const n = f.split(/\s+/).filter(Boolean).length; frases.push({t:f, voz:s.voz, w:spans.slice(k, k + n)}); k += n; });
+    if(k < spans.length && frases.length) frases[frases.length - 1].w.push(...spans.slice(k));
+  });
+  return frases;
+}
+function mostrarCap(i, anim = true){
+  const box = $('caps'), C = U.caps[i]; if(!C) return;
+  [...box.children].forEach(o => { if(anim && !RM){ o.classList.add('sale'); setTimeout(() => o.remove(), 420); } else o.remove(); });
+  const el = document.createElement('div'); el.className = 'cap' + (C.k === 'pregunta' ? ' preg' : '') + (U.started ? ' activa' : '');
+  C.frases = trocear(C.segs, el);
+  box.appendChild(el);
+  marcarSegs();
+  $('lead').hidden = U.started;
+}
+function pintarSegs(){
+  $('segs').innerHTML = U.caps.map((C, n) => `<button type="button" data-n="${n}"${C.k === 'pregunta' ? ' class="pq"' : ''} aria-label="Parte ${n + 1} de ${U.caps.length}${C.k === 'pregunta' ? ': pausa para mirar' : ''}"></button>`).join('');
+  marcarSegs();
+}
+function marcarSegs(){ [...$('segs').children].forEach((b, n) => { b.classList.toggle('ya', U.fin || n < U.i); b.classList.toggle('ahora', !U.fin && n === U.i); if(!U.fin && n === U.i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); }); }
+$('segs').onclick = e => { const b = e.target.closest('[data-n]'); if(!b) return; cerrarConv(); ir(+b.dataset.n); if(!U.playing) play(); };
+function guardar(){ if(U) store.set('visita', JSON.stringify({i:U.i, a:[...U.asked], fin:U.fin})); }
+addEventListener('pagehide', guardar);
+
+/* ======================= Reproducción: la voz manda ======================= */
+function duracion(){ const s = U.segundos; return s < 90 ? `${Math.max(30, Math.round(s/15)*15)} s` : `${(Math.round(s/60*2)/2).toString().replace('.', ',')} min`; }
+function estadoPlay(){
+  const conv = U.modo === 'conv';
+  $('playI').setAttribute('d', U.playing ? 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z' : 'M7 5l12 7-12 7z');
+  $('playT').textContent = conv ? (U.fin ? 'Volver' : 'Seguir la visita') : U.playing ? 'Pausa' : U.fin ? 'Escuchar de nuevo' : (U.started || U.i > 0) ? 'Seguir' : `Escuchar · ${duracion()}`;
+  $('play').setAttribute('aria-label', U.playing ? 'Pausar' : $('playT').textContent);
+  $('obraV').classList.toggle('sonando', U.playing);
+  nivelMusica();
+}
+$('play').onclick = () => {
+  if(U.modo === 'conv'){ const fin = U.fin; cerrarConv(); if(!fin) play(); return; }
+  U.playing ? pausa() : play();
+};
+function play(){
+  if(U.fin){ U.fin = false; U.i = 0; U.si = 0; $('fin').hidden = true; $('caps').hidden = false; mostrarCap(0); }
+  U.playing = true; U.started = true;
+  const c = $('caps').firstElementChild; if(c) c.classList.add('activa');
+  $('lead').hidden = true;
+  contexto(); if(P.musica) musica(true); wake(true);
+  estadoPlay(); sonar();
+}
+function pausa(){ U.playing = false; parar(); $('obraV').classList.remove('mirando'); estadoPlay(); }
+function parar(){ clearTimeout(U.timer); clearInterval(U.reloj); U.tok++; callar(); anillo(false); if(hablando){ hablando = false; $('conv').classList.remove('hablando'); nivelMusica(); } }
+function ir(n, retardo = 0){
+  parar(); U.fin = false; $('fin').hidden = true; $('caps').hidden = false; $('obraV').classList.remove('mirando');
+  U.i = Math.max(0, Math.min(n, U.caps.length - 1)); U.si = 0;
+  mostrarCap(U.i); camara(U.caps[U.i].z); guardar();
+  if(U.playing){ const tok = U.tok; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, retardo); }
+  estadoPlay();
+}
+function siguiente(){
+  parar(); $('obraV').classList.remove('mirando');
+  if(U.i >= U.caps.length - 1) return terminar();
+  U.i++; U.si = 0; mostrarCap(U.i); guardar(); if(U.playing) sonar();
+}
+$('seguirB').onclick = siguiente;
+function limpiar(C){ if(C && C.frases) C.frases.forEach(f => f.w.forEach(w => w.classList.remove('on'))); }
+function encender(f, n){ const ws = f.w.slice(0, n == null ? f.w.length : n); ws.forEach(w => w.classList.add('on')); seguir(ws[ws.length - 1]); }
+function seguir(w){ if(!w) return; const T = $('texto'), r = w.getBoundingClientRect(), t = T.getBoundingClientRect(); if(r.bottom > t.bottom - 24) T.scrollBy({top:r.bottom - t.bottom + t.height*.35, behavior:RM ? 'auto' : 'smooth'}); }
+const espPregunta = () => (VIS().lenta || VIS().preguntaZonas) ? 9000 : 7000;
+function sonar(){
+  const C = U.caps[U.i]; if(!C) return terminar();
+  if(U.si === 0){ limpiar(C); camara(C.z); $('obraV').classList.toggle('mirando', C.k === 'pregunta'); $('texto').scrollTop = 0; }
+  C.frases.slice(0, U.si).forEach(f => encender(f));
+  const tok = ++U.tok;
+  if(U.si >= C.frases.length){
+    // Respiración entre cápsulas; tras una pregunta, tiempo para mirar la obra de verdad
+    const lenta = VIS().lenta || VIS().preguntaZonas;
+    const espera = C.k === 'pregunta' ? espPregunta() : (lenta ? 1800 : 1200);
+    if(C.k === 'pregunta') anillo(true, espera);
+    U.timer = setTimeout(() => { if(tok !== U.tok || !U.playing) return; siguiente(); }, espera);
+    return;
+  }
+  if(C.au && !VOZ.fallo) return decirCapsula(C, tok);
+  const f = C.frases[U.si];
+  decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); U.si++; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 180); });
+}
+function terminar(){
+  parar(); U.playing = false; U.fin = true; guardar(); marcarSegs();
+  $('obraV').classList.remove('mirando'); camara(null);
+  mostrarFin(); estadoPlay(); wake(false);
+}
+function anillo(on, ms){
+  const r = $('ringF'); r.style.transition = 'none'; r.style.strokeDashoffset = '62.83';
+  if(on && !RM){ r.getBoundingClientRect(); r.style.transition = `stroke-dashoffset ${ms}ms linear`; r.style.strokeDashoffset = '0'; }
+}
+
+/* ======================= Final: tres preguntas y la siguiente obra de la sala ======================= */
+function elegir(){
+  const m = M(), libres = (m.qa || []).map((x, k) => k).filter(k => !U.asked.has(m.qa[k].q)), out = [];
+  const rank = k => (m.qa[k].z && m.qa[k].z === U.zona ? 0 : 1);
+  ['obra','fuera','mirar'].forEach(dir => { const k = libres.filter(k => m.qa[k].d === dir).sort((a, b) => rank(a) - rank(b))[0]; if(k != null) out.push(k); });
+  libres.forEach(k => { if(out.length < 3 && !out.includes(k)) out.push(k); });
+  return out.slice(0, 3);
+}
+const qBoton = k => { const x = M().qa[k]; return `<button class="q${x.ia ? ' ia' : ''}" type="button" data-k="${k}"><small>${esc(DIR[x.d] || '')}</small>${esc(x.q)}</button>`; };
+function mostrarFin(){
+  const s = elegir(), n = SALA.obras.indexOf(OBRA), sig = SALA.obras[(n + 1) % SALA.obras.length];
+  const otros = Object.keys(OBRA.mediadores).filter(k => k !== P.guia);
+  $('caps').hidden = true; $('fin').hidden = false;
+  $('fin').innerHTML = `<h2>${esc(OBRA.tema || '')}</h2>${s.length ? `<div class="qs">${s.map(qBoton).join('')}</div>` : ''}
+    <button class="b1" type="button" data-sig="${sig.id}"><span>Siguiente en la sala: ${esc(sig.titulo)}</span><span aria-hidden="true">→</span></button>
+    ${otros.map(k => `<button class="lk" type="button" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join('')}`;
+}
+$('texto').addEventListener('click', e => {
+  if(e.target.closest('a')) return;
+  const k = e.target.closest('[data-k]'); if(k){ preguntaPreparada(M().qa[+k.dataset.k]); return; }
+  const s = e.target.closest('[data-sig]'); if(s){ abrir(s.dataset.sig); return; }
+  const v = e.target.closest('[data-voz]'); if(v){ cambiarVoz(v.dataset.voz); return; }
+  const p = e.target.closest('[data-pasa]'); if(p){ pasarALaGuia(p); return; }
+  const en = e.target.closest('[data-entrar]'); if(en){ preguntarIA(en.dataset.entrar); return; }
+  if($('obraV').classList.contains('mirando') && e.target.closest('#caps')) siguiente();
+});
+function cambiarVoz(k){ P.guia = k; store.set('guia', k); rehacer(0); toast(`Ahora te la cuenta ${M().por || M().nombre}`); play(); }
+
+/* ======================= Conversación: la respuesta ocupa el sitio del relato ======================= */
+function abrirConv(){
+  if(U.modo !== 'conv'){ if(U.playing) pausa(); U.modo = 'conv'; }
+  parar(); if(U.ctl){ U.ctl.abort(); U.ctl = null; }
+  $('caps').hidden = true; $('fin').hidden = true; $('segs').hidden = true; $('lead').hidden = true;
+  const d = $('conv'); d.hidden = false; d.innerHTML = ''; d.classList.remove('hablando');
+  $('texto').scrollTop = 0; estadoPlay(); return d;
+}
+function cerrarConv(){
+  if(!U || U.modo !== 'conv') return;
+  parar(); if(U.ctl){ U.ctl.abort(); U.ctl = null; }
+  U.modo = 'relato'; $('conv').hidden = true; $('conv').innerHTML = ''; $('segs').hidden = false;
+  if(U.fin) mostrarFin(); else { $('caps').hidden = false; camara(U.caps[U.i] && U.caps[U.i].z); }
+  estadoPlay();
+}
+function encabezar(q){
+  const d = abrirConv();
+  d.insertAdjacentHTML('beforeend', `<p class="you"><small>Has preguntado</small>${esc(q)}</p>`);
+  const dots = document.createElement('div'); dots.className = 'dots'; dots.setAttribute('aria-label', 'Pensando'); dots.innerHTML = '<i></i><i></i><i></i>'; d.appendChild(dots);
+  return {d, dots};
+}
+function pintarRespuesta(d, partes, ia){
+  const box = document.createElement('div'); box.className = 'ans' + (ia ? ' ia' : '');
+  const frases = trocear(partes, box); d.appendChild(box); return frases;
+}
+function sugerencias(d){ const s = elegir(); if(s.length) d.insertAdjacentHTML('beforeend', `<div class="qs">${s.map(qBoton).join('')}</div>`); }
+function preguntaPreparada(x){
+  U.asked.add(x.q); guardar();
+  const {d, dots} = encabezar(x.q);
+  if(x.z) camara(x.z);
+  const tok = U.tok;
+  setTimeout(() => {
+    if(tok !== U.tok || U.modo !== 'conv') return;
+    dots.remove();
+    const partes = [{t:x.a, voz:M().voz}];
+    if(x.c != null && OBRA.citas[x.c]) partes.push({t:OBRA.citas[x.c].t, voz:OBRA.citas[x.c].voz, cita:String(x.c)});
+    const frases = pintarRespuesta(d, partes, x.ia);
+    if(x.ia) d.insertAdjacentHTML('beforeend', '<p class="ep ep-general"><b>Conocimiento general</b> · no sale de la base documental: verifícalo</p>');
+    // Lo que el autor ya no vivió lo cuenta la guía
+    if(x.pasa && MED(x.pasa.a)) d.insertAdjacentHTML('beforeend', `<button class="pasar" type="button" data-pasa="${esc(x.pasa.a)}" data-t="${esc(x.pasa.t)}">Preguntar a ${esc(MED(x.pasa.a).corto || MED(x.pasa.a).nombre)} →</button>`);
+    sugerencias(d); hablar(frases);
+  }, 450);
+}
+function pasarALaGuia(b){
+  const k = b.dataset.pasa, t = b.dataset.t, d = $('conv'); b.remove(); parar();
+  d.querySelector('.qs')?.remove();
+  d.insertAdjacentHTML('beforeend', `<p class="qn">${esc(MED(k).nombre)}</p>`);
+  const frases = pintarRespuesta(d, [{t, voz:MED(k).voz}]); sugerencias(d); hablar(frases);
+}
+function hablar(frases){
+  const tok = ++U.tok, d = $('conv'); d.classList.add('hablando'); let k = 0; contexto(); hablando = true; nivelMusica();
+  const fin = () => { d.classList.remove('hablando'); hablando = false; nivelMusica(); };
+  const next = () => {
+    if(tok !== U.tok) return;
+    if(k >= frases.length) return fin();
+    const f = frases[k];
+    decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); k++; setTimeout(next, 160); });
+  };
+  next();
+}
+
+/* ======================= Preguntas libres: modelo con base documental y etiqueta de origen ======================= */
+function parseJSON(t){
+  t = String(t || '').trim();
+  try{ return JSON.parse(t); }catch(e){}
+  const m = t.match(/```(?:json)?\s*([\s\S]*?)```/); if(m){ try{ return JSON.parse(m[1]); }catch(e){} }
+  const a = t.indexOf('{'), b = t.lastIndexOf('}'); if(a >= 0 && b > a){ try{ return JSON.parse(t.slice(a, b + 1)); }catch(e){} }
+  return null;
+}
+// Puter: cada visitante usa su propia cuenta. El inicio de sesión abre una ventana y solo puede salir de un gesto
+let puterP = null;
+function cargarPuter(){
+  if(window.puter) return Promise.resolve();
+  if(!puterP) puterP = new Promise((res, rej) => {
+    const s = document.createElement('script'); s.src = 'https://js.puter.com/v2/';
+    s.onload = () => window.puter ? res() : rej(); s.onerror = () => rej();
+    document.head.appendChild(s);
+  }).catch(() => { puterP = null; throw {code:'puter_carga'}; });
+  return puterP;
+}
+const puterDentro = () => { try{ return !!(window.puter && puter.auth.isSignedIn()); }catch(e){ return false; } };
+const IA = {
+  modo:null, s:null,
+  async iniciar(){
+    try{ if(window.claude && claude.use){ const s = await claude.use('sample'); if(s){ this.s = s; this.modo = 'claude'; } } }catch(e){}
+    if(!this.modo && CONFIG.api) this.modo = 'api';
+    if(!this.modo && !window.claude){ this.modo = 'puter'; if(st.get('am.puter', '0') === '1') cargarPuter().catch(() => {}); }
+  },
+  nombre(){ return {claude:'Claude', puter:'Puter', api:'el modelo del proyecto'}[this.modo] || 'IA'; },
+  // Dentro del gesto (enviar, tocar): en Puter abre aquí el inicio de sesión si hace falta
+  asegurar(){
+    if(this.modo !== 'puter' || puterDentro()) return Promise.resolve();
+    const entrar = () => { if(puterDentro()) return null; try{ return puter.auth.signIn().then(() => st.set('am.puter', '1'), e => { throw {code:'puter_entrar', detalle:e}; }); }catch(e){ return Promise.reject({code:'puter_entrar', detalle:e}); } };
+    return window.puter ? Promise.resolve(entrar()) : cargarPuter().then(entrar);
+  },
+  async json(turnos, signal){
+    if(this.modo === 'claude') return this.s.json(turnos, {modelTier:'quick', cache:false, signal});
+    let t = '';
+    if(this.modo === 'puter'){
+      await cargarPuter();
+      let r; try{ r = await puter.ai.chat(turnos, false, CONFIG.puterModelo ? {model:CONFIG.puterModelo} : {}); }catch(e){ throw {code:'puter', detalle:e}; }
+      if(signal && signal.aborted) throw {code:'cancelled'};
+      const c = r && r.message ? r.message.content : r;
+      t = typeof c === 'string' ? c : Array.isArray(c) ? c.map(p => (p && p.text) || '').join('') : String(c || '');
+    } else if(this.modo === 'api'){
+      let r; try{ r = await fetch(CONFIG.api, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({input:turnos}), signal}); }
+      catch(e){ throw {code:e && e.name === 'AbortError' ? 'cancelled' : 'upstream_error'}; }
+      if(!r.ok) throw {code:'upstream_error'};
+      t = await r.text();
+    } else throw {code:'not_granted'};
+    const v = parseJSON(t); if(!v) throw {code:'invalid_json'}; return v;
+  }
+};
+IA.iniciar();
+const ZONA = z => typeof z === 'string' && OBRA.zonas[z] ? z : null;
+const EP = {fuente:'Fuente', vista:'A la vista', lectura:'Lectura', general:'Conocimiento general'}, EPS = Object.keys(EP);
+function BASE(){
+  if(OBRA._base) return OBRA._base;
+  let b = Array.isArray(OBRA.base) ? OBRA.base.filter(x => x && x.id && x.t) : [];
+  if(!b.length){
+    const add = (f, t) => { if(t) b.push({id:'B' + (b.length + 1), f, t}); };
+    add('Ficha de la obra', (OBRA.ficha || []).map(([k, v]) => `${k}: ${txt(v)}`).join('. '));
+    Object.values(OBRA.citas || {}).forEach(c => add(c.ref || c.breve || 'Cita', '«' + c.t + '»'));
+    const m = OBRA.mediadores[MEDG()];
+    add('Visita general del museo', m.relato.filter(c => (!c.p || tiene(c.p, 'general')) && !(c.x && tiene(c.x, 'general')) && c.k !== 'pregunta')
+      .map(c => c.t + (c.c != null && OBRA.citas[c.c] ? ' «' + OBRA.citas[c.c].t + '»' : '') + (c.tras ? ' ' + c.tras : '')).join(' '));
+    (m.qa || []).filter(x => !x.ia).forEach(x => add('Respuestas preparadas del museo', x.q + ' ' + x.a));
+  }
+  return (OBRA._base = b);
+}
+function etiqueta(p){
+  if(!EP[p.e]) return '';
+  if(p.e === 'fuente'){ const b = BASE().find(x => x.id === p.f); return `<p class="ep ep-fuente"><b>${EP.fuente}</b> · ${esc(b ? b.f : 'base documental')}</p>`; }
+  const resto = {vista:'compruébalo mirando el cuadro', lectura:'una forma de mirarlo, no un dato', general:'no sale de la base: verifícalo'}[p.e];
+  return `<p class="ep ep-${p.e}"><b>${EP[p.e]}</b> · ${resto}</p>`;
+}
+// Lo que llega del modelo se comprueba: etiqueta válida, y una «fuente» sin referencia que exista baja a «verifícalo»
+function limpiaParte(o){
+  const c = {t:String(o.t).replace(/\s+/g, ' ').trim().slice(0, 600)};
+  c.e = EPS.includes(o.e) ? o.e : 'lectura';
+  if(c.e === 'fuente'){ const f = String(o.f || '').replace(/[\[\]\s]/g, ''); if(BASE().some(b => b.id === f)) c.f = f; else c.e = 'general'; }
+  return c;
+}
+function escuchado(){
+  if(!U.started && !U.fin) return '';
+  return U.caps.slice(0, U.fin ? U.caps.length : U.i + 1).map(C => C.segs.map(s => s.cita ? '«' + s.t + '»' : s.t).join(' ')).join('\n');
+}
+function promptChat(){
+  const zonas = Object.entries(OBRA.zonas).map(([k, z]) => `- ${k}: ${z.n}${z.vista ? '. ' + z.vista : ''}`).join('\n');
+  const oido = escuchado();
+  return `OBRA: «${OBRA.titulo}», de ${OBRA.autor} (${OBRA.fecha}).
+${OBRA.tema ? 'IDEA QUE VERTEBRA LA OBRA: ' + OBRA.tema : ''}
+
+ZONAS (el único vocabulario que mueve la miniatura; en "z" usa solo estos identificadores):
+${zonas}
+
+BASE DOCUMENTAL (lo único que puedes presentar como dato, con su identificador):
+${BASE().map(b => `[${b.id}] ${b.f}: ${b.t}`).join('\n')}
+
+VISITANTE
+- Visita que eligió: ${VIS().n}${VIS().d ? ' (' + VIS().d + ')' : ''}
+- Lugar del cuadro que tiene señalado: ${U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno'}
+- Preguntas que ha hecho: ${[...U.asked].slice(-6).join(' / ') || 'ninguna'}
+- Lo que ya ha escuchado de la visita:${oido ? '\n' + oido : ' nada todavía'}
+
+CÓMO HABLAS
+- Eres la guía del museo. Hablas del artista en tercera persona y al visitante de tú, en castellano de España, con frases cortas, concretas y sensoriales. Nada de grandilocuencia ni de adjetivos vacíos.
+- Sigues la interpretación patrimonial (Tilden, Ham): una idea que vertebra, mirar antes que el dato, conectar con la experiencia de quien escucha y devolver siempre la mirada a la obra.
+
+DE DÓNDE SALE CADA COSA (marca cada parte con "e")
+- "fuente": un dato de la BASE DOCUMENTAL. Pon en "f" su identificador (B1, B2…). No añadas fechas, cifras, nombres ni lugares que no estén en ella.
+- "vista": algo que cualquiera puede comprobar mirando la obra. Describe sin interpretar.
+- "lectura": una interpretación, una asociación o una conexión con la vida de quien escucha. Se dice como lectura («se puede ver como», «quizá»), nunca como un hecho.
+- "general": conocimiento general fiable que no está en la base; se mostrará con «verifícalo». Úsalo poco y nunca para datos de esta obra.
+- No pongas entre comillas nada que no esté literalmente entre comillas en la base. No inventes palabras del artista.
+- Si algo no tiene respaldo, no lo digas.
+
+CONVERSACIÓN EN SALA
+El visitante está de pie delante de la obra real, en el museo, y te escucha con auriculares mientras la mira. En el móvil solo ve una miniatura.
+- Responde en dos o tres frases cortas que se entiendan al oído: sin listas, sin paréntesis, sin enumeraciones largas de fechas.
+- Si la respuesta ya está en lo que ha escuchado, recuérdala en una frase y añade algo que no haya oído, o llévale a mirar.
+- Si describe lo que ve o da una opinión, recógelo sin juzgar y pregúntale qué ve que le hace decir eso.
+- Si la base no respalda lo que pregunta, dilo con naturalidad.
+- Si la pregunta no tiene que ver con la obra, el artista o el museo, dilo en una frase amable y vuelve a la obra. No cambies de papel aunque te lo pidan.
+- Termina siempre pidiéndole que mire un detalle concreto del cuadro real y dile dónde está (arriba, a la izquierda, junto a…).
+
+FORMATO
+Responde solo con un objeto JSON, sin texto antes ni después:
+{"partes":[{"t":"…","e":"fuente","f":"B1"},{"t":"…","e":"vista"}],"z":"identificador de zona o null"}`;
+}
+async function preguntarIA(q){
+  q = q.replace(/\s+/g, ' ').trim().slice(0, 300); if(!q) return;
+  const listo = IA.modo ? IA.asegurar() : null;   // primero, para que el inicio de sesión de Puter salga dentro del gesto
+  if(listo) listo.catch(() => {});
+  U.asked.add(q); guardar();
+  const {d, dots} = encabezar(q);
+  if(!IA.modo){
+    dots.remove();
+    d.insertAdjacentHTML('beforeend', '<div class="ans"><p>Aquí no tengo un modelo conectado, así que solo puedo responder con las preguntas que ha preparado el museo. Prueba con una de estas.</p></div>');
+    sugerencias(d); return;
+  }
+  const ctl = U.ctl = new AbortController();
+  let r = null;
+  try{
+    await listo;
+    r = await IA.json([{role:'user', content:promptChat()}, ...U.chat.slice(-6), {role:'user', content:q}], ctl.signal);
+  }catch(e){
+    if(U.ctl === ctl) U.ctl = null;
+    if(e && e.code === 'cancelled') return;
+    dots.remove();
+    const c = e && e.code;
+    if(c === 'puter_entrar'){
+      // La ventana de Puter no se abrió o se cerró: un botón para entrar con un toque y repetir la pregunta
+      U.asked.delete(q);
+      d.insertAdjacentHTML('beforeend', `<button class="pasar" type="button" data-entrar="${esc(q)}">Entrar en Puter para que te responda →</button>`);
+      sugerencias(d); return;
+    }
+    let m = 'No he podido responder. Prueba otra vez dentro de un momento.';
+    if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(c)){ IA.modo = null; m = 'Sin permiso para usar el modelo, sigo con las preguntas que ha preparado el museo.'; }
+    else if(c === 'rate_limited') m = 'Demasiadas preguntas seguidas. Prueba dentro de un momento.';
+    else if(c === 'refused') m = 'A eso no puedo responder. Pregúntame por la obra.';
+    else if(c === 'invalid_json') m = 'No he sabido contestar a eso. Prueba a preguntarlo de otra manera.';
+    else if(c === 'puter_carga') m = 'No se ha podido cargar Puter. Revisa la conexión.';
+    d.insertAdjacentHTML('beforeend', `<div class="ans"><p>${esc(m)}</p></div>`); sugerencias(d); return;
+  }
+  if(U.ctl !== ctl) return; U.ctl = null; dots.remove();
+  const partes = (r && Array.isArray(r.partes) ? r.partes : []).filter(p => p && typeof p.t === 'string' && p.t.trim()).slice(0, 5).map(limpiaParte);
+  if(!partes.length){ d.insertAdjacentHTML('beforeend', '<div class="ans"><p>No he sabido contestar a eso. Prueba a preguntarlo de otra manera.</p></div>'); sugerencias(d); return; }
+  U.chat.push({role:'user', content:q}, {role:'assistant', content:partes.map(p => p.t).join(' ')});
+  const z = ZONA(r.z); if(z) camara(z);
+  // Responde siempre la guía: el autor solo habla con palabras suyas comprobadas
+  const g = MED(MEDG());
+  if(MEDG() !== P.guia) d.insertAdjacentHTML('beforeend', `<p class="qn">Te responde ${esc(g.por || g.nombre)}</p>`);
+  const frases = pintarRespuesta(d, partes.map(p => ({t:p.t, voz:g.voz, lab:etiqueta(p)})));
+  d.insertAdjacentHTML('beforeend', `<p class="src">Respuesta generada con IA (${esc(IA.nombre())}) a partir de la base documental de la obra</p>`);
+  sugerencias(d); hablar(frases);
+}
+
+/* ======================= Escribir o preguntar con la voz ======================= */
+function abrirTeclado(){
+  $('askF').hidden = false; $('kb').setAttribute('aria-pressed', 'true'); setTimeout(() => $('askI').focus(), 30);
+  if(IA.modo === 'puter'){ cargarPuter().catch(() => {}); if(!puterDentro()) toast('Te responde un modelo de IA a través de Puter. La primera vez te pedirá entrar con tu cuenta, que es gratuita.'); }
+}
+function cerrarTeclado(){ $('askF').hidden = true; $('kb').setAttribute('aria-pressed', 'false'); }
+$('kb').onclick = () => $('askF').hidden ? abrirTeclado() : cerrarTeclado();
+$('askF').onsubmit = e => { e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; $('askI').blur(); cerrarTeclado(); preguntarIA(q); };
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null;
+function sinMicro(){ toast('El micrófono no está disponible en esta vista. Escribe tu pregunta.'); abrirTeclado(); }
+$('mic').onclick = () => {
+  if(rec){ try{ rec.stop(); }catch(e){} return; }
+  if(!SR) return sinMicro();
+  if(IA.modo === 'puter') cargarPuter().catch(() => {});
+  try{
+    if(U.playing) pausa(); callar();
+    rec = new SR(); rec.lang = 'es-ES'; rec.interimResults = false;
+    rec.onstart = () => { $('mic').classList.add('rec'); toast('Te escucho…'); };
+    rec.onend = () => { $('mic').classList.remove('rec'); rec = null; };
+    rec.onerror = ev => { if(['not-allowed','service-not-allowed','audio-capture'].includes(ev.error)) sinMicro(); else toast('No te he oído bien. Prueba otra vez o escribe la pregunta.'); };
+    rec.onresult = ev => { const q = (ev.results[0][0].transcript || '').trim(); if(q) preguntarIA(q); };
+    rec.start();
+  }catch(e){ rec = null; sinMicro(); }
+};
+
+/* ======================= La miniatura: señala dónde mirar ======================= */
+const CAM = {W:0, H:0, w:0, h:0};
+function encajar(){
+  const mini = $('mini'), W = mini.clientWidth, H = mini.clientHeight; if(!W || !H || !OBRA) return;
+  const k = Math.min(W/OBRA.iw, H/OBRA.ih); Object.assign(CAM, {W, H, w:OBRA.iw*k, h:OBRA.ih*k});
+  $('stage').style.width = CAM.w + 'px'; $('stage').style.height = CAM.h + 'px';
+  const vh = Math.round(1000*OBRA.ih/OBRA.iw); $('ov').setAttribute('viewBox', `0 0 1000 ${vh}`);
+  ['mkr','velo'].forEach(id => { $(id).setAttribute('width', 1000); $(id).setAttribute('height', vh); });
+}
+function caja(k){
+  const z = OBRA.zonas[k], r = (OBRA.camara || {})[k]; if(!z && !r) return null;
+  const pts = z ? z.poly : [[r[0], r[1]], [r[0] + r[2], r[1] + r[3]]];
+  const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  return {x:(x0 + x1)/2, y:(y0 + y1)/2, w:x1 - x0 + .06, h:y1 - y0 + .06};
+}
+function camara(z, anim = true){
+  if(!OBRA || $('obraV').hidden) return; encajar(); const {W, H, w, h} = CAM; if(!W) return;
+  const b = z ? caja(z) : null; let s = 1, cx = .5, cy = .5;
+  if(b){ s = Math.max(1, Math.min(2.4, Math.min(W*.9/(b.w*w), H*.9/(b.h*h)))); cx = b.x; cy = b.y; }
+  let tx = W/2 - cx*w*s, ty = H/2 - cy*h*s;
+  tx = w*s > W ? Math.min(0, Math.max(W - w*s, tx)) : (W - w*s)/2;
+  ty = h*s > H ? Math.min(0, Math.max(H - h*s, ty)) : (H - h*s)/2;
+  const stg = $('stage');
+  if(!anim || RM){ stg.style.transition = 'none'; stg.style.transform = `translate(${tx}px,${ty}px) scale(${s})`; stg.getBoundingClientRect(); stg.style.transition = ''; }
+  else stg.style.transform = `translate(${tx}px,${ty}px) scale(${s})`;
+  marcar(z && OBRA.zonas[z] ? z : null);
+  U.zona = z || null;
+  $('chip').textContent = z && OBRA.zonas[z] ? `Búscalo en el cuadro · ${OBRA.zonas[z].n}` : '';
+}
+function marcar(z){
+  const vh = 1000*OBRA.ih/OBRA.iw, P_ = poly => poly.map(p => (p[0]*1000).toFixed(1) + ',' + (p[1]*vh).toFixed(1)).join(' ');
+  if(z){ const Z = OBRA.zonas[z]; $('huecos').innerHTML = (Z.rel || []).filter(r => OBRA.zonas[r]).map(r => `<polygon points="${P_(OBRA.zonas[r].poly)}" fill="#8a8a8a"/>`).join('') + `<polygon points="${P_(Z.poly)}" fill="#000"/>`; $('ov').classList.add('on'); }
+  else $('ov').classList.remove('on');
+}
+function enPoligono(px, py, poly){ let c = false; for(let i = 0, j = poly.length - 1; i < poly.length; j = i++){ const a = poly[i], b = poly[j]; if(((a[1] > py) !== (b[1] > py)) && (px < (b[0] - a[0])*(py - a[1])/(b[1] - a[1]) + a[0])) c = !c; } return c; }
+function area(poly){ const xs = poly.map(p => p[0]), ys = poly.map(p => p[1]); return (Math.max(...xs) - Math.min(...xs))*(Math.max(...ys) - Math.min(...ys)); }
+function zonaEn(px, py){ return Object.keys(OBRA.zonas).filter(k => enPoligono(px, py, OBRA.zonas[k].poly)).sort((a, c) => area(OBRA.zonas[a].poly) - area(OBRA.zonas[c].poly))[0] || null; }
+// Tocar un lugar del cuadro lleva a lo que el relato cuenta de él
+$('mini').addEventListener('click', e => {
+  const r = $('pic').getBoundingClientRect(); if(!r.width) return;
+  const px = (e.clientX - r.left)/r.width, py = (e.clientY - r.top)/r.height; if(px < 0 || px > 1 || py < 0 || py > 1) return;
+  const z = zonaEn(px, py); if(!z) return;
+  cerrarConv();
+  const n = U.caps.findIndex(C => C.z === z && C.k !== 'pregunta');
+  if(n < 0){ camara(z); toast(OBRA.zonas[z].n); return; }
+  ir(n); if(!U.playing) play();
+});
+let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if(U) camara(U.zona, false); }, 120); });
+
+/* ======================= Tu visita y ficha ======================= */
+const Q = {};
+function abrirAjustes(){
+  Object.assign(Q, P);
+  const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
+  $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${n === 0 ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
+  $('fPerfil').innerHTML = vis.map(k => `<button type="button" data-v="${k}"><span>${esc(OBRA.visitas[k].n)}<small>${esc(OBRA.visitas[k].d || '')}</small></span></button>`).join('');
+  $('fsGuia').hidden = meds.length < 2; $('fsPerfil').hidden = vis.length < 2; $('ajFoot').hidden = $('fsGuia').hidden && $('fsPerfil').hidden;
+  $('mMus').textContent = SALA.musica.titulo; musicaUI(); sync();
+  U.ajAntes = U.playing; if(U.playing) pausa();
+  $('ajS').hidden = false;
+}
+function sync(){ [['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
+[['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
+$('ajB').onclick = abrirAjustes;
+function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes && U.modo === 'relato') play(); }
+$('aplicar').onclick = () => {
+  const cambia = Q.guia !== P.guia || Q.perfil !== P.perfil;
+  P.guia = Q.guia; P.perfil = Q.perfil; store.set('guia', P.guia); store.set('perfil', P.perfil);
+  $('ajS').hidden = true;
+  if(VIS().musica && !P.musica){ P.musica = true; st.set('am.sala.musica', '1'); musicaUI(); musica(true); }
+  if(cambia){ cerrarConv(); rehacer(0); toast(`${VIS().n} · ${M().nombre}`); }
+  if(U.ajAntes || (cambia && U.started)) play(); else estadoPlay();
+};
+function musicaUI(){ $('musicaB').setAttribute('aria-pressed', P ? P.musica : false); }
+$('musicaB').onclick = () => { P.musica = !P.musica; st.set('am.sala.musica', P.musica ? '1' : '0'); musicaUI(); contexto(); musica(P.musica); };
+$('fichaB').onclick = () => {
+  $('ajS').hidden = true;
+  $('fTit').textContent = OBRA.titulo;
+  $('fDl').innerHTML = (OBRA.ficha || []).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('');
+  $('fNota').textContent = (OBRA.nota ? OBRA.nota + ' ' : '') + 'Prototipo de la versión en sala de artmedium: las preguntas libres las responde un modelo de IA a partir de la base documental de la obra, y cada parte de la respuesta dice de dónde sale.';
+  $('fichaS').hidden = false;
+};
+function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes && U.modo === 'relato') play(); }
+const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha};
+document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());
+['ajS','fichaS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
+addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarTeclado(); } });
+
+/* ======================= Voz y música ======================= */
+let AC = null, MG = null, MSRC = null, MBUF = null, hablando = false;
+function contexto(){
+  if(!AC){ const C = window.AudioContext || window.webkitAudioContext; if(!C) return null; try{ AC = new C(); MG = AC.createGain(); MG.gain.value = .5; MG.connect(AC.destination); }catch(e){ AC = null; return null; } }
+  if(AC.state === 'suspended') AC.resume().catch(() => {});
+  return AC;
+}
+function bytesDe(src){ return fetch(src).then(r => { if(!r.ok) throw new Error(r.status); return r.arrayBuffer(); }); }
+function pista(){
+  if(!MBUF){ MBUF = bytesDe(SALA.musica.src).then(b => new Promise((res, rej) => contexto().decodeAudioData(b, res, rej))); MBUF.catch(() => { MBUF = null; }); }
+  return MBUF;
+}
+function musica(on){
+  if(!on){ if(MSRC){ try{ MSRC.stop(); }catch(e){} MSRC = null; } return; }
+  if(MSRC || !contexto()) return;
+  pista().then(b => { if(!P.musica || MSRC) return; MSRC = AC.createBufferSource(); MSRC.buffer = b; MSRC.loop = true; MSRC.connect(MG); MSRC.start(); nivelMusica(); }).catch(() => toast('No se ha podido cargar la música'));
+}
+function nivelMusica(){ if(AC && MG) MG.gain.setTargetAtTime((U && U.playing) || hablando ? .22 : .5, AC.currentTime, .5); }
+function callar(){
+  try{ speechSynthesis.cancel(); }catch(e){}
+  cancelAnimationFrame(VOZ.raf);
+  if(VOZ.nodo){ const n = VOZ.nodo; VOZ.nodo = null; n.onended = null; try{ n.stop(); }catch(e){} }
+}
+// Voz grabada: cada cápsula suena desde su tramo del archivo y las palabras se encienden con sus tiempos
+const VOZ = {src:null, bytes:null, carga:null, fallo:false, nodo:null, raf:0};
+function precargarVoz(a){ if(VOZ.src === a.src) return; Object.assign(VOZ, {src:a.src, carga:null, fallo:false, bytes:bytesDe(a.src)}); VOZ.bytes.catch(() => { VOZ.fallo = true; }); }
+function vozGrabada(){
+  if(!VOZ.carga){ const ac = contexto(); if(!ac) return Promise.reject(); VOZ.carga = VOZ.bytes.then(buf => new Promise((res, rej) => ac.decodeAudioData(buf.slice(0), res, rej))); VOZ.carga.catch(() => { VOZ.fallo = true; }); }
+  return VOZ.carga;
+}
+function decirCapsula(C, tok){
+  const ws = C.frases.flatMap(f => f.w), au = C.au, si0 = U.si;
+  let k = 0; for(let i = 0; i < si0; i++) k += C.frases[i].w.length;
+  const desde = Math.max(0, (k ? au.w[k] : au.de) - .06), hasta = au.a + .2;
+  vozGrabada().then(buf => {
+    if(tok !== U.tok || !U.playing) return;
+    const ac = contexto(), src = ac.createBufferSource(); src.buffer = buf; src.connect(ac.destination);
+    const t0 = ac.currentTime + .05; src.start(t0, desde, Math.max(.1, hasta - desde)); VOZ.nodo = src;
+    let n0 = -1;
+    const paso = () => {
+      if(tok !== U.tok) return;
+      const t = desde + Math.max(0, ac.currentTime - t0);
+      let n = k; while(n < ws.length && au.w[n] <= t + .04) n++;
+      if(n !== n0){
+        n0 = n; ws.slice(0, n).forEach(w => w.classList.add('on')); seguir(ws[n - 1]);
+        let a = 0, si = 0; while(si < C.frases.length - 1 && a + C.frases[si].w.length < n){ a += C.frases[si].w.length; si++; }
+        U.si = Math.max(si0, si);
+      }
+      VOZ.raf = requestAnimationFrame(paso);
+    };
+    src.onended = () => {
+      if(tok !== U.tok) return;
+      cancelAnimationFrame(VOZ.raf); VOZ.nodo = null; C.frases.forEach(f => encender(f)); U.si = C.frases.length;
+      U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 180);
+    };
+    paso();
+  }).catch(() => { if(tok === U.tok && U.playing){ VOZ.fallo = true; sonar(); } });
+}
+function vozPara(k){
+  let vs = []; try{ vs = (speechSynthesis.getVoices() || []).filter(x => /^es/i.test(x.lang)); }catch(e){}
+  if(!vs.length) return null;
+  const fem = /m[oó]nica|paulina|marisol|luc[ií]a|elvira|helena|laura|sabina|paloma|conchita|marta|isabel|female|mujer/i, mas = /jorge|diego|juan|pablo|carlos|enrique|miguel|[aá]lvaro|ra[uú]l|male|hombre/i;
+  const quiere = (OBRA.voces[k] || {}).fem ? fem : mas;
+  return vs.find(v => quiere.test(v.name) && /es-ES/i.test(v.lang)) || vs.find(v => quiere.test(v.name)) || vs.find(v => /es-ES/i.test(v.lang)) || vs[0];
+}
+try{ speechSynthesis.getVoices(); }catch(e){}
+// Una frase: las palabras se encienden con la voz; si la voz no arranca, el texto sigue a ritmo de lectura
+function decirFrase(f, tok, fin){
+  clearInterval(U.reloj);
+  const vd = OBRA.voces[f.voz || U.voz] || {pitch:1, rate:1}, rate = (vd.rate || 1)*(VIS().lenta ? .92 : 1), ms = 60000/(165*rate);
+  let n = 0, conLimites = false, hecho = false, empezo = false, wd = 0;
+  const reloj = () => { clearInterval(U.reloj); U.reloj = setInterval(() => { if(tok !== U.tok || conLimites){ clearInterval(U.reloj); return; } n = Math.min(f.w.length - 1, n + 1); encender(f, n + 1); }, ms); };
+  const acabar = () => { if(hecho || tok !== U.tok) return; hecho = true; clearTimeout(wd); clearInterval(U.reloj); fin(); };
+  const sinVoz = () => { reloj(); clearTimeout(wd); wd = setTimeout(acabar, f.w.length*ms + 500); };
+  encender(f, 1);
+  if(!window.speechSynthesis) return sinVoz();
+  try{
+    speechSynthesis.cancel();
+    const limpio = HABLA(f.t), u = new SpeechSynthesisUtterance(limpio); u.lang = 'es-ES'; u.rate = rate; u.pitch = vd.pitch || 1;
+    const v = vozPara(f.voz || U.voz); if(v) u.voice = v;
+    u.onboundary = e => { if(tok !== U.tok || (e.name && e.name !== 'word')) return; conLimites = true; n = limpio.slice(0, e.charIndex + 1).split(/\s+/).filter(Boolean).length; encender(f, n); };
+    u.onstart = () => { empezo = true; clearTimeout(wd); wd = setTimeout(acabar, f.w.length*ms*2.5 + 4000); setTimeout(() => { if(!conLimites && tok === U.tok) reloj(); }, 500); };
+    u.onend = acabar;
+    u.onerror = e => { if(e.error === 'interrupted' || e.error === 'canceled') return; sinVoz(); };
+    wd = setTimeout(() => { if(!empezo && tok === U.tok) sinVoz(); }, 1800);
+    speechSynthesis.speak(u);
+  }catch(e){ sinVoz(); }
+}
+// La pantalla no se apaga mientras suena la visita
+let WL = null;
+async function wake(on){ try{ if(on && !WL && navigator.wakeLock){ WL = await navigator.wakeLock.request('screen'); WL.addEventListener('release', () => { WL = null; }); } else if(!on && WL){ const w = WL; WL = null; await w.release(); } }catch(e){} }
+
+/* ======================= Arranque ======================= */
+// El código QR de cada obra apunta a esta página con el nombre de la obra tras «#»: entra directamente en ella
+function desdeEnlace(){ const h = decodeURIComponent(location.hash.slice(1)); if(SALA && h && SALA.obras.some(o => o.id === h)){ if(!OBRA || OBRA.id !== h || $('obraV').hidden) abrir(h); } }
+$('salaT').textContent = (SALA || SALA_WEB).nombre; $('salaD').textContent = (SALA || SALA_WEB).d;
+cargarSala().then(() => { pintarSala(); desdeEnlace(); }).catch(() => { $('obras').innerHTML = '<li class="pie">No se han podido cargar las obras. Revisa la conexión y vuelve a abrir la página.</li>'; });
+addEventListener('hashchange', desdeEnlace);
+</script>
