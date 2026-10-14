@@ -9,15 +9,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
 <style>
-/* artmedium · versión en sala. El visitante tiene la obra delante: la voz manda,
-   la pantalla señala en una miniatura dónde mirar y se apaga cuando toca levantar la vista.
+/* artmedium · versión en sala. El visitante tiene la obra delante, así que la pantalla no la repite:
+   la voz y el texto ocupan todo, y un sello redondo con la obra se acerca al detalle que se nombra.
    ADN de artmedium, registro inmersivo (solo oscuro): fondo con el color de la propia obra,
-   una sola familia (Archivo), esquinas rectas, texto a la izquierda, nada por debajo de 12 px. */
+   una sola familia (Archivo), esquinas rectas salvo el sello, nada por debajo de 12 px. */
 :root{
   color-scheme:dark;
-  --bg:var(--c-fondo,#0A0A0B); --fg:var(--c-texto,#F6F5F2); --muted:var(--c-apagado,#A29E97); --hair:var(--c-filete,rgba(246,245,242,.2)); --panel:var(--c-panel,#0D0D0E); --campo:#141416; --tinta:#000;
+  --bg:var(--c-fondo,#0A0A0B); --fg:var(--c-texto,#F6F5F2); --muted:var(--c-apagado,#A29E97); --hair:var(--c-filete,rgba(246,245,242,.2)); --panel:var(--c-panel,#0D0D0E); --tinta:#000;
   --font:var(--fuente,"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif);
-  --col:560px;
+  --col:560px; --sello:clamp(118px,34vw,164px);
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;border-radius:0}
@@ -29,22 +29,21 @@ button{cursor:pointer}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--fg);outline-offset:-3px}
 .col{width:100%;max-width:calc(var(--col) + 32px);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-
 #app{position:relative;height:100%;overflow:hidden}
 .vista{position:absolute;inset:0;overflow:hidden;background:var(--bg)}
-.fondo{position:absolute;inset:-60px;background-size:cover;background-position:center;filter:blur(30px) brightness(.42) saturate(1.2);transform:translateZ(0);transition:filter .9s}
+.fondo{position:absolute;inset:-60px;background-size:cover;background-position:center;filter:blur(34px) brightness(.34) saturate(1.15);transform:translateZ(0);transition:filter 1s}
 
-/* ---------- La sala ---------- */
+/* ---------- La sala (solo si se entra sin código de obra) ---------- */
 #salaF{filter:blur(40px) brightness(.26) saturate(1.1)}
-.salaIn{position:relative;height:100%;overflow-y:auto;padding-block:28px 28px}
+.salaIn{position:relative;height:100%;overflow-y:auto;padding-block:28px}
 .eyb{font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;line-height:1;margin:12px 0 14px;text-wrap:balance;max-width:14ch}
 .salaD{font-size:1.06rem;line-height:1.45;color:rgba(246,245,242,.86);max-width:36ch}
 .qr{display:flex;gap:12px;align-items:flex-start;font-size:.9rem;line-height:1.4;color:var(--muted);padding:16px 0;margin-top:24px;border-top:1px solid var(--hair)}
 .qr svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--fg);stroke-width:1.8}
 .obras{list-style:none;border-top:1px solid var(--hair)}
-.ob{display:grid;grid-template-columns:26px 72px 1fr 20px;gap:14px;align-items:center;width:100%;padding:14px 0;border-bottom:1px solid var(--hair);text-align:left}
-.ob img{width:72px;height:72px;object-fit:cover;display:block;max-width:none}
+.ob{display:grid;grid-template-columns:26px 64px 1fr 20px;gap:14px;align-items:center;width:100%;padding:14px 0;border-bottom:1px solid var(--hair);text-align:left}
+.ob img{width:64px;height:64px;object-fit:cover;display:block;max-width:none;border-radius:50%}
 .num{font-size:1.35rem;font-weight:900;font-variant-numeric:tabular-nums}
 .obt{min-width:0}
 .obt b{display:block;font-size:1.12rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
@@ -52,88 +51,50 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;lin
 .ob .fl{font-weight:700;color:var(--muted)}
 .ob:hover .obt b{text-decoration:underline;text-underline-offset:3px}
 .pie{font-size:.8rem;line-height:1.5;color:var(--muted);margin-top:22px}
-.pie b{color:var(--fg);font-weight:900;letter-spacing:-.01em}
+.pie b,.firma b{color:var(--fg);font-weight:900;letter-spacing:-.01em}
 
 /* ---------- La obra ---------- */
 .o-in{position:relative;height:100%;display:flex;flex-direction:column}
-.top{display:flex;align-items:center;gap:4px;height:58px;flex:none;transition:opacity .8s}
-.who{flex:1;min-width:0;padding-left:2px}
-.who b{display:block;font-size:1rem;font-weight:900;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.who small{display:block;font-size:.85rem;color:rgba(246,245,242,.75);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ib{width:44px;height:44px;display:grid;place-items:center;flex:none}
+.top{flex:none;border-bottom:1px solid var(--hair);position:relative;z-index:3}
+.top .col{display:flex;align-items:center;gap:8px;min-height:70px;padding-block:10px}
+.who{flex:1;min-width:0}
+.who b{display:block;font-size:1.18rem;font-weight:900;letter-spacing:-.015em;line-height:1.15}
+.who small{display:block;font-size:.9rem;color:rgba(246,245,242,.8);margin-top:3px}
+.ib{width:44px;height:44px;display:grid;place-items:center;flex:none;margin-right:-10px}
 .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
 .ib:hover{background:var(--fg);color:var(--tinta)}
-.top .ib:first-child{margin-left:-12px}
-.top .ib:last-child{margin-right:-12px}
 
-#mini{position:relative;height:clamp(170px,36vh,430px);overflow:hidden;cursor:pointer;transition:opacity .8s;touch-action:manipulation}
-#stage{position:absolute;left:0;top:0;transform-origin:0 0;transition:transform 1.3s cubic-bezier(.65,0,.35,1);box-shadow:0 20px 60px rgba(0,0,0,.55)}
-#pic{display:block;width:100%;height:100%;max-width:none;pointer-events:none;-webkit-user-drag:none;user-select:none}
-#ov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity .7s}
-#ov.on{opacity:1}
-.chip{flex:none;min-height:38px;display:flex;align-items:center;gap:9px;font-size:.88rem;font-weight:700;transition:opacity .6s}
-.chip:not(:empty)::before{content:"";width:8px;height:8px;flex:none;background:var(--fg)}
+/* Inicio: el sello grande y un solo botón (el toque que deja sonar la voz) */
+#inicio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding-block:20px;text-align:center}
+.ini-s{width:min(62vw,260px);aspect-ratio:1;max-width:100%;border-radius:50%;overflow:hidden;border:3px solid var(--fg);box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.ini-s img{width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+.ini-q{font-size:.95rem;color:rgba(246,245,242,.82);line-height:1.4;max-width:30ch}
+#empezar{height:56px;padding:0 26px;background:var(--fg);color:var(--tinta);font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:10px}
+#empezar svg{width:16px;height:16px;fill:currentColor}
 
-#texto{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
-#texto::-webkit-scrollbar{display:none}
-.tx{padding-block:0 22px}
-.segs{display:flex;gap:4px;padding:2px 0 14px}
-.segs button{flex:1;height:22px;position:relative}
-.segs button::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;background:var(--hair);transition:background .4s}
-.segs .ya::before{background:rgba(246,245,242,.62)}
-.segs .ahora::before{background:var(--fg)}
-.segs .pq{flex:0 0 14px}
-.segs .pq::before{left:3px;right:3px;height:8px;margin-top:-4px}
-.lead{font-size:.88rem;color:var(--muted);line-height:1.4;margin-bottom:12px}
-
-#caps{position:relative}
-.cap{font-size:clamp(1.32rem,5.5vw,1.62rem);font-weight:700;letter-spacing:-.015em;line-height:1.3;max-width:28ch;animation:entra .55s cubic-bezier(.2,.8,.2,1)}
-.cap.sale{position:absolute;left:0;right:0;top:0;animation:sale .4s forwards;pointer-events:none}
-@keyframes entra{from{opacity:0;transform:translateY(14px)}}
-@keyframes sale{to{opacity:0;transform:translateY(-14px)}}
-.cap:not(.activa){opacity:.6}
+/* El relato y la conversación, como un solo texto que crece hacia abajo */
+#flujo{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(transparent,#000 22px,#000 60%,transparent 97%);mask-image:linear-gradient(transparent,#000 22px,#000 60%,transparent 97%);transition:opacity .8s}
+#flujo::-webkit-scrollbar{display:none}
+#lineas{display:flex;flex-direction:column;gap:22px;padding-block:24px calc(var(--sello)*.55 + 70px)}
+.cap{font-size:clamp(1.32rem,5.5vw,1.62rem);font-weight:700;letter-spacing:-.014em;line-height:1.36;max-width:30ch;transition:opacity .6s;animation:entra .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes entra{from{opacity:0;transform:translateY(12px)}}
+.cap.ya,.ans.ya{opacity:.4}
 .cap p+p,.cap p+div,.cap div+p{margin-top:.5em}
-.cap.preg{font-size:clamp(1.6rem,6.8vw,2.05rem);font-weight:800;letter-spacing:-.025em;line-height:1.14}
+.cap.preg{font-size:clamp(1.55rem,6.6vw,1.95rem);font-weight:800;letter-spacing:-.025em;line-height:1.16}
 blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;padding-left:12px}
 .ref{font-size:.85rem;font-weight:500;font-style:normal;color:var(--muted);line-height:1.35;margin-top:8px;letter-spacing:0}
 .ref a{text-decoration:underline;text-underline-offset:2px}
 .w{transition:opacity .25s}
-#obraV.sonando .cap .w{opacity:.3}
-#obraV.sonando .cap .w.on{opacity:1}
-
-/* Pausa para mirar: la pantalla se apaga y el visitante levanta la vista hacia el cuadro real */
-.mirlab{display:none;align-items:center;gap:10px;flex-wrap:wrap;font-size:.88rem;font-weight:700;margin-bottom:14px;color:var(--fg)}
-.ring{width:22px;height:22px;transform:rotate(-90deg);flex:none}
-.ring circle{fill:none;stroke-width:2.5}
-.ring .rb{stroke:var(--hair)}
-.ring .rf{stroke:var(--fg);stroke-dasharray:62.83;stroke-dashoffset:62.83}
-.mirlab .lk{margin-left:auto}
-#obraV.mirando .mirlab{display:flex}
-#obraV.mirando #mini{opacity:.08}
-#obraV.mirando .chip{opacity:0}
-#obraV.mirando .top,#obraV.mirando .bar{opacity:.4}
-#obraV.mirando .fondo{filter:blur(30px) brightness(.16) saturate(1.1)}
-
-/* Final y conversación */
-.fin{display:flex;flex-direction:column;gap:12px;animation:entra .55s cubic-bezier(.2,.8,.2,1)}
-.fin h2{font-size:clamp(1.32rem,5.5vw,1.62rem);font-weight:800;letter-spacing:-.02em;line-height:1.2;max-width:24ch}
-.qs{display:flex;flex-direction:column;gap:6px}
-.q{text-align:left;border:1px solid var(--hair);padding:10px 12px;font-size:1rem;font-weight:700;line-height:1.28;min-height:48px;background:rgba(10,10,11,.35)}
-.q small{display:block;font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
-.q.ia{border-style:dashed}
-.q:hover{border-color:var(--fg)}
-.b1{height:56px;background:var(--fg);color:var(--tinta);font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;text-align:left}
-.b1 span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lk{font-size:.9rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:6px 0;text-align:left;align-self:flex-start}
-#conv{display:flex;flex-direction:column;gap:16px;animation:entra .5s cubic-bezier(.2,.8,.2,1)}
-.you{font-size:1rem;font-weight:700;color:var(--muted);line-height:1.35}
-.you small{display:block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;margin-bottom:4px}
-.qn{font-size:.85rem;font-weight:800;margin-bottom:-6px}
-.ans{font-size:clamp(1.16rem,4.7vw,1.36rem);font-weight:600;line-height:1.38;max-width:32ch;display:flex;flex-direction:column;gap:14px}
+#obraV.sonando .cap.ahora .w{opacity:.28}
+#obraV.sonando .cap.ahora .w.on{opacity:1}
+.you{font-size:1rem;font-style:italic;font-weight:500;color:var(--muted);line-height:1.4;max-width:34ch;margin-bottom:-8px}
+.qn{font-size:.85rem;font-weight:800;margin-bottom:-10px}
+.ans{font-size:clamp(1.24rem,5vw,1.48rem);font-weight:600;line-height:1.4;max-width:31ch;display:flex;flex-direction:column;gap:14px;animation:entra .6s cubic-bezier(.2,.8,.2,1)}
 .ans.ia{border-left:2px dashed var(--hair);padding-left:12px}
 .parte{display:flex;flex-direction:column;gap:5px}
-#conv.hablando .ans .w{opacity:.3}
-#conv.hablando .ans .w.on{opacity:1}
+#lineas.hablando .ans.ahora .w{opacity:.28}
+#lineas.hablando .ans.ahora .w.on{opacity:1}
 .ep{font-size:.8rem;font-weight:500;line-height:1.4;color:var(--muted);letter-spacing:0;max-width:44ch}
 .ep b{font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--fg)}
 .ep::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;vertical-align:0;border:1.5px solid var(--fg)}
@@ -141,38 +102,79 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .ep-vista::before{border-radius:50%}
 .ep-lectura::before{transform:rotate(45deg) scale(.85)}
 .ep-general::before{border-style:dashed}
-.src{font-size:.85rem;color:var(--muted);line-height:1.4}
+.src{font-size:.85rem;color:var(--muted);line-height:1.4;margin-top:-8px}
 .dots{display:flex;gap:6px;height:24px;align-items:center}
 .dots i{width:7px;height:7px;background:var(--fg);opacity:.15;animation:dt 1.2s ease-in-out infinite}
 .dots i:nth-child(2){animation-delay:.2s}
 .dots i:nth-child(3){animation-delay:.4s}
 @keyframes dt{40%{opacity:1}}
+.sug{display:flex;flex-direction:column;gap:6px;animation:entra .6s cubic-bezier(.2,.8,.2,1)}
+.sug .eyb{margin-bottom:4px}
+.q{text-align:left;border:1px solid var(--hair);padding:12px 14px;font-size:1.02rem;font-weight:600;line-height:1.3;min-height:50px;background:rgba(10,10,11,.3)}
+.q.ia{border-style:dashed}
+.q:hover{border-color:var(--fg)}
+.b1{min-height:56px;background:var(--fg);color:var(--tinta);font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;text-align:left;margin-top:8px}
+.b1 span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lk{font-size:.92rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:6px 0;text-align:left;align-self:flex-start}
 .pasar{align-self:flex-start;height:44px;padding:0 14px;border:1px solid var(--fg);font-size:.95rem;font-weight:700}
 .pasar:hover{background:var(--fg);color:var(--tinta)}
+#obraV.sintexto #lineas{visibility:hidden}
 
-/* Barra: escribir, escuchar, hablar */
-#askF{flex:none;padding-top:6px}
-.askin{display:flex;border:1px solid var(--hair);background:var(--campo)}
-.askin input{flex:1;min-width:0;height:54px;padding:0 14px;font-size:1rem}
-.askin input::placeholder{color:#c9c5be}
-.askin input:focus{outline:none}
-.askin button{width:54px;flex:none;display:grid;place-items:center;background:var(--fg);color:var(--tinta)}
-.askin svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
-.bar{display:flex;gap:8px;padding-block:10px 12px;flex:none;transition:opacity .8s}
-.sq{width:56px;height:56px;border:1px solid var(--hair);display:grid;place-items:center;flex:none;background:rgba(10,10,11,.5)}
-.sq svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
-.sq[aria-pressed=true]{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+/* Abajo: el sello, la pista y los tres mandos */
+.abajo{flex:none;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:calc(var(--sello)*.64);padding-bottom:10px}
+.sello{position:absolute;left:50%;top:0;width:var(--sello);height:var(--sello);transform:translate(-50%,-36%);border-radius:50%;display:block}
+.sv{position:absolute;inset:7px;border-radius:50%;overflow:hidden;border:3px solid var(--fg);background:var(--panel);box-shadow:0 16px 46px rgba(0,0,0,.6)}
+.sv img{position:absolute;left:0;top:0;max-width:none;transform-origin:0 0;transition:transform 1.25s cubic-bezier(.65,0,.35,1)}
+.sring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none}
+.sring circle{fill:none;stroke-width:2.4}
+.sring .sb{stroke:var(--hair)}
+.sring .sf{stroke:var(--fg);stroke-dasharray:301.6;stroke-dashoffset:301.6}
+.sico{position:absolute;inset:7px;border-radius:50%;display:grid;place-items:center;background:rgba(10,10,11,.5);opacity:0;transition:opacity .3s}
+.sico svg{width:34px;height:34px;fill:var(--fg)}
+#obraV.pausado .sico{opacity:1}
+.pista{font-size:.92rem;line-height:1.4;color:rgba(246,245,242,.82);text-align:center;min-height:2.8em;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;max-width:36ch;padding:0 8px}
+.pista .lk{padding:2px 0;align-self:auto}
+.mandos{display:flex;align-items:center;justify-content:center;gap:22px}
+.sq{width:60px;height:60px;border:1px solid var(--hair);display:grid;place-items:center;flex:none;background:rgba(10,10,11,.55)}
+.sq svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
+.sq.grande{width:74px;height:74px;background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+.sq.grande svg{width:28px;height:28px}
+.sq[aria-pressed=true]:not(.grande),.sq[aria-expanded=true]{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
 .sq.rec{animation:inv 1s steps(2) infinite}
-@keyframes inv{50%{background:var(--fg);color:var(--tinta)}}
-.play{flex:1;min-width:0;height:56px;background:var(--fg);color:var(--tinta);display:flex;align-items:center;justify-content:center;gap:10px;font-size:1rem;font-weight:800;white-space:nowrap}
-.play svg{width:16px;height:16px;fill:currentColor;flex:none}
-.play span{overflow:hidden;text-overflow:ellipsis}
+@keyframes inv{50%{background:var(--bg);color:var(--fg)}}
+.firma{font-size:.8rem;color:var(--muted)}
+
+/* Escribir: el campo ocupa el sitio de los mandos, grande */
+#askF{width:100%;display:flex;flex-direction:column;gap:14px;padding-block:6px 4px}
+#askI{width:100%;font-size:clamp(1.4rem,6vw,1.7rem);font-weight:600;letter-spacing:-.01em;padding:10px 0;border-bottom:1px solid var(--hair)}
+#askI::placeholder{color:rgba(246,245,242,.42)}
+#askI:focus{outline:none;border-bottom-color:var(--fg)}
+.esc-b{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.b2{height:50px;padding:0 20px;border:1px solid var(--fg);font-size:.98rem;font-weight:800;display:flex;align-items:center;gap:10px}
+.b2 svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
+.b2:hover{background:var(--fg);color:var(--tinta)}
+#obraV.escribiendo .sello,#obraV.escribiendo .pista,#obraV.escribiendo .mandos,#obraV.escribiendo .firma{display:none}
+#obraV.escribiendo .abajo{padding-top:10px}
+
+/* Panel del altavoz: voz, música y texto en pantalla */
+.mandos{position:relative}
+#panel{position:absolute;z-index:6;right:0;bottom:calc(100% + 10px);display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--hair);box-shadow:0 18px 50px rgba(0,0,0,.6)}
+#panel button{display:flex;align-items:center;gap:12px;padding:12px 16px;min-width:180px;text-align:left;font-size:.95rem;font-weight:700;border-top:1px solid var(--hair)}
+#panel button:first-child{border-top:0}
+#panel svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;flex:none}
+#panel small{display:block;font-size:.8rem;font-weight:500;color:var(--muted);margin-top:2px}
+#panel button[aria-pressed=false]{color:var(--muted)}
+
+/* Pausa para mirar: la pantalla se apaga y el visitante levanta la vista hacia el cuadro real */
+#obraV.mirando #lineas>*:not(.ahora){opacity:.08}
+#obraV.mirando .fondo{filter:blur(34px) brightness(.14) saturate(1.1)}
+#obraV.mirando .top{opacity:.45}
 
 /* Hojas: tu visita y ficha */
 .sheet{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.5);display:flex;flex-direction:column;justify-content:flex-end}
 .sheet .pn{background:var(--panel);border-top:2px solid var(--fg);display:flex;flex-direction:column;max-height:88%;width:100%;max-width:620px;margin:0 auto;animation:rise .35s cubic-bezier(.2,.8,.2,1)}
 @keyframes rise{from{transform:translateY(30px);opacity:0}}
-.sheet .hd{display:flex;align-items:center;gap:10px;padding:8px max(6px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--hair)}
+.sheet .hd{display:flex;align-items:center;gap:10px;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--hair)}
 .sheet .hd b{flex:1;font-size:.95rem;font-weight:800}
 .deep{flex:1;min-height:0;overflow-y:auto;padding-block:16px 22px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
 .menu{display:flex;flex-direction:column;border-top:1px solid var(--hair)}
@@ -180,10 +182,6 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .fila-m>span:first-child{flex:1;min-width:0}
 .fila-m b{display:block;font-size:.98rem;font-weight:800}
 .fila-m small{display:block;font-size:.8rem;font-weight:500;color:var(--muted);margin-top:2px}
-.tog{width:40px;height:22px;border:2px solid var(--muted);position:relative;flex:none}
-.tog::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;background:var(--muted);transition:left .2s}
-.fila-m[aria-pressed=true] .tog{border-color:var(--fg);background:var(--fg)}
-.fila-m[aria-pressed=true] .tog::after{left:20px;background:var(--tinta)}
 fieldset{border:0;display:flex;flex-direction:column;gap:8px}
 legend{font-size:.95rem;font-weight:800;margin-bottom:8px}
 .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border:1px solid var(--hair)}
@@ -197,22 +195,22 @@ legend{font-size:.95rem;font-weight:800;margin-bottom:8px}
 .opts button[aria-pressed=true]::before{background:var(--fg);border-color:var(--fg);box-shadow:inset 0 0 0 3px var(--panel)}
 .opts small{display:block;font-size:.8rem;font-weight:500;color:var(--muted);margin-top:2px}
 .sheet .foot{display:flex;gap:8px;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-top:1px solid var(--hair)}
-.sheet .foot .b1{flex:1}
-.b2{height:56px;padding:0 18px;border:1px solid var(--hair);font-size:.92rem;font-weight:700}
+.sheet .foot .b1{flex:1;margin-top:0}
+.b3{height:56px;padding:0 18px;border:1px solid var(--hair);font-size:.92rem;font-weight:700}
 .note{font-size:.85rem;line-height:1.45;color:var(--muted)}
 dl{display:grid;grid-template-columns:96px 1fr;font-size:.88rem;line-height:1.4}
 dt,dd{padding:10px 0;border-top:1px solid var(--hair)}
 dt{font-size:.85rem;font-weight:700;color:var(--muted);padding-right:10px}
 dd{min-width:0;overflow-wrap:anywhere}
 dd a{text-decoration:underline;text-underline-offset:2px}
-#toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 64px);z-index:60;max-width:528px;margin:0 auto;background:var(--fg);color:var(--tinta);padding:11px 14px;font-size:.88rem;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s}
+#toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 80px);z-index:60;max-width:528px;margin:0 auto;background:var(--fg);color:var(--tinta);padding:11px 14px;font-size:.88rem;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s}
 #toast.on{opacity:1}
-@media (min-height:820px){ #mini{height:clamp(170px,40vh,470px)} }
-@media (prefers-reduced-motion:reduce){ *{animation:none!important} #stage,.w,#ov,.fondo,#mini,.top,.bar,.chip{transition:none!important} }
+@media (max-height:640px){ :root{--sello:clamp(96px,26vw,124px)} .mandos{gap:16px} .sq{width:54px;height:54px} .sq.grande{width:64px;height:64px} }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important} .sv img,.w,.cap,.fondo,#flujo,.sico{transition:none!important} }
 </style>
 
 <div id="app">
-  <section id="salaV" class="vista" aria-label="La sala">
+  <section id="salaV" class="vista" aria-label="La sala" hidden>
     <div class="fondo" id="salaF" aria-hidden="true"></div>
     <div class="salaIn">
       <div class="col">
@@ -229,44 +227,44 @@ dd a{text-decoration:underline;text-underline-offset:2px}
   <section id="obraV" class="vista" hidden>
     <div class="fondo" id="obraF" aria-hidden="true"></div>
     <div class="o-in">
-      <header class="top col">
-        <button class="ib" id="atras" aria-label="Volver a la sala"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-        <div class="who"><b id="oTit"></b><small id="oSub"></small></div>
-        <button class="ib" id="ajB" aria-label="Tu visita: quién te la cuenta, música y ficha"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></button>
+      <header class="top">
+        <div class="col">
+          <div class="who"><b id="oTit"></b><small id="oSub"></small></div>
+          <button class="ib" id="menuB" type="button" aria-label="Tu visita, ficha y otras obras de la sala"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg></button>
+        </div>
       </header>
-      <div class="col">
-        <div id="mini" title="Toca un lugar del cuadro para escuchar lo que se cuenta de él">
-          <div id="stage">
-            <img id="pic" alt="">
-            <svg id="ov" aria-hidden="true" preserveAspectRatio="none">
-              <defs>
-                <filter id="pluma" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
-                <mask id="mk" maskUnits="userSpaceOnUse"><rect id="mkr" fill="#fff"/><g id="huecos" filter="url(#pluma)"></g></mask>
-              </defs>
-              <rect id="velo" fill="#000" fill-opacity=".62" mask="url(#mk)"/>
-            </svg>
+
+      <div id="inicio" class="col">
+        <div class="ini-s"><img id="iniImg" alt=""></div>
+        <p class="ini-q" id="iniQ"></p>
+        <button id="empezar" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg><span id="empT">Empezar</span></button>
+      </div>
+
+      <div id="flujo" hidden><div class="col" id="lineas" aria-live="polite"></div></div>
+
+      <div class="abajo" id="abajo" hidden>
+        <button class="sello" id="sello" type="button" aria-label="Pausar o seguir la visita">
+          <span class="sv"><img id="selloImg" alt=""></span>
+          <svg class="sring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="48" class="sb"/><circle cx="50" cy="50" r="48" class="sf" id="sf"/></svg>
+          <span class="sico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></span>
+        </button>
+        <p class="pista col" id="pista" aria-live="polite"></p>
+        <div class="mandos">
+          <button class="sq" id="kb" type="button" aria-label="Escribir una pregunta"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg></button>
+          <button class="sq grande" id="mic" type="button" aria-label="Preguntar con la voz"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+          <button class="sq" id="alt" type="button" aria-label="Voz, música y texto" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+          <div id="panel" hidden>
+            <button type="button" id="pVoz" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg><span>Voz<small>Te lo cuenta en voz alta</small></span></button>
+            <button type="button" id="pMus" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span>Música<small id="pMusT"></small></span></button>
+            <button type="button" id="pTxt" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M7 11h4M13 11h4M7 15h10"/></svg><span>Texto en pantalla<small>Quítalo y queda solo la voz</small></span></button>
           </div>
         </div>
+        <form id="askF" class="col" hidden autocomplete="off">
+          <input id="askI" enterkeyhint="send" aria-label="Tu pregunta" placeholder="Escribe tu pregunta…">
+          <div class="esc-b"><button type="button" class="lk" id="cancelar">Cancelar</button><button class="b2" type="submit">Enviar <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+        </form>
+        <p class="firma">Con tecnología de <b>artmedium</b></p>
       </div>
-      <p class="chip col" id="chip" aria-live="polite"></p>
-      <div id="texto">
-        <div class="col tx">
-          <div class="segs" id="segs" aria-label="Partes del relato"></div>
-          <div class="mirlab" id="mirlab"><svg class="ring" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" class="rb"/><circle cx="12" cy="12" r="10" class="rf" id="ringF"/></svg><span>Levanta la vista y mira el cuadro</span><button class="lk" id="seguirB" type="button">Ya he mirado →</button></div>
-          <p class="lead" id="lead"></p>
-          <div id="caps" aria-live="polite"></div>
-          <div class="fin" id="fin" hidden></div>
-          <div id="conv" hidden aria-live="polite"></div>
-        </div>
-      </div>
-      <form id="askF" class="col" hidden autocomplete="off">
-        <div class="askin"><input id="askI" enterkeyhint="send" aria-label="Tu pregunta"><button aria-label="Enviar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
-      </form>
-      <nav class="bar col" aria-label="Escuchar y preguntar">
-        <button class="sq" id="kb" type="button" aria-label="Escribir una pregunta" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg></button>
-        <button class="play" id="play" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="playI" d="M7 5l12 7-12 7z"/></svg><span id="playT">Escuchar</span></button>
-        <button class="sq" id="mic" type="button" aria-label="Preguntar con la voz"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
-      </nav>
     </div>
   </section>
 </div>
@@ -278,11 +276,12 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
       <div class="menu">
-        <button class="fila-m" type="button" id="musicaB" aria-pressed="false"><span><b>Música</b><small id="mMus"></small></span><span class="tog" aria-hidden="true"></span></button>
         <button class="fila-m" type="button" id="fichaB"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
+        <button class="fila-m" type="button" id="deNuevoB"><span><b>Escucharla desde el principio</b><small id="deNuevoT"></small></span><span aria-hidden="true">→</span></button>
+        <button class="fila-m" type="button" id="salaB"><span><b>Otras obras de la sala</b><small id="salaBT"></small></span><span aria-hidden="true">→</span></button>
       </div>
     </div>
-    <div class="foot" id="ajFoot"><button class="b1" id="aplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b2" type="button" data-close>Cancelar</button></div>
+    <div class="foot" id="ajFoot"><button class="b1" id="aplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
   </div>
 </div>
 <div class="sheet" id="fichaS" hidden>
@@ -315,7 +314,6 @@ const txt = h => { try{ return new DOMParser().parseFromString(String(h), 'text/
 const tiene = (s, p) => String(s).split(' ').includes(p);
 const SENT = t => { const s = t.replace(/\[…\]/g, '⁣'); return (s.match(/[^.!?…]+[.!?…»]+|[^.!?…]+$/g) || [s]).map(x => x.trim().replace(/⁣/g, '[…]')).filter(Boolean); };
 const HABLA = t => t.replace(/[«»]/g, '').replace(/\[…\]/g, ',');
-const DIR = {obra:'Sobre la obra', fuera:'Más allá de la obra', mirar:'Vuelve a mirar'};
 const st = {get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : v; }catch(e){ return d; } }, set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }};
 let OBRA = null, P = null, U = null, KEY = 'am.sala.';
 const store = {get:(k, d) => st.get(KEY + k, d), set:(k, v) => st.set(KEY + k, v)};
@@ -324,7 +322,8 @@ const MED = k => OBRA.mediadores[k];
 const MEDG = () => Object.keys(OBRA.mediadores)[0];
 const VIS = () => OBRA.visitas[P.perfil];
 const incl = c => (!c.p || tiene(c.p, P.perfil)) && !(c.x && tiene(c.x, P.perfil));
-function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3200); }
+const G = {voz:st.get('am.sala.voz', '1') === '1', texto:st.get('am.sala.texto', '1') === '1', musica:st.get('am.sala.musica', '0') === '1'};
+function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3400); }
 
 /* ======================= La sala ======================= */
 async function cargarSala(){
@@ -336,7 +335,7 @@ async function cargarSala(){
     d.id = ruta.split('/').pop().replace(/\.json$/, '');
     Object.values(d.mediadores || {}).forEach(m => { if(m.audio && m.audio.src) m.audio.src = abs(m.audio.src, url); });
     if(d.iiif){
-      // IIIF: el tamaño sale de su info.json; la miniatura pide una vista de 1.200 px como la unidad
+      // IIIF: el tamaño sale de su info.json; el sello usa una vista de 1.200 px como la unidad
       const base = abs(d.iiif, url).replace(/\/(info\.json)?$/, '');
       try{ const info = await fetch(base + '/info.json').then(r => r.json()); d.iw = info.width; d.ih = info.height; }catch(e){}
       d.img = d.img ? abs(d.img, url) : `${base}/full/${d.iw ? Math.min(1200, d.iw) : 843},/0/default.jpg`;
@@ -355,42 +354,48 @@ function pintarSala(){
   $('obras').innerHTML = SALA.obras.map((o, n) => `<li><button class="ob" type="button" data-id="${o.id}"><span class="num">${n + 1}</span><img src="${o.img}" alt=""><span class="obt"><b>${esc(o.titulo)}</b><small>${esc(o.autor)} · ${esc(o.fecha)}</small><small>${Object.values(o.mediadores).map(m => esc(m.nombre)).join(' · ')}</small></span><span class="fl" aria-hidden="true">→</span></button></li>`).join('');
 }
 $('obras').onclick = e => { const b = e.target.closest('[data-id]'); if(b) abrir(b.dataset.id); };
+function volverSala(){
+  if(U){ pausa(); cerrarEscribir(); }
+  $('obraV').hidden = true; $('salaV').hidden = false; wake(false);
+  try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+}
 
 /* ======================= Abrir una obra (como al escanear su código) ======================= */
 function abrir(id){
   const o = SALA.obras.find(x => x.id === id); if(!o) return;
-  if(U){ cerrarConv(); parar(); U.playing = false; }
+  if(U){ parar(); U.playing = false; }
   OBRA = o; KEY = 'am.sala.' + id + '.';
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
-  P = {guia:store.get('guia', meds[0]), perfil:store.get('perfil', vis[0]), musica:st.get('am.sala.musica', '0') === '1'};
+  P = {guia:store.get('guia', meds[0]), perfil:store.get('perfil', vis[0])};
   if(!OBRA.mediadores[P.guia]) P.guia = meds[0];
   if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
-  U = {caps:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], modo:'relato', voz:M().voz, ctl:null, segundos:60};
-  let V = null; try{ V = JSON.parse(store.get('visita', '') || 'null'); }catch(e){}
-  U.asked = new Set(V && V.a || []);
+  U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false};
   $('oTit').textContent = OBRA.titulo; $('oSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
-  $('pic').src = OBRA.img; $('pic').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
+  $('iniImg').src = OBRA.img; $('selloImg').src = OBRA.img; $('selloImg').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
   $('obraF').style.backgroundImage = `url(${OBRA.fondo})`;
-  $('askI').placeholder = MED(MEDG()).placeholder || 'Pregunta a la guía…';
-  cerrarTeclado();
+  $('askI').placeholder = 'Escribe tu pregunta…';
   $('salaV').hidden = true; $('obraV').hidden = false;
-  rehacer(V && !V.fin ? V.i || 0 : 0);
+  cerrarEscribir(); cerrarPanel();
+  preparar();
   try{ history.replaceState(null, '', '#' + id); }catch(e){}
-  requestAnimationFrame(() => camara(U.caps[U.i] && U.caps[U.i].z, false));
 }
-function volverSala(){
-  if(U){ cerrarConv(); pausa(); }
-  $('obraV').hidden = true; $('salaV').hidden = false; wake(false);
-  try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
-}
-$('atras').onclick = volverSala;
-function rehacer(i = 0){
-  parar(); U.voz = M().voz; U.caps = construir(); U.i = Math.max(0, Math.min(i, U.caps.length - 1)); U.si = 0; U.fin = false; U.modo = 'relato';
+// Vuelve al inicio de la obra: el sello grande y un botón (el toque que deja sonar la voz)
+function preparar(){
+  parar(); U.voz = M().voz; U.caps = construir(); U.els = []; U.i = 0; U.si = 0; U.fin = false; U.started = false; U.playing = false; U.conv = false;
   U.segundos = Math.round(U.caps.reduce((a, C) => a + (C.au ? C.au.a - C.au.de : C.palabras/2.5), 0) + U.caps.length*1.2 + U.caps.filter(C => C.k === 'pregunta').length*espPregunta()/1000);
-  $('conv').hidden = true; $('fin').hidden = true; $('caps').hidden = false; $('segs').hidden = false;
-  $('lead').textContent = `${VIS().n} · te la cuenta ${M().por || M().nombre}. Con auriculares, mirando el cuadro.`;
-  pintarSegs(); mostrarCap(U.i, false); camara(U.caps[U.i] && U.caps[U.i].z); estadoPlay(); guardar();
+  $('lineas').innerHTML = ''; $('lineas').classList.remove('hablando');
+  $('iniQ').textContent = `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando el cuadro.`;
+  $('empT').textContent = `Empezar · ${duracion()}`;
+  $('inicio').hidden = false; $('flujo').hidden = true; $('abajo').hidden = true;
+  $('obraV').classList.remove('sonando', 'pausado', 'mirando');
+  anillo(0, 0); estado();
 }
+$('empezar').onclick = () => {
+  U.started = true; $('inicio').hidden = true; $('flujo').hidden = false; $('abajo').hidden = false;
+  $('obraV').classList.toggle('sintexto', !G.texto);
+  requestAnimationFrame(() => selloCam(null, false));
+  play();
+};
 
 /* ======================= El relato: cápsulas, frases, palabras ======================= */
 function audioVisita(){ const a = M().audio; return a && a.src && (!a.visitas || tiene(a.visitas, P.perfil)) ? a : null; }
@@ -426,93 +431,105 @@ function trocear(segs, el){
   });
   return frases;
 }
-function mostrarCap(i, anim = true){
-  const box = $('caps'), C = U.caps[i]; if(!C) return;
-  [...box.children].forEach(o => { if(anim && !RM){ o.classList.add('sale'); setTimeout(() => o.remove(), 420); } else o.remove(); });
-  const el = document.createElement('div'); el.className = 'cap' + (C.k === 'pregunta' ? ' preg' : '') + (U.started ? ' activa' : '');
+// Lo ya dicho se queda arriba, más apagado; lo nuevo se añade debajo
+function apagarAnteriores(){ $('lineas').querySelectorAll('.ahora').forEach(el => { el.classList.remove('ahora'); el.classList.add('ya'); }); }
+function alTope(el){ if(!el) return; const F = $('flujo'); F.scrollTo({top:Math.max(0, el.offsetTop - F.clientHeight*.1), behavior:RM ? 'auto' : 'smooth'}); }
+function anadirCap(i){
+  if(U.els[i]) return U.els[i];
+  const C = U.caps[i]; apagarAnteriores();
+  const el = document.createElement('div'); el.className = 'cap ahora' + (C.k === 'pregunta' ? ' preg' : '');
   C.frases = trocear(C.segs, el);
-  box.appendChild(el);
-  marcarSegs();
-  $('lead').hidden = U.started;
+  $('lineas').appendChild(el); U.els[i] = el; alTope(el);
+  return el;
 }
-function pintarSegs(){
-  $('segs').innerHTML = U.caps.map((C, n) => `<button type="button" data-n="${n}"${C.k === 'pregunta' ? ' class="pq"' : ''} aria-label="Parte ${n + 1} de ${U.caps.length}${C.k === 'pregunta' ? ': pausa para mirar' : ''}"></button>`).join('');
-  marcarSegs();
-}
-function marcarSegs(){ [...$('segs').children].forEach((b, n) => { b.classList.toggle('ya', U.fin || n < U.i); b.classList.toggle('ahora', !U.fin && n === U.i); if(!U.fin && n === U.i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); }); }
-$('segs').onclick = e => { const b = e.target.closest('[data-n]'); if(!b) return; cerrarConv(); ir(+b.dataset.n); if(!U.playing) play(); };
-function guardar(){ if(U) store.set('visita', JSON.stringify({i:U.i, a:[...U.asked], fin:U.fin})); }
-addEventListener('pagehide', guardar);
+function seguir(w){ if(!w) return; const F = $('flujo'), r = w.getBoundingClientRect(), t = F.getBoundingClientRect(); if(r.bottom > t.top + t.height*.58) F.scrollBy({top:r.bottom - (t.top + t.height*.42), behavior:RM ? 'auto' : 'smooth'}); }
 
 /* ======================= Reproducción: la voz manda ======================= */
 function duracion(){ const s = U.segundos; return s < 90 ? `${Math.max(30, Math.round(s/15)*15)} s` : `${(Math.round(s/60*2)/2).toString().replace('.', ',')} min`; }
-function estadoPlay(){
-  const conv = U.modo === 'conv';
-  $('playI').setAttribute('d', U.playing ? 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z' : 'M7 5l12 7-12 7z');
-  $('playT').textContent = conv ? (U.fin ? 'Volver' : 'Seguir la visita') : U.playing ? 'Pausa' : U.fin ? 'Escuchar de nuevo' : (U.started || U.i > 0) ? 'Seguir' : `Escuchar · ${duracion()}`;
-  $('play').setAttribute('aria-label', U.playing ? 'Pausar' : $('playT').textContent);
-  $('obraV').classList.toggle('sonando', U.playing);
+function estado(){
+  const V = $('obraV');
+  V.classList.toggle('sonando', U.playing);
+  V.classList.toggle('pausado', U.started && !U.playing && !U.fin);
+  const C = U.caps[U.i], zona = U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : '';
+  let p;
+  if(V.classList.contains('mirando')) p = 'Levanta la vista y mira el cuadro <button class="lk" type="button" id="yaB">Ya he mirado →</button>';
+  else if(U.pensando) p = 'Pensando…';
+  else if(U.playing) p = zona ? `Búscalo en el cuadro · ${esc(zona)}` : 'Toca el sello para pausar';
+  else if(U.conv && !U.fin) p = zona ? `Búscalo en el cuadro · ${esc(zona)}. Toca el sello para seguir la visita` : 'Toca el sello para seguir la visita, o pregunta otra cosa';
+  else if(U.fin) p = 'Pregunta con el micrófono o el teclado. Toca el sello para escucharla de nuevo';
+  else p = 'Toca el sello para seguir, o pregunta con el micrófono o el teclado';
+  $('pista').innerHTML = p;
+  $('sello').setAttribute('aria-label', U.playing ? 'Pausar la visita' : U.fin ? 'Escucharla desde el principio' : 'Seguir la visita');
   nivelMusica();
 }
-$('play').onclick = () => {
-  if(U.modo === 'conv'){ const fin = U.fin; cerrarConv(); if(!fin) play(); return; }
-  U.playing ? pausa() : play();
+$('sello').onclick = () => {
+  if(!U.started) return;
+  cerrarPanel();
+  if(U.playing) return pausa();
+  if(U.fin){ reiniciar(); return play(); }
+  play();
 };
+$('pista').addEventListener('click', e => { if(e.target.closest('#yaB')) siguiente(); });
 function play(){
-  if(U.fin){ U.fin = false; U.i = 0; U.si = 0; $('fin').hidden = true; $('caps').hidden = false; mostrarCap(0); }
-  U.playing = true; U.started = true;
-  const c = $('caps').firstElementChild; if(c) c.classList.add('activa');
-  $('lead').hidden = true;
-  contexto(); if(P.musica) musica(true); wake(true);
-  estadoPlay(); sonar();
+  // Tras una pregunta, la visita sigue debajo de la respuesta: la cápsula que sonaba empieza de nuevo
+  // (o la siguiente, si ya había terminado)
+  if(U.conv){
+    U.conv = false; const C = U.caps[U.i];
+    if(C && C.frases && U.si >= C.frases.length && U.i < U.caps.length - 1) U.i++;
+    U.si = 0; U.els[U.i] = null;
+  }
+  U.playing = true;
+  contexto(); if(G.musica) musica(true); wake(true);
+  estado(); sonar();
 }
-function pausa(){ U.playing = false; parar(); $('obraV').classList.remove('mirando'); estadoPlay(); }
-function parar(){ clearTimeout(U.timer); clearInterval(U.reloj); U.tok++; callar(); anillo(false); if(hablando){ hablando = false; $('conv').classList.remove('hablando'); nivelMusica(); } }
-function ir(n, retardo = 0){
-  parar(); U.fin = false; $('fin').hidden = true; $('caps').hidden = false; $('obraV').classList.remove('mirando');
-  U.i = Math.max(0, Math.min(n, U.caps.length - 1)); U.si = 0;
-  mostrarCap(U.i); camara(U.caps[U.i].z); guardar();
-  if(U.playing){ const tok = U.tok; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, retardo); }
-  estadoPlay();
+function pausa(){ U.playing = false; parar(); $('obraV').classList.remove('mirando'); estado(); }
+function parar(){
+  clearTimeout(U.timer); clearInterval(U.reloj); U.tok++; callar();
+  const c = $('sf'), cur = getComputedStyle(c).strokeDashoffset; c.style.transition = 'none'; c.style.strokeDashoffset = cur;
+  if(hablando){ hablando = false; $('lineas').classList.remove('hablando'); }
 }
+function reiniciar(){ parar(); U.i = 0; U.si = 0; U.fin = false; U.els = []; $('lineas').innerHTML = ''; anillo(0, 0); }
 function siguiente(){
   parar(); $('obraV').classList.remove('mirando');
   if(U.i >= U.caps.length - 1) return terminar();
-  U.i++; U.si = 0; mostrarCap(U.i); guardar(); if(U.playing) sonar();
+  U.i++; U.si = 0; if(U.playing) sonar(); else estado();
 }
-$('seguirB').onclick = siguiente;
 function limpiar(C){ if(C && C.frases) C.frases.forEach(f => f.w.forEach(w => w.classList.remove('on'))); }
 function encender(f, n){ const ws = f.w.slice(0, n == null ? f.w.length : n); ws.forEach(w => w.classList.add('on')); seguir(ws[ws.length - 1]); }
-function seguir(w){ if(!w) return; const T = $('texto'), r = w.getBoundingClientRect(), t = T.getBoundingClientRect(); if(r.bottom > t.bottom - 24) T.scrollBy({top:r.bottom - t.bottom + t.height*.35, behavior:RM ? 'auto' : 'smooth'}); }
 const espPregunta = () => (VIS().lenta || VIS().preguntaZonas) ? 9000 : 7000;
 function sonar(){
   const C = U.caps[U.i]; if(!C) return terminar();
-  if(U.si === 0){ limpiar(C); camara(C.z); $('obraV').classList.toggle('mirando', C.k === 'pregunta'); $('texto').scrollTop = 0; }
+  const n = U.caps.length;
+  if(U.si === 0){
+    const nueva = !U.els[U.i]; anadirCap(U.i); if(!nueva){ apagarAnteriores(); U.els[U.i].classList.remove('ya'); U.els[U.i].classList.add('ahora'); alTope(U.els[U.i]); }
+    limpiar(C); selloCam(C.z); $('obraV').classList.toggle('mirando', C.k === 'pregunta'); anillo(U.i/n);
+  }
+  estado();
   C.frases.slice(0, U.si).forEach(f => encender(f));
   const tok = ++U.tok;
   if(U.si >= C.frases.length){
     // Respiración entre cápsulas; tras una pregunta, tiempo para mirar la obra de verdad
     const lenta = VIS().lenta || VIS().preguntaZonas;
     const espera = C.k === 'pregunta' ? espPregunta() : (lenta ? 1800 : 1200);
-    if(C.k === 'pregunta') anillo(true, espera);
+    anillo((U.i + 1)/n, C.k === 'pregunta' ? espera : 600);
     U.timer = setTimeout(() => { if(tok !== U.tok || !U.playing) return; siguiente(); }, espera);
     return;
   }
-  if(C.au && !VOZ.fallo) return decirCapsula(C, tok);
+  if(C.au && !VOZ.fallo && G.voz) return decirCapsula(C, tok);
   const f = C.frases[U.si];
-  decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); U.si++; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 180); });
+  decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); U.si++; anillo((U.i + U.si/C.frases.length)/n); U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 180); });
 }
 function terminar(){
-  parar(); U.playing = false; U.fin = true; guardar(); marcarSegs();
-  $('obraV').classList.remove('mirando'); camara(null);
-  mostrarFin(); estadoPlay(); wake(false);
+  parar(); U.playing = false; U.fin = true; apagarAnteriores();
+  $('obraV').classList.remove('mirando'); selloCam(null); anillo(1);
+  mostrarFin(); estado(); wake(false);
 }
-function anillo(on, ms){
-  const r = $('ringF'); r.style.transition = 'none'; r.style.strokeDashoffset = '62.83';
-  if(on && !RM){ r.getBoundingClientRect(); r.style.transition = `stroke-dashoffset ${ms}ms linear`; r.style.strokeDashoffset = '0'; }
+function anillo(p, ms = 600){
+  const c = $('sf'), v = 301.6*(1 - Math.max(0, Math.min(1, p)));
+  c.style.transition = ms && !RM ? `stroke-dashoffset ${ms}ms linear` : 'none'; c.style.strokeDashoffset = String(v);
 }
 
-/* ======================= Final: tres preguntas y la siguiente obra de la sala ======================= */
+/* ======================= Final: sugerencias y la siguiente obra de la sala ======================= */
 function elegir(){
   const m = M(), libres = (m.qa || []).map((x, k) => k).filter(k => !U.asked.has(m.qa[k].q)), out = [];
   const rank = k => (m.qa[k].z && m.qa[k].z === U.zona ? 0 : 1);
@@ -520,78 +537,73 @@ function elegir(){
   libres.forEach(k => { if(out.length < 3 && !out.includes(k)) out.push(k); });
   return out.slice(0, 3);
 }
-const qBoton = k => { const x = M().qa[k]; return `<button class="q${x.ia ? ' ia' : ''}" type="button" data-k="${k}"><small>${esc(DIR[x.d] || '')}</small>${esc(x.q)}</button>`; };
-function mostrarFin(){
-  const s = elegir(), n = SALA.obras.indexOf(OBRA), sig = SALA.obras[(n + 1) % SALA.obras.length];
-  const otros = Object.keys(OBRA.mediadores).filter(k => k !== P.guia);
-  $('caps').hidden = true; $('fin').hidden = false;
-  $('fin').innerHTML = `<h2>${esc(OBRA.tema || '')}</h2>${s.length ? `<div class="qs">${s.map(qBoton).join('')}</div>` : ''}
-    <button class="b1" type="button" data-sig="${sig.id}"><span>Siguiente en la sala: ${esc(sig.titulo)}</span><span aria-hidden="true">→</span></button>
-    ${otros.map(k => `<button class="lk" type="button" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join('')}`;
+const qBoton = k => { const x = M().qa[k]; return `<button class="q${x.ia ? ' ia' : ''}" type="button" data-k="${k}">${esc(x.q)}</button>`; };
+function sugerencias(extra = ''){
+  $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
+  const s = elegir(); if(!s.length && !extra) return;
+  const box = document.createElement('div'); box.className = 'sug';
+  box.innerHTML = (s.length ? `<p class="eyb">Sugerencias</p>${s.map(qBoton).join('')}` : '') + extra;
+  $('lineas').appendChild(box);
 }
-$('texto').addEventListener('click', e => {
+function mostrarFin(){
+  const n = SALA.obras.indexOf(OBRA), sig = SALA.obras.length > 1 ? SALA.obras[(n + 1) % SALA.obras.length] : null;
+  const otros = Object.keys(OBRA.mediadores).filter(k => k !== P.guia);
+  sugerencias((sig ? `<button class="b1" type="button" data-sig="${sig.id}"><span>Siguiente en la sala: ${esc(sig.titulo)}</span><span aria-hidden="true">→</span></button>` : '') +
+    otros.map(k => `<button class="lk" type="button" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join(''));
+  const s = $('lineas').querySelector('.sug'); if(s) setTimeout(() => s.scrollIntoView({block:'nearest', behavior:RM ? 'auto' : 'smooth'}), 400);
+}
+$('lineas').addEventListener('click', e => {
   if(e.target.closest('a')) return;
   const k = e.target.closest('[data-k]'); if(k){ preguntaPreparada(M().qa[+k.dataset.k]); return; }
   const s = e.target.closest('[data-sig]'); if(s){ abrir(s.dataset.sig); return; }
-  const v = e.target.closest('[data-voz]'); if(v){ cambiarVoz(v.dataset.voz); return; }
+  const v = e.target.closest('[data-voz]'); if(v){ P.guia = v.dataset.voz; store.set('guia', P.guia); preparar(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); $('empezar').click(); return; }
   const p = e.target.closest('[data-pasa]'); if(p){ pasarALaGuia(p); return; }
-  const en = e.target.closest('[data-entrar]'); if(en){ preguntarIA(en.dataset.entrar); return; }
-  if($('obraV').classList.contains('mirando') && e.target.closest('#caps')) siguiente();
+  const en = e.target.closest('[data-entrar]'); if(en){ en.remove(); preguntarIA(en.dataset.entrar); return; }
 });
-function cambiarVoz(k){ P.guia = k; store.set('guia', k); rehacer(0); toast(`Ahora te la cuenta ${M().por || M().nombre}`); play(); }
 
-/* ======================= Conversación: la respuesta ocupa el sitio del relato ======================= */
-function abrirConv(){
-  if(U.modo !== 'conv'){ if(U.playing) pausa(); U.modo = 'conv'; }
-  parar(); if(U.ctl){ U.ctl.abort(); U.ctl = null; }
-  $('caps').hidden = true; $('fin').hidden = true; $('segs').hidden = true; $('lead').hidden = true;
-  const d = $('conv'); d.hidden = false; d.innerHTML = ''; d.classList.remove('hablando');
-  $('texto').scrollTop = 0; estadoPlay(); return d;
-}
-function cerrarConv(){
-  if(!U || U.modo !== 'conv') return;
-  parar(); if(U.ctl){ U.ctl.abort(); U.ctl = null; }
-  U.modo = 'relato'; $('conv').hidden = true; $('conv').innerHTML = ''; $('segs').hidden = false;
-  if(U.fin) mostrarFin(); else { $('caps').hidden = false; camara(U.caps[U.i] && U.caps[U.i].z); }
-  estadoPlay();
-}
+/* ======================= Conversación: se añade al mismo texto ======================= */
 function encabezar(q){
-  const d = abrirConv();
-  d.insertAdjacentHTML('beforeend', `<p class="you"><small>Has preguntado</small>${esc(q)}</p>`);
-  const dots = document.createElement('div'); dots.className = 'dots'; dots.setAttribute('aria-label', 'Pensando'); dots.innerHTML = '<i></i><i></i><i></i>'; d.appendChild(dots);
-  return {d, dots};
+  if(U.playing) pausa(); else parar();
+  if(U.ctl){ U.ctl.abort(); U.ctl = null; }
+  U.conv = true; $('obraV').classList.remove('mirando');
+  apagarAnteriores(); $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
+  const y = document.createElement('p'); y.className = 'you'; y.textContent = q; $('lineas').appendChild(y);
+  const dots = document.createElement('div'); dots.className = 'dots'; dots.setAttribute('aria-label', 'Pensando'); dots.innerHTML = '<i></i><i></i><i></i>'; $('lineas').appendChild(dots);
+  alTope(y); U.pensando = true; estado();
+  return dots;
 }
-function pintarRespuesta(d, partes, ia){
-  const box = document.createElement('div'); box.className = 'ans' + (ia ? ' ia' : '');
-  const frases = trocear(partes, box); d.appendChild(box); return frases;
+function responder(partes, ia, antes = ''){
+  U.pensando = false;
+  if(antes) $('lineas').insertAdjacentHTML('beforeend', antes);
+  const box = document.createElement('div'); box.className = 'ans ahora' + (ia ? ' ia' : '');
+  const frases = trocear(partes, box); $('lineas').appendChild(box); return frases;
 }
-function sugerencias(d){ const s = elegir(); if(s.length) d.insertAdjacentHTML('beforeend', `<div class="qs">${s.map(qBoton).join('')}</div>`); }
 function preguntaPreparada(x){
-  U.asked.add(x.q); guardar();
-  const {d, dots} = encabezar(x.q);
-  if(x.z) camara(x.z);
-  const tok = U.tok;
+  U.asked.add(x.q);
+  const dots = encabezar(x.q), tok = U.tok;
+  if(x.z) selloCam(x.z);
   setTimeout(() => {
-    if(tok !== U.tok || U.modo !== 'conv') return;
+    if(tok !== U.tok) return;
     dots.remove();
     const partes = [{t:x.a, voz:M().voz}];
     if(x.c != null && OBRA.citas[x.c]) partes.push({t:OBRA.citas[x.c].t, voz:OBRA.citas[x.c].voz, cita:String(x.c)});
-    const frases = pintarRespuesta(d, partes, x.ia);
-    if(x.ia) d.insertAdjacentHTML('beforeend', '<p class="ep ep-general"><b>Conocimiento general</b> · no sale de la base documental: verifícalo</p>');
+    const frases = responder(partes, x.ia);
+    if(x.ia) $('lineas').insertAdjacentHTML('beforeend', '<p class="ep ep-general"><b>Conocimiento general</b> · no sale de la base documental: verifícalo</p>');
     // Lo que el autor ya no vivió lo cuenta la guía
-    if(x.pasa && MED(x.pasa.a)) d.insertAdjacentHTML('beforeend', `<button class="pasar" type="button" data-pasa="${esc(x.pasa.a)}" data-t="${esc(x.pasa.t)}">Preguntar a ${esc(MED(x.pasa.a).corto || MED(x.pasa.a).nombre)} →</button>`);
-    sugerencias(d); hablar(frases);
+    const pasa = x.pasa && MED(x.pasa.a) ? `<button class="pasar" type="button" data-pasa="${esc(x.pasa.a)}" data-t="${esc(x.pasa.t)}">Preguntar a ${esc(MED(x.pasa.a).corto || MED(x.pasa.a).nombre)} →</button>` : '';
+    sugerencias(pasa); estado(); hablar(frases);
   }, 450);
 }
 function pasarALaGuia(b){
-  const k = b.dataset.pasa, t = b.dataset.t, d = $('conv'); b.remove(); parar();
-  d.querySelector('.qs')?.remove();
-  d.insertAdjacentHTML('beforeend', `<p class="qn">${esc(MED(k).nombre)}</p>`);
-  const frases = pintarRespuesta(d, [{t, voz:MED(k).voz}]); sugerencias(d); hablar(frases);
+  const k = b.dataset.pasa, t = b.dataset.t; parar(); apagarAnteriores();
+  $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
+  const frases = responder([{t, voz:MED(k).voz}], false, `<p class="qn">${esc(MED(k).nombre)}</p>`);
+  sugerencias(); estado(); hablar(frases);
 }
+let hablando = false;
 function hablar(frases){
-  const tok = ++U.tok, d = $('conv'); d.classList.add('hablando'); let k = 0; contexto(); hablando = true; nivelMusica();
-  const fin = () => { d.classList.remove('hablando'); hablando = false; nivelMusica(); };
+  const tok = ++U.tok, L = $('lineas'); L.classList.add('hablando'); let k = 0; contexto(); hablando = true; nivelMusica();
+  const fin = () => { L.classList.remove('hablando'); hablando = false; nivelMusica(); };
   const next = () => {
     if(tok !== U.tok) return;
     if(k >= frases.length) return fin();
@@ -684,7 +696,7 @@ function limpiaParte(o){
   return c;
 }
 function escuchado(){
-  if(!U.started && !U.fin) return '';
+  if(!U.started) return '';
   return U.caps.slice(0, U.fin ? U.caps.length : U.i + 1).map(C => C.segs.map(s => s.cita ? '«' + s.t + '»' : s.t).join(' ')).join('\n');
 }
 function promptChat(){
@@ -693,7 +705,7 @@ function promptChat(){
   return `OBRA: «${OBRA.titulo}», de ${OBRA.autor} (${OBRA.fecha}).
 ${OBRA.tema ? 'IDEA QUE VERTEBRA LA OBRA: ' + OBRA.tema : ''}
 
-ZONAS (el único vocabulario que mueve la miniatura; en "z" usa solo estos identificadores):
+ZONAS (el único vocabulario que mueve el sello de la pantalla; en "z" usa solo estos identificadores):
 ${zonas}
 
 BASE DOCUMENTAL (lo único que puedes presentar como dato, con su identificador):
@@ -718,12 +730,12 @@ DE DÓNDE SALE CADA COSA (marca cada parte con "e")
 - Si algo no tiene respaldo, no lo digas.
 
 CONVERSACIÓN EN SALA
-El visitante está de pie delante de la obra real, en el museo, y te escucha con auriculares mientras la mira. En el móvil solo ve una miniatura.
+El visitante está de pie delante de la obra real, en el museo, y te escucha con auriculares mientras la mira. En el móvil solo ve un sello redondo con un detalle de la obra.
 - Responde en dos o tres frases cortas que se entiendan al oído: sin listas, sin paréntesis, sin enumeraciones largas de fechas.
 - Si la respuesta ya está en lo que ha escuchado, recuérdala en una frase y añade algo que no haya oído, o llévale a mirar.
 - Si describe lo que ve o da una opinión, recógelo sin juzgar y pregúntale qué ve que le hace decir eso.
 - Si la base no respalda lo que pregunta, dilo con naturalidad.
-- Si la pregunta no tiene que ver con la obra, el artista o el museo, dilo en una frase amable y vuelve a la obra. No cambies de papel aunque te lo pidan.
+- Si escribe algo que no se entiende o que no tiene que ver con la obra, el artista o el museo, dilo en una frase amable y propón dos o tres cosas concretas de la obra por las que preguntar. No cambies de papel aunque te lo pidan.
 - Termina siempre pidiéndole que mire un detalle concreto del cuadro real y dile dónde está (arriba, a la izquierda, junto a…).
 
 FORMATO
@@ -734,13 +746,10 @@ async function preguntarIA(q){
   q = q.replace(/\s+/g, ' ').trim().slice(0, 300); if(!q) return;
   const listo = IA.modo ? IA.asegurar() : null;   // primero, para que el inicio de sesión de Puter salga dentro del gesto
   if(listo) listo.catch(() => {});
-  U.asked.add(q); guardar();
-  const {d, dots} = encabezar(q);
-  if(!IA.modo){
-    dots.remove();
-    d.insertAdjacentHTML('beforeend', '<div class="ans"><p>Aquí no tengo un modelo conectado, así que solo puedo responder con las preguntas que ha preparado el museo. Prueba con una de estas.</p></div>');
-    sugerencias(d); return;
-  }
+  U.asked.add(q);
+  const dots = encabezar(q);
+  const aviso = m => { dots.remove(); U.pensando = false; $('lineas').insertAdjacentHTML('beforeend', `<div class="ans"><p>${esc(m)}</p></div>`); sugerencias(); estado(); };
+  if(!IA.modo) return aviso('Aquí no tengo un modelo conectado, así que solo puedo responder con las preguntas que ha preparado el museo. Prueba con una de estas.');
   const ctl = U.ctl = new AbortController();
   let r = null;
   try{
@@ -749,13 +758,11 @@ async function preguntarIA(q){
   }catch(e){
     if(U.ctl === ctl) U.ctl = null;
     if(e && e.code === 'cancelled') return;
-    dots.remove();
     const c = e && e.code;
     if(c === 'puter_entrar'){
       // La ventana de Puter no se abrió o se cerró: un botón para entrar con un toque y repetir la pregunta
-      U.asked.delete(q);
-      d.insertAdjacentHTML('beforeend', `<button class="pasar" type="button" data-entrar="${esc(q)}">Entrar en Puter para que te responda →</button>`);
-      sugerencias(d); return;
+      U.asked.delete(q); dots.remove(); U.pensando = false;
+      sugerencias(`<button class="pasar" type="button" data-entrar="${esc(q)}">Entrar en Puter para que te responda →</button>`); estado(); return;
     }
     let m = 'No he podido responder. Prueba otra vez dentro de un momento.';
     if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(c)){ IA.modo = null; m = 'Sin permiso para usar el modelo, sigo con las preguntas que ha preparado el museo.'; }
@@ -763,97 +770,79 @@ async function preguntarIA(q){
     else if(c === 'refused') m = 'A eso no puedo responder. Pregúntame por la obra.';
     else if(c === 'invalid_json') m = 'No he sabido contestar a eso. Prueba a preguntarlo de otra manera.';
     else if(c === 'puter_carga') m = 'No se ha podido cargar Puter. Revisa la conexión.';
-    d.insertAdjacentHTML('beforeend', `<div class="ans"><p>${esc(m)}</p></div>`); sugerencias(d); return;
+    return aviso(m);
   }
   if(U.ctl !== ctl) return; U.ctl = null; dots.remove();
   const partes = (r && Array.isArray(r.partes) ? r.partes : []).filter(p => p && typeof p.t === 'string' && p.t.trim()).slice(0, 5).map(limpiaParte);
-  if(!partes.length){ d.insertAdjacentHTML('beforeend', '<div class="ans"><p>No he sabido contestar a eso. Prueba a preguntarlo de otra manera.</p></div>'); sugerencias(d); return; }
+  if(!partes.length) return aviso('No he sabido contestar a eso. Prueba a preguntarlo de otra manera.');
   U.chat.push({role:'user', content:q}, {role:'assistant', content:partes.map(p => p.t).join(' ')});
-  const z = ZONA(r.z); if(z) camara(z);
+  const z = ZONA(r.z); if(z) selloCam(z);
   // Responde siempre la guía: el autor solo habla con palabras suyas comprobadas
   const g = MED(MEDG());
-  if(MEDG() !== P.guia) d.insertAdjacentHTML('beforeend', `<p class="qn">Te responde ${esc(g.por || g.nombre)}</p>`);
-  const frases = pintarRespuesta(d, partes.map(p => ({t:p.t, voz:g.voz, lab:etiqueta(p)})));
-  d.insertAdjacentHTML('beforeend', `<p class="src">Respuesta generada con IA (${esc(IA.nombre())}) a partir de la base documental de la obra</p>`);
-  sugerencias(d); hablar(frases);
+  const frases = responder(partes.map(p => ({t:p.t, voz:g.voz, lab:etiqueta(p)})), false, MEDG() !== P.guia ? `<p class="qn">Te responde ${esc(g.por || g.nombre)}</p>` : '');
+  $('lineas').insertAdjacentHTML('beforeend', `<p class="src">Respuesta generada con IA (${esc(IA.nombre())}) a partir de la base documental de la obra</p>`);
+  sugerencias(); estado(); hablar(frases);
 }
 
 /* ======================= Escribir o preguntar con la voz ======================= */
-function abrirTeclado(){
-  $('askF').hidden = false; $('kb').setAttribute('aria-pressed', 'true'); setTimeout(() => $('askI').focus(), 30);
+function abrirEscribir(){
+  cerrarPanel(); $('obraV').classList.add('escribiendo'); $('askF').hidden = false; setTimeout(() => $('askI').focus(), 30);
   if(IA.modo === 'puter'){ cargarPuter().catch(() => {}); if(!puterDentro()) toast('Te responde un modelo de IA a través de Puter. La primera vez te pedirá entrar con tu cuenta, que es gratuita.'); }
 }
-function cerrarTeclado(){ $('askF').hidden = true; $('kb').setAttribute('aria-pressed', 'false'); }
-$('kb').onclick = () => $('askF').hidden ? abrirTeclado() : cerrarTeclado();
-$('askF').onsubmit = e => { e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; $('askI').blur(); cerrarTeclado(); preguntarIA(q); };
+function cerrarEscribir(){ $('obraV').classList.remove('escribiendo'); $('askF').hidden = true; $('askI').blur(); }
+$('kb').onclick = abrirEscribir;
+$('cancelar').onclick = cerrarEscribir;
+$('askF').onsubmit = e => { e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; cerrarEscribir(); preguntarIA(q); };
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let rec = null;
-function sinMicro(){ toast('El micrófono no está disponible en esta vista. Escribe tu pregunta.'); abrirTeclado(); }
+function sinMicro(){ toast('El micrófono no está disponible aquí. Escribe tu pregunta.'); abrirEscribir(); }
 $('mic').onclick = () => {
+  cerrarPanel();
   if(rec){ try{ rec.stop(); }catch(e){} return; }
   if(!SR) return sinMicro();
   if(IA.modo === 'puter') cargarPuter().catch(() => {});
   try{
     if(U.playing) pausa(); callar();
     rec = new SR(); rec.lang = 'es-ES'; rec.interimResults = false;
-    rec.onstart = () => { $('mic').classList.add('rec'); toast('Te escucho…'); };
-    rec.onend = () => { $('mic').classList.remove('rec'); rec = null; };
+    rec.onstart = () => { $('mic').classList.add('rec'); $('pista').textContent = 'Te escucho…'; };
+    rec.onend = () => { $('mic').classList.remove('rec'); rec = null; if($('pista').textContent === 'Te escucho…') estado(); };
     rec.onerror = ev => { if(['not-allowed','service-not-allowed','audio-capture'].includes(ev.error)) sinMicro(); else toast('No te he oído bien. Prueba otra vez o escribe la pregunta.'); };
     rec.onresult = ev => { const q = (ev.results[0][0].transcript || '').trim(); if(q) preguntarIA(q); };
     rec.start();
   }catch(e){ rec = null; sinMicro(); }
 };
 
-/* ======================= La miniatura: señala dónde mirar ======================= */
-const CAM = {W:0, H:0, w:0, h:0};
-function encajar(){
-  const mini = $('mini'), W = mini.clientWidth, H = mini.clientHeight; if(!W || !H || !OBRA) return;
-  const k = Math.min(W/OBRA.iw, H/OBRA.ih); Object.assign(CAM, {W, H, w:OBRA.iw*k, h:OBRA.ih*k});
-  $('stage').style.width = CAM.w + 'px'; $('stage').style.height = CAM.h + 'px';
-  const vh = Math.round(1000*OBRA.ih/OBRA.iw); $('ov').setAttribute('viewBox', `0 0 1000 ${vh}`);
-  ['mkr','velo'].forEach(id => { $(id).setAttribute('width', 1000); $(id).setAttribute('height', vh); });
-}
+/* ======================= Panel del altavoz: voz, música y texto ======================= */
+function cerrarPanel(){ $('panel').hidden = true; $('alt').setAttribute('aria-expanded', 'false'); }
+function panelUI(){ $('pVoz').setAttribute('aria-pressed', G.voz); $('pMus').setAttribute('aria-pressed', G.musica); $('pTxt').setAttribute('aria-pressed', G.texto); $('pMusT').textContent = SALA ? SALA.musica.titulo : ''; }
+$('alt').onclick = e => { e.stopPropagation(); const abre = $('panel').hidden; $('panel').hidden = !abre; $('alt').setAttribute('aria-expanded', abre); panelUI(); };
+$('pVoz').onclick = () => { G.voz = !G.voz; st.set('am.sala.voz', G.voz ? '1' : '0'); panelUI(); if(U.playing){ parar(); sonar(); } else if(!G.voz) callar(); };
+$('pMus').onclick = () => { G.musica = !G.musica; st.set('am.sala.musica', G.musica ? '1' : '0'); panelUI(); contexto(); musica(G.musica); };
+$('pTxt').onclick = () => { G.texto = !G.texto; st.set('am.sala.texto', G.texto ? '1' : '0'); panelUI(); $('obraV').classList.toggle('sintexto', !G.texto); };
+document.addEventListener('click', e => { if(!$('panel').hidden && !e.target.closest('#panel') && !e.target.closest('#alt')) cerrarPanel(); });
+
+/* ======================= El sello: se acerca al detalle que se nombra ======================= */
 function caja(k){
   const z = OBRA.zonas[k], r = (OBRA.camara || {})[k]; if(!z && !r) return null;
   const pts = z ? z.poly : [[r[0], r[1]], [r[0] + r[2], r[1] + r[3]]];
   const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
-  return {x:(x0 + x1)/2, y:(y0 + y1)/2, w:x1 - x0 + .06, h:y1 - y0 + .06};
+  return {x:(x0 + x1)/2, y:(y0 + y1)/2, w:x1 - x0 + .04, h:y1 - y0 + .04};
 }
-function camara(z, anim = true){
-  if(!OBRA || $('obraV').hidden) return; encajar(); const {W, H, w, h} = CAM; if(!W) return;
+function selloCam(z, anim = true){
+  U.zona = z && OBRA.zonas[z] ? z : null;
+  const box = $('sello').querySelector('.sv'), D = box.clientWidth, img = $('selloImg'); if(!D || !OBRA.iw) return estado();
+  const k = Math.max(D/OBRA.iw, D/OBRA.ih), w = OBRA.iw*k, h = OBRA.ih*k;
   const b = z ? caja(z) : null; let s = 1, cx = .5, cy = .5;
-  if(b){ s = Math.max(1, Math.min(2.4, Math.min(W*.9/(b.w*w), H*.9/(b.h*h)))); cx = b.x; cy = b.y; }
-  let tx = W/2 - cx*w*s, ty = H/2 - cy*h*s;
-  tx = w*s > W ? Math.min(0, Math.max(W - w*s, tx)) : (W - w*s)/2;
-  ty = h*s > H ? Math.min(0, Math.max(H - h*s, ty)) : (H - h*s)/2;
-  const stg = $('stage');
-  if(!anim || RM){ stg.style.transition = 'none'; stg.style.transform = `translate(${tx}px,${ty}px) scale(${s})`; stg.getBoundingClientRect(); stg.style.transition = ''; }
-  else stg.style.transform = `translate(${tx}px,${ty}px) scale(${s})`;
-  marcar(z && OBRA.zonas[z] ? z : null);
-  U.zona = z || null;
-  $('chip').textContent = z && OBRA.zonas[z] ? `Búscalo en el cuadro · ${OBRA.zonas[z].n}` : '';
+  if(b){ s = Math.max(1, Math.min(6, Math.min(D*.8/(b.w*w), D*.8/(b.h*h)))); cx = b.x; cy = b.y; }
+  const tx = Math.min(0, Math.max(D - w*s, D/2 - cx*w*s)), ty = Math.min(0, Math.max(D - h*s, D/2 - cy*h*s));
+  img.style.width = w + 'px'; img.style.height = h + 'px';
+  if(!anim || RM){ img.style.transition = 'none'; img.style.transform = `translate(${tx}px,${ty}px) scale(${s})`; img.getBoundingClientRect(); img.style.transition = ''; }
+  else img.style.transform = `translate(${tx}px,${ty}px) scale(${s})`;
+  estado();
 }
-function marcar(z){
-  const vh = 1000*OBRA.ih/OBRA.iw, P_ = poly => poly.map(p => (p[0]*1000).toFixed(1) + ',' + (p[1]*vh).toFixed(1)).join(' ');
-  if(z){ const Z = OBRA.zonas[z]; $('huecos').innerHTML = (Z.rel || []).filter(r => OBRA.zonas[r]).map(r => `<polygon points="${P_(OBRA.zonas[r].poly)}" fill="#8a8a8a"/>`).join('') + `<polygon points="${P_(Z.poly)}" fill="#000"/>`; $('ov').classList.add('on'); }
-  else $('ov').classList.remove('on');
-}
-function enPoligono(px, py, poly){ let c = false; for(let i = 0, j = poly.length - 1; i < poly.length; j = i++){ const a = poly[i], b = poly[j]; if(((a[1] > py) !== (b[1] > py)) && (px < (b[0] - a[0])*(py - a[1])/(b[1] - a[1]) + a[0])) c = !c; } return c; }
-function area(poly){ const xs = poly.map(p => p[0]), ys = poly.map(p => p[1]); return (Math.max(...xs) - Math.min(...xs))*(Math.max(...ys) - Math.min(...ys)); }
-function zonaEn(px, py){ return Object.keys(OBRA.zonas).filter(k => enPoligono(px, py, OBRA.zonas[k].poly)).sort((a, c) => area(OBRA.zonas[a].poly) - area(OBRA.zonas[c].poly))[0] || null; }
-// Tocar un lugar del cuadro lleva a lo que el relato cuenta de él
-$('mini').addEventListener('click', e => {
-  const r = $('pic').getBoundingClientRect(); if(!r.width) return;
-  const px = (e.clientX - r.left)/r.width, py = (e.clientY - r.top)/r.height; if(px < 0 || px > 1 || py < 0 || py > 1) return;
-  const z = zonaEn(px, py); if(!z) return;
-  cerrarConv();
-  const n = U.caps.findIndex(C => C.z === z && C.k !== 'pregunta');
-  if(n < 0){ camara(z); toast(OBRA.zonas[z].n); return; }
-  ir(n); if(!U.playing) play();
-});
-let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if(U) camara(U.zona, false); }, 120); });
+let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { if(U && U.started) selloCam(U.zona, false); }, 120); });
 
-/* ======================= Tu visita y ficha ======================= */
+/* ======================= Tu visita, ficha y sala ======================= */
 const Q = {};
 function abrirAjustes(){
   Object.assign(Q, P);
@@ -861,24 +850,25 @@ function abrirAjustes(){
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${n === 0 ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
   $('fPerfil').innerHTML = vis.map(k => `<button type="button" data-v="${k}"><span>${esc(OBRA.visitas[k].n)}<small>${esc(OBRA.visitas[k].d || '')}</small></span></button>`).join('');
   $('fsGuia').hidden = meds.length < 2; $('fsPerfil').hidden = vis.length < 2; $('ajFoot').hidden = $('fsGuia').hidden && $('fsPerfil').hidden;
-  $('mMus').textContent = SALA.musica.titulo; musicaUI(); sync();
+  $('deNuevoT').textContent = `${VIS().n} · ${duracion()}`; $('salaBT').textContent = `${SALA.nombre} · ${SALA.obras.length} obras`;
+  sync(); cerrarPanel();
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
 function sync(){ [['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
 [['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
-$('ajB').onclick = abrirAjustes;
-function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes && U.modo === 'relato') play(); }
+$('menuB').onclick = abrirAjustes;
+function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
   const cambia = Q.guia !== P.guia || Q.perfil !== P.perfil;
   P.guia = Q.guia; P.perfil = Q.perfil; store.set('guia', P.guia); store.set('perfil', P.perfil);
   $('ajS').hidden = true;
-  if(VIS().musica && !P.musica){ P.musica = true; st.set('am.sala.musica', '1'); musicaUI(); musica(true); }
-  if(cambia){ cerrarConv(); rehacer(0); toast(`${VIS().n} · ${M().nombre}`); }
-  if(U.ajAntes || (cambia && U.started)) play(); else estadoPlay();
+  if(VIS().musica && !G.musica){ G.musica = true; st.set('am.sala.musica', '1'); }
+  if(cambia){ const iba = U.started; preparar(); toast(`${VIS().n} · ${M().nombre}`); if(iba) $('empezar').click(); }
+  else if(U.ajAntes) play();
 };
-function musicaUI(){ $('musicaB').setAttribute('aria-pressed', P ? P.musica : false); }
-$('musicaB').onclick = () => { P.musica = !P.musica; st.set('am.sala.musica', P.musica ? '1' : '0'); musicaUI(); contexto(); musica(P.musica); };
+$('deNuevoB').onclick = () => { $('ajS').hidden = true; preparar(); $('empezar').click(); };
+$('salaB').onclick = () => { $('ajS').hidden = true; volverSala(); };
 $('fichaB').onclick = () => {
   $('ajS').hidden = true;
   $('fTit').textContent = OBRA.titulo;
@@ -886,14 +876,14 @@ $('fichaB').onclick = () => {
   $('fNota').textContent = (OBRA.nota ? OBRA.nota + ' ' : '') + 'Prototipo de la versión en sala de artmedium: las preguntas libres las responde un modelo de IA a partir de la base documental de la obra, y cada parte de la respuesta dice de dónde sale.';
   $('fichaS').hidden = false;
 };
-function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes && U.modo === 'relato') play(); }
+function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes) play(); }
 const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());
 ['ajS','fichaS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
-addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarTeclado(); } });
+addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
 
 /* ======================= Voz y música ======================= */
-let AC = null, MG = null, MSRC = null, MBUF = null, hablando = false;
+let AC = null, MG = null, MSRC = null, MBUF = null;
 function contexto(){
   if(!AC){ const C = window.AudioContext || window.webkitAudioContext; if(!C) return null; try{ AC = new C(); MG = AC.createGain(); MG.gain.value = .5; MG.connect(AC.destination); }catch(e){ AC = null; return null; } }
   if(AC.state === 'suspended') AC.resume().catch(() => {});
@@ -907,7 +897,7 @@ function pista(){
 function musica(on){
   if(!on){ if(MSRC){ try{ MSRC.stop(); }catch(e){} MSRC = null; } return; }
   if(MSRC || !contexto()) return;
-  pista().then(b => { if(!P.musica || MSRC) return; MSRC = AC.createBufferSource(); MSRC.buffer = b; MSRC.loop = true; MSRC.connect(MG); MSRC.start(); nivelMusica(); }).catch(() => toast('No se ha podido cargar la música'));
+  pista().then(b => { if(!G.musica || MSRC) return; MSRC = AC.createBufferSource(); MSRC.buffer = b; MSRC.loop = true; MSRC.connect(MG); MSRC.start(); nivelMusica(); }).catch(() => toast('No se ha podido cargar la música'));
 }
 function nivelMusica(){ if(AC && MG) MG.gain.setTargetAtTime((U && U.playing) || hablando ? .22 : .5, AC.currentTime, .5); }
 function callar(){
@@ -938,7 +928,7 @@ function decirCapsula(C, tok){
       if(n !== n0){
         n0 = n; ws.slice(0, n).forEach(w => w.classList.add('on')); seguir(ws[n - 1]);
         let a = 0, si = 0; while(si < C.frases.length - 1 && a + C.frases[si].w.length < n){ a += C.frases[si].w.length; si++; }
-        U.si = Math.max(si0, si);
+        U.si = Math.max(si0, si); anillo((U.i + n/ws.length)/U.caps.length, 300);
       }
       VOZ.raf = requestAnimationFrame(paso);
     };
@@ -958,7 +948,7 @@ function vozPara(k){
   return vs.find(v => quiere.test(v.name) && /es-ES/i.test(v.lang)) || vs.find(v => quiere.test(v.name)) || vs.find(v => /es-ES/i.test(v.lang)) || vs[0];
 }
 try{ speechSynthesis.getVoices(); }catch(e){}
-// Una frase: las palabras se encienden con la voz; si la voz no arranca, el texto sigue a ritmo de lectura
+// Una frase: las palabras se encienden con la voz; sin voz (o silenciada), el texto sigue a ritmo de lectura
 function decirFrase(f, tok, fin){
   clearInterval(U.reloj);
   const vd = OBRA.voces[f.voz || U.voz] || {pitch:1, rate:1}, rate = (vd.rate || 1)*(VIS().lenta ? .92 : 1), ms = 60000/(165*rate);
@@ -967,7 +957,7 @@ function decirFrase(f, tok, fin){
   const acabar = () => { if(hecho || tok !== U.tok) return; hecho = true; clearTimeout(wd); clearInterval(U.reloj); fin(); };
   const sinVoz = () => { reloj(); clearTimeout(wd); wd = setTimeout(acabar, f.w.length*ms + 500); };
   encender(f, 1);
-  if(!window.speechSynthesis) return sinVoz();
+  if(!G.voz || !window.speechSynthesis) return sinVoz();
   try{
     speechSynthesis.cancel();
     const limpio = HABLA(f.t), u = new SpeechSynthesisUtterance(limpio); u.lang = 'es-ES'; u.rate = rate; u.pitch = vd.pitch || 1;
@@ -986,8 +976,12 @@ async function wake(on){ try{ if(on && !WL && navigator.wakeLock){ WL = await na
 
 /* ======================= Arranque ======================= */
 // El código QR de cada obra apunta a esta página con el nombre de la obra tras «#»: entra directamente en ella
-function desdeEnlace(){ const h = decodeURIComponent(location.hash.slice(1)); if(SALA && h && SALA.obras.some(o => o.id === h)){ if(!OBRA || OBRA.id !== h || $('obraV').hidden) abrir(h); } }
+function desdeEnlace(){
+  const h = decodeURIComponent(location.hash.slice(1));
+  if(SALA && h && SALA.obras.some(o => o.id === h)){ if(!OBRA || OBRA.id !== h || $('obraV').hidden) abrir(h); }
+  else if(SALA && $('obraV').hidden) $('salaV').hidden = false;
+}
 $('salaT').textContent = (SALA || SALA_WEB).nombre; $('salaD').textContent = (SALA || SALA_WEB).d;
-cargarSala().then(() => { pintarSala(); desdeEnlace(); }).catch(() => { $('obras').innerHTML = '<li class="pie">No se han podido cargar las obras. Revisa la conexión y vuelve a abrir la página.</li>'; });
+cargarSala().then(() => { pintarSala(); desdeEnlace(); }).catch(() => { $('salaV').hidden = false; $('obras').innerHTML = '<li class="pie">No se han podido cargar las obras. Revisa la conexión y vuelve a abrir la página.</li>'; });
 addEventListener('hashchange', desdeEnlace);
 </script>
