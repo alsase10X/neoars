@@ -313,33 +313,56 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 /* La obra se abre en la unidad, en una capa encima del catálogo: al cerrarla, el mapa sigue donde estaba */
 #uni{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:20;background:var(--paper)}
 #toast{position:fixed;left:var(--s2);right:var(--s2);top:calc(env(safe-area-inset-top,0px) + 60px);max-width:520px;margin:0 auto;z-index:50;background:var(--ink);color:#000;padding:11px 14px;font-size:14px;font-weight:700;overflow-wrap:anywhere}
-/* Modo artista (?artista=…): la portada presenta al personaje; encima del mapa, filtros y selecciones */
-#portada{position:fixed;inset:0;z-index:30;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s3);text-align:center;padding:calc(env(safe-area-inset-top,0px) + var(--s3)) max(var(--s2), env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + var(--s3)) max(var(--s2), env(safe-area-inset-left,0px))}
-#pRetrato{width:min(56vw,240px);height:auto;fill:none;stroke:var(--ink);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
-#pRetrato path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
-#pRetrato.dibuja path{animation:trazo var(--dur,2s) cubic-bezier(.45,.05,.3,1) forwards;animation-delay:var(--del,0s)}
-@keyframes trazo{to{stroke-dashoffset:0}}
-#pNombre{margin:0;font-size:2rem;font-weight:900;letter-spacing:-.03em;line-height:1;text-wrap:balance}
-#pVida{margin:8px 0 0;color:var(--grey);font-size:.95rem;font-weight:600}
-#pSaludo{margin:0;font-size:1.25rem;font-weight:700;line-height:1.3;letter-spacing:-.01em;max-width:24ch;text-wrap:balance}
-#pCuenta{margin:0;color:var(--grey);font-size:.9rem;font-weight:500;line-height:1.4;min-height:2.8em;max-width:34ch}
-#pVer{height:52px;padding:0 28px;font-size:1rem;background:var(--ink);color:#000;border-color:var(--ink)}
-#pVer:hover{background:var(--paper);color:var(--ink)}
-#pNota{color:var(--grey);font-size:.8rem;font-weight:500}
-#aNombre{flex:1;min-width:0;text-align:left;border:0;padding:8px 0;background:none;color:var(--ink);font-size:1.3rem;font-weight:800;letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#aNombre:hover{background:none;color:var(--ink)}
+/* Modo artista (?artista=…): una sola pantalla. Arriba, su nombre, filtros y selecciones; en medio, el mapa de sus obras;
+   abajo (en pantalla grande, a la izquierda), él: su retrato, lo que dice y el campo para preguntarle */
+#aNombre{flex:1;min-width:0;padding:4px 0}
+#aNombre h1{margin:0;font-size:1.3rem;font-weight:800;letter-spacing:-.025em;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#aNombre small{display:block;margin-top:2px;font-size:.8rem;font-weight:500;color:var(--grey)}
+body.artista #hint{display:none}
 #selec{display:flex;gap:6px;overflow-x:auto;padding:4px var(--s2) 10px;flex:0 0 auto;scrollbar-width:none}
 #selec::-webkit-scrollbar{display:none}
 #selec button{flex:none;padding:8px 12px;font-size:.85rem;white-space:nowrap}
 #selec button[aria-pressed=true]{background:var(--ink);color:#000;border-color:var(--ink)}
 #selec .sep{flex:none;width:1px;background:var(--soft);margin:4px}
-.pAcc{display:grid;gap:10px;width:min(100%,300px)}
-#pPreg{height:52px;font-size:1rem}
-/* Charla con el artista: él, recreado, en primera persona y con sus citas; lo posterior, la guía. Cada parte lleva el avatar de quien habla */
-#charla{z-index:35}
+.tile.marca{outline:3px solid var(--ink);outline-offset:-3px}
+/* Retrato a línea: el trazo se dibuja al aparecer (sin animación, se ve entero) */
+.trazo{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
+.trazo path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.trazo.dibuja path{animation:trazo var(--dur,2s) cubic-bezier(.45,.05,.3,1) forwards;animation-delay:var(--del,0s)}
+@keyframes trazo{to{stroke-dashoffset:0}}
+#vinc{position:relative;z-index:6;flex:0 0 auto;display:flex;flex-direction:column;background:var(--paper);border-top:1px solid var(--soft)}
+#vRet{display:none}
+#pRetrato{stroke-width:2.1}
+.vfila{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start;padding:12px var(--s2) 2px}
+#vAv{width:44px;height:52px;padding:0;border:0;background:none}
+#vAv:hover{background:none}
+#vAv .av{width:44px;height:52px;stroke-width:4.5}
+#vDice{margin:0;font-size:.98rem;line-height:1.4;font-weight:600;min-height:2.8em;transition:opacity .2s}
+#vDice.cambia{opacity:0}
+#vinc #chF{border-top:0}
+#vinc.abierta .vfila{display:none}
+/* La charla: en móvil, una hoja que sube sobre el mapa hasta media pantalla; el mapa sigue visible arriba */
+#vHoja{display:none;position:absolute;left:0;right:0;bottom:100%;height:min(50vh,calc(100vh - 210px));flex-direction:column;background:var(--panel);border-top:2px solid var(--ink);animation:rise .3s cubic-bezier(.2,.8,.2,1)}
+#vinc.abierta #vHoja{display:flex}
+.vhd{display:flex;align-items:center;gap:8px;padding:2px 6px 2px var(--s2);border-bottom:1px solid var(--soft);flex:0 0 auto}
+.vhd b{flex:1;min-width:0;font-size:.95rem;font-weight:800}
+#chLog{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:18px;padding:var(--s2)}
+@media(min-width:900px){
+  body.artista{display:grid;grid-template-columns:minmax(300px,30vw) minmax(0,1fr);grid-template-rows:auto auto auto minmax(0,1fr)}
+  body.artista>*{grid-column:2}
+  body.artista>header{grid-row:1} body.artista>#selec{grid-row:2} body.artista>#bar{grid-row:3} body.artista>#content{grid-row:4}
+  body.artista>#vinc{grid-column:1;grid-row:1/-1;min-height:0;border-top:0;border-right:1px solid var(--soft)}
+  #vRet{display:flex;flex:1 1 auto;min-height:0;align-items:center;justify-content:center;padding:var(--s3)}
+  #pRetrato{width:min(80%,260px);height:auto;max-height:100%}
+  #vinc.abierta #vRet{flex:0 0 auto;padding:var(--s2) var(--s2) 0}
+  #vinc.abierta #pRetrato{width:84px}
+  .vfila{grid-template-columns:minmax(0,1fr);padding:0 var(--s3) var(--s2)}
+  #vAv{display:none}
+  #vDice{font-size:1.15rem;line-height:1.45;min-height:4.4em;max-width:30ch}
+  #vHoja{position:static;height:auto;flex:1 1 auto;min-height:0;border-top:1px solid var(--soft);background:none;animation:none}
+}
+/* Lo que se dice en la charla. Cada parte lleva el avatar de quien habla: él, recreado, o la guía */
 .av{flex:none;width:28px;height:28px;fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
-#chAv .av{width:34px;height:34px}
-#chLog{display:flex;flex-direction:column;gap:18px;max-width:640px;margin:0 auto}
 #chLog .intro,#chLog .src{margin:0;color:var(--grey);font-size:.9rem;font-weight:500;line-height:1.45}
 #chLog .src{font-size:.8rem}
 #chLog .yo{margin:8px 0 0;align-self:flex-end;text-align:right;max-width:30ch;color:var(--grey);font-weight:700;font-size:1rem}
@@ -349,13 +372,9 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 .resp .ref{margin-top:6px;font-size:.8rem;color:var(--grey)}
 .resp .ref a{color:var(--grey);font-weight:500}
 .resp .ver{display:inline-block;margin-top:8px;font-size:.8rem;color:var(--grey);border:1px solid var(--soft);padding:3px 8px;font-weight:500}
-.chObras{display:flex;gap:10px;overflow-x:auto;padding-left:38px;scrollbar-width:none}
-.chObras::-webkit-scrollbar{display:none}
-.chObras button{flex:none;width:132px;padding:0;border:0;background:none;text-align:left;color:var(--ink)}
-.chObras button:hover{background:none;color:var(--ink)}
-.chObras img{display:block;width:132px;height:100px;object-fit:cover;background:var(--tile)}
-.chObras span{display:block;margin-top:6px;font-size:.8rem;font-weight:700;line-height:1.25}
-.chObras small{display:block;font-weight:500;color:var(--grey)}
+.chMapa{margin:0 0 0 38px;font-size:.9rem;font-weight:500;color:var(--grey);line-height:1.6}
+.chMapa button{padding:0;border:0;background:none;color:var(--ink);font-size:.9rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;text-align:left}
+.chMapa button:hover{background:none;color:var(--ink)}
 #chQs{display:flex;flex-direction:column;gap:8px}
 #chQs button{text-align:left;font-size:.95rem;padding:12px 14px;line-height:1.3}
 #chF{display:flex;gap:6px;padding:10px var(--s2) calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--soft);flex:0 0 auto}
@@ -365,19 +384,10 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
-<div id="portada" hidden>
-  <svg id="pRetrato" aria-hidden="true"></svg>
-  <div><h1 id="pNombre"></h1><p id="pVida"></p></div>
-  <p id="pSaludo" hidden></p>
-  <p id="pCuenta" role="status"></p>
-  <div class="pAcc"><button id="pVer" type="button">Ver sus obras</button><button id="pPreg" type="button">Preguntarle algo</button></div>
-  <small id="pNota"></small>
-</div>
 <header>
-  <button id="aNombre" type="button" hidden aria-label="Volver a la portada"></button>
+  <div id="aNombre" hidden><h1 id="aN"></h1><small id="aSub"></small></div>
   <div class="tabs" role="tablist"><button id="tExp" role="tab">Exposiciones</button><button id="tCat" role="tab">Catálogo</button></div>
   <button class="ib" id="lupa" aria-label="Buscar" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
-  <button class="ib" id="aPreg" hidden aria-label="Preguntarle algo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></button>
   <button class="ib" id="mas" aria-label="Más opciones" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></button>
 </header>
 <div id="buscar" hidden>
@@ -419,6 +429,17 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
   <div id="expos" hidden></div>
   <div id="pager"><button id="prev">← Anterior</button><button id="next">Siguiente →</button></div>
 </div>
+<!-- Modo artista: el personaje vive en la misma pantalla que sus obras. En móvil, franja abajo y la charla sube
+     como hoja sobre el mapa; en pantalla grande, columna a la izquierda -->
+<aside id="vinc" hidden>
+  <div id="vRet" aria-hidden="true"><svg id="pRetrato" class="trazo"></svg></div>
+  <div id="vHoja" role="region" aria-labelledby="chT">
+    <div class="vhd"><b id="chT"></b><button class="ib" id="chX" type="button" aria-label="Cerrar la charla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+    <div id="chLog" aria-live="polite"></div>
+  </div>
+  <div class="vfila"><button id="vAv" type="button"></button><p id="vDice" aria-live="polite"></p></div>
+  <form id="chF" autocomplete="off"><input id="chI" enterkeyhint="send" aria-label="Tu pregunta" placeholder="Pregúntame algo…"><button aria-label="Enviar">→</button></form>
+</aside>
 <div id="pick" hidden><span id="pickTxt"></span><button id="pickX">Cancelar</button></div>
 
 <div id="modal">
@@ -501,12 +522,6 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
   <div class="ovh"><h3 id="riHead">Exposición</h3><button id="riX" aria-label="Cerrar">✕</button></div>
   <div class="ovb" id="riBody"></div>
   <div class="ovf"><button id="riGo" class="go">Empezar</button></div>
-</div>
-
-<div id="charla" class="ov" hidden>
-  <div class="ovh"><span id="chAv"></span><h3 id="chT"></h3><button id="chX" aria-label="Cerrar">✕</button></div>
-  <div class="ovb"><div id="chLog" aria-live="polite"></div></div>
-  <form id="chF" autocomplete="off"><input id="chI" enterkeyhint="send" aria-label="Tu pregunta" placeholder="Pregúntale…"><button aria-label="Enviar">→</button></form>
 </div>
 
 <div id="toast" hidden></div>
@@ -809,7 +824,7 @@ async function load(page=1){
 function aviso(t){ $('msg').textContent = t || ''; $('bar').hidden = !t && $('undrift').hidden; }
 
 /* ---------- Vistas ---------- */
-const M = {x:0,y:0,vx:0,vy:0,W:1,tiles:[],raf:0,drag:null,moved:0,token:0};
+const M = {x:0,y:0,vx:0,vy:0,W:1,tiles:[],raf:0,drag:null,moved:0,token:0,anim:null,mov:false,vw:0,vh:0};
 const mod = (a,n) => ((a%n)+n)%n;
 function setDet(v){ DET = v; $('det').setAttribute('aria-pressed', String(v)); ls.set('det', v?'1':'0'); }
 function render(){
@@ -818,7 +833,7 @@ function render(){
   $('map').hidden = !mapMode; $('grid').hidden = mapMode; $('det').disabled = !mapMode;
   if(!ARTISTA){ ls.set('view', $('view').value); ls.set('order', $('order').value); }
   $('hint').textContent = DET ? 'Arrastra · toca un fragmento para ver la obra' : 'Arrastra para explorar';
-  if(mapMode) buildMap(); else buildCols();
+  return mapMode ? buildMap() : buildCols();
 }
 function measure(a){
   if(a.ar) return Promise.resolve(a.ar);
@@ -871,6 +886,7 @@ async function buildMap(){
   await prepare(true, mode==='color');
   if(token!==M.token) return;
   const vw = map.clientWidth, vh = map.clientHeight, target = vw < 700 ? 170 : 260;
+  M.vw = vw; M.vh = vh; M.anim = null;
   const cols0 = Math.max(2, Math.round(vw/target) + 1), cw = vw/(cols0-1);
   const ord = order(current), items = [], heights = [];
   const tileH = a => DET ? Math.round(cw*(0.7 + Math.random()*0.6)) : Math.max(40, Math.round(cw*a.ar));
@@ -921,9 +937,14 @@ function place(){
 function loop(){
   cancelAnimationFrame(M.raf);
   const step = () => {
-    if(!M.drag){
+    if(M.anim){   // viaje hacia una obra (desde la charla)
+      const k = Math.min(1, (performance.now() - M.anim.t0)/M.anim.d), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2)/2;
+      M.x = M.anim.x0 + M.anim.dx*e; M.y = M.anim.y0 + M.anim.dy*e;
+      if(k >= 1) M.anim = null;
+    } else if(!M.drag){
       M.x += M.vx; M.y += M.vy; M.vx *= 0.94; M.vy *= 0.94;
       if(Math.abs(M.vx)<0.05) M.vx = 0; if(Math.abs(M.vy)<0.05) M.vy = 0;
+      if(M.mov && !M.vx && !M.vy){ M.mov = false; if(ARTISTA) alParar(); }   // se ha parado después de arrastrar
     }
     place(); M.raf = requestAnimationFrame(step);
   };
@@ -932,7 +953,7 @@ function loop(){
 const mp = $('map');
 mp.addEventListener('pointerdown', e => {
   mp.setPointerCapture(e.pointerId); mp.classList.add('drag');
-  M.drag = {id:e.pointerId, lx:e.clientX, ly:e.clientY}; M.moved = 0; M.vx = M.vy = 0;
+  M.drag = {id:e.pointerId, lx:e.clientX, ly:e.clientY}; M.moved = 0; M.vx = M.vy = 0; M.anim = null;
   $('hint').style.display = 'none';
 });
 mp.addEventListener('pointermove', e => {
@@ -940,6 +961,7 @@ mp.addEventListener('pointermove', e => {
   const dx = e.clientX-M.drag.lx, dy = e.clientY-M.drag.ly;
   M.x += dx; M.y += dy; M.moved += Math.abs(dx)+Math.abs(dy);
   M.vx = dx*0.9; M.vy = dy*0.9; M.drag.lx = e.clientX; M.drag.ly = e.clientY;
+  if(M.moved >= 8) M.mov = true;
 });
 const endDrag = e => {
   if(!M.drag || M.drag.id!==e.pointerId) return;
@@ -950,8 +972,13 @@ const endDrag = e => {
   }
 };
 mp.addEventListener('pointerup', endDrag); mp.addEventListener('pointercancel', endDrag);
-mp.addEventListener('wheel', e => { e.preventDefault(); M.x -= e.deltaX; M.y -= e.deltaY; }, {passive:false});
-window.addEventListener('resize', () => { if(!document.body.classList.contains('home') && $('view').value==='map' && !$('modal').classList.contains('open')) buildMap(); });
+mp.addEventListener('wheel', e => { e.preventDefault(); M.anim = null; M.x -= e.deltaX; M.y -= e.deltaY; M.mov = true; }, {passive:false});
+// Solo se rehace si cambia el ancho o crece el alto (el teclado del móvil encoge el alto y no debe mover el mapa)
+window.addEventListener('resize', () => {
+  if(document.body.classList.contains('home') || $('view').value!=='map' || $('modal').classList.contains('open')) return;
+  const mp_ = $('map'); if(M.tiles.length && mp_.clientWidth === M.vw && mp_.clientHeight <= M.vh) return;
+  buildMap();
+});
 
 /* ---------- Visor ---------- */
 const V = {s:1,x:0,y:0,fit:1,iw:0,ih:0,pts:new Map(),lastTap:0,swap:false,tok:0,crop:null,tt:0,padB:0};
@@ -1081,7 +1108,6 @@ function abrirUnidad(a, crop){
 function cerrarUnidad(desdeAtras){
   if(!UNI) return;
   UNI.f.remove(); UNI = null;
-  if(ARTISTA && ARTISTA.volverCharla){ ARTISTA.volverCharla = false; abrirCharla(); }
   if(!document.body.classList.contains('home') && $('view').value === 'map' && M.tiles.length) loop();
   if(!desdeAtras) try{ history.back(); }catch(e){}
 }
@@ -1909,27 +1935,31 @@ async function callLLM(messages){
 }
 
 /* ---------- Modo artista (?artista=van-gogh) ----------
-   La puerta del imán: la portada presenta al personaje y «Ver sus obras» abre el mapa con todas sus obras
-   de dominio público en los museos abiertos, ordenadas por fecha. Encima, filtros por datos (tipo, en sala,
-   época) y selecciones curadas, que se leen de artistas/<id>.json. Cada obra se abre en la unidad. */
-const MUSEO_EN = {aic:'el Art Institute de Chicago', cma:'el Museo de Arte de Cleveland', met:'el Met de Nueva York'};
+   La puerta del imán: una sola pantalla con el mapa de todas sus obras de dominio público en los museos abiertos,
+   ordenadas por fecha (arrastrar en horizontal es recorrer su vida), y él en la misma pantalla. Lo que dice sale de
+   frases preparadas en artistas/<id>.json: el saludo, una por época (al parar de arrastrar) y una por selección
+   (al elegirla). Encima, filtros por datos (tipo, en sala, época) y selecciones curadas. Cada obra se abre en la unidad. */
+const MUSEO_CORTO = {aic:'Chicago', cma:'Cleveland', met:'Nueva York'};
 const TIPOS = [
   {id:'todas', t:'Todas', f:() => true},
   {id:'pintura', t:'Pinturas', f:a => a.tipo === 'pintura'},
   {id:'papel', t:'Dibujos y grabados', f:a => a.tipo === 'papel'},
   {id:'sala', t:'En sala ahora', f:a => !!a.sala}
 ];
-function dibujarRetrato(r){
-  const svg = $('pRetrato');
+// Pinta un retrato a línea en un <svg> y, si se puede, lo dibuja trazo a trazo
+function trazar(svg, r, lento){
+  if(!svg || !r) return;
   svg.setAttribute('viewBox', r.viewBox || '0 0 200 240');
   svg.innerHTML = (r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('');
   if(RM) return;   // sin animación, el trazo se ve entero
-  svg.querySelectorAll('path').forEach((p, i) => {
-    p.style.setProperty('--len', Math.ceil(p.getTotalLength()) + 2);
-    p.style.setProperty('--del', (i ? 0.25 + i*0.09 : 0) + 's');
-    p.style.setProperty('--dur', (i ? 1.1 : 2.2) + 's');
-  });
-  svg.classList.add('dibuja');
+  try{
+    svg.querySelectorAll('path').forEach((p, i) => {
+      p.style.setProperty('--len', Math.ceil(p.getTotalLength()) + 2);
+      p.style.setProperty('--del', (i ? (lento ? 0.25 : 0.1) + i*(lento ? 0.09 : 0.05) : 0) + 's');
+      p.style.setProperty('--dur', (i ? (lento ? 1.1 : 0.7) : (lento ? 2.2 : 1.2)) + 's');
+    });
+    svg.classList.add('dibuja');
+  }catch(e){ svg.querySelectorAll('path').forEach(p => p.style.removeProperty('--len')); }
 }
 async function cargarObrasArtista(){
   const x = ARTISTA.autor, d = {kind:'artist', value:x.buscar[0], alts:x.buscar};
@@ -1952,68 +1982,114 @@ async function cargarObrasArtista(){
 async function iniciarArtista(id){
   document.body.classList.add('artista');
   document.querySelector('.tabs').hidden = $('lupa').hidden = $('mas').hidden = $('pager').hidden = true;
-  $('aNombre').hidden = $('portada').hidden = $('aPreg').hidden = false;
+  $('aNombre').hidden = false;
   $('view').value = 'map'; $('order').value = 'date'; setDet(false);
   let cfg = null;
   try{ const r = await fetch(`artistas/${encodeURIComponent(id)}.json`, {cache:'no-cache'}); if(r.ok) cfg = await r.json(); }catch(e){}
   const autor = cfg && AUTORES.find(x => x.nombre === cfg.nombre);
-  if(!autor){ $('aPreg').hidden = true; $('pPreg').hidden = true; $('pNombre').textContent = 'No encontramos a este artista'; $('pCuenta').textContent = 'Revisa el enlace o el código QR.'; $('pVer').hidden = true; return; }
-  ARTISTA = {cfg, autor, obras:[], filtro:'todas', grupos:[], visto:false, msg:''};
-  document.title = $('pNombre').textContent = $('aNombre').textContent = cfg.nombre;
-  $('pVida').textContent = autor.vida;
-  // Si el personaje es una recreación, saluda él y se le habla de tú; el aviso lo dice desde la portada
+  if(!autor){ $('aN').textContent = 'No encontramos a este artista'; aviso('Revisa el enlace o el código QR.'); return; }
+  ARTISTA = {cfg, autor, obras:[], filtro:'todas', grupos:[], msg:'', dicho:'', epoca:-1};
   const corto = cfg.corto || cfg.nombre;
-  if(cfg.saludo){ $('pSaludo').textContent = cfg.saludo; $('pSaludo').hidden = false; $('pVer').textContent = 'Ver tus obras'; $('pPreg').textContent = 'Preguntarte algo'; }
-  $('aPreg').setAttribute('aria-label', `Preguntar a ${corto}`);
-  $('pNota').textContent = [cfg.aviso, cfg.retrato && cfg.retrato.nota].filter(Boolean).join(' · ');
+  document.title = $('aN').textContent = cfg.nombre;
+  // Si es una recreación, se dice bajo su nombre; el saludo es lo primero que dice
+  $('aSub').textContent = [cfg.saludo ? 'Recreación' : '', autor.vida].filter(Boolean).join(' · ');
+  if(cfg.aviso) $('aSub').title = cfg.aviso;
+  $('chT').textContent = `Charla con ${corto}`;
+  $('vAv').setAttribute('aria-label', `Hablar con ${corto}`);
+  $('vAv').innerHTML = avatarHTML(cfg.retrato);
+  $('vinc').hidden = false;
+  trazar($('vAv').firstElementChild, cfg.retrato, false);
+  trazar($('pRetrato'), cfg.retrato, true);
+  decir(cfg.saludo || '');
   // Sus mediaciones por obra (la recreación y sus citas) también alimentan la charla
   fetch('unidad/obras/breves.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null)
     .then(j => { if(j) ARTISTA.breves = Object.entries(j.obras || {}).filter(([, o]) => o.artista === id && Array.isArray(o.autor)); }).catch(() => {});
-  if(cfg.retrato) try{ dibujarRetrato(cfg.retrato); }catch(e){}
-  $('pCuenta').textContent = 'Buscando sus obras en los museos…';
-  $('pVer').disabled = $('pPreg').disabled = true;
+  aviso('Buscando sus obras en los museos…');
   await cargarObrasArtista();
-  const c = ARTISTA.cuenta, partes = ['aic','cma','met'].filter(k => c[k]).map(k => `${c[k]} en ${MUSEO_EN[k]}`);
-  if(!partes.length){ $('pCuenta').textContent = 'Los museos no han respondido. Prueba otra vez dentro de un momento.'; return; }
-  const n = ARTISTA.obras.length, lista = partes.length > 1 ? partes.slice(0, -1).join(', ') + ' y ' + partes[partes.length-1] : partes[0];
-  $('pCuenta').textContent = `${n} ${n === 1 ? 'obra' : 'obras'}: ${lista}.` + (ARTISTA.fallos ? ' Algún museo no ha respondido.' : '');
+  if(!ARTISTA.obras.length){ aviso('Los museos no han respondido. Prueba otra vez dentro de un momento.'); return; }
   pintarSelec();
-  $('pVer').disabled = $('pPreg').disabled = false;
+  $('selec').hidden = false;
+  return aplicarFiltro('todas');
 }
 // Filtros por datos y selecciones curadas; solo se ofrecen los que tienen alguna obra
 function pintarSelec(){
   const A = ARTISTA, cfg = A.cfg, hay = o => o.id === 'todas' || A.obras.some(o.f);
   A.grupos = [
     TIPOS.filter(hay),
-    (cfg.epocas || []).map((e, i) => ({id:'e' + i, t:e.titulo, f:a => a.year != null && (e.desde == null || a.year >= e.desde) && (e.hasta == null || a.year <= e.hasta)})).filter(hay),
-    (cfg.selecciones || []).map(s => ({id:'s-' + s.id, t:s.titulo, nota:s.nota, f:a => (s.obras || []).includes(a.key)})).filter(hay)
+    (cfg.epocas || []).map((e, i) => ({id:'e' + i, t:e.titulo, dice:e.dice, ep:i, f:a => enEpoca(a, e)})).filter(hay),
+    (cfg.selecciones || []).map(s => ({id:'s-' + s.id, t:s.titulo, dice:s.dice, f:a => (s.obras || []).includes(a.key)})).filter(hay)
   ].filter(g => g.length);
   $('selec').innerHTML = A.grupos.map(g => g.map(o => `<button type="button" data-f="${esc(o.id)}" aria-pressed="${o.id === A.filtro}">${esc(o.t)}</button>`).join('')).join('<i class="sep" aria-hidden="true"></i>');
 }
+const enEpoca = (a, e) => a.year != null && (e.desde == null || a.year >= e.desde) && (e.hasta == null || a.year <= e.hasta);
 function aplicarFiltro(id){
   const A = ARTISTA, o = A.grupos.flat().find(x => x.id === id) || A.grupos[0][0];
   A.filtro = o.id;
   current = A.obras.filter(o.f);
   $('selec').querySelectorAll('[data-f]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.f === o.id)));
-  const n = current.length;
-  A.msg = `${n} ${n === 1 ? 'obra' : 'obras'}` + (o.id === 'todas' ? '' : ` · ${o.t}`) + (o.nota ? ` · ${o.nota}` : '');
+  const n = current.length, c = A.cuenta, partes = ['aic','cma','met'].filter(k => c[k]).map(k => `${MUSEO_CORTO[k]} ${c[k]}`);
+  // Con todas, de qué museos vienen; con un filtro, cuántas quedan. Lo que significa el filtro lo dice él
+  A.msg = o.id === 'todas' ? `${n} ${n === 1 ? 'obra' : 'obras'}: ${partes.join(', ')}` + (A.fallos ? ' · algún museo no ha respondido' : '')
+    : `${n} ${n === 1 ? 'obra' : 'obras'} · ${o.t}`;
   aviso(A.msg);
-  render();
+  if(o.dice){ decir(o.dice); if(o.ep != null) A.epoca = o.ep; }
+  return render();
 }
-function verObras(){
-  $('portada').hidden = true; $('selec').hidden = false;
-  if(ARTISTA.visto && M.tiles.length){ aviso(ARTISTA.msg); loop(); return; }
-  ARTISTA.visto = true;
-  aplicarFiltro(ARTISTA.filtro);
+// Lo que dice, con un fundido breve; no repite lo que acaba de decir
+function decir(t){
+  const A = ARTISTA, el = $('vDice'); if(!A || !t || t === A.dicho) return;
+  A.dicho = t;
+  if(RM || !el.textContent){ el.textContent = t; return; }
+  el.classList.add('cambia');
+  setTimeout(() => { if(A.dicho === t){ el.textContent = t; el.classList.remove('cambia'); } }, 200);
 }
-$('pVer').onclick = verObras;
+// Al parar de arrastrar: la obra que queda en el centro de lo visible decide la época de la que habla
+let paradaT = 0;
+function alParar(){ clearTimeout(paradaT); paradaT = setTimeout(epocaVisible, 350); }
+function zonaVisible(){
+  const mp = $('map'), r = mp.getBoundingClientRect(), h = $('vHoja');
+  let abajo = r.top + mp.clientHeight;
+  if($('vinc').classList.contains('abierta') && getComputedStyle(h).position === 'absolute') abajo = Math.min(abajo, h.getBoundingClientRect().top);
+  return {w:mp.clientWidth, h:Math.max(80, abajo - r.top)};
+}
+function tileEn(px, py){
+  return M.tiles.find(t => { const x = mod(t.bx + M.x + t.w, M.W) - t.w, y = mod(t.by + M.y + t.h, t.H) - t.h; return px >= x && px < x + t.w && py >= y && py < y + t.h; });
+}
+function epocaVisible(){
+  const A = ARTISTA; if(!A || UNI || !M.tiles.length) return;
+  const z = zonaVisible(), t = tileEn(z.w/2, z.h/2), a = t && current[t.i]; if(!a) return;
+  const i = (A.cfg.epocas || []).findIndex(e => enEpoca(a, e));
+  if(i < 0 || i === A.epoca) return;
+  A.epoca = i; decir(A.cfg.epocas[i].dice);
+}
+// Lleva el mapa (que no tiene bordes) hasta una obra por el camino más corto, en la parte visible
+function irATile(T){
+  const z = zonaVisible();
+  const sx = mod(T.bx + M.x + T.w, M.W) - T.w, sy = mod(T.by + M.y + T.h, T.H) - T.h;
+  let dx = (z.w - T.w)/2 - sx, dy = Math.max(8, (z.h - T.h)/2) - sy;
+  dx -= Math.round(dx/M.W)*M.W; dy -= Math.round(dy/T.H)*T.H;
+  M.vx = M.vy = 0;
+  if(RM){ M.x += dx; M.y += dy; return; }
+  M.anim = {x0:M.x, y0:M.y, dx, dy, t0:performance.now(), d:700};
+}
+// Las obras que nombra en la charla se marcan en el mapa y el mapa va a la primera
+async function marcarObras(keys){
+  if(!keys.length) return;
+  if(!keys.some(k => current.some(a => a.key === k))) await aplicarFiltro('todas');
+  document.querySelectorAll('.tile.marca').forEach(el => el.classList.remove('marca'));
+  const ts = M.tiles.filter(t => keys.includes(current[t.i].key));
+  ts.forEach(t => t.el.classList.add('marca'));
+  const z = zonaVisible(), primero = ts.filter(t => current[t.i].key === (keys.find(k => ts.some(u => current[u.i].key === k))));
+  const dist = t => { const x = mod(t.bx + M.x + t.w, M.W) - t.w, y = mod(t.by + M.y + t.h, t.H) - t.h; return Math.hypot(x + t.w/2 - z.w/2, y + t.h/2 - z.h/2); };
+  if(primero.length) irATile(primero.reduce((a, b) => dist(b) < dist(a) ? b : a));
+}
 
 /* ---------- Charla con el artista: su biografía viva ----------
    Él es una recreación: habla en primera persona y de tú, libre en la forma pero solo con los hechos del dossier,
    de sus mediaciones por obra y del catálogo, y nada que no pudiera saber; lo posterior lo cuenta la guía.
    Sus palabras literales solo por identificador (artistas/<id>.json y unidad/obras/breves.json, «citas»): la página
-   pinta el texto verificado con su fuente y enlaza cada obra a su unidad. Responde un modelo a través de Puter. */
-const avatarHTML = r => r ? `<svg class="av" viewBox="${esc(r.viewBox || '0 0 200 240')}" aria-hidden="true">${(r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('')}</svg>` : '';
+   pinta el texto verificado con su fuente, y las obras que nombra se marcan en el mapa. Responde un modelo a través de Puter. */
+const avatarHTML = r => r ? `<svg class="av trazo" viewBox="${esc(r.viewBox || '0 0 200 240')}" aria-hidden="true">${(r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('')}</svg>` : '';
 let CH = null;
 const citasArtista = () => [...(ARTISTA.cfg.citas || []),
   ...(ARTISTA.breves || []).flatMap(([k, o]) => Object.entries(o.citas || {}).map(([c, x]) => ({id:`${k}:${c}`, t:x.t, ref:x.ref, url:x.url, obra:k})))];
@@ -2022,16 +2098,14 @@ function abrirCharla(){
   const A = ARTISTA; if(!A) return;
   loadPuter().catch(() => {});   // cargado antes de enviar: el inicio de sesión de Puter tiene que abrirse dentro del gesto
   const corto = A.cfg.corto || A.cfg.nombre;
-  $('chT').textContent = `Pregúntale a ${corto}`;
-  $('chAv').innerHTML = avatarHTML(A.cfg.retrato);
   if(!CH){
     CH = {turnos:[], busy:false};
-    $('chLog').innerHTML = `<p class="intro">${esc(corto)} es una recreación: te habla en primera persona a partir de sus cartas y de los textos de los museos. Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. Responde un modelo de IA a través de Puter: la primera vez te pedirá entrar con una cuenta gratuita.</p>`;
+    $('chLog').innerHTML = `<p class="intro">${esc(corto)} es una recreación: te habla en primera persona a partir de sus cartas y de los textos de los museos. Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. Responde una IA a través de Puter: la primera vez te pedirá entrar con una cuenta gratuita.</p>`;
     pintarChQs();
   }
-  $('charla').hidden = false;
+  $('vinc').classList.add('abierta');
 }
-function cerrarCharla(){ $('charla').hidden = true; }
+function cerrarCharla(){ $('vinc').classList.remove('abierta'); }
 function pintarChQs(){
   $('chQs')?.remove();
   const qs = (ARTISTA.cfg.preguntas || []).filter(q => !CH.turnos.some(t => t.q === q)).slice(0, 3);
@@ -2085,11 +2159,13 @@ function pintarRespuestaArtista(partes, obras){
     } else d.innerHTML = avatarHTML(A.cfg.guia && A.cfg.guia.retrato) + `<div><p>${esc(p.t)}</p>${p.ia ? '<span class="ver">Conocimiento general · verifícalo</span>' : ''}</div>`;
     log.appendChild(d);
   });
+  // Las obras que nombra: marcadas en el mapa, y aquí sus títulos para abrirlas
   const sel = (Array.isArray(obras) ? obras : []).filter((k, i, s) => s.indexOf(k) === i).map(k => A.obras.find(a => a.key === k)).filter(Boolean).slice(0, 4);
   if(sel.length){
-    const box = document.createElement('div'); box.className = 'chObras';
-    box.innerHTML = sel.map(a => `<button type="button" data-obra="${esc(a.key)}"><img src="${esc(a.thumb)}" alt="" loading="lazy"><span>${esc(a.title)}<small>${esc(a.date || '')}</small></span></button>`).join('');
+    const box = document.createElement('p'); box.className = 'chMapa';
+    box.innerHTML = 'Marcadas en el mapa: ' + sel.map(a => `<button type="button" data-obra="${esc(a.key)}">${esc(a.title)}</button>${a.date ? ' (' + esc(a.date) + ')' : ''}`).join(' · ');
     log.appendChild(box);
+    marcarObras(sel.map(a => a.key));
   }
   const s = document.createElement('p'); s.className = 'src'; s.textContent = 'Respuesta generada con IA (Puter)'; log.appendChild(s);
 }
@@ -2098,7 +2174,7 @@ function enviarCharla(q){
   let listo;   // si hace falta entrar en Puter, la ventana se abre ahora, dentro del gesto
   try{ listo = window.puter ? (puter.auth.isSignedIn() ? null : puter.auth.signIn()) : loadPuter().then(() => puter.auth.isSignedIn() ? null : puter.auth.signIn()); }
   catch(e){ listo = Promise.reject(e); }
-  CH.busy = true; $('chQs')?.remove();
+  abrirCharla(); CH.busy = true; $('chQs')?.remove();
   const log = $('chLog'), y = document.createElement('p'); y.className = 'yo'; y.textContent = q; log.appendChild(y);
   const dots = document.createElement('div'); dots.className = 'dots'; dots.innerHTML = '<i></i><i></i><i></i>'; log.appendChild(dots);
   if(y.scrollIntoView) y.scrollIntoView({block:'start', behavior:RM ? 'auto' : 'smooth'});
@@ -2109,6 +2185,7 @@ function enviarCharla(q){
     if(!partes.length) throw {code:'vacia'};
     dots.remove();
     pintarRespuestaArtista(partes, j.obras);
+    if(y.scrollIntoView) y.scrollIntoView({block:'start', behavior:RM ? 'auto' : 'smooth'});   // la pregunta arriba y la respuesta debajo
     CH.turnos.push({q, a:JSON.stringify({partes, obras:j.obras || []})});
   }).catch(e => {
     dots.remove();
@@ -2120,17 +2197,13 @@ function enviarCharla(q){
 $('chLog').onclick = e => {
   const q = e.target.closest('#chQs button'); if(q){ enviarCharla(q.textContent); return; }
   const o = e.target.closest('[data-obra]'); if(!o) return;
-  const a = ARTISTA.obras.find(x => x.key === o.dataset.obra); if(!a) return;
-  ARTISTA.volverCharla = true; cerrarCharla();
-  if(!$('portada').hidden) verObras();   // debajo queda el mapa
-  openArt(a);
+  const a = ARTISTA.obras.find(x => x.key === o.dataset.obra); if(a) openArt(a);   // al cerrar la obra, la charla sigue donde estaba
 };
 $('chF').onsubmit = e => { e.preventDefault(); const q = $('chI').value.trim(); if(!q) return; $('chI').value = ''; $('chI').blur(); enviarCharla(q); };
 $('chX').onclick = cerrarCharla;
-$('pPreg').onclick = abrirCharla;
-$('aPreg').onclick = abrirCharla;
+$('vAv').onclick = abrirCharla;
+$('chI').addEventListener('focus', abrirCharla);
 $('selec').onclick = e => { const b = e.target.closest('[data-f]'); if(b && b.dataset.f !== ARTISTA.filtro) aplicarFiltro(b.dataset.f); };
-$('aNombre').onclick = () => { cancelAnimationFrame(M.raf); $('selec').hidden = $('bar').hidden = true; $('portada').hidden = false; };
 
 /* ---------- Arranque ---------- */
 const syncOpt = () => { $('optText').hidden = !['aic','all'].includes($('src').value); $('optText').setAttribute('aria-pressed', String($('onlyText').checked)); };
@@ -2182,7 +2255,7 @@ $('toggle').onclick = () => { setInfo(!$('info').classList.contains('hidden')); 
 document.addEventListener('keydown', e => {
   if(e.key!=='Escape') return;
   if(UNI){ cerrarUnidad(); return; }
-  if(!$('charla').hidden){ cerrarCharla(); return; }
+  if($('vinc').classList.contains('abierta')){ cerrarCharla(); return; }
   if(!$('menuS').hidden){ menu(false); return; }
   if(!$('post').hidden){ $('post').hidden = true; return; }
   if(!$('cmp').hidden){ cmpClose(); return; }

@@ -2,7 +2,7 @@
  "id": "van-gogh",
  "nombre": "Vincent van Gogh",
  "corto": "Vincent",
- "saludo": "¡Hola! ¿Te enseño mis obras o prefieres preguntarme algo?",
+ "saludo": "¡Hola! Aquí tienes mis obras, de la primera a la última. Arrastra para recorrerlas o pregúntame lo que quieras.",
  "aviso": "Recreación a partir de sus cartas y de los textos de los museos",
  "estado": "Retratos provisionales. Épocas por año de la ficha del museo. Selecciones de prueba, pendientes de curar. Citas: traducción propia del original francés, comprobado en la edición del Van Gogh Museum.",
  "retrato": {
@@ -51,27 +51,32 @@
  "epocas": [
   {
    "titulo": "Hasta 1885",
-   "hasta": 1885
+   "hasta": 1885,
+   "dice": "Decidí ser artista en 1880, con veintisiete años. Mis años holandeses: La Haya, Drenthe y Nuenen, en casa de mis padres."
   },
   {
    "titulo": "1886–1887",
    "desde": 1886,
-   "hasta": 1887
+   "hasta": 1887,
+   "dice": "En 1886 me fui a París con Theo. Allí conocí a los impresionistas, aclaré la paleta y probé los puntos de Seurat."
   },
   {
    "titulo": "1888",
    "desde": 1888,
-   "hasta": 1888
+   "hasta": 1888,
+   "dice": "En febrero de 1888 me fui a Arlés, buscando la luz del sur. Alquilé la Casa Amarilla y soñaba con un taller de pintores."
   },
   {
    "titulo": "1889",
    "desde": 1889,
-   "hasta": 1889
+   "hasta": 1889,
+   "dice": "En mayo de 1889 entré por mi voluntad en el hospital de Saint-Rémy. Seguí pintando: primero en mi cuarto, luego en el campo."
   },
   {
    "titulo": "1890",
    "desde": 1890,
-   "hasta": 1890
+   "hasta": 1890,
+   "dice": "En mayo de 1890 me instalé en Auvers, cerca del doctor Gachet. Allí hice mi único aguafuerte: su retrato."
   }
  ],
  "selecciones": [
@@ -79,6 +84,7 @@
    "id": "retratos",
    "titulo": "Retratos",
    "nota": "Él mismo y gente de su entorno",
+   "dice": "Me pinté a mí mismo una y otra vez, y a la gente que tenía cerca: Augustine Roulin, Adeline, el doctor Gachet.",
    "obras": [
     "aic-80607",
     "aic-27949",
@@ -91,6 +97,7 @@
    "id": "arboles",
    "titulo": "Árboles",
    "nota": "De 1884 a 1889",
+   "dice": "Árboles entre 1884 y 1889: de una avenida de abedules desmochados a los plátanos y los álamos de Saint-Rémy.",
    "obras": [
     "aic-31640",
     "aic-202382",
@@ -104,6 +111,7 @@
    "id": "campo",
    "titulo": "Campo y trabajo",
    "nota": "Gente trabajando la tierra y los caminos",
+   "dice": "El trabajo del campo y la gente sencilla fueron temas centrales para mí: una mujer cavando, obreros arreglando aceras.",
    "obras": [
     "cma-135286",
     "aic-28862",
