@@ -2,6 +2,8 @@
  "id": "van-gogh",
  "nombre": "Vincent van Gogh",
  "corto": "Vincent",
+ "saludo": "¡Hola! ¿Te enseño mis obras o prefieres preguntarme algo?",
+ "aviso": "Recreación a partir de sus cartas y de los textos de los museos",
  "estado": "Retratos provisionales. Épocas por año de la ficha del museo. Selecciones de prueba, pendientes de curar. Citas: traducción propia del original francés, comprobado en la edición del Van Gogh Museum.",
  "retrato": {
   "nota": "Retrato provisional",

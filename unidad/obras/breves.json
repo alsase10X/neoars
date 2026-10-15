@@ -1,81 +1,231 @@
 {
- "nota": "Mediación breve de obras del catálogo sin unidad preparada. Borrador escrito a partir del texto de cada museo (que lo publica en inglés), sin validar: no añade nada que no esté en ese texto. La última cápsula de cada obra es una pausa para mirar.",
+ "nota": "Mediación breve de obras del catálogo sin unidad preparada, escrita a partir del texto de cada museo (que lo publica en inglés). Borrador sin validar. «relato» es la guía, en tercera persona: no añade nada que no esté en ese texto. «autor» es una recreación del artista en primera persona: libre en la forma, pero solo con hechos de ese texto y nada que él no pudiera saber; lo posterior queda para la guía. Sus palabras literales van en «citas», con su fuente. La última cápsula de cada versión es una pausa para mirar.",
  "obras": {
-  "aic-80607": {"fuente": "Art Institute of Chicago", "relato": [
-   {"t": "En 1886 Van Gogh se mudó a París para vivir cerca de su hermano Theo, marchante de arte. En los dos años que pasó allí se retrató al menos veinticuatro veces."},
-   {"t": "Este autorretrato es pequeño y está pintado sobre cartón preparado, con pinceladas cortas y apretadas. Es su respuesta al puntillismo de Seurat, pero Van Gogh no lo usa como método científico, sino para expresar."},
-   {"k": "pregunta", "t": "Busca sus ojos verdes entre tanto color: el museo destaca la intensidad de su mirada."}
-  ]},
-  "aic-28862": {"fuente": "Art Institute of Chicago", "relato": [
-   {"t": "Tras una etapa de soledad y pobreza en La Haya, a finales de 1883 Van Gogh volvió a casa de sus padres, en Nuenen, en los Países Bajos, y se dedicó por completo a pintar."},
-   {"t": "A partir de sus paseos por el pueblo pintó una serie de casas de campesinos, y le escribió a su hermano lo que sentía por esas casas humildes y por quienes vivían en ellas."},
-   {"k": "pregunta", "t": "La mujer, la casa y el campo comparten los mismos tonos de tierra y la misma pincelada. ¿Dónde termina ella y empieza el paisaje?"}
-  ]},
-  "aic-79349": {"fuente": "Art Institute of Chicago", "relato": [
-   {"t": "Lo pintó en el hospital de Saint-Paul, en Saint-Rémy, cerca de Arlés. Allí copiaba obras de artistas que admiraba: así podía centrarse en interpretar, no en componer."},
-   {"t": "Este copia un grabado en madera de Honoré Daumier, una parodia de las cuatro edades del hombre que, con humor, advierte de los peligros del alcohol."},
-   {"k": "pregunta", "t": "El museo sugiere que el tono verdoso podría aludir a la absenta. ¿Dónde lo ves con más fuerza?"}
-  ]},
-  "aic-109314": {"fuente": "Art Institute of Chicago", "relato": [
-   {"t": "Es el Sena junto al puente de Clichy, cerca de Asnières, al norte de París. Van Gogh pintó allí varias veces con su amigo Paul Signac."},
-   {"t": "De Signac y Seurat tomó la idea de poner el color en pinceladas separadas para que la luz brille más."},
-   {"k": "pregunta", "t": "Busca el agua: pequeñas pinceladas de color puro hacen de reflejos."}
-  ]},
-  "aic-27949": {"fuente": "Art Institute of Chicago", "relato": [
-   {"t": "Augustine Roulin mece una cuna tirando de una cuerda. Para Van Gogh, ella, su marido Joseph y sus hijos eran un ideal de amor y de vida familiar."},
-   {"t": "«Berceuse» quiere decir canción de cuna. Pintó cinco versiones. Esta la terminó en enero de 1889, poco después de salir del hospital tras la difícil marcha de Gauguin."},
-   {"t": "La sentó en la silla de Gauguin. En mayo de 1889 le regaló este lienzo como gesto de reconciliación, y le pidió que lo colgara entre dos cuadros de girasoles."},
-   {"k": "pregunta", "t": "Busca la cuerda en sus manos."}
-  ]},
-  "aic-27954": {"fuente": "Art Institute of Chicago", "relato": [
-   {"t": "Invierno de 1887, un año después de llegar a París. Es la colina de Montmartre, a un paseo del piso de la calle Lepic que compartía con Theo."},
-   {"t": "Montmartre conservaba restos de su pasado rural: canteras abandonadas, huertos y tres molinos. El de Blute-Fin ya no molía, pero atraía a visitantes con un mirador sobre París."},
-   {"k": "pregunta", "t": "Busca el mirador: desde allí se veía la ciudad entera."}
-  ]},
-  "aic-64957": {"fuente": "Art Institute of Chicago", "relato": [
-   {"t": "Otoño de 1887, en París. Es uno de varios bodegones de fruta de temporada con los que Van Gogh simplificó su paleta y empezó a pintar con colores más vivos y más materia."},
-   {"t": "Ensayaba parejas de complementarios, amarillo y violeta, azul y naranja, rojo y verde, para que cada color intensificara al otro."},
-   {"t": "Probablemente es uno de los «bodegones violentos» que describió su amigo Émile Bernard, y que Van Gogh expuso en un restaurante a finales de 1887."},
-   {"k": "pregunta", "t": "Mira el mantel: el museo dice que sus pinceladas crean un campo de fuerza alrededor de la fruta."}
-  ]},
-  "aic-202382": {"fuente": "Art Institute of Chicago", "relato": [
-   {"t": "Es un dibujo melancólico, probablemente inspirado en el poema «Tristement», de François Coppée: una viuda camina de luto por una larga avenida de árboles medio desnudos."},
-   {"t": "La tinta ferrogálica que usó ha pasado con los años del negro al marrón. Las líneas se han corrido y el papel ha tomado un tono dorado."},
-   {"k": "pregunta", "t": "Acércate al rayado: las líneas tan juntas se funden. ¿Cambia eso el ánimo del paisaje?"}
-  ]},
-  "aic-88393": {"fuente": "Cleveland Museum of Art, texto sobre otra estampa del mismo grabado", "relato": [
-   {"t": "Es el único aguafuerte que hizo Van Gogh: el retrato del doctor Paul Gachet, de 1890, dos meses antes de su muerte."},
-   {"t": "Gachet, grabador aficionado, le dio la plancha de cobre y le ayudó a estamparla en una pequeña prensa. El Museo de Arte de Cleveland guarda otra estampa del mismo grabado."},
-   {"k": "pregunta", "t": "Busca la pipa."}
-  ]},
-  "cma-135299": {"fuente": "Cleveland Museum of Art", "relato": [
-   {"t": "En mayo de 1890 Van Gogh llegó a Auvers, al norte de París, y alquiló una habitación en la posada de Arthur Ravoux. Esta es su hija Adeline, de trece años."},
-   {"t": "La pintó en los últimos meses de su vida. Quería que sus retratos transmitieran la emoción de la vida moderna con el color, no con un parecido fotográfico."},
-   {"t": "A Adeline no le gustó: decía que no se parecía a ella. Según el museo, una foto suya de mayor muestra un parecido asombroso."},
-   {"k": "pregunta", "t": "¿Qué colores ha elegido para hablar de ella?"}
-  ]},
-  "cma-125249": {"fuente": "Cleveland Museum of Art", "relato": [
-   {"t": "Lo pintó en otoño, mientras vivía en el hospital psiquiátrico cerca de Saint-Rémy. Su médico le dejaba pintar al aire libre."},
-   {"t": "En una carta a Theo describió la escena: obreros arreglando el pavimento bajo unos plátanos enormes, montones de arena y piedra, hojas que amarillean y figuras pequeñas."},
-   {"t": "Pintó una repetición, que está en la Phillips Collection de Washington. Según los estudios de conservación, la de Cleveland es la primera."},
-   {"k": "pregunta", "t": "Busca los montones de arena y piedra que nombraba en la carta."}
-  ]},
-  "cma-135310": {"fuente": "Cleveland Museum of Art", "relato": [
-   {"t": "Otro paisaje de otoño de Saint-Rémy. Al principio solo podía pintar en su habitación del hospital, pero pronto volvió a trabajar al aire libre."},
-   {"t": "En su etapa de Saint-Rémy hizo unos ciento cincuenta lienzos y un centenar de dibujos."},
-   {"k": "pregunta", "t": "Mira cómo se tuercen los árboles contra un cielo que oscurece."}
-  ]},
-  "cma-135286": {"fuente": "Cleveland Museum of Art", "relato": [
-   {"t": "En septiembre de 1883 Van Gogh dejó La Haya en busca de campo abierto y se fue a Drenthe, en el noreste de los Países Bajos."},
-   {"t": "Le pareció un paisaje bello y sereno. Con verdes acerados y azules fríos pintó un brezal que parece perderse a lo lejos, bajo la luz lila de la tarde."},
-   {"t": "Hizo esta acuarela poco más de un año después de empezar a trabajar como artista."},
-   {"k": "pregunta", "t": "Busca la carretilla."}
-  ]},
-  "cma-126085": {"fuente": "Cleveland Museum of Art", "relato": [
-   {"t": "Es el único aguafuerte que hizo Van Gogh, dos meses antes de morir. Fue a Auvers a tratarse con el doctor Paul Gachet por consejo del pintor Camille Pissarro."},
-   {"t": "Gachet, grabador aficionado, le dio una plancha de cobre barnizada y le ayudó a estamparla en una pequeña prensa. Lo retrató sentado en su jardín, fumando en pipa."},
-   {"t": "Su hermano Theo dijo que era un verdadero aguafuerte de pintor: sin refinamiento, un dibujo hecho sobre metal."},
-   {"k": "pregunta", "t": "Busca la pipa."}
-  ]}
+  "aic-80607": {
+   "fuente": "Art Institute of Chicago", "artista": "van-gogh",
+   "relato": [
+    {"t": "En 1886 Van Gogh se mudó a París para vivir cerca de su hermano Theo, marchante de arte. En los dos años que pasó allí se retrató al menos veinticuatro veces."},
+    {"t": "Este autorretrato es pequeño y está pintado sobre cartón preparado, con pinceladas cortas y apretadas. Es su respuesta al puntillismo de Seurat, pero Van Gogh no lo usa como método científico, sino para expresar."},
+    {"k": "pregunta", "t": "Busca sus ojos verdes entre tanto color: el museo destaca la intensidad de su mirada."}
+   ],
+   "autor": [
+    {"t": "En 1886 dejé Holanda y me fui a París, con mi hermano Theo, que era marchante de cuadros. Allí conocí el impresionismo y me pinté a mí mismo una y otra vez."},
+    {"t": "Este es pequeño, y no está en lienzo: lo pinté sobre cartón preparado. Toques cortos, apretados, uno junto a otro."},
+    {"t": "Lo de los puntos venía de Seurat, que los usaba con la frialdad de la ciencia. Yo los quería para decir lo que siento."},
+    {"t": "A Theo se lo escribí una vez:", "c": "ojos"},
+    {"k": "pregunta", "t": "Ahora búscame los ojos entre tanto verde, azul y naranja. ¿Me aguantas la mirada?"}
+   ],
+   "citas": {
+    "ojos": {"t": "Prefiero pintar los ojos de la gente antes que catedrales. Por solemnes e imponentes que sean, me interesa más un alma humana, aunque sea la de una pobre mujer de la calle.", "voz": "autor", "ref": "Carta a Theo, citada por el Art Institute of Chicago. Traducción propia del inglés", "url": "https://www.artic.edu/artworks/80607"}
+   }
+  },
+  "aic-28862": {
+   "fuente": "Art Institute of Chicago", "artista": "van-gogh",
+   "relato": [
+    {"t": "Tras una etapa de soledad y pobreza en La Haya, a finales de 1883 Van Gogh volvió a casa de sus padres, en Nuenen, en los Países Bajos, y se dedicó por completo a pintar."},
+    {"t": "A partir de sus paseos por el pueblo pintó una serie de casas de campesinos, y le escribió a su hermano lo que sentía por esas casas humildes y por quienes vivían en ellas."},
+    {"k": "pregunta", "t": "La mujer, la casa y el campo comparten los mismos tonos de tierra y la misma pincelada. ¿Dónde termina ella y empieza el paisaje?"}
+   ],
+   "autor": [
+    {"t": "En La Haya lo pasé mal: solo y sin dinero. A finales de 1883 volví a casa de mis padres, en Nuenen, y me puse a pintar. Nada más que a pintar."},
+    {"t": "Allí volví a los marrones, los verdes y los grises. Y paseando por el pueblo fui pintando sus casas, una detrás de otra."},
+    {"t": "A Theo le conté lo que sentía por ellas:", "c": "nidos"},
+    {"t": "A ella, a la casa y a la tierra les di los mismos colores y la misma pincelada. Ella es de este sitio, y el sitio es de ella."},
+    {"k": "pregunta", "t": "Sigue la pincelada desde su espalda hasta el tejado. ¿Dónde acaba ella y empieza la tierra?"}
+   ],
+   "citas": {
+    "nidos": {"t": "Me conmueven las nidadas y los nidos, sobre todo esos nidos humanos: las casitas del brezal y quienes viven en ellas.", "voz": "autor", "ref": "Carta a Theo, citada por el Art Institute of Chicago. Traducción propia del inglés", "url": "https://www.artic.edu/artworks/28862"}
+   }
+  },
+  "aic-79349": {
+   "fuente": "Art Institute of Chicago", "artista": "van-gogh",
+   "relato": [
+    {"t": "Lo pintó en el hospital de Saint-Paul, en Saint-Rémy, cerca de Arlés. Allí copiaba obras de artistas que admiraba: así podía centrarse en interpretar, no en componer."},
+    {"t": "Este copia un grabado en madera de Honoré Daumier, una parodia de las cuatro edades del hombre que, con humor, advierte de los peligros del alcohol."},
+    {"k": "pregunta", "t": "El museo sugiere que el tono verdoso podría aludir a la absenta. ¿Dónde lo ves con más fuerza?"}
+   ],
+   "autor": [
+    {"t": "En el hospital de Saint-Paul, en Saint-Rémy, copiaba a pintores que admiraba. Así no tenía que inventar la composición y me quedaba toda la cabeza para interpretar."},
+    {"t": "Este sale de un grabado en madera de Daumier, Los bebedores: una parodia de las cuatro edades del hombre."},
+    {"t": "Daumier exagera las figuras y te hace reír, pero lo que cuenta es triste: lo que el alcohol hace con la gente."},
+    {"k": "pregunta", "t": "Cuenta las edades: un niño, un joven y dos viejos. Mira con qué seriedad beben, entre tanto verde. ¿Qué sed quieren quitarse?"}
+   ]
+  },
+  "aic-109314": {
+   "fuente": "Art Institute of Chicago", "artista": "van-gogh",
+   "relato": [
+    {"t": "Es el Sena junto al puente de Clichy, cerca de Asnières, al norte de París. Van Gogh pintó allí varias veces con su amigo Paul Signac."},
+    {"t": "De Signac y Seurat tomó la idea de poner el color en pinceladas separadas para que la luz brille más."},
+    {"k": "pregunta", "t": "Busca el agua: pequeñas pinceladas de color puro hacen de reflejos."}
+   ],
+   "autor": [
+    {"t": "Esto es el Sena, junto al puente de Clichy, en Asnières, al norte de París. Allí salí a pintar varias veces con mi amigo Paul Signac."},
+    {"t": "Signac y Seurat ponían el color en toques sueltos, con teorías científicas, para sacarle toda la luz. Aquí lo probé yo: pinceladas pequeñas de color puro."},
+    {"k": "pregunta", "t": "Busca al pescador en su barca y mira el agua a su alrededor: esos toques de color son la luz rebotando."}
+   ]
+  },
+  "aic-27949": {
+   "fuente": "Art Institute of Chicago", "artista": "van-gogh",
+   "relato": [
+    {"t": "Augustine Roulin mece una cuna tirando de una cuerda. Para Van Gogh, ella, su marido Joseph y sus hijos eran un ideal de amor y de vida familiar."},
+    {"t": "«Berceuse» quiere decir canción de cuna. Pintó cinco versiones. Esta la terminó en enero de 1889, poco después de salir del hospital tras la difícil marcha de Gauguin."},
+    {"t": "La sentó en la silla de Gauguin. En mayo de 1889 le regaló este lienzo como gesto de reconciliación, y le pidió que lo colgara entre dos cuadros de girasoles."},
+    {"k": "pregunta", "t": "Busca la cuerda en sus manos."}
+   ],
+   "autor": [
+    {"t": "Es Augustine Roulin. Ella, su marido Joseph y sus hijos eran para mí lo que tiene que ser una familia: cariño y vida en casa."},
+    {"t": "Mece la cuna tirando de una cuerda. Por eso la llamo La berceuse, la que canta la nana. Y sus colores son eso mismo:", "c": "nana"},
+    {"t": "La terminé en enero de 1889, al poco de salir del hospital, después de que Gauguin se marchara. Fue una marcha difícil. A ella la senté en su silla: quería llenar ese hueco."},
+    {"t": "Hice cinco versiones. En mayo le regalé esta a Gauguin, para hacer las paces, y le pedí que la colgara entre dos cuadros de girasoles."},
+    {"k": "pregunta", "t": "Busca la cuerda en sus manos. Desde ahí se mece todo."}
+   ],
+   "citas": {
+    "nana": {"t": "una nana en colores", "voz": "autor", "ref": "Van Gogh sobre los colores de este cuadro, citado por el Art Institute of Chicago. Traducción propia del inglés", "url": "https://www.artic.edu/artworks/27949"}
+   }
+  },
+  "aic-27954": {
+   "fuente": "Art Institute of Chicago", "artista": "van-gogh",
+   "relato": [
+    {"t": "Invierno de 1887, un año después de llegar a París. Es la colina de Montmartre, a un paseo del piso de la calle Lepic que compartía con Theo."},
+    {"t": "Montmartre conservaba restos de su pasado rural: canteras abandonadas, huertos y tres molinos. El de Blute-Fin ya no molía, pero atraía a visitantes con un mirador sobre París."},
+    {"k": "pregunta", "t": "Busca el mirador: desde allí se veía la ciudad entera."}
+   ],
+   "autor": [
+    {"t": "Invierno de 1887. Llevaba un año en París, viviendo con Theo en la calle Lepic. Desde casa, una cuesta corta y estás en lo alto de Montmartre."},
+    {"t": "Montmartre aún tenía algo de pueblo: canteras abandonadas, huertos y tres molinos en pie. Este, el de Blute-Fin, ya no molía."},
+    {"t": "Al lado habían puesto una torre, y la gente subía a ver París entero desde arriba."},
+    {"k": "pregunta", "t": "Busca el mirador junto al molino."}
+   ]
+  },
+  "aic-64957": {
+   "fuente": "Art Institute of Chicago", "artista": "van-gogh",
+   "relato": [
+    {"t": "Otoño de 1887, en París. Es uno de varios bodegones de fruta de temporada con los que Van Gogh simplificó su paleta y empezó a pintar con colores más vivos y más materia."},
+    {"t": "Ensayaba parejas de complementarios, amarillo y violeta, azul y naranja, rojo y verde, para que cada color intensificara al otro."},
+    {"t": "Probablemente es uno de los «bodegones violentos» que describió su amigo Émile Bernard, y que Van Gogh expuso en un restaurante a finales de 1887."},
+    {"k": "pregunta", "t": "Mira el mantel: el museo dice que sus pinceladas crean un campo de fuerza alrededor de la fruta."}
+   ],
+   "autor": [
+    {"t": "Otoño de 1887: fruta de temporada y una tanda de cuadros con ella. Aquí simplifiqué la paleta, puse colores más vivos y cargué más el pincel."},
+    {"t": "Lo que ensayaba eran parejas: amarillo y violeta, azul y naranja, rojo y verde. Cada color empuja al otro y los dos ganan fuerza."},
+    {"k": "pregunta", "t": "Mira el mantel: las pinceladas laten alrededor de la fruta, como un campo de fuerza. ¿Hacia dónde te llevan?"}
+   ]
+  },
+  "aic-202382": {
+   "fuente": "Art Institute of Chicago", "artista": "van-gogh",
+   "relato": [
+    {"t": "Es un dibujo melancólico, probablemente inspirado en el poema «Tristement», de François Coppée: una viuda camina de luto por una larga avenida de árboles medio desnudos."},
+    {"t": "La tinta ferrogálica que usó ha pasado con los años del negro al marrón. Las líneas se han corrido y el papel ha tomado un tono dorado."},
+    {"k": "pregunta", "t": "Acércate al rayado: las líneas tan juntas se funden. ¿Cambia eso el ánimo del paisaje?"}
+   ],
+   "autor": [
+    {"t": "Marzo de 1884. Una avenida de abedules desmochados y álamos, dibujada con pluma de caña y tinta, línea a línea."},
+    {"t": "Hay un poema de François Coppée, el poeta de los humildes, que se llama «Tristement». En él, una viuda de luto camina por", "c": "coppee"},
+    {"k": "pregunta", "t": "Recorre mi avenida con la vista hasta el fondo, como la viuda del poema."}
+   ],
+   "citas": {
+    "coppee": {"t": "una avenida muy larga de plátanos gigantes, medio desnudos", "voz": "autor", "ref": "François Coppée, «Tristement», citado por el Art Institute of Chicago. Traducción propia del inglés", "url": "https://www.artic.edu/artworks/202382"}
+   }
+  },
+  "aic-88393": {
+   "fuente": "Cleveland Museum of Art, texto sobre otra estampa del mismo grabado", "artista": "van-gogh",
+   "relato": [
+    {"t": "Es el único aguafuerte que hizo Van Gogh: el retrato del doctor Paul Gachet, de 1890, dos meses antes de su muerte."},
+    {"t": "Gachet, grabador aficionado, le dio la plancha de cobre y le ayudó a estamparla en una pequeña prensa. El Museo de Arte de Cleveland guarda otra estampa del mismo grabado."},
+    {"k": "pregunta", "t": "Busca la pipa."}
+   ],
+   "autor": [
+    {"t": "Es el único aguafuerte que he hecho. Fue en Auvers, en 1890. Fui allí a ponerme en manos del doctor Paul Gachet, porque me lo aconsejó Pissarro."},
+    {"t": "Gachet grababa por afición. Me dio una plancha de cobre barnizada y me ayudó a estamparla en su pequeña prensa. Era mi primer intento, y lo retraté a él, sentado en su jardín, fumando en pipa."},
+    {"t": "Theo dijo de este grabado:", "c": "theo"},
+    {"k": "pregunta", "t": "Busca la pipa. Y fíjate en la línea: un dibujo hecho sobre metal, sin más."}
+   ],
+   "citas": {
+    "theo": {"t": "Es un verdadero aguafuerte de pintor. Nada de refinamiento en el procedimiento, sino un dibujo hecho sobre metal.", "voz": "autor", "ref": "Theo van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés", "url": "https://clevelandart.org/art/1948.303"}
+   }
+  },
+  "cma-135299": {
+   "fuente": "Cleveland Museum of Art", "artista": "van-gogh",
+   "relato": [
+    {"t": "En mayo de 1890 Van Gogh llegó a Auvers, al norte de París, y alquiló una habitación en la posada de Arthur Ravoux. Esta es su hija Adeline, de trece años."},
+    {"t": "La pintó en los últimos meses de su vida. Quería que sus retratos transmitieran la emoción de la vida moderna con el color, no con un parecido fotográfico."},
+    {"t": "A Adeline no le gustó: decía que no se parecía a ella. Según el museo, una foto suya de mayor muestra un parecido asombroso."},
+    {"k": "pregunta", "t": "¿Qué colores ha elegido para hablar de ella?"}
+   ],
+   "autor": [
+    {"t": "En mayo de 1890 llegué a Auvers, un pueblo al norte de París, y alquilé una habitación en la posada de Arthur Ravoux. Esta es su hija, Adeline. Tenía trece años."},
+    {"t": "No buscaba un parecido de fotografía. Quería que un retrato tuviera lo apasionado de la vida moderna, y eso lo da el color."},
+    {"k": "pregunta", "t": "¿Qué colores he elegido para hablar de ella?"}
+   ]
+  },
+  "cma-125249": {
+   "fuente": "Cleveland Museum of Art", "artista": "van-gogh",
+   "relato": [
+    {"t": "Lo pintó en otoño, mientras vivía en el hospital psiquiátrico cerca de Saint-Rémy. Su médico le dejaba pintar al aire libre."},
+    {"t": "En una carta a Theo describió la escena: obreros arreglando el pavimento bajo unos plátanos enormes, montones de arena y piedra, hojas que amarillean y figuras pequeñas."},
+    {"t": "Pintó una repetición, que está en la Phillips Collection de Washington. Según los estudios de conservación, la de Cleveland es la primera."},
+    {"k": "pregunta", "t": "Busca los montones de arena y piedra que nombraba en la carta."}
+   ],
+   "autor": [
+    {"t": "Otoño de 1889, en el hospital, cerca de Saint-Rémy. Mi médico me dejaba pintar fuera: sabía que pintar del natural me sentaba bien."},
+    {"t": "A Theo se lo describí así:", "c": "platanos"},
+    {"t": "A veces repetía un cuadro: el mismo tema y la misma composición otra vez. A eso lo llamaba una repetición. De este hice una, y este es el primero."},
+    {"k": "pregunta", "t": "Busca a los obreros y los montones de arena y de piedra. Mira qué pequeños se ven al lado de esos troncos."}
+   ],
+   "citas": {
+    "platanos": {"t": "El último estudio que he hecho es una vista del pueblo, donde estaban trabajando bajo unos plátanos enormes, arreglando las aceras. […] Hay montones de arena, piedras y los troncos gigantescos; las hojas amarillean y aquí y allá se ve una fachada y figuras pequeñas.", "voz": "autor", "ref": "Carta a Theo, citada por el Museo de Arte de Cleveland. Traducción propia del inglés", "url": "https://clevelandart.org/art/1947.209"}
+   }
+  },
+  "cma-135310": {
+   "fuente": "Cleveland Museum of Art", "artista": "van-gogh",
+   "relato": [
+    {"t": "Otro paisaje de otoño de Saint-Rémy. Al principio solo podía pintar en su habitación del hospital, pero pronto volvió a trabajar al aire libre."},
+    {"t": "En su etapa de Saint-Rémy hizo unos ciento cincuenta lienzos y un centenar de dibujos."},
+    {"k": "pregunta", "t": "Mira cómo se tuercen los árboles contra un cielo que oscurece."}
+   ],
+   "autor": [
+    {"t": "Otoño en Saint-Rémy. Al principio, en el hospital, solo podía pintar en mi cuarto. Pronto volví a salir al campo."},
+    {"t": "Pintaba la naturaleza tal como la veía, sin adornarla. Y creía que pintar me iba a ayudar a curarme."},
+    {"k": "pregunta", "t": "Sigue con la vista cómo se tuercen los dos álamos contra un cielo que oscurece."}
+   ]
+  },
+  "cma-135286": {
+   "fuente": "Cleveland Museum of Art", "artista": "van-gogh",
+   "relato": [
+    {"t": "En septiembre de 1883 Van Gogh dejó La Haya en busca de campo abierto y se fue a Drenthe, en el noreste de los Países Bajos."},
+    {"t": "Le pareció un paisaje bello y sereno. Con verdes acerados y azules fríos pintó un brezal que parece perderse a lo lejos, bajo la luz lila de la tarde."},
+    {"t": "Hizo esta acuarela poco más de un año después de empezar a trabajar como artista."},
+    {"k": "pregunta", "t": "Busca la carretilla."}
+   ],
+   "autor": [
+    {"t": "Septiembre de 1883. Dejé La Haya, con tanto ajetreo, y me fui a Drenthe, en el noreste de los Países Bajos, a buscar campo abierto."},
+    {"t": "Lo que encontré lo dije así:", "c": "calma"},
+    {"t": "Con pocos colores, verdes acerados y azules fríos, pinté el brezal bajo el lila de la tarde:", "c": "llanura"},
+    {"t": "Llevaba poco más de un año trabajando como artista."},
+    {"k": "pregunta", "t": "Busca la carretilla en medio de tanta llanura."}
+   ],
+   "citas": {
+    "calma": {"t": "¡Qué tranquilidad, qué amplitud, qué calma en esta naturaleza!", "voz": "autor", "ref": "Van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés", "url": "https://clevelandart.org/art/1958.30"},
+    "llanura": {"t": "una llanura inmensa que se pierde en el infinito", "voz": "autor", "ref": "Van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés", "url": "https://clevelandart.org/art/1958.30"}
+   }
+  },
+  "cma-126085": {
+   "fuente": "Cleveland Museum of Art", "artista": "van-gogh",
+   "relato": [
+    {"t": "Es el único aguafuerte que hizo Van Gogh, dos meses antes de morir. Fue a Auvers a tratarse con el doctor Paul Gachet por consejo del pintor Camille Pissarro."},
+    {"t": "Gachet, grabador aficionado, le dio una plancha de cobre barnizada y le ayudó a estamparla en una pequeña prensa. Lo retrató sentado en su jardín, fumando en pipa."},
+    {"t": "Su hermano Theo dijo que era un verdadero aguafuerte de pintor: sin refinamiento, un dibujo hecho sobre metal."},
+    {"k": "pregunta", "t": "Busca la pipa."}
+   ],
+   "autor": [
+    {"t": "Es el único aguafuerte que he hecho. Fue en Auvers, en 1890. Fui allí a ponerme en manos del doctor Paul Gachet, porque me lo aconsejó Pissarro."},
+    {"t": "Gachet grababa por afición. Me dio una plancha de cobre barnizada y me ayudó a estamparla en su pequeña prensa. Era mi primer intento, y lo retraté a él, sentado en su jardín, fumando en pipa."},
+    {"t": "Theo dijo de este grabado:", "c": "theo"},
+    {"k": "pregunta", "t": "Busca la pipa. Y fíjate en la línea: un dibujo hecho sobre metal, sin más."}
+   ],
+   "citas": {
+    "theo": {"t": "Es un verdadero aguafuerte de pintor. Nada de refinamiento en el procedimiento, sino un dibujo hecho sobre metal.", "voz": "autor", "ref": "Theo van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés", "url": "https://clevelandart.org/art/1948.303"}
+   }
+  }
  }
 }

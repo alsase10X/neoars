@@ -281,7 +281,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 
 async function iniciar(datos, desde){
   OBRA = datos; resolver(desde); await prepararImagen(); KEY = 'uo.' + (OBRA.titulo + OBRA.fecha).toLowerCase().replace(/[^a-z0-9]+/g, '') + '.';
-  const meds = Object.keys(OBRA.mediadores), defecto = meds[0];
+  const meds = Object.keys(OBRA.mediadores), defecto = OBRA.mediadores[OBRA.porDefecto] ? OBRA.porDefecto : meds[0];
   P = {guia:store.get('guia', defecto), perfil:store.get('perfil', Object.keys(OBRA.visitas)[0]), musica:store.get('musica','0') === '1'};
   if(!OBRA.mediadores[P.guia]) P.guia = defecto; if(!OBRA.visitas[P.perfil]) P.perfil = Object.keys(OBRA.visitas)[0];
   U = {caps:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, sel:null, zona:'__', manual:false, gesto:0, dedo:false, asked:new Set(), fin:false, sWhole:1, voz:M().voz, gen:[], genClave:'', genCtl:null, chat:[], chatCtl:null};
@@ -297,7 +297,7 @@ async function iniciar(datos, desde){
   $('fNota').textContent = OBRA.nota || '';
   $('fsGuia').hidden = meds.length < 2; $('fPerfil').parentNode.hidden = Object.keys(OBRA.visitas).length < 2;
   $('ajS').querySelector('.foot').hidden = $('fsGuia').hidden && $('fPerfil').parentNode.hidden;   // nada que aplicar
-  $('fGuia').innerHTML = meds.map((k, n) => `<button data-v="${k}">${esc(MED(k).nombre)}<small>${n === 0 ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
+  $('fGuia').innerHTML = meds.map(k => `<button data-v="${k}">${esc(MED(k).nombre)}<small>${k === defecto ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
   $('fPerfil').innerHTML = Object.entries(OBRA.visitas).map(([k, v]) => `<button data-v="${k}"><span>${esc(v.n)}<small>${esc(v.d || '')}</small></span></button>`).join('');
   let V = null; try{ V = JSON.parse(store.get('visita', '') || 'null'); }catch(e){}
   U.asked = new Set(V && V.a || []);
@@ -676,7 +676,9 @@ function cabecera(){
   const m = M();
   $('hName').textContent = m.conversa; $('askI').placeholder = m.placeholder;
   if(avActual !== P.guia){ avActual = P.guia; $('lAv').innerHTML = avatarHTML(m); dibujarAv($('lAv').firstElementChild); }
-  $('lName').textContent = m.nombre; $('lSub').textContent = P.perfil === Object.keys(OBRA.visitas)[0] ? '' : VIS().n; $('lSub').hidden = !$('lSub').textContent;
+  // Una recreación lo dice debajo de su nombre, sin que se corte
+  $('lName').textContent = m.sub ? m.corto : m.nombre;
+  $('lSub').textContent = [m.sub, P.perfil === Object.keys(OBRA.visitas)[0] ? '' : VIS().n].filter(Boolean).join(' · '); $('lSub').hidden = !$('lSub').textContent;
 }
 function abrirHablar(){
   if(!$('hablarS').hidden) return;
@@ -1223,23 +1225,37 @@ async function obraDeMuseo(clave){
     url = raw.url;
   }
   filas = filas.filter(([, v]) => v).map(([k, v]) => [k, String(v)]);
-  // Mediación breve en castellano, si está preparada (obras/breves.json): borrador a partir del texto del museo
-  let breve = null;
+  // Mediación breve en castellano, si está preparada (obras/breves.json): borrador a partir del texto del museo.
+  // «relato» es la guía; «autor», si lo hay, una recreación del artista en primera persona, que pasa a ser quien media por defecto
+  let breve = null, artista = null;
   try{ const r = await fetch('obras/breves.json', {cache:'no-cache'}); if(r.ok){ const j = await r.json(); breve = (j.obras || {})[clave] || null; } }catch(e){}
+  const recrea = breve && breve.artista && Array.isArray(breve.autor) && breve.autor.length;
+  if(recrea) try{ const r = await fetch(`../artistas/${encodeURIComponent(breve.artista)}.json`, {cache:'no-cache'}); if(r.ok) artista = await r.json(); }catch(e){}
   const base = [{id:'B1', f:`${museo} · ficha`, t:`${o.titulo}. ` + filas.map(([k, v]) => `${k}: ${v}`).join('. ')}];
   textos.filter(([, t]) => t && plano(t)).forEach(([f, t]) => base.push({id:'B' + (base.length + 1), f:`${museo} · ${f} (en inglés)`, t:plano(t)}));
+  const caps = l => l.map(c => Object.assign({z:null}, c));
+  const mediadores = {guia:{nombre:'Guía', por:'la guía', corto:'Guía', ini:'G', acc:'#f6f5f2', voz:'guia', desc:recrea ? 'En tercera persona, con lo que se sabe hoy' : '',
+    placeholder:'Dime qué ves o pregunta…', conversa:'Conversa con la guía', te:'La guía te pregunta',
+    vts:'Dime qué ves o pregúntame lo que quieras.', rol:'Guía del museo',
+    relato:breve && Array.isArray(breve.relato) && breve.relato.length ? caps(breve.relato) : [{k:'pregunta', z:null, t:'¿Qué es lo primero que ves en esta obra?'}], qa:[]}};
+  let quien = '';
+  if(recrea){
+    const corto = artista && artista.corto || o.autor.split(' ')[0];
+    quien = corto;
+    // A lo que se escribe responde siempre la guía (con datos y etiquetas); la recreación solo cuenta su relato
+    mediadores.autor = {nombre:`${corto} · recreación`, por:`${corto} (recreación)`, corto, sub:'Recreación', ini:corto[0], acc:'#f6f5f2', voz:'autor', retrato:artista && artista.retrato || null,
+      desc:'Recreación en primera persona', placeholder:'Pregunta a la guía…', conversa:'Pregunta a la guía', te:`${corto} te pregunta`,
+      vts:'Te responde la guía, con los datos del museo. Dime qué ves o pregunta lo que quieras.', rol:`Recreación de ${o.autor} en primera persona`,
+      relato:caps(breve.autor), qa:[]};
+  }
   return Object.assign(o, {
-    museo:clave, salir:'../', tema:'', zonas:{}, citas:{}, base,
-    voces:{guia:{pitch:1.06, rate:1, fem:true}},
+    museo:clave, salir:'../', tema:'', zonas:{}, citas:recrea && breve.citas || {}, base,
+    voces:{guia:{pitch:1.06, rate:1, fem:true}, autor:{pitch:0.82, rate:0.92, fem:false}},
     visitas:{general:{n:'Visita general', d:'Para todos'}},
-    mediadores:{guia:{nombre:'Guía', por:'la guía', corto:'Guía', ini:'G', acc:'#f6f5f2', voz:'guia',
-      placeholder:'Dime qué ves o pregunta…', conversa:'Conversa con la guía', te:'La guía te pregunta',
-      vts:'Dime qué ves o pregúntame lo que quieras.', rol:'Guía del museo',
-      relato:breve && Array.isArray(breve.relato) && breve.relato.length
-        ? breve.relato.map(c => Object.assign({z:null}, c))
-        : [{k:'pregunta', z:null, t:'¿Qué es lo primero que ves en esta obra?'}], qa:[]}},
+    mediadores, porDefecto:recrea ? 'autor' : 'guia',
     ficha:[...filas.map(([k, v]) => [k, esc(v)]), ['Museo', url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(museo)}</a>` : esc(museo)], ['Licencia', 'Dominio público']],
-    nota:breve ? `Mediación breve: borrador a partir del texto del museo (${breve.fuente || museo}), sin validar. La guía responde con IA a partir de esos datos.`
+    nota:recrea ? `${quien} es una recreación: habla en primera persona a partir del texto del museo (${breve.fuente || museo}), sin añadir hechos ni nada que él no pudiera saber. Sus palabras literales van entre comillas, con su fuente. La guía lo cuenta en tercera persona y responde con IA a partir de esos datos. Borrador sin validar.`
+      : breve ? `Mediación breve: borrador a partir del texto del museo (${breve.fuente || museo}), sin validar. La guía responde con IA a partir de esos datos.`
       : 'Datos y textos del museo, sin revisar. La guía responde con IA a partir de ellos.'
   });
 }

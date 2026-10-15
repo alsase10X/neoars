@@ -321,6 +321,7 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 @keyframes trazo{to{stroke-dashoffset:0}}
 #pNombre{margin:0;font-size:2rem;font-weight:900;letter-spacing:-.03em;line-height:1;text-wrap:balance}
 #pVida{margin:8px 0 0;color:var(--grey);font-size:.95rem;font-weight:600}
+#pSaludo{margin:0;font-size:1.25rem;font-weight:700;line-height:1.3;letter-spacing:-.01em;max-width:24ch;text-wrap:balance}
 #pCuenta{margin:0;color:var(--grey);font-size:.9rem;font-weight:500;line-height:1.4;min-height:2.8em;max-width:34ch}
 #pVer{height:52px;padding:0 28px;font-size:1rem;background:var(--ink);color:#000;border-color:var(--ink)}
 #pVer:hover{background:var(--paper);color:var(--ink)}
@@ -334,7 +335,7 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 #selec .sep{flex:none;width:1px;background:var(--soft);margin:4px}
 .pAcc{display:grid;gap:10px;width:min(100%,300px)}
 #pPreg{height:52px;font-size:1rem}
-/* Charla con el artista: él habla solo con sus citas; lo demás, la guía. Cada parte lleva el avatar de quien habla */
+/* Charla con el artista: él, recreado, en primera persona y con sus citas; lo posterior, la guía. Cada parte lleva el avatar de quien habla */
 #charla{z-index:35}
 .av{flex:none;width:28px;height:28px;fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
 #chAv .av{width:34px;height:34px}
@@ -367,6 +368,7 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 <div id="portada" hidden>
   <svg id="pRetrato" aria-hidden="true"></svg>
   <div><h1 id="pNombre"></h1><p id="pVida"></p></div>
+  <p id="pSaludo" hidden></p>
   <p id="pCuenta" role="status"></p>
   <div class="pAcc"><button id="pVer" type="button">Ver sus obras</button><button id="pPreg" type="button">Preguntarle algo</button></div>
   <small id="pNota"></small>
@@ -1959,7 +1961,14 @@ async function iniciarArtista(id){
   ARTISTA = {cfg, autor, obras:[], filtro:'todas', grupos:[], visto:false, msg:''};
   document.title = $('pNombre').textContent = $('aNombre').textContent = cfg.nombre;
   $('pVida').textContent = autor.vida;
-  $('pNota').textContent = (cfg.retrato && cfg.retrato.nota) || '';
+  // Si el personaje es una recreación, saluda él y se le habla de tú; el aviso lo dice desde la portada
+  const corto = cfg.corto || cfg.nombre;
+  if(cfg.saludo){ $('pSaludo').textContent = cfg.saludo; $('pSaludo').hidden = false; $('pVer').textContent = 'Ver tus obras'; $('pPreg').textContent = 'Preguntarte algo'; }
+  $('aPreg').setAttribute('aria-label', `Preguntar a ${corto}`);
+  $('pNota').textContent = [cfg.aviso, cfg.retrato && cfg.retrato.nota].filter(Boolean).join(' · ');
+  // Sus mediaciones por obra (la recreación y sus citas) también alimentan la charla
+  fetch('unidad/obras/breves.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null)
+    .then(j => { if(j) ARTISTA.breves = Object.entries(j.obras || {}).filter(([, o]) => o.artista === id && Array.isArray(o.autor)); }).catch(() => {});
   if(cfg.retrato) try{ dibujarRetrato(cfg.retrato); }catch(e){}
   $('pCuenta').textContent = 'Buscando sus obras en los museos…';
   $('pVer').disabled = $('pPreg').disabled = true;
@@ -2000,12 +2009,15 @@ function verObras(){
 $('pVer').onclick = verObras;
 
 /* ---------- Charla con el artista: su biografía viva ----------
-   Él solo habla con citas literales (artistas/<id>.json, «citas»); lo demás lo cuenta la guía, en tercera persona.
-   El modelo solo puede nombrar citas y obras que existen, por su identificador; la página pinta el texto
-   verificado y enlaza cada obra a su unidad. Responde un modelo a través de Puter (gratuito, con cuenta). */
+   Él es una recreación: habla en primera persona y de tú, libre en la forma pero solo con los hechos del dossier,
+   de sus mediaciones por obra y del catálogo, y nada que no pudiera saber; lo posterior lo cuenta la guía.
+   Sus palabras literales solo por identificador (artistas/<id>.json y unidad/obras/breves.json, «citas»): la página
+   pinta el texto verificado con su fuente y enlaza cada obra a su unidad. Responde un modelo a través de Puter. */
 const avatarHTML = r => r ? `<svg class="av" viewBox="${esc(r.viewBox || '0 0 200 240')}" aria-hidden="true">${(r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('')}</svg>` : '';
 let CH = null;
-const citaDe = id => (ARTISTA.cfg.citas || []).find(c => c.id === id);
+const citasArtista = () => [...(ARTISTA.cfg.citas || []),
+  ...(ARTISTA.breves || []).flatMap(([k, o]) => Object.entries(o.citas || {}).map(([c, x]) => ({id:`${k}:${c}`, t:x.t, ref:x.ref, url:x.url, obra:k})))];
+const citaDe = id => citasArtista().find(c => c.id === id);
 function abrirCharla(){
   const A = ARTISTA; if(!A) return;
   loadPuter().catch(() => {});   // cargado antes de enviar: el inicio de sesión de Puter tiene que abrirse dentro del gesto
@@ -2014,7 +2026,7 @@ function abrirCharla(){
   $('chAv').innerHTML = avatarHTML(A.cfg.retrato);
   if(!CH){
     CH = {turnos:[], busy:false};
-    $('chLog').innerHTML = `<p class="intro">Pregúntale por su vida o por sus obras. ${esc(corto)} responde con sus propias palabras cuando las hay; lo demás te lo cuenta la guía. Responde un modelo de IA a través de Puter: la primera vez te pedirá entrar con una cuenta gratuita.</p>`;
+    $('chLog').innerHTML = `<p class="intro">${esc(corto)} es una recreación: te habla en primera persona a partir de sus cartas y de los textos de los museos. Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. Responde un modelo de IA a través de Puter: la primera vez te pedirá entrar con una cuenta gratuita.</p>`;
     pintarChQs();
   }
   $('charla').hidden = false;
@@ -2030,36 +2042,44 @@ function pintarChQs(){
 }
 function promptArtista(){
   const A = ARTISTA, x = A.autor, d = x.dossier || {}, corto = A.cfg.corto || x.nombre, L = [];
-  L.push(`Eres el motor de la conversación con ${x.nombre} (${x.vida}) en el catálogo de su obra. Responde a la última pregunta del visitante con estas reglas, sin excepción.`);
-  L.push(`1. Hay dos voces: "autor" (${corto}) y "guia". El autor SOLO habla con citas literales de la lista CITAS, indicando su id. Nunca escribas palabras nuevas en su boca.`);
-  L.push('2. Todo lo demás lo cuenta la guía, en tercera persona, en castellano de España, con frases cortas y concretas.');
-  L.push(`3. Si la pregunta trata de algo posterior a su muerte (${x.muerte}), la guía empieza dejando claro que eso él ya no lo vivió.`);
-  L.push('4. La guía se basa en el DOSSIER y en el CATÁLOGO. Si añade algo que no está ahí, marca esa parte con "ia": true. Si no se sabe, lo dice. Nada inventado.');
-  L.push('5. Brevedad: de 1 a 3 partes y como mucho 70 palabras en total.');
+  L.push(`Eres el motor de la conversación con una recreación de ${x.nombre} (${x.vida}) en el catálogo de su obra. Responde a la última pregunta del visitante con estas reglas, sin excepción.`);
+  L.push(`1. Hay dos voces. "autor" es ${corto} recreado: habla en primera persona y de tú al visitante, informal y cercano, en castellano de España, con frases cortas. "guia" habla de él en tercera persona.`);
+  L.push(`2. La recreación es libre en la forma, no en los hechos: solo cuenta lo que está en el DOSSIER, las MEDIACIONES o el CATÁLOGO, y nada que él no pudiera saber. Su muerte (${x.muerte}) y todo lo posterior (museos, precios, fama) lo cuenta la guía, dejando claro que eso él ya no lo vivió.`);
+  L.push('3. Sus palabras literales solo con "cita" y un id de la lista CITAS. Nunca pongas entre comillas palabras que no estén ahí.');
+  L.push('4. Si hace falta algo que no está en el DOSSIER, las MEDIACIONES o el CATÁLOGO, lo dice la guía y marca esa parte con "ia": true. Si no se sabe, se dice. Nada inventado.');
+  L.push(`5. Brevedad: de 1 a 3 partes y como mucho 80 palabras en total. Normalmente empieza ${corto}.`);
   L.push('6. Si la respuesta trata de obras del CATÁLOGO, pon hasta 4 claves en "obras" para que el visitante pueda abrirlas. Solo claves de la lista.');
-  L.push('7. Si la pregunta no tiene que ver con el artista, su obra o el arte, la guía lo dice con amabilidad y propone volver a sus obras.');
-  L.push('', 'CITAS (id: texto · fuente):', ...(A.cfg.citas || []).map(c => `${c.id}: ${c.t} · ${c.ref}`));
-  if(d.hechos) L.push('', 'DOSSIER · hechos (escritos en primera persona: la guía los cuenta en tercera):', ...d.hechos.map(h => '- ' + h.t));
+  L.push(`7. Si la pregunta no tiene que ver con él, su obra o el arte, ${corto} lo dice con amabilidad y propone volver a sus obras.`);
+  if(d.voz) L.push('', `VOZ DE ${corto.toUpperCase()}: ${d.voz}`);
+  L.push('', 'CITAS (id: texto · fuente):', ...citasArtista().map(c => `${c.id}: ${c.t} · ${c.ref}`));
+  if(d.hechos) L.push('', 'DOSSIER · hechos (en primera persona):', ...d.hechos.map(h => '- ' + h.t));
   if(d.ideas) L.push('', 'DOSSIER · ideas sobre su obra:', ...d.ideas.map(h => '- ' + h.t));
   if(d.relacionadas) L.push('', 'DOSSIER · obras relacionadas:', ...d.relacionadas.map(t => '- ' + t));
   if(d.personas) L.push('', 'DOSSIER · personas:', ...d.personas.map(t => '- ' + t));
+  const cap = (k, o, l) => l.filter(c => c.k !== 'pregunta').map(c => c.t + (c.c && o.citas && o.citas[c.c] ? ` [cita ${k}:${c.c}]` : '')).join(' ');
+  if(A.breves && A.breves.length) L.push('', `MEDIACIONES por obra (clave · lo que cuenta ${corto} · lo que cuenta la guía):`, ...A.breves.map(([k, o]) => `${k} · ${corto}: ${cap(k, o, o.autor)} · Guía: ${cap(k, o, o.relato || [])}`));
   L.push('', 'CATÁLOGO (clave | título | fecha | museo | tipo | en sala):', ...A.obras.map(a => `${a.key} | ${a.title} | ${a.date || ''} | ${SRC_NAME[a.src]} | ${a.tipo} | ${a.sala || 'no'}`));
-  L.push('', 'Responde SOLO con JSON con esta forma: {"partes":[{"voz":"guia","t":"…","ia":false},{"voz":"autor","cita":"705b"}],"obras":["aic-28560"]}');
+  L.push('', 'Responde SOLO con JSON con esta forma: {"partes":[{"voz":"autor","t":"…"},{"voz":"autor","cita":"705b"},{"voz":"guia","t":"…","ia":false}],"obras":["aic-28560"]}');
   return L.join('\n');
 }
 function jsonDe(txt){ const i = txt.indexOf('{'), j = txt.lastIndexOf('}'); if(i < 0 || j <= i) return null; try{ return JSON.parse(txt.slice(i, j + 1)); }catch(e){ return null; } }
 function partesDe(j){
   return (j && Array.isArray(j.partes) ? j.partes : []).map(p => {
-    if(p && p.voz === 'autor' && citaDe(p.cita)) return {voz:'autor', cita:p.cita};
-    if(p && typeof p.t === 'string' && p.t.trim()) return {voz:'guia', t:p.t.trim().slice(0, 700), ia:!!p.ia};
-    return null;
+    if(!p) return null;
+    if(p.voz === 'autor' && p.cita) return citaDe(p.cita) ? {voz:'autor', cita:p.cita} : null;
+    const t = typeof p.t === 'string' ? p.t.trim().slice(0, 700) : '';
+    if(!t) return null;
+    // La recreación no puede traer nada «de fuera»: si el modelo marca así una parte suya, no se pinta
+    if(p.voz === 'autor') return p.ia ? null : {voz:'autor', t};
+    return {voz:'guia', t, ia:!!p.ia};
   }).filter(Boolean).slice(0, 3);
 }
 function pintarRespuestaArtista(partes, obras){
   const A = ARTISTA, log = $('chLog');
   partes.forEach(p => {
     const d = document.createElement('div'); d.className = 'resp';
-    if(p.voz === 'autor'){
+    if(p.voz === 'autor' && !p.cita) d.innerHTML = avatarHTML(A.cfg.retrato) + `<div><p>${esc(p.t)}</p></div>`;
+    else if(p.voz === 'autor'){
       const c = citaDe(p.cita), ref = c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.ref)}</a>` : esc(c.ref);
       d.innerHTML = avatarHTML(A.cfg.retrato) + `<div><blockquote>«${esc(c.t)}»</blockquote><p class="ref">${ref}</p></div>`;
     } else d.innerHTML = avatarHTML(A.cfg.guia && A.cfg.guia.retrato) + `<div><p>${esc(p.t)}</p>${p.ia ? '<span class="ver">Conocimiento general · verifícalo</span>' : ''}</div>`;
@@ -2089,7 +2109,7 @@ function enviarCharla(q){
     if(!partes.length) throw {code:'vacia'};
     dots.remove();
     pintarRespuestaArtista(partes, j.obras);
-    CH.turnos.push({q, a:partes.map(p => p.voz === 'autor' ? '«' + citaDe(p.cita).t + '»' : p.t).join(' ')});
+    CH.turnos.push({q, a:JSON.stringify({partes, obras:j.obras || []})});
   }).catch(e => {
     dots.remove();
     const p = document.createElement('p'); p.className = 'intro';
