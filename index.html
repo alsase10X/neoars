@@ -65,7 +65,7 @@ figure img{width:100%;display:block;min-height:80px;border-radius:var(--r);backg
 figcaption{padding:8px 2px 0;font-size:.9rem;line-height:1.2;font-weight:700;letter-spacing:-.01em}
 figcaption small{display:block;font-size:.8rem;font-weight:500;color:var(--grey);margin-top:3px;letter-spacing:0}
 figcaption em{display:inline-block;margin-top:6px;font-size:11px;font-style:normal;border:1px solid var(--soft);padding:3px 6px;letter-spacing:0}
-#map{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:grab;background:var(--paper)}
+#map{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:grab;background:var(--paper);-webkit-user-select:none;user-select:none}
 #map.drag{cursor:grabbing}
 .tile{position:absolute;left:0;top:0;will-change:transform;overflow:hidden;background:var(--tile);border-radius:var(--r)}
 .tile img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-user-drag:none}
@@ -352,7 +352,8 @@ body.artista #hint{display:none}
   body.artista>*{grid-column:2}
   body.artista>header{grid-row:1} body.artista>#selec{grid-row:2} body.artista>#bar{grid-row:3} body.artista>#content{grid-row:4}
   body.artista>#vinc{grid-column:1;grid-row:1/-1;min-height:0;border-top:0;border-right:1px solid var(--soft)}
-  #vRet{display:flex;flex:1 1 auto;min-height:0;align-items:center;justify-content:center;padding:var(--s3)}
+  #vRet{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;align-items:center;justify-content:center;padding:var(--s3)}
+  #vinc.abierta #vNom{display:none}
   #pRetrato{width:min(80%,260px);height:auto;max-height:100%}
   #vinc.abierta #vRet{flex:0 0 auto;padding:var(--s2) var(--s2) 0}
   #vinc.abierta #pRetrato{width:84px}
@@ -361,6 +362,32 @@ body.artista #hint{display:none}
   #vDice{font-size:1.15rem;line-height:1.45;min-height:4.4em;max-width:30ch}
   #vHoja{position:static;height:auto;flex:1 1 auto;min-height:0;border-top:1px solid var(--soft);background:none;animation:none}
 }
+#vQuien{margin:0 0 4px;font-size:.75rem;font-weight:700;color:var(--grey);letter-spacing:.02em}
+#vAcc{margin-top:10px;padding:7px 12px;font-size:.85rem}
+#vNom{text-align:center;margin-top:var(--s2)}
+#vNom b{display:block;font-size:1.4rem;font-weight:900;letter-spacing:-.03em}
+#vNom small{display:block;margin-top:4px;font-size:.85rem;font-weight:500;color:var(--grey)}
+/* Variante v2 (&v=2): sin franja de arriba ni línea de recuento. En móvil, el mapa ocupa toda la pantalla,
+   los filtros flotan arriba y él flota abajo: su retrato siempre, el bocadillo cuando habla */
+body.v2>header,body.v2>#bar{display:none!important}
+@media(max-width:899px){
+  body.v2 #selec{position:fixed;top:0;left:0;right:0;z-index:5;padding:calc(env(safe-area-inset-top,0px) + 10px) var(--s2) 30px;background:linear-gradient(var(--paper) 40%,rgba(10,10,11,0));pointer-events:none}
+  body.v2 #selec button{pointer-events:auto}
+  body.v2 #selec button:not([aria-pressed=true]){background:var(--paper)}
+  body.v2 #selec .sep{display:none}
+  body.v2 #vinc{position:fixed;left:0;right:0;bottom:0;background:none;border:0;pointer-events:none}
+  body.v2 .vfila{grid-template-columns:58px minmax(0,1fr);gap:8px;align-items:end;padding:0 10px calc(10px + env(safe-area-inset-bottom,0px))}
+  body.v2 #vAv{pointer-events:auto;width:58px;height:66px;background:var(--paper);border:1px solid var(--soft)}
+  body.v2 #vAv .av{width:50px;height:58px}
+  body.v2 .vbur{pointer-events:auto;cursor:pointer;background:var(--panel);border:1px solid var(--soft);padding:10px 12px 12px;visibility:hidden;opacity:0;transform:translateY(10px);transition:opacity .2s,transform .2s,visibility 0s .2s}
+  body.v2 #vinc.habla .vbur{visibility:visible;opacity:1;transform:none;transition:opacity .2s,transform .2s}
+  body.v2 #vDice{font-size:.95rem;min-height:0}
+  body.v2 #vinc #chF{display:none}
+  body.v2 #vinc.abierta{pointer-events:auto;background:var(--paper)}
+  body.v2 #vinc.abierta #chF{display:flex;border-top:1px solid var(--soft)}
+  body.v2 #vHoja{height:min(62vh,calc(100vh - 150px))}
+}
+@media(min-width:900px){ #vQuien{display:none!important} body.v2 #selec{padding-top:14px} }
 /* Lo que se dice en la charla. Cada parte lleva el avatar de quien habla: él, recreado, o la guía */
 .av{flex:none;width:28px;height:28px;fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
 #chLog .intro,#chLog .src{margin:0;color:var(--grey);font-size:.9rem;font-weight:500;line-height:1.45}
@@ -432,12 +459,12 @@ body.artista #hint{display:none}
 <!-- Modo artista: el personaje vive en la misma pantalla que sus obras. En móvil, franja abajo y la charla sube
      como hoja sobre el mapa; en pantalla grande, columna a la izquierda -->
 <aside id="vinc" hidden>
-  <div id="vRet" aria-hidden="true"><svg id="pRetrato" class="trazo"></svg></div>
+  <div id="vRet"><svg id="pRetrato" class="trazo" aria-hidden="true"></svg><div id="vNom" hidden><b id="vNomN"></b><small id="vNomS"></small></div></div>
   <div id="vHoja" role="region" aria-labelledby="chT">
     <div class="vhd"><b id="chT"></b><button class="ib" id="chX" type="button" aria-label="Cerrar la charla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
     <div id="chLog" aria-live="polite"></div>
   </div>
-  <div class="vfila"><button id="vAv" type="button"></button><p id="vDice" aria-live="polite"></p></div>
+  <div class="vfila"><button id="vAv" type="button"></button><div class="vbur"><p id="vQuien" hidden></p><p id="vDice" aria-live="polite"></p><button id="vAcc" type="button" hidden></button></div></div>
   <form id="chF" autocomplete="off"><input id="chI" enterkeyhint="send" aria-label="Tu pregunta" placeholder="Pregúntame algo…"><button aria-label="Enviar">→</button></form>
 </aside>
 <div id="pick" hidden><span id="pickTxt"></span><button id="pickX">Cancelar</button></div>
@@ -944,7 +971,7 @@ function loop(){
     } else if(!M.drag){
       M.x += M.vx; M.y += M.vy; M.vx *= 0.94; M.vy *= 0.94;
       if(Math.abs(M.vx)<0.05) M.vx = 0; if(Math.abs(M.vy)<0.05) M.vy = 0;
-      if(M.mov && !M.vx && !M.vy){ M.mov = false; if(ARTISTA) alParar(); }   // se ha parado después de arrastrar
+      if(M.mov && Math.abs(M.vx) < 0.6 && Math.abs(M.vy) < 0.6){ M.mov = false; if(ARTISTA) alParar(); }   // casi parado después de arrastrar
     }
     place(); M.raf = requestAnimationFrame(step);
   };
@@ -961,7 +988,7 @@ mp.addEventListener('pointermove', e => {
   const dx = e.clientX-M.drag.lx, dy = e.clientY-M.drag.ly;
   M.x += dx; M.y += dy; M.moved += Math.abs(dx)+Math.abs(dy);
   M.vx = dx*0.9; M.vy = dy*0.9; M.drag.lx = e.clientX; M.drag.ly = e.clientY;
-  if(M.moved >= 8) M.mov = true;
+  if(M.moved >= 8){ M.mov = true; if(ARTISTA) callar(); }
 });
 const endDrag = e => {
   if(!M.drag || M.drag.id!==e.pointerId) return;
@@ -972,7 +999,7 @@ const endDrag = e => {
   }
 };
 mp.addEventListener('pointerup', endDrag); mp.addEventListener('pointercancel', endDrag);
-mp.addEventListener('wheel', e => { e.preventDefault(); M.anim = null; M.x -= e.deltaX; M.y -= e.deltaY; M.mov = true; }, {passive:false});
+mp.addEventListener('wheel', e => { e.preventDefault(); M.anim = null; M.x -= e.deltaX; M.y -= e.deltaY; M.mov = true; if(ARTISTA) callar(); }, {passive:false});
 // Solo se rehace si cambia el ancho o crece el alto (el teclado del móvil encoge el alto y no debe mover el mapa)
 window.addEventListener('resize', () => {
   if(document.body.classList.contains('home') || $('view').value!=='map' || $('modal').classList.contains('open')) return;
@@ -1940,6 +1967,7 @@ async function callLLM(messages){
    frases preparadas en artistas/<id>.json: el saludo, una por época (al parar de arrastrar) y una por selección
    (al elegirla). Encima, filtros por datos (tipo, en sala, época) y selecciones curadas. Cada obra se abre en la unidad. */
 const MUSEO_CORTO = {aic:'Chicago', cma:'Cleveland', met:'Nueva York'};
+const V2 = (() => { try{ return new URLSearchParams(location.search).get('v') === '2'; }catch(e){ return false; } })();   // variante de diseño, para comparar
 const TIPOS = [
   {id:'todas', t:'Todas', f:() => true},
   {id:'pintura', t:'Pinturas', f:a => a.tipo === 'pintura'},
@@ -1988,13 +2016,18 @@ async function iniciarArtista(id){
   try{ const r = await fetch(`artistas/${encodeURIComponent(id)}.json`, {cache:'no-cache'}); if(r.ok) cfg = await r.json(); }catch(e){}
   const autor = cfg && AUTORES.find(x => x.nombre === cfg.nombre);
   if(!autor){ $('aN').textContent = 'No encontramos a este artista'; aviso('Revisa el enlace o el código QR.'); return; }
-  ARTISTA = {cfg, autor, obras:[], filtro:'todas', grupos:[], msg:'', dicho:'', epoca:-1};
+  ARTISTA = {cfg, autor, obras:[], filtro:'todas', grupos:[], msg:'', dicho:'', epoca:-1, acc:null};
   const corto = cfg.corto || cfg.nombre;
   document.title = $('aN').textContent = cfg.nombre;
   // Si es una recreación, se dice bajo su nombre; el saludo es lo primero que dice
   $('aSub').textContent = [cfg.saludo ? 'Recreación' : '', autor.vida].filter(Boolean).join(' · ');
   if(cfg.aviso) $('aSub').title = cfg.aviso;
   $('chT').textContent = `Charla con ${corto}`;
+  if(V2){   // variante: sin franja de arriba; quién habla va en el bocadillo (móvil) o bajo el retrato (pantalla grande)
+    document.body.classList.add('v2');
+    $('vQuien').textContent = corto + (cfg.saludo ? ' · recreación' : ''); $('vQuien').hidden = false;
+    $('vNomN').textContent = cfg.nombre; $('vNomS').textContent = $('aSub').textContent; $('vNom').hidden = false;
+  }
   $('vAv').setAttribute('aria-label', `Hablar con ${corto}`);
   $('vAv').innerHTML = avatarHTML(cfg.retrato);
   $('vinc').hidden = false;
@@ -2019,7 +2052,7 @@ function pintarSelec(){
     (cfg.epocas || []).map((e, i) => ({id:'e' + i, t:e.titulo, dice:e.dice, ep:i, f:a => enEpoca(a, e)})).filter(hay),
     (cfg.selecciones || []).map(s => ({id:'s-' + s.id, t:s.titulo, dice:s.dice, f:a => (s.obras || []).includes(a.key)})).filter(hay)
   ].filter(g => g.length);
-  $('selec').innerHTML = A.grupos.map(g => g.map(o => `<button type="button" data-f="${esc(o.id)}" aria-pressed="${o.id === A.filtro}">${esc(o.t)}</button>`).join('')).join('<i class="sep" aria-hidden="true"></i>');
+  $('selec').innerHTML = A.grupos.filter(g => !(V2 && g.some(o => o.ep != null))).map(g => g.map(o => `<button type="button" data-f="${esc(o.id)}" aria-pressed="${o.id === A.filtro}">${esc(o.t)}</button>`).join('')).join('<i class="sep" aria-hidden="true"></i>');
 }
 const enEpoca = (a, e) => a.year != null && (e.desde == null || a.year >= e.desde) && (e.hasta == null || a.year <= e.hasta);
 function aplicarFiltro(id){
@@ -2032,41 +2065,51 @@ function aplicarFiltro(id){
   A.msg = o.id === 'todas' ? `${n} ${n === 1 ? 'obra' : 'obras'}: ${partes.join(', ')}` + (A.fallos ? ' · algún museo no ha respondido' : '')
     : `${n} ${n === 1 ? 'obra' : 'obras'} · ${o.t}`;
   aviso(A.msg);
-  if(o.dice){ decir(o.dice); if(o.ep != null) A.epoca = o.ep; }
+  if(o.dice){ decir(o.dice, o.ep != null ? {t:'Ver todas', f:'todas'} : null); if(o.ep != null) A.epoca = o.ep; }
+  else pintarAcc();
   return render();
 }
-// Lo que dice, con un fundido breve; no repite lo que acaba de decir
-function decir(t){
-  const A = ARTISTA, el = $('vDice'); if(!A || !t || t === A.dicho) return;
+// Lo que dice, con un fundido breve. En la v2 puede llevar una propuesta debajo («Ver solo 1888»)
+function decir(t, acc){
+  const A = ARTISTA, el = $('vDice'); if(!A || !t) return;
+  A.acc = V2 && acc || null; hablar();
+  if(t === A.dicho){ pintarAcc(); return; }
   A.dicho = t;
-  if(RM || !el.textContent){ el.textContent = t; return; }
+  if(RM || !el.textContent){ el.textContent = t; pintarAcc(); return; }
   el.classList.add('cambia');
-  setTimeout(() => { if(A.dicho === t){ el.textContent = t; el.classList.remove('cambia'); } }, 200);
+  setTimeout(() => { if(A.dicho === t){ el.textContent = t; el.classList.remove('cambia'); pintarAcc(); } }, 200);
 }
+function pintarAcc(){ const A = ARTISTA, b = $('vAcc'); b.hidden = !A.acc || A.acc.f === A.filtro; if(A.acc) b.textContent = A.acc.t; }
+// En la v2 (móvil), el bocadillo se recoge al arrastrar y vuelve al parar
+const hablar = () => $('vinc').classList.add('habla');
+const callar = () => $('vinc').classList.remove('habla');
 // Al parar de arrastrar: la obra que queda en el centro de lo visible decide la época de la que habla
 let paradaT = 0;
-function alParar(){ clearTimeout(paradaT); paradaT = setTimeout(epocaVisible, 350); }
+function alParar(){ clearTimeout(paradaT); paradaT = setTimeout(epocaVisible, 250); }
+// La parte del mapa que no tapan los filtros flotantes, la charla o el bocadillo (en coordenadas del mapa)
 function zonaVisible(){
-  const mp = $('map'), r = mp.getBoundingClientRect(), h = $('vHoja');
-  let abajo = r.top + mp.clientHeight;
-  if($('vinc').classList.contains('abierta') && getComputedStyle(h).position === 'absolute') abajo = Math.min(abajo, h.getBoundingClientRect().top);
-  return {w:mp.clientWidth, h:Math.max(80, abajo - r.top)};
+  const mp = $('map'), r = mp.getBoundingClientRect(), h = $('vHoja'), vi = $('vinc'), sel = $('selec');
+  let arriba = r.top, abajo = r.top + mp.clientHeight;
+  if(getComputedStyle(sel).position === 'fixed') arriba = Math.max(arriba, sel.getBoundingClientRect().bottom - 24);
+  if(vi.classList.contains('abierta') && getComputedStyle(h).position === 'absolute') abajo = Math.min(abajo, h.getBoundingClientRect().top);
+  else if(getComputedStyle(vi).position === 'fixed') abajo = Math.min(abajo, vi.querySelector('.vfila').getBoundingClientRect().top);
+  return {w:mp.clientWidth, y0:arriba - r.top, h:Math.max(80, abajo - arriba)};
 }
 function tileEn(px, py){
   return M.tiles.find(t => { const x = mod(t.bx + M.x + t.w, M.W) - t.w, y = mod(t.by + M.y + t.h, t.H) - t.h; return px >= x && px < x + t.w && py >= y && py < y + t.h; });
 }
 function epocaVisible(){
   const A = ARTISTA; if(!A || UNI || !M.tiles.length) return;
-  const z = zonaVisible(), t = tileEn(z.w/2, z.h/2), a = t && current[t.i]; if(!a) return;
+  const z = zonaVisible(), t = tileEn(z.w/2, z.y0 + z.h/2), a = t && current[t.i]; if(!a){ hablar(); return; }
   const i = (A.cfg.epocas || []).findIndex(e => enEpoca(a, e));
-  if(i < 0 || i === A.epoca) return;
-  A.epoca = i; decir(A.cfg.epocas[i].dice);
+  if(i < 0 || i === A.epoca){ hablar(); return; }
+  const e = A.cfg.epocas[i]; A.epoca = i; decir(e.dice, {t:'Ver solo ' + (/^\d/.test(e.titulo) ? e.titulo : e.titulo[0].toLowerCase() + e.titulo.slice(1)), f:'e' + i});
 }
 // Lleva el mapa (que no tiene bordes) hasta una obra por el camino más corto, en la parte visible
 function irATile(T){
   const z = zonaVisible();
   const sx = mod(T.bx + M.x + T.w, M.W) - T.w, sy = mod(T.by + M.y + T.h, T.H) - T.h;
-  let dx = (z.w - T.w)/2 - sx, dy = Math.max(8, (z.h - T.h)/2) - sy;
+  let dx = (z.w - T.w)/2 - sx, dy = z.y0 + Math.max(8, (z.h - T.h)/2) - sy;
   dx -= Math.round(dx/M.W)*M.W; dy -= Math.round(dy/T.H)*T.H;
   M.vx = M.vy = 0;
   if(RM){ M.x += dx; M.y += dy; return; }
@@ -2080,7 +2123,7 @@ async function marcarObras(keys){
   const ts = M.tiles.filter(t => keys.includes(current[t.i].key));
   ts.forEach(t => t.el.classList.add('marca'));
   const z = zonaVisible(), primero = ts.filter(t => current[t.i].key === (keys.find(k => ts.some(u => current[u.i].key === k))));
-  const dist = t => { const x = mod(t.bx + M.x + t.w, M.W) - t.w, y = mod(t.by + M.y + t.h, t.H) - t.h; return Math.hypot(x + t.w/2 - z.w/2, y + t.h/2 - z.h/2); };
+  const dist = t => { const x = mod(t.bx + M.x + t.w, M.W) - t.w, y = mod(t.by + M.y + t.h, t.H) - t.h; return Math.hypot(x + t.w/2 - z.w/2, y + t.h/2 - z.y0 - z.h/2); };
   if(primero.length) irATile(primero.reduce((a, b) => dist(b) < dist(a) ? b : a));
 }
 
@@ -2202,6 +2245,8 @@ $('chLog').onclick = e => {
 $('chF').onsubmit = e => { e.preventDefault(); const q = $('chI').value.trim(); if(!q) return; $('chI').value = ''; $('chI').blur(); enviarCharla(q); };
 $('chX').onclick = cerrarCharla;
 $('vAv').onclick = abrirCharla;
+$('vAcc').onclick = () => { if(ARTISTA.acc) aplicarFiltro(ARTISTA.acc.f); };
+document.querySelector('.vbur').addEventListener('click', e => { if(V2 && !e.target.closest('#vAcc')) abrirCharla(); });
 $('chI').addEventListener('focus', abrirCharla);
 $('selec').onclick = e => { const b = e.target.closest('[data-f]'); if(b && b.dataset.f !== ARTISTA.filtro) aplicarFiltro(b.dataset.f); };
 
