@@ -1196,6 +1196,9 @@ async function obraDeMuseo(clave){
     url = raw.url;
   }
   filas = filas.filter(([, v]) => v).map(([k, v]) => [k, String(v)]);
+  // Mediación breve en castellano, si está preparada (obras/breves.json): borrador a partir del texto del museo
+  let breve = null;
+  try{ const r = await fetch('obras/breves.json', {cache:'no-cache'}); if(r.ok){ const j = await r.json(); breve = (j.obras || {})[clave] || null; } }catch(e){}
   const base = [{id:'B1', f:`${museo} · ficha`, t:`${o.titulo}. ` + filas.map(([k, v]) => `${k}: ${v}`).join('. ')}];
   textos.filter(([, t]) => t && plano(t)).forEach(([f, t]) => base.push({id:'B' + (base.length + 1), f:`${museo} · ${f} (en inglés)`, t:plano(t)}));
   return Object.assign(o, {
@@ -1205,9 +1208,12 @@ async function obraDeMuseo(clave){
     mediadores:{guia:{nombre:'Guía', por:'la guía', corto:'Guía', ini:'G', acc:'#f6f5f2', voz:'guia',
       placeholder:'Dime qué ves o pregunta…', conversa:'Conversa con la guía', te:'La guía te pregunta',
       vts:'Dime qué ves o pregúntame lo que quieras.', rol:'Guía del museo',
-      relato:[{k:'pregunta', z:null, t:'¿Qué es lo primero que ves en esta obra?'}], qa:[]}},
+      relato:breve && Array.isArray(breve.relato) && breve.relato.length
+        ? breve.relato.map(c => Object.assign({z:null}, c))
+        : [{k:'pregunta', z:null, t:'¿Qué es lo primero que ves en esta obra?'}], qa:[]}},
     ficha:[...filas.map(([k, v]) => [k, esc(v)]), ['Museo', url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(museo)}</a>` : esc(museo)], ['Licencia', 'Dominio público']],
-    nota:'Datos y textos del museo, sin revisar. La guía responde con IA a partir de ellos.'
+    nota:breve ? `Mediación breve: borrador a partir del texto del museo (${breve.fuente || museo}), sin validar. La guía responde con IA a partir de esos datos.`
+      : 'Datos y textos del museo, sin revisar. La guía responde con IA a partir de ellos.'
   });
 }
 // Lo que manda el catálogo para el «⋯»: guardar en Mi recorrido y seguir por autor, tema, estilo o época

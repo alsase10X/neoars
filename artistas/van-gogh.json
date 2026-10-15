@@ -1,0 +1,91 @@
+{
+ "id": "van-gogh",
+ "nombre": "Vincent van Gogh",
+ "estado": "Retrato provisional. Épocas por año de la ficha del museo. Selecciones de prueba, pendientes de curar.",
+ "retrato": {
+  "nota": "Retrato provisional",
+  "viewBox": "48 30 152 214",
+  "trazos": [
+   "M110 46 C131 45 145 58 147 77 C148 86 146 93 149 99 C153 107 162 119 167 128 C168 132 163 134 156 133 C155 136 155 139 157 141 C154 143 152 145 154 148 C156 151 156 154 153 157 C157 167 155 180 147 190 C139 199 124 202 112 198 C104 195 98 188 96 180",
+   "M110 46 C86 46 67 62 65 88 C63 106 71 121 84 129 C90 133 94 141 96 151",
+   "M95 56 C107 51 121 52 132 58",
+   "M81 69 C94 62 109 62 121 66",
+   "M100 113 C92 107 84 113 86 125 C88 135 96 139 102 135",
+   "M124 96 C131 92 139 92 147 96",
+   "M129 105 L141 101 M129 105 L140 108",
+   "M157 140 C150 144 141 147 132 152",
+   "M137 162 C140 170 139 179 136 188",
+   "M125 166 C127 174 126 183 123 192",
+   "M113 171 C114 179 113 187 110 193",
+   "M104 196 C104 207 102 217 98 229",
+   "M141 195 C143 207 147 217 153 227",
+   "M70 240 C84 227 98 225 110 233 L122 240",
+   "M153 227 C167 227 179 233 189 240"
+  ]
+ },
+ "epocas": [
+  {
+   "titulo": "Hasta 1885",
+   "hasta": 1885
+  },
+  {
+   "titulo": "1886–1887",
+   "desde": 1886,
+   "hasta": 1887
+  },
+  {
+   "titulo": "1888",
+   "desde": 1888,
+   "hasta": 1888
+  },
+  {
+   "titulo": "1889",
+   "desde": 1889,
+   "hasta": 1889
+  },
+  {
+   "titulo": "1890",
+   "desde": 1890,
+   "hasta": 1890
+  }
+ ],
+ "selecciones": [
+  {
+   "id": "retratos",
+   "titulo": "Retratos",
+   "nota": "Él mismo y gente de su entorno",
+   "obras": [
+    "aic-80607",
+    "aic-27949",
+    "cma-135299",
+    "cma-126085",
+    "aic-88393"
+   ]
+  },
+  {
+   "id": "arboles",
+   "titulo": "Árboles",
+   "nota": "De 1884 a 1889",
+   "obras": [
+    "aic-31640",
+    "aic-202382",
+    "aic-52733",
+    "aic-87327",
+    "cma-125249",
+    "cma-135310"
+   ]
+  },
+  {
+   "id": "campo",
+   "titulo": "Campo y trabajo",
+   "nota": "Gente trabajando la tierra y los caminos",
+   "obras": [
+    "cma-135286",
+    "aic-28862",
+    "aic-150802",
+    "cma-125249",
+    "aic-65479"
+   ]
+  }
+ ]
+}

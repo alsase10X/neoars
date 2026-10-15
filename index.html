@@ -313,11 +313,38 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 /* La obra se abre en la unidad, en una capa encima del catálogo: al cerrarla, el mapa sigue donde estaba */
 #uni{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:20;background:var(--paper)}
 #toast{position:fixed;left:var(--s2);right:var(--s2);top:calc(env(safe-area-inset-top,0px) + 60px);max-width:520px;margin:0 auto;z-index:50;background:var(--ink);color:#000;padding:11px 14px;font-size:14px;font-weight:700;overflow-wrap:anywhere}
+/* Modo artista (?artista=…): la portada presenta al personaje; encima del mapa, filtros y selecciones */
+#portada{position:fixed;inset:0;z-index:30;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s3);text-align:center;padding:calc(env(safe-area-inset-top,0px) + var(--s3)) max(var(--s2), env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + var(--s3)) max(var(--s2), env(safe-area-inset-left,0px))}
+#pRetrato{width:min(56vw,240px);height:auto;fill:none;stroke:var(--ink);stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+#pRetrato path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+#pRetrato.dibuja path{animation:trazo var(--dur,2s) cubic-bezier(.45,.05,.3,1) forwards;animation-delay:var(--del,0s)}
+@keyframes trazo{to{stroke-dashoffset:0}}
+#pNombre{margin:0;font-size:2rem;font-weight:900;letter-spacing:-.03em;line-height:1;text-wrap:balance}
+#pVida{margin:8px 0 0;color:var(--grey);font-size:.95rem;font-weight:600}
+#pCuenta{margin:0;color:var(--grey);font-size:.9rem;font-weight:500;line-height:1.4;min-height:2.8em;max-width:34ch}
+#pVer{height:52px;padding:0 28px;font-size:1rem;background:var(--ink);color:#000;border-color:var(--ink)}
+#pVer:hover{background:var(--paper);color:var(--ink)}
+#pNota{color:var(--grey);font-size:.8rem;font-weight:500}
+#aNombre{flex:1;min-width:0;text-align:left;border:0;padding:8px 0;background:none;color:var(--ink);font-size:1.3rem;font-weight:800;letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#aNombre:hover{background:none;color:var(--ink)}
+#selec{display:flex;gap:6px;overflow-x:auto;padding:4px var(--s2) 10px;flex:0 0 auto;scrollbar-width:none}
+#selec::-webkit-scrollbar{display:none}
+#selec button{flex:none;padding:8px 12px;font-size:.85rem;white-space:nowrap}
+#selec button[aria-pressed=true]{background:var(--ink);color:#000;border-color:var(--ink)}
+#selec .sep{flex:none;width:1px;background:var(--soft);margin:4px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
+<div id="portada" hidden>
+  <svg id="pRetrato" aria-hidden="true"></svg>
+  <div><h1 id="pNombre"></h1><p id="pVida"></p></div>
+  <p id="pCuenta" role="status"></p>
+  <button id="pVer" type="button">Ver sus obras</button>
+  <small id="pNota"></small>
+</div>
 <header>
+  <button id="aNombre" type="button" hidden aria-label="Volver a la portada"></button>
   <div class="tabs" role="tablist"><button id="tExp" role="tab">Exposiciones</button><button id="tCat" role="tab">Catálogo</button></div>
   <button class="ib" id="lupa" aria-label="Buscar" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
   <button class="ib" id="mas" aria-label="Más opciones" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></button>
@@ -326,6 +353,7 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
   <input id="q" type="search" placeholder="Artista, tema, obra…" enterkeyhint="search" aria-label="Buscar en el catálogo" autocomplete="off">
   <button class="ib" id="qX" aria-label="Quitar la búsqueda"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 </div>
+<div id="selec" role="toolbar" aria-label="Filtros y selecciones" hidden></div>
 <div id="bar" hidden><span id="msg"></span><button id="undrift" hidden>Quitar ✕</button></div>
 <!-- Estado del catálogo: lo cambia el menú «⋯» -->
 <div hidden>
@@ -465,6 +493,7 @@ const fmtYear = y => y == null ? '' : y < 0 ? `${-y} a. C.` : String(y);
 const firstLine = s => String(s || '').split('\n')[0];
 const within = (p, ms) => Promise.race([p, new Promise(r => setTimeout(r, ms))]);
 let state = {page:1, seed:1, more:false}, current = [], art = null, drift = null, expoView = false, DET = false;
+let ARTISTA = null;   // modo artista: configuración, obras y filtro activo
 
 /* ---------- Autores que presentan su obra ----------
    Solo autores muy documentados. Se reconocen por el nombre (con variantes), porque cada museo
@@ -527,6 +556,8 @@ const AUTORES = [
 ];
 const normTxt = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
 const ATTRIB = /\b(follower|school|workshop|circle|after|style|manner|copy|attributed|studio|imitator|pupil|possibly|probably)\b/i;
+// Tipo de obra, igual en los tres museos: pintura, papel (dibujo, acuarela, grabado) u otro
+function tipoDe(s){ s = String(s || ''); return /paint/i.test(s) ? 'pintura' : /draw|print|water|etch|engrav|lithog|sketch/i.test(s) ? 'papel' : 'otro'; }
 function autorDe(a){
   if(!a || !a.name || ATTRIB.test(a.name) || ATTRIB.test(a.attrib || '')) return null;
   const n = ' '+normTxt(a.name)+' ';
@@ -589,7 +620,7 @@ function sampleColor(a, withPal=false){
 /* ---------- Museos ---------- */
 const AIC = {
   base:'https://api.artic.edu/api/v1/artworks',
-  fields: ['id','title','artist_display','artist_title','date_display','date_start','place_of_origin','medium_display','dimensions','credit_line','department_title','classification_title','style_title','subject_titles','description','short_description','image_id','thumbnail','color','is_public_domain','main_reference_number'],
+  fields: ['id','title','artist_display','artist_title','date_display','date_start','place_of_origin','medium_display','dimensions','credit_line','department_title','classification_title','style_title','subject_titles','description','short_description','image_id','thumbnail','color','is_public_domain','main_reference_number','artwork_type_title','is_on_view','gallery_title'],
   // pint: solo pintura (el catálogo); las búsquedas por autor de «Conoce a…» no lo usan
   async search(q, page, lim, d, pint){
     const filter = [{term:{is_public_domain:true}},{exists:{field:'image_id'}}];
@@ -622,6 +653,7 @@ const AIC = {
       ar:(t && t.width && t.height) ? t.height/t.width : 0,
       hsl: a.color ? [a.color.h, a.color.s, a.color.l] : undefined,
       subject:(a.subject_titles||[])[0] || '', style:a.style_title || '', kind:a.classification_title || '',
+      tipo:tipoDe(a.artwork_type_title || a.classification_title), sala:a.is_on_view ? (a.gallery_title || 'En sala') : '',
       voices:[
         a.description ? {label:'Texto del museo', text:strip(a.description), by:SRC_NAME.aic}
           : a.short_description ? {label:'Texto breve del museo', text:strip(a.short_description), by:SRC_NAME.aic} : null,
@@ -665,6 +697,7 @@ const MET = {
       year: o.objectDate ? o.objectBeginDate : null,
       thumb:o.primaryImageSmall||o.primaryImage, mid:o.primaryImageSmall||o.primaryImage, big:o.primaryImage, ar:0, hsl:undefined,
       subject:(o.tags||[])[0]?.term || '', style:o.period || o.culture || '', kind:o.classification || '',
+      tipo:tipoDe(o.classification), sala:o.GalleryNumber ? 'Sala ' + o.GalleryNumber : '',
       voices:[], alt:'', url:o.objectURL,
       fields:[['Fecha',o.objectDate],['Cultura',o.culture],['Periodo',o.period],['Técnica',o.medium],['Dimensiones',o.dimensions],['Clasificación',o.classification],['Departamento',o.department],['Nº de acceso',o.accessionNumber],['Crédito',o.creditLine],['Etiquetas',(o.tags||[]).map(t=>t.term).join(', ')],['Licencia','Dominio público (Open Access)']]
     };
@@ -672,7 +705,7 @@ const MET = {
 };
 const CMA = {
   base:'https://openaccess-api.clevelandart.org/api/artworks',
-  fields:'id,accession_number,title,creation_date,creation_date_earliest,creators,culture,technique,type,department,collection,measurements,creditline,description,did_you_know,url,images,share_license_status',
+  fields:'id,accession_number,title,creation_date,creation_date_earliest,creators,culture,technique,type,department,collection,measurements,creditline,description,did_you_know,url,images,share_license_status,current_location',
   async search(q, page, lim, d, pint){
     const p = new URLSearchParams({has_image:'1', cc0:'1', limit:String(lim), skip:String((page-1)*lim)});
     if(pint) p.set('type', 'Painting');
@@ -699,6 +732,7 @@ const CMA = {
       year: a.creation_date_earliest ?? yearOf(a.creation_date),
       thumb:w.url, mid:w.url, big:w.url, hi:pr?.url || '', ar:(+w.height && +w.width) ? +w.height/+w.width : 0, hsl:undefined,
       subject:'', style:(a.culture||[])[0] || '', kind:a.type || '',
+      tipo:tipoDe(a.type), sala:a.current_location ? 'Sala ' + a.current_location : '',
       voices:[
         a.description ? {label:'Texto del museo', text:strip(a.description), by:SRC_NAME.cma} : null,
         a.did_you_know ? {label:'¿Sabías que…?', text:strip(a.did_you_know), by:SRC_NAME.cma} : null
@@ -745,7 +779,7 @@ function render(){
   if(document.body.classList.contains('home')) return;
   const mapMode = $('view').value==='map';
   $('map').hidden = !mapMode; $('grid').hidden = mapMode; $('det').disabled = !mapMode;
-  ls.set('view', $('view').value); ls.set('order', $('order').value);
+  if(!ARTISTA){ ls.set('view', $('view').value); ls.set('order', $('order').value); }
   $('hint').textContent = DET ? 'Arrastra · toca un fragmento para ver la obra' : 'Arrastra para explorar';
   if(mapMode) buildMap(); else buildCols();
 }
@@ -1015,7 +1049,7 @@ function cerrarUnidad(desdeAtras){
 }
 function extras(){
   if(!UNI) return;
-  UNI.f.contentWindow.postMessage({tipo:'unidad-extras', guardado:saved(UNI.a), seguir:driftOpts(UNI.a).map(o => o.label)}, location.origin);
+  UNI.f.contentWindow.postMessage({tipo:'unidad-extras', guardado:saved(UNI.a), seguir:ARTISTA ? [] : driftOpts(UNI.a).map(o => o.label)}, location.origin);
 }
 addEventListener('message', e => {
   if(!UNI || e.origin !== location.origin || e.source !== UNI.f.contentWindow) return;
@@ -1836,6 +1870,101 @@ async function callLLM(messages){
   return j.choices[0].message.content;
 }
 
+/* ---------- Modo artista (?artista=van-gogh) ----------
+   La puerta del imán: la portada presenta al personaje y «Ver sus obras» abre el mapa con todas sus obras
+   de dominio público en los museos abiertos, ordenadas por fecha. Encima, filtros por datos (tipo, en sala,
+   época) y selecciones curadas, que se leen de artistas/<id>.json. Cada obra se abre en la unidad. */
+const MUSEO_EN = {aic:'el Art Institute de Chicago', cma:'el Museo de Arte de Cleveland', met:'el Met de Nueva York'};
+const TIPOS = [
+  {id:'todas', t:'Todas', f:() => true},
+  {id:'pintura', t:'Pinturas', f:a => a.tipo === 'pintura'},
+  {id:'papel', t:'Dibujos y grabados', f:a => a.tipo === 'papel'},
+  {id:'sala', t:'En sala ahora', f:a => !!a.sala}
+];
+function dibujarRetrato(r){
+  const svg = $('pRetrato');
+  svg.setAttribute('viewBox', r.viewBox || '0 0 200 240');
+  svg.innerHTML = (r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('');
+  if(RM) return;   // sin animación, el trazo se ve entero
+  svg.querySelectorAll('path').forEach((p, i) => {
+    p.style.setProperty('--len', Math.ceil(p.getTotalLength()) + 2);
+    p.style.setProperty('--del', (i ? 0.25 + i*0.09 : 0) + 's');
+    p.style.setProperty('--dur', (i ? 1.1 : 2.2) + 's');
+  });
+  svg.classList.add('dibuja');
+}
+async function cargarObrasArtista(){
+  const x = ARTISTA.autor, d = {kind:'artist', value:x.buscar[0], alts:x.buscar};
+  $('onlyText').checked = false;
+  const fuentes = [['aic', 100], ['cma', 100], ['met', 40]];
+  const res = await Promise.allSettled(fuentes.map(([k, n]) => APIS[k].search('', 1, n, d)));
+  const obras = [], cuenta = {};
+  res.forEach((r, i) => {
+    if(r.status !== 'fulfilled') return;
+    const k = fuentes[i][0];
+    r.value.items.filter(a => autorDe(a) === x).forEach(a => {
+      if(obras.some(o => o.key === a.key)) return;
+      obras.push(localize(a)); cuenta[k] = (cuenta[k] || 0) + 1;
+    });
+  });
+  obras.sort((p, q) => (p.year ?? 1e9) - (q.year ?? 1e9));
+  obras.forEach(a => ITEMS[a.key] = a);
+  Object.assign(ARTISTA, {obras, cuenta, fallos:res.filter(r => r.status === 'rejected').length});
+}
+async function iniciarArtista(id){
+  document.body.classList.add('artista');
+  document.querySelector('.tabs').hidden = $('lupa').hidden = $('mas').hidden = $('pager').hidden = true;
+  $('aNombre').hidden = $('portada').hidden = false;
+  $('view').value = 'map'; $('order').value = 'date'; setDet(false);
+  let cfg = null;
+  try{ const r = await fetch(`artistas/${encodeURIComponent(id)}.json`, {cache:'no-cache'}); if(r.ok) cfg = await r.json(); }catch(e){}
+  const autor = cfg && AUTORES.find(x => x.nombre === cfg.nombre);
+  if(!autor){ $('pNombre').textContent = 'No encontramos a este artista'; $('pCuenta').textContent = 'Revisa el enlace o el código QR.'; $('pVer').hidden = true; return; }
+  ARTISTA = {cfg, autor, obras:[], filtro:'todas', grupos:[], visto:false, msg:''};
+  document.title = $('pNombre').textContent = $('aNombre').textContent = cfg.nombre;
+  $('pVida').textContent = autor.vida;
+  $('pNota').textContent = (cfg.retrato && cfg.retrato.nota) || '';
+  if(cfg.retrato) try{ dibujarRetrato(cfg.retrato); }catch(e){}
+  $('pCuenta').textContent = 'Buscando sus obras en los museos…';
+  $('pVer').disabled = true;
+  await cargarObrasArtista();
+  const c = ARTISTA.cuenta, partes = ['aic','cma','met'].filter(k => c[k]).map(k => `${c[k]} en ${MUSEO_EN[k]}`);
+  if(!partes.length){ $('pCuenta').textContent = 'Los museos no han respondido. Prueba otra vez dentro de un momento.'; return; }
+  const n = ARTISTA.obras.length, lista = partes.length > 1 ? partes.slice(0, -1).join(', ') + ' y ' + partes[partes.length-1] : partes[0];
+  $('pCuenta').textContent = `${n} ${n === 1 ? 'obra' : 'obras'}: ${lista}.` + (ARTISTA.fallos ? ' Algún museo no ha respondido.' : '');
+  pintarSelec();
+  $('pVer').disabled = false;
+}
+// Filtros por datos y selecciones curadas; solo se ofrecen los que tienen alguna obra
+function pintarSelec(){
+  const A = ARTISTA, cfg = A.cfg, hay = o => o.id === 'todas' || A.obras.some(o.f);
+  A.grupos = [
+    TIPOS.filter(hay),
+    (cfg.epocas || []).map((e, i) => ({id:'e' + i, t:e.titulo, f:a => a.year != null && (e.desde == null || a.year >= e.desde) && (e.hasta == null || a.year <= e.hasta)})).filter(hay),
+    (cfg.selecciones || []).map(s => ({id:'s-' + s.id, t:s.titulo, nota:s.nota, f:a => (s.obras || []).includes(a.key)})).filter(hay)
+  ].filter(g => g.length);
+  $('selec').innerHTML = A.grupos.map(g => g.map(o => `<button type="button" data-f="${esc(o.id)}" aria-pressed="${o.id === A.filtro}">${esc(o.t)}</button>`).join('')).join('<i class="sep" aria-hidden="true"></i>');
+}
+function aplicarFiltro(id){
+  const A = ARTISTA, o = A.grupos.flat().find(x => x.id === id) || A.grupos[0][0];
+  A.filtro = o.id;
+  current = A.obras.filter(o.f);
+  $('selec').querySelectorAll('[data-f]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.f === o.id)));
+  const n = current.length;
+  A.msg = `${n} ${n === 1 ? 'obra' : 'obras'}` + (o.id === 'todas' ? '' : ` · ${o.t}`) + (o.nota ? ` · ${o.nota}` : '');
+  aviso(A.msg);
+  render();
+}
+function verObras(){
+  $('portada').hidden = true; $('selec').hidden = false;
+  if(ARTISTA.visto && M.tiles.length){ aviso(ARTISTA.msg); loop(); return; }
+  ARTISTA.visto = true;
+  aplicarFiltro(ARTISTA.filtro);
+}
+$('pVer').onclick = verObras;
+$('selec').onclick = e => { const b = e.target.closest('[data-f]'); if(b && b.dataset.f !== ARTISTA.filtro) aplicarFiltro(b.dataset.f); };
+$('aNombre').onclick = () => { cancelAnimationFrame(M.raf); $('selec').hidden = $('bar').hidden = true; $('portada').hidden = false; };
+
 /* ---------- Arranque ---------- */
 const syncOpt = () => { $('optText').hidden = !['aic','all'].includes($('src').value); $('optText').setAttribute('aria-pressed', String($('onlyText').checked)); };
 $('view').value = ls.get('view','map');
@@ -1896,7 +2025,8 @@ document.addEventListener('keydown', e => {
   if(SL.on){ slowStop(false); return; }
   if($('modal').classList.contains('open')) close_();
 });
-setTab(ls.get('tab','exp'));
+const ART_ID = (() => { try{ return new URLSearchParams(location.search).get('artista'); }catch(e){ return null; } })();
+if(ART_ID) iniciarArtista(ART_ID); else setTab(ls.get('tab','exp'));
 const UNIS = loadUnidades();
 Promise.all([loadRecorridos(), loadLocal(), UNIS]).then(() => { if(document.body.classList.contains('home')) renderHome(); });
 UNIS.then(openFromHash);
