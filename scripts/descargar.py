@@ -70,7 +70,12 @@ def ficha_e_imagenes(museo, ident):
 def claves_de_recorridos():
     datos = json.loads((RAIZ / "recorridos.json").read_text("utf-8"))
     lista = datos["recorridos"] if isinstance(datos, dict) else datos
-    return sorted({k for r in lista for k in r.get("obras", [])})
+    claves = {k for r in lista for k in r.get("obras", [])}
+    # También las obras con mediación breve: así su ficha original (con el texto del museo) queda en data/
+    breves = RAIZ / "unidad" / "obras" / "breves.json"
+    if breves.exists():
+        claves |= set(json.loads(breves.read_text("utf-8")).get("obras", {}))
+    return sorted(claves)
 
 
 def main():

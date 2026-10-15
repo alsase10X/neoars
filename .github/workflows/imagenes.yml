@@ -1,12 +1,13 @@
 name: Imágenes de los recorridos
 
-# Cada vez que cambia recorridos.json, descarga las fichas e imágenes que falten
+# Cada vez que cambia recorridos.json (o las mediaciones breves), descarga las fichas e imágenes que falten
 # y las guarda en el repositorio (data/ e img/). También se puede lanzar a mano.
 on:
   push:
     branches: [main]
     paths:
       - recorridos.json
+      - unidad/obras/breves.json
       - scripts/descargar.py
   workflow_dispatch:
 
