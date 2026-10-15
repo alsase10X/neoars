@@ -4,6 +4,11 @@
  "corto": "Vincent",
  "saludo": "¡Hola! Aquí tienes mis obras, de la primera a la última. Arrastra para recorrerlas o pregúntame lo que quieras.",
  "aviso": "Recreación a partir de sus cartas y de los textos de los museos",
+ "presentacion": "¡Hola! Soy Vincent. Bueno, una recreación hecha con inteligencia artificial a partir de mis cartas y de lo que cuentan los museos. Pregúntame lo que quieras o recorre mis obras.",
+ "foto": {
+  "src": "artistas/van-gogh-cara.jpg",
+  "fuente": "Detalle de su Autorretrato de 1887 · Art Institute of Chicago · dominio público"
+ },
  "estado": "Retratos provisionales. Épocas por año de la ficha del museo. Selecciones de prueba, pendientes de curar. Citas: traducción propia del original francés, comprobado en la edición del Van Gogh Museum.",
  "retrato": {
   "nota": "Retrato provisional",

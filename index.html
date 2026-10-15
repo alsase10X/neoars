@@ -388,6 +388,62 @@ body.v2>header,body.v2>#bar{display:none!important}
   body.v2 #vHoja{height:min(62vh,calc(100vh - 150px))}
 }
 @media(min-width:900px){ #vQuien{display:none!important} body.v2 #selec{padding-top:14px} }
+/* Variantes 3 y 4: su cara real (detalle de un autorretrato) y esquinas redondeadas */
+#vAsa{display:none}
+#vNav{display:none}
+.av.foto{border-radius:50%;object-fit:cover;display:block}
+#chAv .av{width:34px;height:34px}
+.vhd small{font-size:.8rem;font-weight:500;color:var(--grey)}
+.chVer{margin-top:10px;padding:9px 16px;font-size:.92rem;background:var(--ink);color:#000;border-color:var(--ink)}
+.chVer:hover{background:var(--paper);color:var(--ink)}
+.chIr{margin-left:4px;padding:4px 10px!important;border:1px solid var(--soft)!important;text-decoration:none!important}
+body.redondo .tile{border-radius:14px}
+body.redondo #selec button{border-radius:999px}
+body.redondo .vbur{border-radius:18px}
+body.redondo #chF input,body.redondo #chF button,body.redondo #vAcc,body.redondo .chVer,body.redondo .chIr{border-radius:999px}
+body.redondo #chQs button{border-radius:14px}
+body.redondo #vAv{border-radius:50%;overflow:hidden;padding:0;border:2px solid var(--ink)}
+body.redondo #vAv .av{width:100%;height:100%}
+@media(max-width:899px){
+  /* v3: una tarjeta abajo, sobre el mapa, con tres alturas: tira (su cara y el campo), media y alta (la charla) */
+  body.v3 #vinc{position:fixed;left:0;right:0;bottom:0;top:auto;display:grid;grid-template-columns:64px minmax(0,1fr);grid-template-areas:"asa asa" "av form";grid-template-rows:auto auto;align-items:center;background:var(--panel);border:0;border-radius:22px 22px 0 0;box-shadow:0 -10px 30px rgba(0,0,0,.55);pointer-events:auto;padding-bottom:env(safe-area-inset-bottom,0px);transition:height .32s cubic-bezier(.2,.8,.2,1)}
+  body.v3 #vinc.abierta{background:var(--panel)}
+  body.v3 #vinc.arrastra{transition:none}
+  body.v3 #vAsa{display:flex;grid-area:asa;height:26px;align-items:center;justify-content:center;touch-action:none;cursor:grab}
+  body.v3 #vAsa::after{content:"";width:42px;height:5px;border-radius:3px;background:rgba(246,245,242,.35)}
+  body.v3 #vinc #vHoja,body.v3 #vinc .vfila{display:contents}
+  body.v3 #vAv{grid-area:av;justify-self:end;width:46px;height:46px;margin:0 2px 8px 0}
+  body.v3 #vinc #chF{display:flex;grid-area:form;padding:0 12px 10px 8px;border-top:0}
+  body.v3 .vbur{position:absolute;left:12px;right:12px;bottom:calc(100% + 10px)}
+  body.v3 .vhd{grid-area:cab;padding:0 6px 8px var(--s2)}
+  body.v3 #chLog{grid-area:log;border-top:1px solid var(--soft)}
+  body.v3 #vinc.e-tira .vhd,body.v3 #vinc.e-tira #chLog{display:none}
+  body.v3 #vinc:not(.e-tira){grid-template-areas:"asa asa" "cab cab" "log log" "form form";grid-template-rows:auto auto minmax(0,1fr) auto;align-items:stretch}
+  body.v3 #vinc:not(.e-tira) #vAv,body.v3 #vinc:not(.e-tira) .vbur{display:none}
+  body.v3 #vinc:not(.e-tira) #chF{padding:10px 12px;border-top:1px solid var(--soft)}
+  body.v3 #vinc.e-media{height:58vh}
+  body.v3 #vinc.e-alta{height:88vh}
+  /* v4: barra abajo con dos pestañas; «Vincent» ocupa la pantalla, «Obras» deja el mapa con su bocadillo */
+  body.v4 #vNav{display:flex;flex:0 0 auto;position:relative;z-index:8;background:var(--paper);border-top:1px solid var(--soft);padding-bottom:env(safe-area-inset-bottom,0px)}
+  body.v4 #vNav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:62px;border:0;background:none;color:var(--grey);font-size:.78rem;font-weight:700;padding:6px 0}
+  body.v4 #vNav button:hover{background:none;color:var(--ink)}
+  body.v4 #vNav button[aria-current=true]{color:var(--ink)}
+  body.v4 #vNav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
+  body.v4 #vNav .navFoto .av{width:26px;height:26px;opacity:.6}
+  body.v4 #vNav button[aria-current=true] .navFoto .av{opacity:1;outline:2px solid var(--ink);outline-offset:1px}
+  body.v4 #vinc{bottom:calc(62px + env(safe-area-inset-bottom,0px))}
+  body.v4 #vAv{display:none}
+  body.v4 .vfila{grid-template-columns:minmax(0,1fr)}
+  body.v4 #vinc.abierta{top:0;display:flex;flex-direction:column;background:var(--paper)}
+  body.v4 #vinc.abierta #vHoja{position:static;display:flex;flex:1 1 auto;min-height:0;height:auto;border-top:0;background:none;animation:none}
+  body.v4 .vhd{padding-top:calc(env(safe-area-inset-top,0px) + 6px)}
+}
+@media(min-width:900px){
+  body.redondo #pRetrato{display:none}
+  #vFotoG{width:min(70%,220px);aspect-ratio:1;border-radius:50%;object-fit:cover}
+  body.redondo #vinc.abierta #vFotoG{width:84px}
+  #chAv,.chVer{display:none!important}
+}
 /* Lo que se dice en la charla. Cada parte lleva el avatar de quien habla: él, recreado, o la guía */
 .av{flex:none;width:28px;height:28px;fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
 #chLog .intro,#chLog .src{margin:0;color:var(--grey);font-size:.9rem;font-weight:500;line-height:1.45}
@@ -459,14 +515,19 @@ body.v2>header,body.v2>#bar{display:none!important}
 <!-- Modo artista: el personaje vive en la misma pantalla que sus obras. En móvil, franja abajo y la charla sube
      como hoja sobre el mapa; en pantalla grande, columna a la izquierda -->
 <aside id="vinc" hidden>
-  <div id="vRet"><svg id="pRetrato" class="trazo" aria-hidden="true"></svg><div id="vNom" hidden><b id="vNomN"></b><small id="vNomS"></small></div></div>
+  <div id="vAsa" aria-hidden="true"></div>
+  <div id="vRet"><svg id="pRetrato" class="trazo" aria-hidden="true"></svg><img id="vFotoG" alt="" hidden><div id="vNom" hidden><b id="vNomN"></b><small id="vNomS"></small></div></div>
   <div id="vHoja" role="region" aria-labelledby="chT">
-    <div class="vhd"><b id="chT"></b><button class="ib" id="chX" type="button" aria-label="Cerrar la charla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
+    <div class="vhd"><span id="chAv" hidden></span><b id="chT"></b><button class="ib" id="chX" type="button" aria-label="Cerrar la charla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
     <div id="chLog" aria-live="polite"></div>
   </div>
   <div class="vfila"><button id="vAv" type="button"></button><div class="vbur"><p id="vQuien" hidden></p><p id="vDice" aria-live="polite"></p><button id="vAcc" type="button" hidden></button></div></div>
   <form id="chF" autocomplete="off"><input id="chI" enterkeyhint="send" aria-label="Tu pregunta" placeholder="Pregúntame algo…"><button aria-label="Enviar">→</button></form>
 </aside>
+<nav id="vNav" hidden aria-label="Secciones">
+  <button type="button" data-tab="obras"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span>Obras</span></button>
+  <button type="button" data-tab="vincent"><span class="navFoto"></span><span id="vNavN"></span></button>
+</nav>
 <div id="pick" hidden><span id="pickTxt"></span><button id="pickX">Cancelar</button></div>
 
 <div id="modal">
@@ -1967,7 +2028,11 @@ async function callLLM(messages){
    frases preparadas en artistas/<id>.json: el saludo, una por época (al parar de arrastrar) y una por selección
    (al elegirla). Encima, filtros por datos (tipo, en sala, época) y selecciones curadas. Cada obra se abre en la unidad. */
 const MUSEO_CORTO = {aic:'Chicago', cma:'Cleveland', met:'Nueva York'};
-const V2 = (() => { try{ return new URLSearchParams(location.search).get('v') === '2'; }catch(e){ return false; } })();   // variante de diseño, para comparar
+// Variantes de diseño, para comparar en el mismo enlace: &v=2 (Vincent flotante), &v=3 (tarjeta que cambia de altura),
+// &v=4 (barra abajo con «Obras» y «Vincent»). La 3 y la 4 llevan su cara real y esquinas redondeadas
+const VAR = (() => { try{ return new URLSearchParams(location.search).get('v') || ''; }catch(e){ return ''; } })();
+const V2 = ['2','3','4'].includes(VAR), V3 = VAR === '3', V4 = VAR === '4', FOTO = V3 || V4;
+const ESTRECHA = () => innerWidth < 900;
 const TIPOS = [
   {id:'todas', t:'Todas', f:() => true},
   {id:'pintura', t:'Pinturas', f:a => a.tipo === 'pintura'},
@@ -2028,12 +2093,22 @@ async function iniciarArtista(id){
     $('vQuien').textContent = corto + (cfg.saludo ? ' · recreación' : ''); $('vQuien').hidden = false;
     $('vNomN').textContent = cfg.nombre; $('vNomS').textContent = $('aSub').textContent; $('vNom').hidden = false;
   }
+  if(FOTO){   // su cara real (detalle de un autorretrato) hasta que haya retrato animado; la presentación abre la charla
+    document.body.classList.add('redondo', V3 ? 'v3' : 'v4');
+    const f = cfg.foto || {};
+    $('vAv').innerHTML = $('chAv').innerHTML = document.querySelector('#vNav .navFoto').innerHTML = avAutor();
+    $('chAv').hidden = false;
+    $('vFotoG').src = f.src || ''; $('vFotoG').title = f.fuente || ''; $('vFotoG').hidden = !f.src;
+    $('chT').innerHTML = `${esc(corto)} <small>${cfg.saludo ? 'recreación' : ''}</small>`;
+    $('vNavN').textContent = corto;
+    if(V4) $('vNav').hidden = false;
+    iniciarCharla();
+    if(V3) estado(ESTRECHA() ? 'media' : 'alta'); else tab('vincent');
+  }
   $('vAv').setAttribute('aria-label', `Hablar con ${corto}`);
-  $('vAv').innerHTML = avatarHTML(cfg.retrato);
+  if(!FOTO){ $('vAv').innerHTML = avatarHTML(cfg.retrato); trazar($('vAv').firstElementChild, cfg.retrato, false); trazar($('pRetrato'), cfg.retrato, true); }
   $('vinc').hidden = false;
-  trazar($('vAv').firstElementChild, cfg.retrato, false);
-  trazar($('pRetrato'), cfg.retrato, true);
-  decir(cfg.saludo || '');
+  if(!FOTO) decir(cfg.saludo || '');
   // Sus mediaciones por obra (la recreación y sus citas) también alimentan la charla
   fetch('unidad/obras/breves.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null)
     .then(j => { if(j) ARTISTA.breves = Object.entries(j.obras || {}).filter(([, o]) => o.artista === id && Array.isArray(o.autor)); }).catch(() => {});
@@ -2082,7 +2157,7 @@ function decir(t, acc){
 function pintarAcc(){ const A = ARTISTA, b = $('vAcc'); b.hidden = !A.acc || A.acc.f === A.filtro; if(A.acc) b.textContent = A.acc.t; }
 // En la v2 (móvil), el bocadillo se recoge al arrastrar y vuelve al parar
 const hablar = () => $('vinc').classList.add('habla');
-const callar = () => $('vinc').classList.remove('habla');
+const callar = () => { $('vinc').classList.remove('habla'); if(V3 && E3 !== 'tira' && ESTRECHA()) estado('tira'); };
 // Al parar de arrastrar: la obra que queda en el centro de lo visible decide la época de la que habla
 let paradaT = 0;
 function alParar(){ clearTimeout(paradaT); paradaT = setTimeout(epocaVisible, 250); }
@@ -2091,7 +2166,8 @@ function zonaVisible(){
   const mp = $('map'), r = mp.getBoundingClientRect(), h = $('vHoja'), vi = $('vinc'), sel = $('selec');
   let arriba = r.top, abajo = r.top + mp.clientHeight;
   if(getComputedStyle(sel).position === 'fixed') arriba = Math.max(arriba, sel.getBoundingClientRect().bottom - 24);
-  if(vi.classList.contains('abierta') && getComputedStyle(h).position === 'absolute') abajo = Math.min(abajo, h.getBoundingClientRect().top);
+  if(V3 && getComputedStyle(vi).position === 'fixed') abajo = Math.min(abajo, vi.getBoundingClientRect().top);
+  else if(vi.classList.contains('abierta') && getComputedStyle(h).position === 'absolute') abajo = Math.min(abajo, h.getBoundingClientRect().top);
   else if(getComputedStyle(vi).position === 'fixed') abajo = Math.min(abajo, vi.querySelector('.vfila').getBoundingClientRect().top);
   return {w:mp.clientWidth, y0:arriba - r.top, h:Math.max(80, abajo - arriba)};
 }
@@ -2120,11 +2196,34 @@ async function marcarObras(keys){
   if(!keys.length) return;
   if(!keys.some(k => current.some(a => a.key === k))) await aplicarFiltro('todas');
   document.querySelectorAll('.tile.marca').forEach(el => el.classList.remove('marca'));
-  const ts = M.tiles.filter(t => keys.includes(current[t.i].key));
-  ts.forEach(t => t.el.classList.add('marca'));
-  const z = zonaVisible(), primero = ts.filter(t => current[t.i].key === (keys.find(k => ts.some(u => current[u.i].key === k))));
+  M.tiles.filter(t => keys.includes(current[t.i].key)).forEach(t => t.el.classList.add('marca'));
+  ARTISTA.marcadas = keys;
+  if(V4 && T4 !== 'obras'){ ARTISTA.irPend = true; return; }   // irá al mapa al pasar a «Obras»
+  if(V3 && E3 === 'alta' && ESTRECHA()){ estado('media'); await new Promise(r => setTimeout(r, 360)); }   // que se vea el mapa
+  irAMarcadas();
+}
+function irAMarcadas(){
+  const keys = ARTISTA.marcadas || [], ts = M.tiles.filter(t => keys.includes(current[t.i].key)); if(!ts.length) return;
+  const k0 = keys.find(k => ts.some(u => current[u.i].key === k)), primero = ts.filter(t => current[t.i].key === k0), z = zonaVisible();
   const dist = t => { const x = mod(t.bx + M.x + t.w, M.W) - t.w, y = mod(t.by + M.y + t.h, t.H) - t.h; return Math.hypot(x + t.w/2 - z.w/2, y + t.h/2 - z.y0 - z.h/2); };
-  if(primero.length) irATile(primero.reduce((a, b) => dist(b) < dist(a) ? b : a));
+  irATile(primero.reduce((a, b) => dist(b) < dist(a) ? b : a));
+}
+// v3: la tarjeta de abajo tiene tres alturas: «tira» (su cara y el campo), «media» y «alta» (la charla)
+let E3 = '';
+function estado(e){
+  if(!V3) return;
+  E3 = e; const vi = $('vinc');
+  vi.classList.remove('e-tira', 'e-media', 'e-alta'); vi.classList.add('e-' + e);
+  vi.classList.toggle('abierta', e !== 'tira');
+}
+// v4: dos pestañas abajo, «Obras» (el mapa) y «Vincent» (la presentación y la charla)
+let T4 = '';
+function tab(t){
+  if(!V4) return;
+  T4 = t; $('vinc').classList.toggle('abierta', t === 'vincent');
+  $('vNav').querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-current', String(b.dataset.tab === t)));
+  if(t === 'obras') $('vinc').classList.remove('habla');   // al volver al mapa, el bocadillo espera a que pares
+  if(t === 'obras' && ARTISTA && ARTISTA.irPend){ ARTISTA.irPend = false; requestAnimationFrame(irAMarcadas); }
 }
 
 /* ---------- Charla con el artista: su biografía viva ----------
@@ -2132,23 +2231,32 @@ async function marcarObras(keys){
    de sus mediaciones por obra y del catálogo, y nada que no pudiera saber; lo posterior lo cuenta la guía.
    Sus palabras literales solo por identificador (artistas/<id>.json y unidad/obras/breves.json, «citas»): la página
    pinta el texto verificado con su fuente, y las obras que nombra se marcan en el mapa. Responde un modelo a través de Puter. */
+const avAutor = () => FOTO && ARTISTA.cfg.foto ? `<img class="av foto" src="${esc(ARTISTA.cfg.foto.src)}" alt="">` : avatarHTML(ARTISTA.cfg.retrato);
 const avatarHTML = r => r ? `<svg class="av trazo" viewBox="${esc(r.viewBox || '0 0 200 240')}" aria-hidden="true">${(r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('')}</svg>` : '';
 let CH = null;
 const citasArtista = () => [...(ARTISTA.cfg.citas || []),
   ...(ARTISTA.breves || []).flatMap(([k, o]) => Object.entries(o.citas || {}).map(([c, x]) => ({id:`${k}:${c}`, t:x.t, ref:x.ref, url:x.url, obra:k})))];
 const citaDe = id => citasArtista().find(c => c.id === id);
-function abrirCharla(){
+function iniciarCharla(){
+  const A = ARTISTA; if(CH) return;
+  const corto = A.cfg.corto || A.cfg.nombre, puter = 'Responde una IA a través de Puter: la primera vez te pedirá entrar con una cuenta gratuita.';
+  CH = {turnos:[], busy:false};
+  // En la 3 y la 4, la charla empieza con su presentación y la propuesta de ver sus obras
+  $('chLog').innerHTML = FOTO && A.cfg.presentacion
+    ? `<div class="resp">${avAutor()}<div><p>${esc(A.cfg.presentacion)}</p><button type="button" class="chVer" id="chVer">Ver mis obras</button></div></div><p class="src">Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. ${puter}</p>`
+    : `<p class="intro">${esc(corto)} es una recreación: te habla en primera persona a partir de sus cartas y de los textos de los museos. Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. ${puter}</p>`;
+  pintarChQs();
+}
+// alto: en la v3, al escribir la tarjeta sube del todo; al tocar su cara, a media altura
+function abrirCharla(alto){
   const A = ARTISTA; if(!A) return;
   loadPuter().catch(() => {});   // cargado antes de enviar: el inicio de sesión de Puter tiene que abrirse dentro del gesto
-  const corto = A.cfg.corto || A.cfg.nombre;
-  if(!CH){
-    CH = {turnos:[], busy:false};
-    $('chLog').innerHTML = `<p class="intro">${esc(corto)} es una recreación: te habla en primera persona a partir de sus cartas y de los textos de los museos. Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. Responde una IA a través de Puter: la primera vez te pedirá entrar con una cuenta gratuita.</p>`;
-    pintarChQs();
-  }
-  $('vinc').classList.add('abierta');
+  iniciarCharla();
+  if(V3){ if(E3 === 'tira' || (alto && E3 === 'media' && ESTRECHA())) estado(alto ? 'alta' : 'media'); }
+  else if(V4) tab('vincent');
+  else $('vinc').classList.add('abierta');
 }
-function cerrarCharla(){ $('vinc').classList.remove('abierta'); }
+function cerrarCharla(){ if(V3) estado('tira'); else if(V4) tab('obras'); else $('vinc').classList.remove('abierta'); }
 function pintarChQs(){
   $('chQs')?.remove();
   const qs = (ARTISTA.cfg.preguntas || []).filter(q => !CH.turnos.some(t => t.q === q)).slice(0, 3);
@@ -2195,10 +2303,10 @@ function pintarRespuestaArtista(partes, obras){
   const A = ARTISTA, log = $('chLog');
   partes.forEach(p => {
     const d = document.createElement('div'); d.className = 'resp';
-    if(p.voz === 'autor' && !p.cita) d.innerHTML = avatarHTML(A.cfg.retrato) + `<div><p>${esc(p.t)}</p></div>`;
+    if(p.voz === 'autor' && !p.cita) d.innerHTML = avAutor() + `<div><p>${esc(p.t)}</p></div>`;
     else if(p.voz === 'autor'){
       const c = citaDe(p.cita), ref = c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.ref)}</a>` : esc(c.ref);
-      d.innerHTML = avatarHTML(A.cfg.retrato) + `<div><blockquote>«${esc(c.t)}»</blockquote><p class="ref">${ref}</p></div>`;
+      d.innerHTML = avAutor() + `<div><blockquote>«${esc(c.t)}»</blockquote><p class="ref">${ref}</p></div>`;
     } else d.innerHTML = avatarHTML(A.cfg.guia && A.cfg.guia.retrato) + `<div><p>${esc(p.t)}</p>${p.ia ? '<span class="ver">Conocimiento general · verifícalo</span>' : ''}</div>`;
     log.appendChild(d);
   });
@@ -2206,7 +2314,8 @@ function pintarRespuestaArtista(partes, obras){
   const sel = (Array.isArray(obras) ? obras : []).filter((k, i, s) => s.indexOf(k) === i).map(k => A.obras.find(a => a.key === k)).filter(Boolean).slice(0, 4);
   if(sel.length){
     const box = document.createElement('p'); box.className = 'chMapa';
-    box.innerHTML = 'Marcadas en el mapa: ' + sel.map(a => `<button type="button" data-obra="${esc(a.key)}">${esc(a.title)}</button>${a.date ? ' (' + esc(a.date) + ')' : ''}`).join(' · ');
+    box.innerHTML = 'Marcadas en el mapa: ' + sel.map(a => `<button type="button" data-obra="${esc(a.key)}">${esc(a.title)}</button>${a.date ? ' (' + esc(a.date) + ')' : ''}`).join(' · ')
+      + (V4 ? ' <button type="button" class="chIr" data-ir>Ir al mapa →</button>' : '');
     log.appendChild(box);
     marcarObras(sel.map(a => a.key));
   }
@@ -2217,7 +2326,7 @@ function enviarCharla(q){
   let listo;   // si hace falta entrar en Puter, la ventana se abre ahora, dentro del gesto
   try{ listo = window.puter ? (puter.auth.isSignedIn() ? null : puter.auth.signIn()) : loadPuter().then(() => puter.auth.isSignedIn() ? null : puter.auth.signIn()); }
   catch(e){ listo = Promise.reject(e); }
-  abrirCharla(); CH.busy = true; $('chQs')?.remove();
+  abrirCharla(true); CH.busy = true; $('chQs')?.remove();
   const log = $('chLog'), y = document.createElement('p'); y.className = 'yo'; y.textContent = q; log.appendChild(y);
   const dots = document.createElement('div'); dots.className = 'dots'; dots.innerHTML = '<i></i><i></i><i></i>'; log.appendChild(dots);
   if(y.scrollIntoView) y.scrollIntoView({block:'start', behavior:RM ? 'auto' : 'smooth'});
@@ -2239,15 +2348,35 @@ function enviarCharla(q){
 }
 $('chLog').onclick = e => {
   const q = e.target.closest('#chQs button'); if(q){ enviarCharla(q.textContent); return; }
+  if(e.target.closest('#chVer, [data-ir]')){ cerrarCharla(); return; }
   const o = e.target.closest('[data-obra]'); if(!o) return;
   const a = ARTISTA.obras.find(x => x.key === o.dataset.obra); if(a) openArt(a);   // al cerrar la obra, la charla sigue donde estaba
 };
 $('chF').onsubmit = e => { e.preventDefault(); const q = $('chI').value.trim(); if(!q) return; $('chI').value = ''; $('chI').blur(); enviarCharla(q); };
 $('chX').onclick = cerrarCharla;
-$('vAv').onclick = abrirCharla;
+$('vAv').onclick = () => abrirCharla(false);
 $('vAcc').onclick = () => { if(ARTISTA.acc) aplicarFiltro(ARTISTA.acc.f); };
-document.querySelector('.vbur').addEventListener('click', e => { if(V2 && !e.target.closest('#vAcc')) abrirCharla(); });
-$('chI').addEventListener('focus', abrirCharla);
+document.querySelector('.vbur').addEventListener('click', e => { if(V2 && !e.target.closest('#vAcc')) abrirCharla(false); });
+$('chI').addEventListener('focus', () => abrirCharla(true));
+$('vNav').onclick = e => { const b = e.target.closest('[data-tab]'); if(b) tab(b.dataset.tab); };
+// v3: la tarjeta se arrastra por su asa; al soltar, se queda en la altura más cercana. Un toque la sube o la baja
+(() => {
+  const asa = $('vAsa'), vi = $('vinc'); let G = null;
+  asa.addEventListener('pointerdown', e => { if(!V3 || !ESTRECHA()) return; asa.setPointerCapture(e.pointerId); G = {y:e.clientY, h:vi.getBoundingClientRect().height, movio:false}; });
+  asa.addEventListener('pointermove', e => {
+    if(!G) return; const dy = G.y - e.clientY; if(Math.abs(dy) > 6) G.movio = true; if(!G.movio) return;
+    if(E3 === 'tira') estado('media');
+    vi.classList.add('arrastra'); vi.style.height = clamp(G.h + dy, 90, innerHeight*0.9) + 'px';
+  });
+  const fin = () => {
+    if(!G) return; const movio = G.movio; G = null;
+    if(!movio){ estado(E3 === 'tira' ? 'media' : E3 === 'media' ? 'alta' : 'media'); return; }
+    const f = vi.getBoundingClientRect().height/innerHeight;
+    vi.classList.remove('arrastra'); vi.style.height = '';
+    estado(f < .3 ? 'tira' : f < .7 ? 'media' : 'alta');
+  };
+  asa.addEventListener('pointerup', fin); asa.addEventListener('pointercancel', fin);
+})();
 $('selec').onclick = e => { const b = e.target.closest('[data-f]'); if(b && b.dataset.f !== ARTISTA.filtro) aplicarFiltro(b.dataset.f); };
 
 /* ---------- Arranque ---------- */
