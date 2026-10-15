@@ -55,6 +55,14 @@ a{color:inherit}
 #letra{position:absolute;left:0;right:0;bottom:var(--barH);height:var(--letraH);z-index:6;display:flex;flex-direction:column;background:linear-gradient(rgba(10,10,11,0),rgba(10,10,11,.88) 34px,rgba(10,10,11,.96))}
 .lhd{display:flex;align-items:center;gap:10px;padding:14px var(--pad) 4px}
 .lhd .quien{flex:1;min-width:0}
+/* Avatar a línea de quien media: bajo la obra, junto al relato y en cada respuesta */
+.av{flex:none;width:40px;height:40px;fill:none;stroke:var(--fg);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.av path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.av.dibuja path{animation:trazoAv var(--dur,1.6s) cubic-bezier(.45,.05,.3,1) forwards;animation-delay:var(--del,0s)}
+@keyframes trazoAv{to{stroke-dashoffset:0}}
+.av.ini{display:grid;place-items:center;border:1.5px solid var(--fg);font-size:.95rem;font-weight:800;stroke:none}
+.resp{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+.resp>.av{width:28px;height:28px;margin-top:2px}
 .lhd .quien b{display:block;font-size:.95rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lhd .quien small{display:block;font-size:.85rem;color:var(--muted);margin-top:2px}
 .play{height:42px;padding:0 16px 0 13px;display:flex;align-items:center;gap:8px;background:var(--fg);color:#000;font-size:.95rem;font-weight:800;flex:none}
@@ -196,6 +204,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
   <button class="pill" id="encuadre" hidden>Volver al encuadre</button>
   <div id="letra">
     <div class="lhd">
+      <span id="lAv"></span>
       <div class="quien"><b id="lName"></b><small id="lSub"></small></div>
       <button class="play" id="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="playP" d="M7 5l12 7-12 7z"/></svg><span id="playT">Escuchar</span></button>
     </div>
@@ -646,11 +655,27 @@ function limitar(){
   T.y = h <= fh ? Math.min(Math.max(T.y, f.top - h*.25), f.bottom - h*.75) : Math.min(f.top + fh*.3, Math.max(f.bottom - h - fh*.3, T.y));
 }
 
+/* ======================= Avatar de quien media ======================= */
+// El mediador puede traer su retrato a línea ({viewBox, trazos}); la guía tiene uno provisional; si no, sus iniciales
+const RETRATO_GUIA = {"viewBox": "30 30 140 200", "trazos": ["M58 112 C52 72 72 44 102 44 C132 44 150 70 144 112 C142 124 145 133 151 139", "M58 112 C56 123 53 132 47 138", "M70 72 C86 80 110 77 130 63", "M67 112 C69 140 84 160 100 162 C116 160 131 140 133 112", "M86 106.5 a1.8 1.8 0 1 0 0.01 0", "M114 106.5 a1.8 1.8 0 1 0 0.01 0", "M101 110 C100 119 98 126 95 130 C98 133 102 133 105 131", "M90 145 C96 148 104 148 110 145", "M91 161 L91 180", "M109 161 L109 180", "M91 180 C71 184 55 196 47 222", "M109 180 C129 184 145 196 153 222", "M91 180 L100 195 L109 180"]};
+function avatarHTML(m){
+  const r = m.retrato || (m.voz === 'guia' ? RETRATO_GUIA : null);
+  if(!r) return `<span class="av ini" aria-hidden="true">${esc(m.ini || (m.nombre || '?')[0])}</span>`;
+  return `<svg class="av" viewBox="${esc(r.viewBox || '0 0 200 240')}" aria-hidden="true">${(r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('')}</svg>`;
+}
+// El trazo se dibuja solo la primera vez que aparece cada mediador
+function dibujarAv(svg){
+  if(!svg || svg.tagName.toLowerCase() !== 'svg' || RM) return;
+  try{ svg.querySelectorAll('path').forEach((p, i) => { p.style.setProperty('--len', Math.ceil(p.getTotalLength()) + 2); p.style.setProperty('--del', (i*0.07) + 's'); }); svg.classList.add('dibuja'); }catch(e){}
+}
+let avActual = '';
+
 /* ======================= Preguntar ======================= */
 let hablarAntes = false, movioCamara = false;
 function cabecera(){
   const m = M();
   $('hName').textContent = m.conversa; $('askI').placeholder = m.placeholder;
+  if(avActual !== P.guia){ avActual = P.guia; $('lAv').innerHTML = avatarHTML(m); dibujarAv($('lAv').firstElementChild); }
   $('lName').textContent = m.nombre; $('lSub').textContent = P.perfil === Object.keys(OBRA.visitas)[0] ? '' : VIS().n; $('lSub').hidden = !$('lSub').textContent;
 }
 function abrirHablar(){
@@ -744,7 +769,8 @@ function pintarRespuesta(quien, x){
   const p = document.createElement('div'); p.className = 'ans' + (x.ia ? ' ia' : '');
   const t = document.createElement('p'); t.textContent = x.a; if(x.maqueta) t.style.color = 'var(--muted)'; p.appendChild(t);
   if(x.c){ const C = OBRA.citas[x.c]; p.insertAdjacentHTML('beforeend', `<div><blockquote>«${esc(C.t)}»</blockquote>${refHTML(C)}</div>`); }
-  d.appendChild(p);
+  const r = document.createElement('div'); r.className = 'resp'; r.innerHTML = avatarHTML(m); r.appendChild(p);
+  d.appendChild(r);
   if(x.ia){ const s = document.createElement('p'); s.className = 'src'; s.textContent = 'Conocimiento general · verifícalo'; d.appendChild(s); }
 }
 function cerrarHablar(){
@@ -1008,7 +1034,8 @@ async function preguntarIA(q){
   if(MEDG() !== P.guia){ const qn = document.createElement('p'); qn.className = 'qn'; qn.textContent = g.nombre; d.appendChild(qn); }
   const box = document.createElement('div'); box.className = 'ans';
   partes.forEach(p => { const w = document.createElement('div'); w.className = 'parte'; const t = document.createElement('p'); t.textContent = p.t; w.appendChild(t); w.insertAdjacentHTML('beforeend', etiqueta(p)); box.appendChild(w); });
-  d.appendChild(box);
+  const rb = document.createElement('div'); rb.className = 'resp'; rb.innerHTML = avatarHTML(g); rb.appendChild(box);
+  d.appendChild(rb);
   const s = document.createElement('p'); s.className = 'src'; s.textContent = `Respuesta generada con IA (${IA.nombre()})`; d.appendChild(s);
   hablarSeguido(partes.map(p => [p.t, g.voz]));
   preguntas();

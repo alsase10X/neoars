@@ -332,6 +332,34 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
 #selec button{flex:none;padding:8px 12px;font-size:.85rem;white-space:nowrap}
 #selec button[aria-pressed=true]{background:var(--ink);color:#000;border-color:var(--ink)}
 #selec .sep{flex:none;width:1px;background:var(--soft);margin:4px}
+.pAcc{display:grid;gap:10px;width:min(100%,300px)}
+#pPreg{height:52px;font-size:1rem}
+/* Charla con el artista: él habla solo con sus citas; lo demás, la guía. Cada parte lleva el avatar de quien habla */
+#charla{z-index:35}
+.av{flex:none;width:28px;height:28px;fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+#chAv .av{width:34px;height:34px}
+#chLog{display:flex;flex-direction:column;gap:18px;max-width:640px;margin:0 auto}
+#chLog .intro,#chLog .src{margin:0;color:var(--grey);font-size:.9rem;font-weight:500;line-height:1.45}
+#chLog .src{font-size:.8rem}
+#chLog .yo{margin:8px 0 0;align-self:flex-end;text-align:right;max-width:30ch;color:var(--grey);font-weight:700;font-size:1rem}
+.resp{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+.resp p{margin:0;font-size:1.05rem;line-height:1.5;font-weight:500;max-width:38ch}
+.resp blockquote{margin:0;font-style:italic;font-weight:500;font-size:1.05rem;line-height:1.5;border-left:2px solid var(--ink);padding-left:12px;max-width:38ch}
+.resp .ref{margin-top:6px;font-size:.8rem;color:var(--grey)}
+.resp .ref a{color:var(--grey);font-weight:500}
+.resp .ver{display:inline-block;margin-top:8px;font-size:.8rem;color:var(--grey);border:1px solid var(--soft);padding:3px 8px;font-weight:500}
+.chObras{display:flex;gap:10px;overflow-x:auto;padding-left:38px;scrollbar-width:none}
+.chObras::-webkit-scrollbar{display:none}
+.chObras button{flex:none;width:132px;padding:0;border:0;background:none;text-align:left;color:var(--ink)}
+.chObras button:hover{background:none;color:var(--ink)}
+.chObras img{display:block;width:132px;height:100px;object-fit:cover;background:var(--tile)}
+.chObras span{display:block;margin-top:6px;font-size:.8rem;font-weight:700;line-height:1.25}
+.chObras small{display:block;font-weight:500;color:var(--grey)}
+#chQs{display:flex;flex-direction:column;gap:8px}
+#chQs button{text-align:left;font-size:.95rem;padding:12px 14px;line-height:1.3}
+#chF{display:flex;gap:6px;padding:10px var(--s2) calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--soft);flex:0 0 auto}
+#chF input{flex:1;font-size:1rem;font-weight:500;padding:12px 14px}
+#chF button{min-width:52px;font-size:1.1rem;background:var(--ink);color:#000;border-color:var(--ink)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -340,13 +368,14 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
   <svg id="pRetrato" aria-hidden="true"></svg>
   <div><h1 id="pNombre"></h1><p id="pVida"></p></div>
   <p id="pCuenta" role="status"></p>
-  <button id="pVer" type="button">Ver sus obras</button>
+  <div class="pAcc"><button id="pVer" type="button">Ver sus obras</button><button id="pPreg" type="button">Preguntarle algo</button></div>
   <small id="pNota"></small>
 </div>
 <header>
   <button id="aNombre" type="button" hidden aria-label="Volver a la portada"></button>
   <div class="tabs" role="tablist"><button id="tExp" role="tab">Exposiciones</button><button id="tCat" role="tab">Catálogo</button></div>
   <button class="ib" id="lupa" aria-label="Buscar" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></button>
+  <button class="ib" id="aPreg" hidden aria-label="Preguntarle algo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg></button>
   <button class="ib" id="mas" aria-label="Más opciones" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></button>
 </header>
 <div id="buscar" hidden>
@@ -470,6 +499,12 @@ dd{font-weight:400;min-width:0;overflow-wrap:anywhere}
   <div class="ovh"><h3 id="riHead">Exposición</h3><button id="riX" aria-label="Cerrar">✕</button></div>
   <div class="ovb" id="riBody"></div>
   <div class="ovf"><button id="riGo" class="go">Empezar</button></div>
+</div>
+
+<div id="charla" class="ov" hidden>
+  <div class="ovh"><span id="chAv"></span><h3 id="chT"></h3><button id="chX" aria-label="Cerrar">✕</button></div>
+  <div class="ovb"><div id="chLog" aria-live="polite"></div></div>
+  <form id="chF" autocomplete="off"><input id="chI" enterkeyhint="send" aria-label="Tu pregunta" placeholder="Pregúntale…"><button aria-label="Enviar">→</button></form>
 </div>
 
 <div id="toast" hidden></div>
@@ -1044,6 +1079,7 @@ function abrirUnidad(a, crop){
 function cerrarUnidad(desdeAtras){
   if(!UNI) return;
   UNI.f.remove(); UNI = null;
+  if(ARTISTA && ARTISTA.volverCharla){ ARTISTA.volverCharla = false; abrirCharla(); }
   if(!document.body.classList.contains('home') && $('view').value === 'map' && M.tiles.length) loop();
   if(!desdeAtras) try{ history.back(); }catch(e){}
 }
@@ -1914,26 +1950,26 @@ async function cargarObrasArtista(){
 async function iniciarArtista(id){
   document.body.classList.add('artista');
   document.querySelector('.tabs').hidden = $('lupa').hidden = $('mas').hidden = $('pager').hidden = true;
-  $('aNombre').hidden = $('portada').hidden = false;
+  $('aNombre').hidden = $('portada').hidden = $('aPreg').hidden = false;
   $('view').value = 'map'; $('order').value = 'date'; setDet(false);
   let cfg = null;
   try{ const r = await fetch(`artistas/${encodeURIComponent(id)}.json`, {cache:'no-cache'}); if(r.ok) cfg = await r.json(); }catch(e){}
   const autor = cfg && AUTORES.find(x => x.nombre === cfg.nombre);
-  if(!autor){ $('pNombre').textContent = 'No encontramos a este artista'; $('pCuenta').textContent = 'Revisa el enlace o el código QR.'; $('pVer').hidden = true; return; }
+  if(!autor){ $('aPreg').hidden = true; $('pPreg').hidden = true; $('pNombre').textContent = 'No encontramos a este artista'; $('pCuenta').textContent = 'Revisa el enlace o el código QR.'; $('pVer').hidden = true; return; }
   ARTISTA = {cfg, autor, obras:[], filtro:'todas', grupos:[], visto:false, msg:''};
   document.title = $('pNombre').textContent = $('aNombre').textContent = cfg.nombre;
   $('pVida').textContent = autor.vida;
   $('pNota').textContent = (cfg.retrato && cfg.retrato.nota) || '';
   if(cfg.retrato) try{ dibujarRetrato(cfg.retrato); }catch(e){}
   $('pCuenta').textContent = 'Buscando sus obras en los museos…';
-  $('pVer').disabled = true;
+  $('pVer').disabled = $('pPreg').disabled = true;
   await cargarObrasArtista();
   const c = ARTISTA.cuenta, partes = ['aic','cma','met'].filter(k => c[k]).map(k => `${c[k]} en ${MUSEO_EN[k]}`);
   if(!partes.length){ $('pCuenta').textContent = 'Los museos no han respondido. Prueba otra vez dentro de un momento.'; return; }
   const n = ARTISTA.obras.length, lista = partes.length > 1 ? partes.slice(0, -1).join(', ') + ' y ' + partes[partes.length-1] : partes[0];
   $('pCuenta').textContent = `${n} ${n === 1 ? 'obra' : 'obras'}: ${lista}.` + (ARTISTA.fallos ? ' Algún museo no ha respondido.' : '');
   pintarSelec();
-  $('pVer').disabled = false;
+  $('pVer').disabled = $('pPreg').disabled = false;
 }
 // Filtros por datos y selecciones curadas; solo se ofrecen los que tienen alguna obra
 function pintarSelec(){
@@ -1962,6 +1998,117 @@ function verObras(){
   aplicarFiltro(ARTISTA.filtro);
 }
 $('pVer').onclick = verObras;
+
+/* ---------- Charla con el artista: su biografía viva ----------
+   Él solo habla con citas literales (artistas/<id>.json, «citas»); lo demás lo cuenta la guía, en tercera persona.
+   El modelo solo puede nombrar citas y obras que existen, por su identificador; la página pinta el texto
+   verificado y enlaza cada obra a su unidad. Responde un modelo a través de Puter (gratuito, con cuenta). */
+const avatarHTML = r => r ? `<svg class="av" viewBox="${esc(r.viewBox || '0 0 200 240')}" aria-hidden="true">${(r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('')}</svg>` : '';
+let CH = null;
+const citaDe = id => (ARTISTA.cfg.citas || []).find(c => c.id === id);
+function abrirCharla(){
+  const A = ARTISTA; if(!A) return;
+  loadPuter().catch(() => {});   // cargado antes de enviar: el inicio de sesión de Puter tiene que abrirse dentro del gesto
+  const corto = A.cfg.corto || A.cfg.nombre;
+  $('chT').textContent = `Pregúntale a ${corto}`;
+  $('chAv').innerHTML = avatarHTML(A.cfg.retrato);
+  if(!CH){
+    CH = {turnos:[], busy:false};
+    $('chLog').innerHTML = `<p class="intro">Pregúntale por su vida o por sus obras. ${esc(corto)} responde con sus propias palabras cuando las hay; lo demás te lo cuenta la guía. Responde un modelo de IA a través de Puter: la primera vez te pedirá entrar con una cuenta gratuita.</p>`;
+    pintarChQs();
+  }
+  $('charla').hidden = false;
+}
+function cerrarCharla(){ $('charla').hidden = true; }
+function pintarChQs(){
+  $('chQs')?.remove();
+  const qs = (ARTISTA.cfg.preguntas || []).filter(q => !CH.turnos.some(t => t.q === q)).slice(0, 3);
+  if(!qs.length) return;
+  const box = document.createElement('div'); box.id = 'chQs';
+  box.innerHTML = qs.map(q => `<button type="button">${esc(q)}</button>`).join('');
+  $('chLog').appendChild(box);
+}
+function promptArtista(){
+  const A = ARTISTA, x = A.autor, d = x.dossier || {}, corto = A.cfg.corto || x.nombre, L = [];
+  L.push(`Eres el motor de la conversación con ${x.nombre} (${x.vida}) en el catálogo de su obra. Responde a la última pregunta del visitante con estas reglas, sin excepción.`);
+  L.push(`1. Hay dos voces: "autor" (${corto}) y "guia". El autor SOLO habla con citas literales de la lista CITAS, indicando su id. Nunca escribas palabras nuevas en su boca.`);
+  L.push('2. Todo lo demás lo cuenta la guía, en tercera persona, en castellano de España, con frases cortas y concretas.');
+  L.push(`3. Si la pregunta trata de algo posterior a su muerte (${x.muerte}), la guía empieza dejando claro que eso él ya no lo vivió.`);
+  L.push('4. La guía se basa en el DOSSIER y en el CATÁLOGO. Si añade algo que no está ahí, marca esa parte con "ia": true. Si no se sabe, lo dice. Nada inventado.');
+  L.push('5. Brevedad: de 1 a 3 partes y como mucho 70 palabras en total.');
+  L.push('6. Si la respuesta trata de obras del CATÁLOGO, pon hasta 4 claves en "obras" para que el visitante pueda abrirlas. Solo claves de la lista.');
+  L.push('7. Si la pregunta no tiene que ver con el artista, su obra o el arte, la guía lo dice con amabilidad y propone volver a sus obras.');
+  L.push('', 'CITAS (id: texto · fuente):', ...(A.cfg.citas || []).map(c => `${c.id}: ${c.t} · ${c.ref}`));
+  if(d.hechos) L.push('', 'DOSSIER · hechos (escritos en primera persona: la guía los cuenta en tercera):', ...d.hechos.map(h => '- ' + h.t));
+  if(d.ideas) L.push('', 'DOSSIER · ideas sobre su obra:', ...d.ideas.map(h => '- ' + h.t));
+  if(d.relacionadas) L.push('', 'DOSSIER · obras relacionadas:', ...d.relacionadas.map(t => '- ' + t));
+  if(d.personas) L.push('', 'DOSSIER · personas:', ...d.personas.map(t => '- ' + t));
+  L.push('', 'CATÁLOGO (clave | título | fecha | museo | tipo | en sala):', ...A.obras.map(a => `${a.key} | ${a.title} | ${a.date || ''} | ${SRC_NAME[a.src]} | ${a.tipo} | ${a.sala || 'no'}`));
+  L.push('', 'Responde SOLO con JSON con esta forma: {"partes":[{"voz":"guia","t":"…","ia":false},{"voz":"autor","cita":"705b"}],"obras":["aic-28560"]}');
+  return L.join('\n');
+}
+function jsonDe(txt){ const i = txt.indexOf('{'), j = txt.lastIndexOf('}'); if(i < 0 || j <= i) return null; try{ return JSON.parse(txt.slice(i, j + 1)); }catch(e){ return null; } }
+function partesDe(j){
+  return (j && Array.isArray(j.partes) ? j.partes : []).map(p => {
+    if(p && p.voz === 'autor' && citaDe(p.cita)) return {voz:'autor', cita:p.cita};
+    if(p && typeof p.t === 'string' && p.t.trim()) return {voz:'guia', t:p.t.trim().slice(0, 700), ia:!!p.ia};
+    return null;
+  }).filter(Boolean).slice(0, 3);
+}
+function pintarRespuestaArtista(partes, obras){
+  const A = ARTISTA, log = $('chLog');
+  partes.forEach(p => {
+    const d = document.createElement('div'); d.className = 'resp';
+    if(p.voz === 'autor'){
+      const c = citaDe(p.cita), ref = c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.ref)}</a>` : esc(c.ref);
+      d.innerHTML = avatarHTML(A.cfg.retrato) + `<div><blockquote>«${esc(c.t)}»</blockquote><p class="ref">${ref}</p></div>`;
+    } else d.innerHTML = avatarHTML(A.cfg.guia && A.cfg.guia.retrato) + `<div><p>${esc(p.t)}</p>${p.ia ? '<span class="ver">Conocimiento general · verifícalo</span>' : ''}</div>`;
+    log.appendChild(d);
+  });
+  const sel = (Array.isArray(obras) ? obras : []).filter((k, i, s) => s.indexOf(k) === i).map(k => A.obras.find(a => a.key === k)).filter(Boolean).slice(0, 4);
+  if(sel.length){
+    const box = document.createElement('div'); box.className = 'chObras';
+    box.innerHTML = sel.map(a => `<button type="button" data-obra="${esc(a.key)}"><img src="${esc(a.thumb)}" alt="" loading="lazy"><span>${esc(a.title)}<small>${esc(a.date || '')}</small></span></button>`).join('');
+    log.appendChild(box);
+  }
+  const s = document.createElement('p'); s.className = 'src'; s.textContent = 'Respuesta generada con IA (Puter)'; log.appendChild(s);
+}
+function enviarCharla(q){
+  if(!q || CH.busy) return;
+  let listo;   // si hace falta entrar en Puter, la ventana se abre ahora, dentro del gesto
+  try{ listo = window.puter ? (puter.auth.isSignedIn() ? null : puter.auth.signIn()) : loadPuter().then(() => puter.auth.isSignedIn() ? null : puter.auth.signIn()); }
+  catch(e){ listo = Promise.reject(e); }
+  CH.busy = true; $('chQs')?.remove();
+  const log = $('chLog'), y = document.createElement('p'); y.className = 'yo'; y.textContent = q; log.appendChild(y);
+  const dots = document.createElement('div'); dots.className = 'dots'; dots.innerHTML = '<i></i><i></i><i></i>'; log.appendChild(dots);
+  if(y.scrollIntoView) y.scrollIntoView({block:'start', behavior:RM ? 'auto' : 'smooth'});
+  const msgs = [{role:'user', content:promptArtista()}, ...CH.turnos.slice(-3).flatMap(t => [{role:'user', content:t.q}, {role:'assistant', content:t.a}]), {role:'user', content:q}];
+  Promise.resolve(listo).then(() => puter.ai.chat(msgs)).then(r => {
+    const c = r?.message?.content ?? r, txt = typeof c === 'string' ? c : Array.isArray(c) ? c.map(p => p.text || '').join('') : String(c);
+    const j = jsonDe(txt), partes = partesDe(j);
+    if(!partes.length) throw {code:'vacia'};
+    dots.remove();
+    pintarRespuestaArtista(partes, j.obras);
+    CH.turnos.push({q, a:partes.map(p => p.voz === 'autor' ? '«' + citaDe(p.cita).t + '»' : p.t).join(' ')});
+  }).catch(e => {
+    dots.remove();
+    const p = document.createElement('p'); p.className = 'intro';
+    p.textContent = e && e.code === 'vacia' ? 'No he sabido responder a eso. ¿Lo preguntas de otra forma?' : 'No ha podido responder ahora. Si se cerró la ventana de Puter, vuelve a preguntar y entra con tu cuenta.';
+    log.appendChild(p);
+  }).finally(() => { CH.busy = false; pintarChQs(); });
+}
+$('chLog').onclick = e => {
+  const q = e.target.closest('#chQs button'); if(q){ enviarCharla(q.textContent); return; }
+  const o = e.target.closest('[data-obra]'); if(!o) return;
+  const a = ARTISTA.obras.find(x => x.key === o.dataset.obra); if(!a) return;
+  ARTISTA.volverCharla = true; cerrarCharla();
+  if(!$('portada').hidden) verObras();   // debajo queda el mapa
+  openArt(a);
+};
+$('chF').onsubmit = e => { e.preventDefault(); const q = $('chI').value.trim(); if(!q) return; $('chI').value = ''; $('chI').blur(); enviarCharla(q); };
+$('chX').onclick = cerrarCharla;
+$('pPreg').onclick = abrirCharla;
+$('aPreg').onclick = abrirCharla;
 $('selec').onclick = e => { const b = e.target.closest('[data-f]'); if(b && b.dataset.f !== ARTISTA.filtro) aplicarFiltro(b.dataset.f); };
 $('aNombre').onclick = () => { cancelAnimationFrame(M.raf); $('selec').hidden = $('bar').hidden = true; $('portada').hidden = false; };
 
@@ -2015,6 +2162,7 @@ $('toggle').onclick = () => { setInfo(!$('info').classList.contains('hidden')); 
 document.addEventListener('keydown', e => {
   if(e.key!=='Escape') return;
   if(UNI){ cerrarUnidad(); return; }
+  if(!$('charla').hidden){ cerrarCharla(); return; }
   if(!$('menuS').hidden){ menu(false); return; }
   if(!$('post').hidden){ $('post').hidden = true; return; }
   if(!$('cmp').hidden){ cmpClose(); return; }

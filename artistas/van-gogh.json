@@ -1,7 +1,8 @@
 {
  "id": "van-gogh",
  "nombre": "Vincent van Gogh",
- "estado": "Retrato provisional. Épocas por año de la ficha del museo. Selecciones de prueba, pendientes de curar.",
+ "corto": "Vincent",
+ "estado": "Retratos provisionales. Épocas por año de la ficha del museo. Selecciones de prueba, pendientes de curar. Citas: traducción propia del original francés, comprobado en la edición del Van Gogh Museum.",
  "retrato": {
   "nota": "Retrato provisional",
   "viewBox": "48 30 152 214",
@@ -22,6 +23,28 @@
    "M70 240 C84 227 98 225 110 233 L122 240",
    "M153 227 C167 227 179 233 189 240"
   ]
+ },
+ "guia": {
+  "nombre": "Guía",
+  "retrato": {
+   "nota": "Retrato provisional",
+   "viewBox": "30 30 140 200",
+   "trazos": [
+    "M58 112 C52 72 72 44 102 44 C132 44 150 70 144 112 C142 124 145 133 151 139",
+    "M58 112 C56 123 53 132 47 138",
+    "M70 72 C86 80 110 77 130 63",
+    "M67 112 C69 140 84 160 100 162 C116 160 131 140 133 112",
+    "M86 106.5 a1.8 1.8 0 1 0 0.01 0",
+    "M114 106.5 a1.8 1.8 0 1 0 0.01 0",
+    "M101 110 C100 119 98 126 95 130 C98 133 102 133 105 131",
+    "M90 145 C96 148 104 148 110 145",
+    "M91 161 L91 180",
+    "M109 161 L109 180",
+    "M91 180 C71 184 55 196 47 222",
+    "M109 180 C129 184 145 196 153 222",
+    "M91 180 L100 195 L109 180"
+   ]
+  }
  },
  "epocas": [
   {
@@ -87,5 +110,33 @@
     "aic-65479"
    ]
   }
+ ],
+ "citas": [
+  {
+   "id": "705a",
+   "t": "Esta vez es mi dormitorio, sin más; solo que aquí el color tiene que hacerlo todo y, dando con su simplificación un estilo más grande a las cosas, sugerir aquí el reposo o el sueño en general.",
+   "ref": "Carta a Theo, Arlés, 16 de octubre de 1888 (carta 705). Traducción propia del francés",
+   "url": "https://vangoghletters.org/vg/letters/let705/letter.html",
+   "obra": "aic-28560"
+  },
+  {
+   "id": "705b",
+   "t": "En fin, ver el cuadro debe hacer descansar la cabeza, o más bien la imaginación.",
+   "ref": "Carta a Theo, Arlés, 16 de octubre de 1888 (carta 705). Traducción propia del francés",
+   "url": "https://vangoghletters.org/vg/letters/let705/letter.html",
+   "obra": "aic-28560"
+  },
+  {
+   "id": "705c",
+   "t": "Las paredes son de un violeta pálido. El suelo es de baldosas rojas.",
+   "ref": "Carta a Theo, Arlés, 16 de octubre de 1888 (carta 705). Traducción propia del francés",
+   "url": "https://vangoghletters.org/vg/letters/let705/letter.html",
+   "obra": "aic-28560"
+  }
+ ],
+ "preguntas": [
+  "¿Qué querías conseguir con El dormitorio?",
+  "¿Qué obras tuyas hay en Chicago?",
+  "¿Cómo empezaste a pintar?"
  ]
 }
