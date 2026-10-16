@@ -226,6 +226,174 @@
    "citas": {
     "theo": {"t": "Es un verdadero aguafuerte de pintor. Nada de refinamiento en el procedimiento, sino un dibujo hecho sobre metal.", "voz": "autor", "ref": "Theo van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés", "url": "https://clevelandart.org/art/1948.303"}
    }
+  },
+  "aic-186315": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "Este estudio sale de un cuaderno que Monet llevaba con no más de diecisiete años. Como no se conserva ninguna pintura suya de esa época, es una ocasión rara de ver su talento temprano."},
+    {"t": "El chico quizá era de Le Havre, la ciudad de la costa donde creció. Los contornos del blusón son nítidos y decididos: parece que apretaba mucho el lápiz."},
+    {"k": "pregunta", "t": "Mira las matas de hierba: llegó a hundir el papel."}
+   ],
+   "autor": [
+    {"t": "Tenía diecisiete años y siempre llevaba un cuaderno encima."},
+    {"t": "Mira el blusón del chico: un contorno firme y ya está, sin entretenerme en el cuerpo de debajo. Apretaba tanto el lápiz que se nota."},
+    {"k": "pregunta", "t": "Pasa la vista por la hierba: ahí casi rompo el papel."}
+   ]
+  },
+  "aic-14598": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "En el verano de 1867 Monet se quedó en casa de su tía en Sainte-Adresse, junto a Le Havre, donde había crecido. El tren estaba convirtiendo aquel pueblo de pescadores en un lugar de veraneo."},
+    {"t": "Empezó el cuadro al aire libre y lo retocó en el taller. Los estudios técnicos muestran que al principio pintó más turistas y yates, y que luego los tapó para centrarse en los pescadores."},
+    {"t": "Lo eligió para la segunda exposición impresionista, en 1876, casi diez años después de pintarlo."},
+    {"k": "pregunta", "t": "Busca a la pareja de veraneantes: él mira por un catalejo; ella lleva un sombrero de paja con una cinta escarlata."}
+   ],
+   "autor": [
+    {"t": "Verano de 1867. Me quedé en casa de mi tía, en Sainte-Adresse, al lado de Le Havre. Conocía esa playa desde niño, pero el tren la estaba llenando de veraneantes."},
+    {"t": "Empecé el cuadro allí mismo, al aire libre, y lo terminé en el taller. Había puesto más turistas y yates; los tapé y me quedé con los pescadores, que es lo que mejor conocía."},
+    {"t": "Nueve años después lo colgué en la segunda exposición de los impresionistas."},
+    {"k": "pregunta", "t": "Busca a los dos veraneantes entre las barcas: un catalejo y un sombrero con cinta roja."}
+   ]
+  },
+  "aic-81539": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "Camille Doncieux, que después sería la mujer de Monet, está sentada en una isla del Sena, mirando hacia la aldea de Gloton, junto a Bennecourt."},
+    {"t": "El novelista Émile Zola le había recomendado Gloton como un retiro barato y bien comunicado con París. Es el único cuadro que se conserva de su breve estancia allí."},
+    {"t": "Las huellas de pintura de debajo sugieren que, en una primera versión, Camille sostenía a un niño con gorro, seguramente el bebé de la pareja, Jean."},
+    {"k": "pregunta", "t": "Busca la barca en la orilla: probablemente llegaron remando."}
+   ],
+   "autor": [
+    {"t": "1868. Esta es Camille, que luego sería mi mujer, sentada en una isla del Sena. Al otro lado, Gloton, junto a Bennecourt."},
+    {"t": "Zola me lo recomendó: un sitio barato, en el campo y bien comunicado con París."},
+    {"t": "Por entonces casi nadie me conocía, y a mucha gente mi manera de pintar le parecía sin terminar."},
+    {"k": "pregunta", "t": "Busca la barca en la orilla y el pueblo al otro lado del río."}
+   ]
+  },
+  "aic-16554": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "Monet y su familia vivieron en Argenteuil, a las afueras de París, de 1871 a 1878. Aquí pintó a su hijo Jean, de cinco o seis años, jugando con un aro, y a su mujer, Camille, en la puerta de la casa cubierta de parra."},
+    {"t": "El jardín, bien cuidado, anticipa el famoso jardín de Giverny. Fueron años de seguridad económica gracias a las ventas al marchante Paul Durand-Ruel."},
+    {"k": "pregunta", "t": "Busca el aro de Jean."}
+   ],
+   "autor": [
+    {"t": "Esta es nuestra casa de Argenteuil, a las afueras de París. Vivimos allí de 1871 a 1878."},
+    {"t": "El pequeño del aro es nuestro hijo Jean. Y en la puerta, entre la parra, Camille."},
+    {"t": "Durand-Ruel me compraba cuadros y por fin estábamos tranquilos. Ya entonces me gustaba cuidar el jardín."},
+    {"k": "pregunta", "t": "Busca a Camille en la puerta, entre tanta hoja."}
+   ]
+  },
+  "aic-16571": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "Los impresionistas pintaban el París moderno: puentes de hierro, salas de exposiciones, estaciones. La de Saint-Lazare unía París con Normandía, donde Monet había aprendido a pintar al aire libre."},
+    {"t": "Hizo doce cuadros de la estación y terminó ocho a tiempo para la tercera exposición impresionista, en 1877."},
+    {"t": "Con ellos empezó su costumbre de pintar un mismo motivo una y otra vez para captar los cambios de la atmósfera. También fue su último intento de pintar la vida urbana: después se dedicó sobre todo al paisaje."},
+    {"k": "pregunta", "t": "Mira el vapor atrapado bajo el techo de cristal y hierro, y la luz que entra por él."}
+   ],
+   "autor": [
+    {"t": "La estación de Saint-Lazare. De aquí salían los trenes a Normandía, donde aprendí a pintar al aire libre."},
+    {"t": "Hice doce cuadros de la estación y llegué con ocho a la tercera exposición impresionista, en 1877."},
+    {"t": "Me atraía la mezcla: el vapor de las locomotoras, atrapado bajo la cubierta, y la luz del día entrando por los cristales."},
+    {"k": "pregunta", "t": "Busca a la gente entre el humo: apenas se distingue."}
+   ]
+  },
+  "aic-14620": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "En febrero de 1882 Monet se fue a pintar a Normandía, lejos de presiones personales y profesionales: Camille había muerto tres años antes y la crisis económica frenaba sus ventas."},
+    {"t": "Le pareció que Dieppe era demasiado urbano y se instaló en Pourville, un pueblo de pescadores, hasta mediados de abril. En junio se le unieron Alice Hoschedé y sus hijos."},
+    {"t": "Las dos jóvenes del acantilado son probablemente Marthe y Blanche, las hijas mayores de Alice. Monet las integra en el paisaje con la misma pincelada y los mismos colores."},
+    {"k": "pregunta", "t": "Mira la hierba: pinceladas cortas y curvas que parecen moverse con el viento, igual que los vestidos y el mar."}
+   ],
+   "autor": [
+    {"t": "Febrero de 1882. Me fui a pintar a Normandía. Camille había muerto tres años antes, vivía con Alice Hoschedé y sus hijos, y los cuadros se vendían mal."},
+    {"t": "Dieppe me pareció demasiado ciudad, así que me quedé en Pourville, un pueblo de pescadores. A Alice y a los niños les escribí:", "c": "rincones"},
+    {"t": "En junio vinieron a verlo."},
+    {"k": "pregunta", "t": "Mira la hierba, los vestidos y el mar: la misma pincelada, movida por el viento."}
+   ],
+   "citas": {
+    "rincones": {"t": "¡Qué bonito se está poniendo el campo, y qué alegría me daría enseñaros todos sus rincones encantadores!", "voz": "autor", "ref": "Carta a Alice Hoschedé y sus hijos, citada por el Art Institute of Chicago. Traducción propia del inglés", "url": "https://www.artic.edu/artworks/14620"}
+   }
+  },
+  "aic-81540": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "El mal tiempo de otoño obligó a Monet a pintar desde la ventana de su habitación en el Hôtel Blanquet, en Étretat. Este cuadro forma pareja con Barcas en la playa de Étretat: la misma paleta, el mismo tema y el mismo punto de vista."},
+    {"t": "En una de sus cartas diarias a Alice Hoschedé, del 24 de noviembre de 1885, describió los dos cuadros."},
+    {"k": "pregunta", "t": "Mira los grupos de gente en la orilla, hechos con trazos rápidos."}
+   ],
+   "autor": [
+    {"t": "Otoño de 1885, en Étretat. Llovía tanto que pinté desde la ventana de mi habitación del hotel."},
+    {"t": "A Alice se lo conté en una de mis cartas. Las caloges son barcas viejas, cubiertas con tablas alquitranadas, que se usan de almacén:", "c": "ventana"},
+    {"t": "Para el agua y lo mojado mezclé azules, rosas, violetas y verdes."},
+    {"k": "pregunta", "t": "Busca a la gente en la orilla: cuatro trazos rápidos y ya están."}
+   ],
+   "citas": {
+    "ventana": {"t": "Por la tarde trabajé en mi habitación en mis caloges, bajo la lluvia, y luego intenté hacer, siempre desde la ventana, un cuadro de las barcas que salen.", "voz": "autor", "ref": "Carta a Alice Hoschedé, 24 de noviembre de 1885, citada por el Art Institute of Chicago. Traducción propia del inglés", "url": "https://www.artic.edu/artworks/81540"}
+   }
+  },
+  "aic-14624": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "Los almiares de la serie medían de cuatro a seis metros y estaban junto a la casa de Monet en Giverny. Trabajó en ellos en 1890 y 1891, en el campo, pintando en varios caballetes a la vez, y en el taller."},
+    {"t": "En mayo de 1891 colgó quince lienzos juntos en una sala pequeña de la galería Durand-Ruel, en París. Fue un éxito de crítica y de ventas sin precedentes."},
+    {"t": "El Art Institute tiene el mayor grupo de almiares de Monet del mundo."},
+    {"k": "pregunta", "t": "En casi todas las vistas de otoño, como esta, la punta de los almiares rompe el horizonte. Míralo."}
+   ],
+   "autor": [
+    {"t": "Estos almiares estaban junto a mi casa de Giverny, y eran enormes. En 1890 y 1891 los pinté en el campo, con varios caballetes a la vez, y luego los afinaba en el taller."},
+    {"t": "En mayo de 1891 colgué quince juntos en una salita de la galería Durand-Ruel, en París. Fue un éxito como nunca había tenido."},
+    {"k": "pregunta", "t": "Es final del día, en otoño: mira cómo la punta del almiar se mete en el cielo."}
+   ]
+  },
+  "aic-16584": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "En sus campañas de Londres, Monet pintó el Parlamento por la tarde y al atardecer desde una terraza del hospital de Saint Thomas."},
+    {"t": "Era un punto de vista cercano al de Turner en sus cuadros del incendio que destruyó buena parte del viejo Parlamento en 1834. Pero en la niebla y el crepúsculo, su inspiración fue un pintor más reciente del Támesis, el estadounidense Whistler."},
+    {"k": "pregunta", "t": "Busca las torres del Parlamento en la niebla."}
+   ],
+   "autor": [
+    {"t": "Londres. Pintaba el Parlamento por la tarde y al ponerse el sol, desde una terraza del hospital de Saint Thomas.", "c": "niebla"},
+    {"t": "Turner pintó el incendio del viejo Parlamento casi desde ahí. Pero a mí, para la niebla y el crepúsculo, me tiraba más Whistler."},
+    {"k": "pregunta", "t": "Busca las torres en la niebla. ¿Dónde acaba el edificio y empieza el aire?"}
+   ],
+   "citas": {
+    "niebla": {"t": "Si no fuera por la niebla, Londres no sería una ciudad bonita.", "voz": "autor", "ref": "Monet, en el texto sobre «Waterloo Bridge, Gray Weather», citado por el Art Institute of Chicago. Traducción propia del inglés", "url": "https://www.artic.edu/artworks/103139"}
+   }
+  },
+  "aic-16568": {
+   "fuente": "Art Institute of Chicago", "artista": "monet",
+   "relato": [
+    {"t": "Monet compró su finca de Giverny en 1890 y tres años después creó allí un jardín de agua. Sería su principal inspiración durante dos décadas y media: unos 250 cuadros."},
+    {"t": "Este es de un grupo pintado entre 1903 y 1908. El formato casi cuadrado deja fuera la tierra y el cielo: solo queda la superficie del agua, con nenúfares y reflejos de árboles y nubes."},
+    {"t": "Él llamaba a estos cuadros «una obsesión», y los estudios técnicos muestran muchos cambios mientras lo pintaba."},
+    {"k": "pregunta", "t": "Busca en el agua el reflejo de los árboles y de las nubes."}
+   ],
+   "autor": [
+    {"t": "En 1890 compré la casa de Giverny y en 1893 hice el estanque. No sabía entonces que me iba a ocupar el resto de mis días."},
+    {"t": "Aquí ya no hay orilla ni cielo: solo el agua, los nenúfares y lo que se refleja en ella. Se me había convertido en", "c": "obsesion"},
+    {"k": "pregunta", "t": "Busca el camino de agua entre los nenúfares, y las nubes reflejadas."}
+   ],
+   "citas": {
+    "obsesion": {"t": "una obsesión", "voz": "autor", "ref": "Monet, sobre estos cuadros, citado por el Art Institute of Chicago. Traducción propia del inglés", "url": "https://www.artic.edu/artworks/16568"}
+   }
+  },
+  "cma-136510": {
+   "fuente": "Cleveland Museum of Art", "artista": "monet",
+   "relato": [
+    {"t": "Monet era también un horticultor experto. Pasó los últimos treinta años de su vida pintando el jardín que diseñó y ayudó a cultivar en su casa de Giverny."},
+    {"t": "Este lienzo, enorme, se centra en los efectos pasajeros del sol que atraviesa la superficie del estanque y se refleja en ella. Sin horizonte ni orillas, el agua parece no tener fin."},
+    {"t": "Pintó unas 250 composiciones de nenúfares."},
+    {"k": "pregunta", "t": "El formato apaisado llena todo el campo de visión. Mira el agua de un extremo a otro."}
+   ],
+   "autor": [
+    {"t": "Al final de mi vida pintaba casi solo mi jardín de Giverny, que diseñé y cultivé yo."},
+    {"t": "Aquí quité el horizonte y las orillas: solo el agua y el sol, que entra en ella y rebota."},
+    {"k": "pregunta", "t": "Deja que el cuadro te llene la vista: ¿dónde acaba el agua?"}
+   ]
   }
  }
 }

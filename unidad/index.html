@@ -60,6 +60,7 @@ a{color:inherit}
 .av path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
 .av.dibuja path{animation:trazoAv var(--dur,1.6s) cubic-bezier(.45,.05,.3,1) forwards;animation-delay:var(--del,0s)}
 @keyframes trazoAv{to{stroke-dashoffset:0}}
+.av.foto{border-radius:50%;object-fit:cover;display:block}
 .av.ini{display:grid;place-items:center;border:1.5px solid var(--fg);font-size:.95rem;font-weight:800;stroke:none}
 .resp{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
 .resp>.av{width:28px;height:28px;margin-top:2px}
@@ -659,6 +660,7 @@ function limitar(){
 // El mediador puede traer su retrato a línea ({viewBox, trazos}); la guía tiene uno provisional; si no, sus iniciales
 const RETRATO_GUIA = {"viewBox": "30 30 140 200", "trazos": ["M58 112 C52 72 72 44 102 44 C132 44 150 70 144 112 C142 124 145 133 151 139", "M58 112 C56 123 53 132 47 138", "M70 72 C86 80 110 77 130 63", "M67 112 C69 140 84 160 100 162 C116 160 131 140 133 112", "M86 106.5 a1.8 1.8 0 1 0 0.01 0", "M114 106.5 a1.8 1.8 0 1 0 0.01 0", "M101 110 C100 119 98 126 95 130 C98 133 102 133 105 131", "M90 145 C96 148 104 148 110 145", "M91 161 L91 180", "M109 161 L109 180", "M91 180 C71 184 55 196 47 222", "M109 180 C129 184 145 196 153 222", "M91 180 L100 195 L109 180"]};
 function avatarHTML(m){
+  if(m.foto) return `<img class="av foto" src="${esc(m.foto)}" alt="">`;   // su cara real, si el artista la trae
   const r = m.retrato || (m.voz === 'guia' ? RETRATO_GUIA : null);
   if(!r) return `<span class="av ini" aria-hidden="true">${esc(m.ini || (m.nombre || '?')[0])}</span>`;
   return `<svg class="av" viewBox="${esc(r.viewBox || '0 0 200 240')}" aria-hidden="true">${(r.trazos || []).map(d => `<path d="${esc(d)}"/>`).join('')}</svg>`;
@@ -1243,7 +1245,7 @@ async function obraDeMuseo(clave){
     const corto = artista && artista.corto || o.autor.split(' ')[0];
     quien = corto;
     // A lo que se escribe responde siempre la guía (con datos y etiquetas); la recreación solo cuenta su relato
-    mediadores.autor = {nombre:`${corto} · recreación`, por:`${corto} (recreación)`, corto, sub:'Recreación', ini:corto[0], acc:'#f6f5f2', voz:'autor', retrato:artista && artista.retrato || null,
+    mediadores.autor = {nombre:`${corto} · recreación`, por:`${corto} (recreación)`, corto, sub:'Recreación', ini:corto[0], acc:'#f6f5f2', voz:'autor', retrato:artista && artista.retrato || null, foto:artista && artista.foto && artista.foto.src ? '../' + artista.foto.src : null,
       desc:'Recreación en primera persona', placeholder:'Pregunta a la guía…', conversa:'Pregunta a la guía', te:`${corto} te pregunta`,
       vts:'Te responde la guía, con los datos del museo. Dime qué ves o pregunta lo que quieras.', rol:`Recreación de ${o.autor} en primera persona`,
       relato:caps(breve.autor), qa:[]};

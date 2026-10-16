@@ -363,7 +363,16 @@ body.artista #hint{display:none}
   #vHoja{position:static;height:auto;flex:1 1 auto;min-height:0;border-top:1px solid var(--soft);background:none;animation:none}
 }
 #vQuien{margin:0 0 4px;font-size:.75rem;font-weight:700;color:var(--grey);letter-spacing:.02em}
-#vAcc{margin-top:10px;padding:7px 12px;font-size:.85rem}
+#vAccs{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+#vAccs[hidden]{display:none}
+#vAccs button{padding:7px 12px;font-size:.85rem}
+#vAccs button:first-child:not(.sec){background:var(--ink);color:#000;border-color:var(--ink)}
+#vAccs .sec{border-color:var(--soft)}
+#vObra{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:center;margin-bottom:8px}
+#vObra img{width:52px;height:52px;object-fit:cover;background:var(--tile)}
+#vObra b{display:block;font-size:.9rem;line-height:1.2;font-weight:800;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+#vObra small{display:block;margin-top:3px;font-size:.78rem;color:var(--grey);font-weight:500}
+#chQs .chPaseo{background:var(--ink);color:#000;border-color:var(--ink)}
 #vNom{text-align:center;margin-top:var(--s2)}
 #vNom b{display:block;font-size:1.4rem;font-weight:900;letter-spacing:-.03em}
 #vNom small{display:block;margin-top:4px;font-size:.85rem;font-weight:500;color:var(--grey)}
@@ -394,13 +403,16 @@ body.v2>header,body.v2>#bar{display:none!important}
 .av.foto{border-radius:50%;object-fit:cover;display:block}
 #chAv .av{width:34px;height:34px}
 .vhd small{font-size:.8rem;font-weight:500;color:var(--grey)}
-.chVer{margin-top:10px;padding:9px 16px;font-size:.92rem;background:var(--ink);color:#000;border-color:var(--ink)}
-.chVer:hover{background:var(--paper);color:var(--ink)}
+.chPres{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chPres button{padding:9px 16px;font-size:.92rem}
+.chPres .chPaseo{background:var(--ink);color:#000;border-color:var(--ink)}
+.chPres .chPaseo:hover{background:var(--paper);color:var(--ink)}
 .chIr{margin-left:4px;padding:4px 10px!important;border:1px solid var(--soft)!important;text-decoration:none!important}
 body.redondo .tile{border-radius:14px}
 body.redondo #selec button{border-radius:999px}
 body.redondo .vbur{border-radius:18px}
-body.redondo #chF input,body.redondo #chF button,body.redondo #vAcc,body.redondo .chVer,body.redondo .chIr{border-radius:999px}
+body.redondo #chF input,body.redondo #chF button,body.redondo #vAccs button,body.redondo .chVer,body.redondo .chIr,body.redondo #chQs .chPaseo,body.redondo .chPres button{border-radius:999px}
+body.redondo #vObra img{border-radius:8px}
 body.redondo #chQs button{border-radius:14px}
 body.redondo #vAv{border-radius:50%;overflow:hidden;padding:0;border:2px solid var(--ink)}
 body.redondo #vAv .av{width:100%;height:100%}
@@ -521,7 +533,7 @@ body.redondo #vAv .av{width:100%;height:100%}
     <div class="vhd"><span id="chAv" hidden></span><b id="chT"></b><button class="ib" id="chX" type="button" aria-label="Cerrar la charla"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button></div>
     <div id="chLog" aria-live="polite"></div>
   </div>
-  <div class="vfila"><button id="vAv" type="button"></button><div class="vbur"><p id="vQuien" hidden></p><p id="vDice" aria-live="polite"></p><button id="vAcc" type="button" hidden></button></div></div>
+  <div class="vfila"><button id="vAv" type="button"></button><div class="vbur"><p id="vQuien" hidden></p><div id="vObra" hidden><img alt=""><span><b></b><small></small></span></div><p id="vDice" aria-live="polite"></p><div id="vAccs"></div></div></div>
   <form id="chF" autocomplete="off"><input id="chI" enterkeyhint="send" aria-label="Tu pregunta" placeholder="Pregúntame algo…"><button aria-label="Enviar">→</button></form>
 </aside>
 <nav id="vNav" hidden aria-label="Secciones">
@@ -669,9 +681,35 @@ const DOSSIER_VAN_GOGH = {
   voz:'Intenso pero sin grandilocuencia. Nombra los colores con precisión casi técnica. Humilde con el dinero y el éxito. Menciona a Theo con naturalidad. Busca la dignidad en la gente sencilla y en el trabajo. Sobre su enfermedad, sobrio y solo si viene al caso.',
   citas:[] // Vacío a propósito: solo frases literales con su referencia exacta de carta.
 };
+// Monet: hechos sacados de los textos de Chicago y Cleveland sobre sus obras (data/artistas/monet.json), en primera persona
+const DOSSIER_MONET = {
+  estado:'Borrador escrito a partir de los textos del Art Institute of Chicago y del Museo de Arte de Cleveland sobre sus obras; sin revisar línea a línea.',
+  fuentes:['Art Institute of Chicago','Cleveland Museum of Art'],
+  hechos:[
+    {t:'Nací en 1840 y crecí en Le Havre, en la costa de Normandía. Con diecisiete años ya llenaba cuadernos de dibujos, y de joven también hice caricaturas.', f:'Art Institute of Chicago'},
+    {t:'En los años sesenta aprendí a pintar al aire libre en Normandía.', f:'Art Institute of Chicago'},
+    {t:'Camille Doncieux fue mi primera mujer; nuestro hijo Jean era un bebé en 1868. Camille murió en 1879.', f:'Art Institute of Chicago'},
+    {t:'De 1871 a 1878 vivimos en Argenteuil, a las afueras de París. Las ventas al marchante Paul Durand-Ruel me dieron unos años de tranquilidad.', f:'Art Institute of Chicago'},
+    {t:'Expuse con los impresionistas: en la segunda exposición, en 1876, y en la tercera, en 1877, con mis cuadros de la estación de Saint-Lazare.', f:'Art Institute of Chicago'},
+    {t:'Después de Camille viví con Alice Hoschedé y sus hijos; nos casamos en 1892.', f:'Art Institute of Chicago'},
+    {t:'En los años ochenta pinté mucho fuera de casa: Pourville, Étretat, Bordighera, Belle-Île.', f:'Art Institute of Chicago'},
+    {t:'En 1890 compré la casa de Giverny, y en 1893 empecé a convertir el terreno pantanoso de detrás en un estanque con un puente de estilo japonés y nenúfares.', f:'Art Institute of Chicago'},
+    {t:'En mayo de 1891 colgué quince cuadros de almiares juntos en la galería Durand-Ruel, en París, y fue un éxito de crítica y de ventas.', f:'Art Institute of Chicago'},
+    {t:'Hacia 1900 hice varias campañas en Londres para pintar el Támesis: el Parlamento, Waterloo Bridge, Charing Cross.', f:'Art Institute of Chicago'},
+    {t:'Durante la Primera Guerra Mundial pinté nenúfares e iris en lienzos cada vez más grandes, preparando unos grandes paneles.', f:'Art Institute of Chicago'}
+  ],
+  ideas:[
+    {t:'Pintaba el mismo motivo muchas veces, con varios lienzos a la vez, para captar los cambios de luz y de atmósfera.', f:'Art Institute of Chicago'},
+    {t:'Me interesaba la vida moderna: los veraneantes en la playa, la estación de tren.', f:'Art Institute of Chicago'},
+    {t:'Coleccionaba estampas japonesas.', f:'Art Institute of Chicago'},
+    {t:'El estanque de nenúfares llegó a ser para mí una obsesión.', f:'Art Institute of Chicago'}
+  ],
+  personas:['Camille Doncieux, mi primera mujer','Jean, nuestro hijo','Alice Hoschedé, mi segunda mujer, y sus hijos','Paul Durand-Ruel, mi marchante','Émile Zola, que me recomendó Gloton','Auguste Rodin, a quien escribía'],
+  voz:'Cercano y práctico. Habla de la luz, del tiempo que hace y de la hora del día; se impacienta con el mal tiempo y con sus cuadros. Muy de su jardín.'
+};
 const AUTORES = [
   {nombre:'Vincent van Gogh', vida:'1853–1890', muerte:1890, alias:['vincent van gogh'], buscar:['Vincent van Gogh'], dossier:DOSSIER_VAN_GOGH},
-  {nombre:'Claude Monet', vida:'1840–1926', muerte:1926, alias:['claude monet'], buscar:['Claude Monet']},
+  {nombre:'Claude Monet', vida:'1840–1926', muerte:1926, alias:['claude monet'], buscar:['Claude Monet'], dossier:DOSSIER_MONET},
   {nombre:'Rembrandt', vida:'1606–1669', muerte:1669, alias:['rembrandt van rijn','rembrandt harmensz van rijn'], buscar:['Rembrandt van Rijn','Rembrandt']},
   {nombre:'Francisco de Goya', vida:'1746–1828', muerte:1828, alias:['goya y lucientes','francisco de goya'], buscar:['Goya']},
   {nombre:'Edgar Degas', vida:'1834–1917', muerte:1917, alias:['edgar degas'], buscar:['Edgar Degas']},
@@ -1056,7 +1094,7 @@ const endDrag = e => {
   M.drag = null; mp.classList.remove('drag');
   if(e.type==='pointerup' && M.moved < 8){
     const el = document.elementsFromPoint(e.clientX, e.clientY).find(n=>n.classList?.contains('tile'));
-    if(el){ const T = M.tiles[+el.dataset.t]; M.vx = M.vy = 0; if(T) openArt(current[T.i], T.crop); }
+    if(el){ const T = M.tiles[+el.dataset.t]; M.vx = M.vy = 0; if(T){ if(ARTISTA && FOTO) previa(current[T.i]); else openArt(current[T.i], T.crop); } }
   }
 };
 mp.addEventListener('pointerup', endDrag); mp.addEventListener('pointercancel', endDrag);
@@ -2140,24 +2178,78 @@ function aplicarFiltro(id){
   A.msg = o.id === 'todas' ? `${n} ${n === 1 ? 'obra' : 'obras'}: ${partes.join(', ')}` + (A.fallos ? ' · algún museo no ha respondido' : '')
     : `${n} ${n === 1 ? 'obra' : 'obras'} · ${o.t}`;
   aviso(A.msg);
-  if(o.dice){ decir(o.dice, o.ep != null ? {t:'Ver todas', f:'todas'} : null); if(o.ep != null) A.epoca = o.ep; }
+  if(o.dice){ decir(o.dice, o.ep != null ? [{t:'Ver todas', f:'todas'}] : null); if(o.ep != null) A.epoca = o.ep; }
   else pintarAcc();
   return render();
 }
-// Lo que dice, con un fundido breve. En la v2 puede llevar una propuesta debajo («Ver solo 1888»)
-function decir(t, acc){
-  const A = ARTISTA, el = $('vDice'); if(!A || !t) return;
-  A.acc = V2 && acc || null; hablar();
-  if(t === A.dicho){ pintarAcc(); return; }
-  A.dicho = t;
-  if(RM || !el.textContent){ el.textContent = t; pintarAcc(); return; }
+// Lo que dice, con un fundido breve. Desde la v2 puede llevar propuestas debajo («Ver solo 1888», «Siguiente»…)
+// y, en la 3 y la 4, la obra de la que habla (miniatura, título y fecha)
+function decir(t, accs, obra, pie){
+  const A = ARTISTA, el = $('vDice'); if(!A || (!t && !obra)) return;
+  A.acc = V2 && accs || null; A.vObra = FOTO && obra ? {a:obra, pie:pie || ''} : null; hablar();
+  const pon = () => { el.textContent = t || ''; el.hidden = !t; pintarObra(); pintarAcc(); };
+  const clave = (t || '') + '|' + (obra ? obra.key + pie : '');
+  if(clave === A.dicho){ pon(); return; }
+  A.dicho = clave;
+  if(RM || !el.textContent){ pon(); return; }
   el.classList.add('cambia');
-  setTimeout(() => { if(A.dicho === t){ el.textContent = t; el.classList.remove('cambia'); pintarAcc(); } }, 200);
+  setTimeout(() => { if(A.dicho === clave){ pon(); el.classList.remove('cambia'); } }, 200);
 }
-function pintarAcc(){ const A = ARTISTA, b = $('vAcc'); b.hidden = !A.acc || A.acc.f === A.filtro; if(A.acc) b.textContent = A.acc.t; }
+function pintarObra(){
+  const A = ARTISTA, box = $('vObra'), o = A.vObra; box.hidden = !o; if(!o) return;
+  box.querySelector('img').src = o.a.thumb; box.querySelector('b').textContent = o.a.title;
+  box.querySelector('small').textContent = [o.a.date, o.pie].filter(Boolean).join(' · ');
+}
+// Las propuestas: un filtro (f) o una acción (hacer); la de filtro no sale si ese filtro ya está puesto
+function pintarAcc(){
+  const A = ARTISTA, box = $('vAccs'), l = (A.acc || []).filter(x => !(x.f && x.f === A.filtro));
+  box.innerHTML = l.map((x, i) => `<button type="button" data-a="${i}"${x.sec ? ' class="sec"' : ''}>${esc(x.t)}</button>`).join('');
+  box.hidden = !l.length; A.accVis = l;
+}
+// Primera frase de su mediación sobre una obra (la recreación si la hay; si no, la guía)
+function fraseDe(k){
+  const o = (ARTISTA.breves || []).find(([c]) => c === k); if(!o) return '';
+  const c = (o[1].autor && o[1].autor.length ? o[1].autor : o[1].relato || []).find(x => x.k !== 'pregunta');
+  return c ? c.t : '';
+}
+function marcar(keys){
+  document.querySelectorAll('.tile.marca').forEach(el => el.classList.remove('marca'));
+  M.tiles.filter(t => keys.includes(current[t.i].key)).forEach(t => t.el.classList.add('marca'));
+}
+// Al tocar una obra (3 y 4): su tarjeta con lo que dice de ella; un segundo toque, o «Abrir», la abre
+function previa(a){
+  const A = ARTISTA;
+  if(A.previa === a.key){ openArt(a); return; }
+  if(A.paseo){ if(A.paseo.keys[A.paseo.i] === a.key){ openArt(a); return; } salirPaseo(); }
+  A.previa = a.key; marcar([a.key]);
+  if(V3 && E3 !== 'tira' && ESTRECHA()) estado('tira');
+  decir(fraseDe(a.key), [{t:'Abrir la obra', hacer:() => openArt(a)}, {t:'Pregúntame por ella', sec:true, hacer:() => { enviarCharla(`Háblame de «${a.title}»`); }}], a);
+}
+// «Enséñame tu vida»: recorre las obras de su recorrido (artistas/<id>.json) en orden, con su frase de cada una
+async function empezarPaseo(){
+  const A = ARTISTA, keys = (A.cfg.recorrido || []).filter(k => A.obras.some(a => a.key === k));
+  if(!keys.length) return;
+  if(A.filtro !== 'todas') await aplicarFiltro('todas');
+  A.paseo = {keys, i:0}; A.previa = null;
+  cerrarCharla();
+  setTimeout(paradaPaseo, V3 && ESTRECHA() ? 360 : 30);
+}
+function paradaPaseo(){
+  const A = ARTISTA, P = A.paseo; if(!P) return;
+  const k = P.keys[P.i], a = A.obras.find(x => x.key === k), ultima = P.i === P.keys.length - 1;
+  marcar([k]); A.marcadas = [k]; irAMarcadas();
+  decir(fraseDe(k), [{t:ultima ? 'Terminar' : 'Siguiente →', hacer:() => { if(ultima) salirPaseo(); else { P.i++; paradaPaseo(); } }},
+    {t:'Abrir la obra', sec:true, hacer:() => openArt(a)}, {t:'Salir', sec:true, hacer:salirPaseo}], a, `${P.i + 1} de ${P.keys.length}`);
+}
+function salirPaseo(){
+  const A = ARTISTA; if(!A.paseo) return;
+  A.paseo = null; marcar([]); callar(); limpiarTarjeta();
+}
+// Sin obra de la que hablar: se vacía (en pantalla grande la tarjeta está siempre a la vista)
+function limpiarTarjeta(){ const A = ARTISTA; A.acc = null; A.vObra = null; A.dicho = ''; $('vDice').textContent = ''; pintarObra(); pintarAcc(); }
 // En la v2 (móvil), el bocadillo se recoge al arrastrar y vuelve al parar
 const hablar = () => $('vinc').classList.add('habla');
-const callar = () => { $('vinc').classList.remove('habla'); if(V3 && E3 !== 'tira' && ESTRECHA()) estado('tira'); };
+const callar = () => { $('vinc').classList.remove('habla'); if(ARTISTA && ARTISTA.previa){ ARTISTA.previa = null; marcar([]); limpiarTarjeta(); } if(V3 && E3 !== 'tira' && ESTRECHA()) estado('tira'); };
 // Al parar de arrastrar: la obra que queda en el centro de lo visible decide la época de la que habla
 let paradaT = 0;
 function alParar(){ clearTimeout(paradaT); paradaT = setTimeout(epocaVisible, 250); }
@@ -2176,10 +2268,11 @@ function tileEn(px, py){
 }
 function epocaVisible(){
   const A = ARTISTA; if(!A || UNI || !M.tiles.length) return;
+  if(A.paseo || A.previa){ hablar(); return; }   // en un recorrido o con una obra tocada, sigue hablando de ella
   const z = zonaVisible(), t = tileEn(z.w/2, z.y0 + z.h/2), a = t && current[t.i]; if(!a){ hablar(); return; }
   const i = (A.cfg.epocas || []).findIndex(e => enEpoca(a, e));
   if(i < 0 || i === A.epoca){ hablar(); return; }
-  const e = A.cfg.epocas[i]; A.epoca = i; decir(e.dice, {t:'Ver solo ' + (/^\d/.test(e.titulo) ? e.titulo : e.titulo[0].toLowerCase() + e.titulo.slice(1)), f:'e' + i});
+  const e = A.cfg.epocas[i]; A.epoca = i; decir(e.dice, [{t:'Ver solo ' + (/^\d/.test(e.titulo) ? e.titulo : e.titulo[0].toLowerCase() + e.titulo.slice(1)), f:'e' + i}]);
 }
 // Lleva el mapa (que no tiene bordes) hasta una obra por el camino más corto, en la parte visible
 function irATile(T){
@@ -2243,7 +2336,7 @@ function iniciarCharla(){
   CH = {turnos:[], busy:false};
   // En la 3 y la 4, la charla empieza con su presentación y la propuesta de ver sus obras
   $('chLog').innerHTML = FOTO && A.cfg.presentacion
-    ? `<div class="resp">${avAutor()}<div><p>${esc(A.cfg.presentacion)}</p><button type="button" class="chVer" id="chVer">Ver mis obras</button></div></div><p class="src">Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. ${puter}</p>`
+    ? `<div class="resp">${avAutor()}<div><p>${esc(A.cfg.presentacion)}</p><div class="chPres">${(A.cfg.recorrido || []).length ? `<button type="button" class="chPaseo" data-paseo>${esc(A.cfg.recorridoTitulo || 'Enséñame tu vida')} →</button>` : ''}<button type="button" class="chVer" id="chVer">Ver mis obras</button></div></div></div><p class="src">Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. ${puter}</p>`
     : `<p class="intro">${esc(corto)} es una recreación: te habla en primera persona a partir de sus cartas y de los textos de los museos. Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. ${puter}</p>`;
   pintarChQs();
 }
@@ -2259,10 +2352,10 @@ function abrirCharla(alto){
 function cerrarCharla(){ if(V3) estado('tira'); else if(V4) tab('obras'); else $('vinc').classList.remove('abierta'); }
 function pintarChQs(){
   $('chQs')?.remove();
-  const qs = (ARTISTA.cfg.preguntas || []).filter(q => !CH.turnos.some(t => t.q === q)).slice(0, 3);
-  if(!qs.length) return;
+  const qs = (ARTISTA.cfg.preguntas || []).filter(q => !CH.turnos.some(t => t.q === q)).slice(0, 3), paseo = FOTO && (ARTISTA.cfg.recorrido || []).length && CH.turnos.length;   // al principio ya está en la presentación
+  if(!qs.length && !paseo) return;
   const box = document.createElement('div'); box.id = 'chQs';
-  box.innerHTML = qs.map(q => `<button type="button">${esc(q)}</button>`).join('');
+  box.innerHTML = (paseo ? `<button type="button" class="chPaseo" data-paseo>${esc(ARTISTA.cfg.recorridoTitulo || 'Enséñame tu vida')} →</button>` : '') + qs.map(q => `<button type="button">${esc(q)}</button>`).join('');
   $('chLog').appendChild(box);
 }
 function promptArtista(){
@@ -2347,6 +2440,7 @@ function enviarCharla(q){
   }).finally(() => { CH.busy = false; pintarChQs(); });
 }
 $('chLog').onclick = e => {
+  if(e.target.closest('[data-paseo]')){ empezarPaseo(); return; }
   const q = e.target.closest('#chQs button'); if(q){ enviarCharla(q.textContent); return; }
   if(e.target.closest('#chVer, [data-ir]')){ cerrarCharla(); return; }
   const o = e.target.closest('[data-obra]'); if(!o) return;
@@ -2355,8 +2449,8 @@ $('chLog').onclick = e => {
 $('chF').onsubmit = e => { e.preventDefault(); const q = $('chI').value.trim(); if(!q) return; $('chI').value = ''; $('chI').blur(); enviarCharla(q); };
 $('chX').onclick = cerrarCharla;
 $('vAv').onclick = () => abrirCharla(false);
-$('vAcc').onclick = () => { if(ARTISTA.acc) aplicarFiltro(ARTISTA.acc.f); };
-document.querySelector('.vbur').addEventListener('click', e => { if(V2 && !e.target.closest('#vAcc')) abrirCharla(false); });
+$('vAccs').onclick = e => { const b = e.target.closest('[data-a]'), x = b && (ARTISTA.accVis || [])[+b.dataset.a]; if(!x) return; e.stopPropagation(); if(x.f){ if(ARTISTA.paseo) salirPaseo(); aplicarFiltro(x.f); } else x.hacer(); };
+document.querySelector('.vbur').addEventListener('click', e => { if(V2 && !e.target.closest('#vAccs') && !ARTISTA.paseo && !ARTISTA.previa) abrirCharla(false); });
 $('chI').addEventListener('focus', () => abrirCharla(true));
 $('vNav').onclick = e => { const b = e.target.closest('[data-tab]'); if(b) tab(b.dataset.tab); };
 // v3: la tarjeta se arrastra por su asa; al soltar, se queda en la altura más cercana. Un toque la sube o la baja
@@ -2377,7 +2471,7 @@ $('vNav').onclick = e => { const b = e.target.closest('[data-tab]'); if(b) tab(b
   };
   asa.addEventListener('pointerup', fin); asa.addEventListener('pointercancel', fin);
 })();
-$('selec').onclick = e => { const b = e.target.closest('[data-f]'); if(b && b.dataset.f !== ARTISTA.filtro) aplicarFiltro(b.dataset.f); };
+$('selec').onclick = e => { const b = e.target.closest('[data-f]'); if(b && b.dataset.f !== ARTISTA.filtro){ salirPaseo(); ARTISTA.previa = null; aplicarFiltro(b.dataset.f); } };
 
 /* ---------- Arranque ---------- */
 const syncOpt = () => { $('optText').hidden = !['aic','all'].includes($('src').value); $('optText').setAttribute('aria-pressed', String($('onlyText').checked)); };

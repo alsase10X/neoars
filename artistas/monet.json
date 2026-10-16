@@ -2,10 +2,107 @@
  "id": "monet",
  "nombre": "Claude Monet",
  "corto": "Monet",
- "estado": "En preparación: catálogo y foto descargados por la acción; faltan textos.",
+ "saludo": "¡Hola! Aquí tienes mis obras, de la primera a la última. Arrastra para recorrerlas o pregúntame lo que quieras.",
+ "aviso": "Recreación a partir de los textos de los museos y de algunas de sus cartas",
+ "presentacion": "¡Hola! Soy Claude Monet. Bueno, una recreación hecha con inteligencia artificial a partir de lo que cuentan los museos y de algunas de mis cartas. Pregúntame lo que quieras o recorre mis obras.",
  "foto": {
   "origen": "https://commons.wikimedia.org/wiki/Special:FilePath/Claude_Monet_1899_Nadar_crop.jpg?width=1200",
-  "src": "artistas/monet-foto.jpg",
+  "src": "artistas/monet-cara.jpg",
   "fuente": "Fotografía de Nadar, 1899 · dominio público (Wikimedia Commons)"
- }
+ },
+ "estado": "Borrador para probar: épocas, selecciones, recorrido y frases escritos a partir de los textos de Chicago y Cleveland (data/artistas/monet.json), sin revisar.",
+ "epocas": [
+  {
+   "titulo": "Hasta 1870",
+   "hasta": 1870,
+   "dice": "Crecí en Le Havre, junto al mar, y con diecisiete años ya llenaba cuadernos. En los años sesenta aprendí a pintar al aire libre en Normandía."
+  },
+  {
+   "titulo": "1871–1882",
+   "desde": 1871,
+   "hasta": 1882,
+   "dice": "De 1871 a 1878 vivimos en Argenteuil, a las afueras de París: Camille, Jean y yo. Pinté el río, el jardín y la estación de Saint-Lazare."
+  },
+  {
+   "titulo": "1883–1899",
+   "desde": 1883,
+   "hasta": 1899,
+   "dice": "Salí a pintar la costa: Pourville, Étretat, Belle-Île, Bordighera. En 1890 compré la casa de Giverny y empecé mis series: los almiares, delante de casa."
+  },
+  {
+   "titulo": "1900–1926",
+   "desde": 1900,
+   "hasta": 1926,
+   "dice": "Fui a Londres a pintar la niebla sobre el Támesis, pero sobre todo pinté mi jardín de Giverny: el estanque y los nenúfares, cada vez más grandes."
+  }
+ ],
+ "selecciones": [
+  {
+   "id": "series",
+   "titulo": "Series",
+   "nota": "El mismo motivo con distinta luz",
+   "dice": "Pintaba el mismo motivo una y otra vez, en lienzos distintos según la hora y la luz: los almiares, los puentes de Londres, Vétheuil desde el balcón.",
+   "obras": [
+    "aic-14624",
+    "aic-81545",
+    "aic-16560",
+    "aic-100191",
+    "aic-111318",
+    "aic-64818",
+    "aic-16584",
+    "aic-103139",
+    "aic-20701",
+    "aic-16544",
+    "aic-14634",
+    "aic-16579"
+   ]
+  },
+  {
+   "id": "agua",
+   "titulo": "Agua",
+   "nota": "El Sena, el mar y el estanque",
+   "dice": "Pinté mucha agua: el Sena, el mar de Normandía y, al final, mi estanque de nenúfares.",
+   "obras": [
+    "aic-81539",
+    "cma-125234",
+    "aic-59927",
+    "aic-81540",
+    "aic-16564",
+    "aic-86998",
+    "aic-87088",
+    "aic-16568",
+    "aic-97933",
+    "cma-136510"
+   ]
+  },
+  {
+   "id": "familia",
+   "titulo": "Camille y Jean",
+   "nota": "Su primera mujer y su hijo",
+   "dice": "Camille, mi primera mujer, y nuestro hijo Jean salen en mis cuadros de aquellos años: junto al Sena, en la nieve, en el jardín de Argenteuil.",
+   "obras": [
+    "aic-81539",
+    "cma-135382",
+    "aic-16554"
+   ]
+  }
+ ],
+ "recorrido": [
+  "aic-186315",
+  "aic-14598",
+  "aic-81539",
+  "aic-16554",
+  "aic-16571",
+  "aic-14620",
+  "aic-81540",
+  "aic-14624",
+  "aic-16584",
+  "aic-16568",
+  "cma-136510"
+ ],
+ "preguntas": [
+  "¿Por qué pintabas lo mismo tantas veces?",
+  "¿Cómo era tu jardín de Giverny?",
+  "¿Qué obras tuyas hay en Chicago?"
+ ]
 }
