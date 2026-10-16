@@ -1,0 +1,11 @@
+{
+ "id": "monet",
+ "nombre": "Claude Monet",
+ "corto": "Monet",
+ "estado": "En preparación: catálogo y foto descargados por la acción; faltan textos.",
+ "foto": {
+  "origen": "https://commons.wikimedia.org/wiki/Special:FilePath/Claude_Monet_1899_Nadar_crop.jpg?width=1200",
+  "src": "artistas/monet-foto.jpg",
+  "fuente": "Fotografía de Nadar, 1899 · dominio público (Wikimedia Commons)"
+ }
+}

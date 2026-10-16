@@ -75,6 +75,11 @@ def claves_de_recorridos():
     breves = RAIZ / "unidad" / "obras" / "breves.json"
     if breves.exists():
         claves |= set(json.loads(breves.read_text("utf-8")).get("obras", {}))
+    # Y las del recorrido y las selecciones de cada artista (artistas/*.json)
+    for ruta in (RAIZ / "artistas").glob("*.json"):
+        cfg = json.loads(ruta.read_text("utf-8"))
+        claves |= set(cfg.get("recorrido") or [])
+        claves |= {k for s in cfg.get("selecciones") or [] for k in s.get("obras", [])}
     return sorted(claves)
 
 
