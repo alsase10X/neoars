@@ -254,6 +254,11 @@
    "pitch": 1.06,
    "rate": 1,
    "fem": true
+  },
+  "obra": {
+   "pitch": 0.94,
+   "rate": 0.95,
+   "fem": false
   }
  },
  "citas": {},
@@ -410,6 +415,116 @@
      "a": "Mide 99 centímetros de alto por casi 80 de ancho: casi un metro. Es más o menos del tamaño de una ventana pequeña."
     }
    ]
+  },
+  "obra": {
+   "nombre": "El propio cuadro",
+   "desc": "en primera persona",
+   "por": "el propio cuadro",
+   "corto": "el cuadro",
+   "ini": "C",
+   "acc": "#c8402f",
+   "voz": "obra",
+   "intro": 5,
+   "placeholder": "Pregúntale al cuadro…",
+   "conversa": "Conversa con el cuadro",
+   "te": "El cuadro te pregunta",
+   "vts": "Dime: ¿qué ves al otro lado del cristal?",
+   "rol": "Eres el propio cuadro, El pañuelo rojo, y hablas en primera persona. No eres Camille ni Monet. Sabes lo que te ha pasado desde que te pintaron hasta hoy (quién te ha tenido, dónde te han expuesto), pero no lo que sentían ellos: eso lo dices como algo que no sabes.",
+   "relato": [
+    {
+     "z": null,
+     "t": "No soy Camille, ni tampoco Monet. Soy el cuadro: óleo sobre tela, casi un metro de alto, delante de ti."
+    },
+    {
+     "z": "camille",
+     "t": "Lo que guardo es un vistazo. Una mujer pasa por el jardín nevado, al otro lado del cristal, y mira hacia la casa."
+    },
+    {
+     "z": "rostro",
+     "t": "Su cara la pintó deprisa, con unos pocos toques. Míralos: dos manchas oscuras para los ojos, y poco más."
+    },
+    {
+     "z": null,
+     "t": "Ese vistazo dura ya más de ciento cincuenta años. Monet me tuvo consigo toda su vida, y después crucé el mar y cambié de casa varias veces."
+    },
+    {
+     "z": null,
+     "t": "Pregúntame lo que quieras: quién es ella, por qué no llevo firma o dónde he estado."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Quién es la mujer?",
+     "d": "obra",
+     "z": "camille",
+     "a": "Camille, la primera mujer de Monet. Pasa por fuera, junto a las puertas de cristal de su casa de Argenteuil, un día de nieve. Fíjate: mira hacia la casa, hacia donde estás tú."
+    },
+    {
+     "q": "¿Por qué no llevas firma?",
+     "d": "obra",
+     "a": "Eso no lo sé. Solo consta que no estoy firmado. Recorre las esquinas con la mirada: no encontrarás su nombre."
+    },
+    {
+     "q": "¿Dónde has estado?",
+     "d": "obra",
+     "z": "camille",
+     "a": "En 1931 pasé de la herencia de Monet a su hijo Michel, en Giverny. En 1939, a Edouard Molyneux, en París. En 1948 crucé el mar: una galería de Nueva York me vendió a Leonard C. Hanna, de Cleveland, que me legó al Museo de Arte de Cleveland. Allí estoy desde 1958, y ella sigue mirando hacia la casa."
+    },
+    {
+     "q": "¿Has viajado mucho?",
+     "d": "obra",
+     "z": "jardin",
+     "a": "Bastante. Me han llevado a Nueva York, Washington, San Francisco, París, Fort Worth y Viena, y en un catálogo salí en la portada. Una de esas exposiciones iba de la nieve en la pintura impresionista: mira la mía, blanca y verde, con reflejos azulados."
+    },
+    {
+     "q": "¿Por qué su cara está tan poco definida?",
+     "d": "obra",
+     "z": "rostro",
+     "a": "Porque Monet la pintó deprisa, con unos pocos toques. El museo lo describe como una técnica impresionista radicalmente atrevida. Acércate: dos toques oscuros para los ojos y apenas nada para la nariz y la boca."
+    },
+    {
+     "q": "¿Cómo te llamas?",
+     "d": "obra",
+     "z": "camille",
+     "a": "Depende de a quién preguntes. En francés me catalogaron como Femme à la capeline rouge, y en inglés, The Red Kerchief. Aquí, El pañuelo rojo. Todos los nombres señalan lo mismo: búscalo, es lo único rojo."
+    },
+    {
+     "q": "¿Cuándo te pintó?",
+     "d": "obra",
+     "z": "jardin",
+     "a": "Ni yo lo sé con exactitud: el museo dice que entre 1868 y 1873. Lo que sí sé es la estación. Mira la nieve."
+    },
+    {
+     "q": "¿Qué fue de Camille?",
+     "d": "fuera",
+     "z": "camille",
+     "a": "Se casó con Monet en 1870. En 1878 se fueron a vivir a Vétheuil, y ella murió al año siguiente. En mí sigue pasando junto a la puerta, un día de nieve."
+    },
+    {
+     "q": "¿Qué es el impresionismo?",
+     "d": "fuera",
+     "z": "jardin",
+     "a": "No sé darte una definición. Sé que Monet ayudó a organizar la primera exposición impresionista, en 1874, y sé cómo me hizo a mí: mira la nieve y los árboles, pinceladas anchas y quebradas de blanco y verde puros."
+    },
+    {
+     "q": "¿Dónde está el único color fuerte?",
+     "d": "mirar",
+     "z": "camille",
+     "a": "En la capa roja de Camille. Todo lo demás son grises, blancos y verdes apagados. Tápala con el dedo y me quedo sin centro."
+    },
+    {
+     "q": "¿Qué hay entre ella y yo?",
+     "d": "mirar",
+     "z": "cortinas",
+     "a": "Un cristal, unas cortinas finas y la madera oscura de la puerta. Ella está fuera, en la luz de la nieve; tú, dentro, en la penumbra."
+    },
+    {
+     "q": "¿Qué tamaño tienes?",
+     "d": "mirar",
+     "z": "puertas",
+     "a": "Noventa y nueve centímetros de alto por casi ochenta de ancho; con el marco, casi un metro treinta. Las puertas de cristal ocupan casi todo: mira cuánto sitio le dejan a ella."
+    }
+   ]
   }
  },
  "ficha": [
@@ -446,7 +561,7 @@
    "«Gymnopédie n.º 1», de Erik Satie, en versión de Kevin MacLeod (incompetech.com). Licencia <a href=\"https://creativecommons.org/licenses/by/3.0/\" target=\"_blank\" rel=\"noopener\">CC BY 3.0</a>"
   ]
  ],
- "nota": "Maqueta de diseño: la visita general se basa en la descripción del Cleveland Museum of Art (CC0), traducida y adaptada; las preguntas marcadas con «verifícalo» usan conocimiento general. Sin modelo real. La visita se guarda solo en este dispositivo.",
+ "nota": "Maqueta de diseño: la visita general se basa en la descripción del Cleveland Museum of Art (CC0), traducida y adaptada; las preguntas marcadas con «verifícalo» usan conocimiento general. Sin modelo real. La visita se guarda solo en este dispositivo. La voz del propio cuadro es una recreación en primera persona, escrita solo con la ficha, la procedencia, las exposiciones y la biografía que publica el museo.",
  "base": [
   {
    "id": "B1",

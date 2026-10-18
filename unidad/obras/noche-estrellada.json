@@ -884,6 +884,7 @@
    "ini": "VG",
    "acc": "#e7c33f",
    "voz": "autor",
+   "intro": 3,
    "placeholder": "Pregúntale a Vincent…",
    "conversa": "Conversa con Van Gogh",
    "te": "Vincent te pregunta",

@@ -312,9 +312,11 @@ const SALA_WEB = {
 // Modelo para las preguntas libres. Dentro de Claude responde Claude; en la web, Puter (cada visitante
 // con su propia cuenta) o, si se rellena «api», el servidor intermedio del proyecto.
 const CONFIG = {api:'', puterModelo:''};
-// Variante v2 (?v=2): conversación primero, como las esculturas que hablan. Una presentación breve, sugerencias
-// y preguntas libres que se responden antes con el banco validado de la obra (qa) que con un modelo.
+// Variante v2 (?v=2): conversación primero, como las esculturas que hablan. Habla la propia obra si tiene voz
+// («obra»), si no el autor, y si no la guía. Una presentación, sugerencias y preguntas libres que se responden
+// antes con el banco validado de la obra (qa) que con un modelo.
 const V2 = new URLSearchParams(location.search).get('v') === '2';
+const alA = s => ('a ' + s).replace(/^a el /, 'al ');
 
 /* ======================= Utilidades ======================= */
 const $ = id => document.getElementById(id);
@@ -374,9 +376,10 @@ function volverSala(){
 function abrir(id){
   const o = SALA.obras.find(x => x.id === id); if(!o) return;
   if(U){ parar(); U.playing = false; }
-  OBRA = o; KEY = 'am.sala.' + id + '.';
+  OBRA = o; KEY = (V2 ? 'am.sala2.' : 'am.sala.') + id + '.';
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
-  P = {guia:store.get('guia', meds[0]), perfil:store.get('perfil', vis[0])};
+  const voz = V2 ? (['obra', 'autor'].find(k => meds.includes(k)) || meds[0]) : meds[0];
+  P = {guia:store.get('guia', voz), perfil:store.get('perfil', vis[0])};
   if(!OBRA.mediadores[P.guia]) P.guia = meds[0];
   if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
   U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false};
@@ -391,10 +394,10 @@ function abrir(id){
 }
 // Vuelve al inicio de la obra: el sello grande y un botón (el toque que deja sonar la voz)
 function preparar(){
-  parar(); U.voz = M().voz; U.caps = construir(); U.els = []; U.i = 0; U.si = 0; U.fin = false; U.started = false; U.playing = false; U.conv = false; U.intro = false; U.introI = 0;
+  parar(); U.voz = M().voz; U.caps = construir(); U.els = []; U.i = 0; U.si = 0; U.fin = false; U.started = false; U.playing = false; U.conv = false; U.intro = false; U.introI = 0; U.introF = 0;
   U.segundos = Math.round(U.caps.reduce((a, C) => a + (C.au ? C.au.a - C.au.de : C.palabras/2.5), 0) + U.caps.length*1.2 + U.caps.filter(C => C.k === 'pregunta').length*espPregunta()/1000);
   $('lineas').innerHTML = ''; $('lineas').classList.remove('hablando');
-  $('iniQ').textContent = V2 ? `Pregúntale lo que quieras a ${M().corto || M().nombre}, con la voz o escribiendo. Mejor con auriculares.`
+  $('iniQ').textContent = V2 ? `Pregúntale lo que quieras ${alA(M().corto || M().nombre)}, con la voz o escribiendo. Mejor con auriculares.`
     : `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando el cuadro.`;
   $('empT').textContent = V2 ? 'Empezar' : `Empezar · ${duracion()}`;
   $('inicio').hidden = false; $('flujo').hidden = true; $('abajo').hidden = true;
@@ -405,8 +408,12 @@ $('empezar').onclick = () => {
   U.started = true; $('inicio').hidden = true; $('flujo').hidden = false; $('abajo').hidden = false;
   $('obraV').classList.toggle('sintexto', !G.texto);
   requestAnimationFrame(() => selloCam(null, false));
-  // v2: solo la presentación (la primera cápsula que no es una pausa para mirar) y después, la conversación
-  if(V2){ U.introI = Math.max(0, U.caps.findIndex(C => C.k !== 'pregunta')); U.i = U.introI; U.intro = true; }
+  // v2: solo la presentación y después, la conversación. Empieza en la primera cápsula que no es una pausa para
+  // mirar y ocupa las que diga el mediador («intro»; una, si no lo dice)
+  if(V2){
+    U.introI = Math.max(0, U.caps.findIndex(C => C.k !== 'pregunta')); U.i = U.introI; U.intro = true;
+    U.introF = Math.min(U.caps.length - 1, U.introI + Math.max(1, +M().intro || 1) - 1);
+  }
   play();
 };
 
@@ -462,13 +469,13 @@ function duracion(){ const s = U.segundos; return s < 90 ? `${Math.max(30, Math.
 function estado(){
   const V = $('obraV');
   V.classList.toggle('sonando', U.playing);
-  V.classList.toggle('pausado', U.started && !U.playing && !U.fin && !(V2 && U.conv && U.i <= U.introI));
+  V.classList.toggle('pausado', U.started && !U.playing && !U.fin && !(V2 && U.conv && U.i <= U.introF));
   const C = U.caps[U.i], zona = U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : '';
   let p;
   if(V.classList.contains('mirando')) p = 'Levanta la vista y mira el cuadro <button class="lk" type="button" id="yaB">Ya he mirado →</button>';
   else if(U.pensando) p = 'Pensando…';
   else if(U.playing) p = zona ? `Búscalo en el cuadro · ${esc(zona)}` : 'Toca el sello para pausar';
-  else if(V2 && U.conv && !U.fin && U.i <= U.introI) p = zona ? `Búscalo en el cuadro · ${esc(zona)}` : 'Pregunta con el micrófono o el teclado';
+  else if(V2 && U.conv && !U.fin && U.i <= U.introF) p = zona ? `Búscalo en el cuadro · ${esc(zona)}` : 'Pregunta con el micrófono o el teclado';
   else if(U.conv && !U.fin) p = zona ? `Búscalo en el cuadro · ${esc(zona)}. Toca el sello para seguir la visita` : 'Toca el sello para seguir la visita, o pregunta otra cosa';
   else if(U.fin) p = 'Pregunta con el micrófono o el teclado. Toca el sello para escucharla de nuevo';
   else p = 'Toca el sello para seguir, o pregunta con el micrófono o el teclado';
@@ -505,7 +512,7 @@ function parar(){
 function reiniciar(){ parar(); U.i = 0; U.si = 0; U.fin = false; U.els = []; $('lineas').innerHTML = ''; anillo(0, 0); }
 function siguiente(){
   parar(); $('obraV').classList.remove('mirando');
-  if(V2 && U.intro){ U.intro = false; return invitar(); }
+  if(V2 && U.intro && U.i >= U.introF){ U.intro = false; return invitar(); }
   if(U.i >= U.caps.length - 1) return terminar();
   U.i++; U.si = 0; if(U.playing) sonar(); else estado();
 }
@@ -557,15 +564,19 @@ function sugerencias(extra = '', ks = null){
   $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
   const s = ks && ks.length ? ks : elegir();
   // v2: mientras solo ha oído la presentación, la visita entera es una sugerencia más
-  const ent = V2 && U.started && !U.fin && U.i <= U.introI ? `<button class="q" type="button" data-entera>Cuéntamela entera · ${duracion()}</button>` : '';
+  const ent = V2 && U.started && !U.fin && U.i <= U.introF ? `<button class="q" type="button" data-entera>Cuéntamela entera · ${duracion()}</button>` : '';
+  // v2: cuando ya no queda relato, las otras voces de la obra (la visita guiada, contada por la guía)
+  if(V2 && U.fin && !extra.includes('data-voz')) extra += otrasVoces();
   if(!s.length && !extra && !ent) return;
   const box = document.createElement('div'); box.className = 'sug';
   box.innerHTML = (s.length || ent ? `<p class="eyb">Sugerencias</p>${ent}${s.map(qBoton).join('')}` : '') + extra;
   $('lineas').appendChild(box);
 }
-// v2: acaba la presentación y empieza la conversación
+const otrasVoces = () => Object.keys(OBRA.mediadores).filter(k => k !== P.guia).map(k => `<button class="lk" type="button" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join('');
+// v2: acaba la presentación y empieza la conversación. Si la presentación era todo su relato, ya ha terminado
 function invitar(){
   U.playing = false; U.conv = true; wake(false);
+  if(U.introF >= U.caps.length - 1){ U.fin = true; anillo(1); }
   sugerencias(); estado();
   const s = $('lineas').querySelector('.sug'); if(s) setTimeout(() => s.scrollIntoView({block:'nearest', behavior:RM ? 'auto' : 'smooth'}), 300);
 }
@@ -582,7 +593,8 @@ $('lineas').addEventListener('click', e => {
   if(e.target.closest('[data-entera]')){ $('lineas').querySelectorAll('.sug').forEach(s => s.remove()); play(); return; }
   const zb = e.target.closest('[data-zona]'); if(zb){ zonaTocada(zb.dataset.zona); return; }
   const s = e.target.closest('[data-sig]'); if(s){ abrir(s.dataset.sig); return; }
-  const v = e.target.closest('[data-voz]'); if(v){ P.guia = v.dataset.voz; store.set('guia', P.guia); preparar(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); $('empezar').click(); return; }
+  // Otra voz: su visita entera (en la v2 también, sin quedarse en la presentación)
+  const v = e.target.closest('[data-voz]'); if(v){ P.guia = v.dataset.voz; store.set('guia', P.guia); preparar(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); $('empezar').click(); U.intro = false; return; }
   const p = e.target.closest('[data-pasa]'); if(p){ pasarALaGuia(p); return; }
   const en = e.target.closest('[data-entrar]'); if(en){ en.remove(); preguntarIA(en.dataset.entrar); return; }
 });
@@ -815,7 +827,7 @@ async function preguntarIA(q){
 // a la herramienta que el modelo en tiempo real llamará para buscar la respuesta validada más cercana.
 const STOP = new Set(('a al algo alguien algun alguna ante antes asi aun bien cada como con contra cual cuales cuando cuanto cuanta cuantos cuantas '
   + 'de del desde donde dos el ella ellas ello ellos en entre era eran es esa esas ese eso esos esta estaba estan estas este esto estos fue fueron '
-  + 'ha habia han hay la las le les lo los mas me mi mis mucho muy nada ni no nos o os para pero por porque puede pueden puedes podria podrias '
+  + 'ha habia han has hay he hemos la las le les lo los mas me mi mis mucho muy nada ni no nos o os para pero por porque puede pueden puedes podria podrias '
   + 'que quien quienes se ser si sido sin sobre son su sus tambien tan tanto te tenia tiene tienen ti tu tus un una uno unos unas usted y ya yo '
   + 'oye vale bueno dime cuentame explicame hablame sabes saber quiero quisiera gustaria hola gracias aqui ahi alli sale hace hizo hacer cosa cosas').split(' '));
 const SIN = {cara:'rost', mide:'tama', medi:'tama', dime:'tama', chic:'muje', seno:'muje'};
