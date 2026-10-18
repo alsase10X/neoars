@@ -456,6 +456,38 @@ body.redondo #vAv .av{width:100%;height:100%}
   body.redondo #vinc.abierta #vFotoG{width:84px}
   #chAv,.chVer{display:none!important}
 }
+/* Variante 5: su espacio de habla. Todo lo que dice es un turno de la conversación; en móvil, su imagen grande a la
+   izquierda y el último turno a la derecha, escribiéndose; abajo, el campo para preguntarle */
+body.v5 .vbur{display:none!important}
+.turno{display:flex;flex-direction:column;gap:18px}
+.tObra{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:center;margin-bottom:8px}
+.tObra img{width:52px;height:52px;object-fit:cover;border-radius:8px;background:var(--tile)}
+.tObra b{display:block;font-size:.9rem;line-height:1.2;font-weight:800}
+.tObra small{display:block;margin-top:3px;font-size:.78rem;color:var(--grey);font-weight:500}
+.acc{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.acc:empty{display:none}
+.acc button{padding:7px 12px;font-size:.85rem;border-radius:999px}
+.acc button:first-child:not(.sec){background:var(--ink);color:#000;border-color:var(--ink)}
+.acc .sec{border-color:var(--soft)}
+body.v5 .w{opacity:0;transition:opacity .18s}
+body.v5 .w.v{opacity:1}
+@keyframes hablaAv{50%{box-shadow:0 0 0 5px rgba(246,245,242,.28)}}
+body.v5 #vinc.hablando #vAv,body.v5 #vinc.hablando #vFotoG{animation:hablaAv 1.1s ease-in-out infinite}
+@media(max-width:899px){
+  body.v5 #vinc.e-media{height:auto;max-height:62vh;grid-template-columns:104px minmax(0,1fr);grid-template-areas:"asa asa" "av log" "form form";grid-template-rows:auto minmax(0,1fr) auto}
+  body.v5 #vinc.e-media .vhd{display:none}
+  body.v5 #vinc.e-media #vAv{display:block;grid-area:av;align-self:start;justify-self:end;width:86px;height:108px;margin:6px 0 0;border-radius:18px}
+  body.v5 #vinc.e-media #vAv .av{border-radius:16px}
+  body.v5 #vinc.e-media #chLog{border-top:0;padding:4px var(--s2) 10px 12px}
+  body.v5 #vinc.e-media #chLog::before{content:attr(data-quien);display:block;font-size:.78rem;font-weight:700;color:var(--grey);margin-bottom:-8px}
+  body.v5 #vinc.e-media #chLog>:not(.actual){display:none}
+  body.v5 #vinc.e-media .resp.autor{grid-template-columns:minmax(0,1fr)}
+  body.v5 #vinc.e-media .resp.autor>.av{display:none}
+  body.v5 #vinc.e-media .turno.pres .src{display:none}
+  body.v5 #vinc.e-media .resp p,body.v5 #vinc.e-media .resp blockquote{font-size:1.02rem}
+  body.v5 #vinc.e-media .yo{margin:0;font-size:.9rem}
+}
+@media(min-width:900px){ body.v5 #chX{display:none} }
 /* Lo que se dice en la charla. Cada parte lleva el avatar de quien habla: él, recreado, o la guía */
 .av{flex:none;width:28px;height:28px;fill:none;stroke:var(--ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
 #chLog .intro,#chLog .src{margin:0;color:var(--grey);font-size:.9rem;font-weight:500;line-height:1.45}
@@ -2069,7 +2101,8 @@ const MUSEO_CORTO = {aic:'Chicago', cma:'Cleveland', met:'Nueva York'};
 // Variantes de diseño, para comparar en el mismo enlace: &v=2 (Vincent flotante), &v=3 (tarjeta que cambia de altura),
 // &v=4 (barra abajo con «Obras» y «Vincent»). La 3 y la 4 llevan su cara real y esquinas redondeadas
 const VAR = (() => { try{ return new URLSearchParams(location.search).get('v') || ''; }catch(e){ return ''; } })();
-const V2 = ['2','3','4'].includes(VAR), V3 = VAR === '3', V4 = VAR === '4', FOTO = V3 || V4;
+// &v=5: como la 3, pero todo lo que dice sale de su espacio de habla, junto a su imagen, y se va escribiendo
+const V5 = VAR === '5', V2 = ['2','3','4','5'].includes(VAR), V3 = VAR === '3' || V5, V4 = VAR === '4', FOTO = V3 || V4;
 const ESTRECHA = () => innerWidth < 900;
 const TIPOS = [
   {id:'todas', t:'Todas', f:() => true},
@@ -2132,7 +2165,8 @@ async function iniciarArtista(id){
     $('vNomN').textContent = cfg.nombre; $('vNomS').textContent = $('aSub').textContent; $('vNom').hidden = false;
   }
   if(FOTO){   // su cara real (detalle de un autorretrato) hasta que haya retrato animado; la presentación abre la charla
-    document.body.classList.add('redondo', V3 ? 'v3' : 'v4');
+    document.body.classList.add('redondo', V3 ? 'v3' : 'v4'); if(V5) document.body.classList.add('v5');
+    $('chLog').dataset.quien = `${corto}${cfg.saludo ? ' · recreación' : ''}`;
     const f = cfg.foto || {};
     $('vAv').innerHTML = $('chAv').innerHTML = document.querySelector('#vNav .navFoto').innerHTML = avAutor();
     $('chAv').hidden = false;
@@ -2185,6 +2219,7 @@ function aplicarFiltro(id){
 // Lo que dice, con un fundido breve. Desde la v2 puede llevar propuestas debajo («Ver solo 1888», «Siguiente»…)
 // y, en la 3 y la 4, la obra de la que habla (miniatura, título y fecha)
 function decir(t, accs, obra, pie){
+  if(V5) return decirTurno(t, accs, obra, pie);
   const A = ARTISTA, el = $('vDice'); if(!A || (!t && !obra)) return;
   A.acc = V2 && accs || null; A.vObra = FOTO && obra ? {a:obra, pie:pie || ''} : null; hablar();
   const pon = () => { el.textContent = t || ''; el.hidden = !t; pintarObra(); pintarAcc(); };
@@ -2200,8 +2235,44 @@ function pintarObra(){
   box.querySelector('img').src = o.a.thumb; box.querySelector('b').textContent = o.a.title;
   box.querySelector('small').textContent = [o.a.date, o.pie].filter(Boolean).join(' · ');
 }
+// v5: lo que dice se añade a su espacio de habla como un turno nuevo, y se va escribiendo palabra a palabra
+function decirTurno(t, accs, obra, pie){
+  const A = ARTISTA; if(!A || (!t && !obra)) return;
+  const clave = (t || '') + '|' + (obra ? obra.key + pie : '');
+  A.acc = accs || null;
+  if(clave === A.dicho){ pintarAcc(); hablar(); return; }
+  A.dicho = clave;
+  document.querySelectorAll('#chLog .turno.dice .acc').forEach(b => b.remove());   // las propuestas viejas ya no valen
+  const tu = turno('dice');
+  tu.innerHTML = `<div class="resp autor">${avAutor()}<div>${obra ? `<div class="tObra"><img src="${esc(obra.thumb)}" alt=""><span><b>${esc(obra.title)}</b><small>${esc([obra.date, pie].filter(Boolean).join(' · '))}</small></span></div>` : ''}${t ? `<p>${esc(t)}</p>` : ''}<div class="acc"></div></div></div>`;
+  pintarAcc(); hablar(); escribir(tu);
+}
+// Un turno de la conversación: lo que dice él, o una pregunta con su respuesta. El último es el que se ve en su espacio
+function turno(clase){
+  const log = $('chLog'), tu = document.createElement('div'); tu.className = 'turno ' + (clase || '');
+  log.querySelectorAll('.turno.actual').forEach(x => x.classList.remove('actual')); tu.classList.add('actual');
+  const qs = $('chQs'); if(qs) log.insertBefore(tu, qs); else log.appendChild(tu);
+  if(V5) requestAnimationFrame(() => { log.scrollTop = E3 === 'alta' || !ESTRECHA() ? log.scrollHeight : 0; });
+  return tu;
+}
+// Se va escribiendo, como si hablara; mientras, su imagen lo indica
+let escT = 0;
+function escribir(tu){
+  if(!V5 || RM) return;
+  const ws = [];
+  tu.querySelectorAll('.resp p:not(.ref), .resp blockquote').forEach(el => {
+    el.innerHTML = el.textContent.split(/(\s+)/).map(w => /^\s+$/.test(w) ? w : `<span class="w">${esc(w)}</span>`).join('');
+    ws.push(...el.querySelectorAll('.w'));
+  });
+  if(!ws.length) return;
+  clearInterval(escT); $('vinc').classList.add('hablando');
+  let i = 0;
+  escT = setInterval(() => { const w = ws[i++]; if(w) w.classList.add('v'); if(i >= ws.length){ clearInterval(escT); $('vinc').classList.remove('hablando'); } }, 45);
+}
 // Las propuestas: un filtro (f) o una acción (hacer); la de filtro no sale si ese filtro ya está puesto
 function pintarAcc(){
+  if(V5){ const A = ARTISTA, box = [...document.querySelectorAll('#chLog .turno.dice .acc')].pop(), l = (A.acc || []).filter(x => !(x.f && x.f === A.filtro));
+    A.accVis = l; if(box) box.innerHTML = l.map((x, i) => `<button type="button" data-a="${i}"${x.sec ? ' class="sec"' : ''}>${esc(x.t)}</button>`).join(''); return; }
   const A = ARTISTA, box = $('vAccs'), l = (A.acc || []).filter(x => !(x.f && x.f === A.filtro));
   box.innerHTML = l.map((x, i) => `<button type="button" data-a="${i}"${x.sec ? ' class="sec"' : ''}>${esc(x.t)}</button>`).join('');
   box.hidden = !l.length; A.accVis = l;
@@ -2222,7 +2293,7 @@ function previa(a){
   if(A.previa === a.key){ openArt(a); return; }
   if(A.paseo){ if(A.paseo.keys[A.paseo.i] === a.key){ openArt(a); return; } salirPaseo(); }
   A.previa = a.key; marcar([a.key]);
-  if(V3 && E3 !== 'tira' && ESTRECHA()) estado('tira');
+  if(V3 && !V5 && E3 !== 'tira' && ESTRECHA()) estado('tira');
   decir(fraseDe(a.key), [{t:'Abrir la obra', hacer:() => openArt(a)}, {t:'Pregúntame por ella', sec:true, hacer:() => { enviarCharla(`Háblame de «${a.title}»`); }}], a);
 }
 // «Enséñame tu vida»: recorre las obras de su recorrido (artistas/<id>.json) en orden, con su frase de cada una
@@ -2246,9 +2317,9 @@ function salirPaseo(){
   A.paseo = null; marcar([]); callar(); limpiarTarjeta();
 }
 // Sin obra de la que hablar: se vacía (en pantalla grande la tarjeta está siempre a la vista)
-function limpiarTarjeta(){ const A = ARTISTA; A.acc = null; A.vObra = null; A.dicho = ''; $('vDice').textContent = ''; pintarObra(); pintarAcc(); }
+function limpiarTarjeta(){ const A = ARTISTA; A.acc = null; A.vObra = null; A.dicho = ''; $('vDice').textContent = ''; if(V5) document.querySelectorAll('#chLog .turno.dice .acc').forEach(b => b.innerHTML = ''); else { pintarObra(); pintarAcc(); } }
 // En la v2 (móvil), el bocadillo se recoge al arrastrar y vuelve al parar
-const hablar = () => $('vinc').classList.add('habla');
+const hablar = () => { $('vinc').classList.add('habla'); if(V5 && E3 === 'tira' && ESTRECHA()) estado('media'); };
 const callar = () => { $('vinc').classList.remove('habla'); if(ARTISTA && ARTISTA.previa){ ARTISTA.previa = null; marcar([]); limpiarTarjeta(); } if(V3 && E3 !== 'tira' && ESTRECHA()) estado('tira'); };
 // Al parar de arrastrar: la obra que queda en el centro de lo visible decide la época de la que habla
 let paradaT = 0;
@@ -2272,7 +2343,10 @@ function epocaVisible(){
   const z = zonaVisible(), t = tileEn(z.w/2, z.y0 + z.h/2), a = t && current[t.i]; if(!a){ hablar(); return; }
   const i = (A.cfg.epocas || []).findIndex(e => enEpoca(a, e));
   if(i < 0 || i === A.epoca){ hablar(); return; }
-  const e = A.cfg.epocas[i]; A.epoca = i; decir(e.dice, [{t:'Ver solo ' + (/^\d/.test(e.titulo) ? e.titulo : e.titulo[0].toLowerCase() + e.titulo.slice(1)), f:'e' + i}]);
+  const e = A.cfg.epocas[i]; A.epoca = i;
+  const accs = [{t:'Ver solo ' + (/^\d/.test(e.titulo) ? e.titulo : e.titulo[0].toLowerCase() + e.titulo.slice(1)), f:'e' + i}];
+  if(V5 && (A.cfg.recorrido || []).length) accs.push({t:A.cfg.recorridoTitulo || 'Enséñame tu vida', sec:true, hacer:empezarPaseo});   // en su espacio, él ofrece el recorrido
+  decir(e.dice, accs);
 }
 // Lleva el mapa (que no tiene bordes) hasta una obra por el camino más corto, en la parte visible
 function irATile(T){
@@ -2336,20 +2410,22 @@ function iniciarCharla(){
   CH = {turnos:[], busy:false};
   // En la 3 y la 4, la charla empieza con su presentación y la propuesta de ver sus obras
   $('chLog').innerHTML = FOTO && A.cfg.presentacion
-    ? `<div class="resp">${avAutor()}<div><p>${esc(A.cfg.presentacion)}</p><div class="chPres">${(A.cfg.recorrido || []).length ? `<button type="button" class="chPaseo" data-paseo>${esc(A.cfg.recorridoTitulo || 'Enséñame tu vida')} →</button>` : ''}<button type="button" class="chVer" id="chVer">Ver mis obras</button></div></div></div><p class="src">Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. ${puter}</p>`
+    ? `<div class="turno pres actual"><div class="resp autor">${avAutor()}<div><p>${esc(A.cfg.presentacion)}</p><div class="chPres">${(A.cfg.recorrido || []).length ? `<button type="button" class="chPaseo" data-paseo>${esc(A.cfg.recorridoTitulo || 'Enséñame tu vida')} →</button>` : ''}<button type="button" class="chVer" id="chVer">Ver mis obras</button></div></div></div><p class="src">Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. ${puter}</p></div>`
     : `<p class="intro">${esc(corto)} es una recreación: te habla en primera persona a partir de sus cartas y de los textos de los museos. Sus palabras literales van entre comillas, con su fuente; lo que él ya no vivió te lo cuenta la guía. ${puter}</p>`;
   pintarChQs();
+  if(V5) escribir($('chLog').querySelector('.turno.pres'));
 }
 // alto: en la v3, al escribir la tarjeta sube del todo; al tocar su cara, a media altura
 function abrirCharla(alto){
   const A = ARTISTA; if(!A) return;
   loadPuter().catch(() => {});   // cargado antes de enviar: el inicio de sesión de Puter tiene que abrirse dentro del gesto
   iniciarCharla();
-  if(V3){ if(E3 === 'tira' || (alto && E3 === 'media' && ESTRECHA())) estado(alto ? 'alta' : 'media'); }
+  if(V5 && alto === 'enviar'){ if(ESTRECHA()) estado('media'); }   // la respuesta sale en su espacio, con el mapa a la vista
+  else if(V3){ if(E3 === 'tira' || (alto && E3 === 'media' && ESTRECHA())) estado(alto ? 'alta' : 'media'); }
   else if(V4) tab('vincent');
   else $('vinc').classList.add('abierta');
 }
-function cerrarCharla(){ if(V3) estado('tira'); else if(V4) tab('obras'); else $('vinc').classList.remove('abierta'); }
+function cerrarCharla(){ if(V5 && E3 === 'alta') estado('media'); else if(V3) estado('tira'); else if(V4) tab('obras'); else $('vinc').classList.remove('abierta'); }
 function pintarChQs(){
   $('chQs')?.remove();
   const qs = (ARTISTA.cfg.preguntas || []).filter(q => !CH.turnos.some(t => t.q === q)).slice(0, 3), paseo = FOTO && (ARTISTA.cfg.recorrido || []).length && CH.turnos.length;   // al principio ya está en la presentación
@@ -2392,10 +2468,10 @@ function partesDe(j){
     return {voz:'guia', t, ia:!!p.ia};
   }).filter(Boolean).slice(0, 3);
 }
-function pintarRespuestaArtista(partes, obras){
-  const A = ARTISTA, log = $('chLog');
+function pintarRespuestaArtista(partes, obras, log = $('chLog')){
+  const A = ARTISTA;
   partes.forEach(p => {
-    const d = document.createElement('div'); d.className = 'resp';
+    const d = document.createElement('div'); d.className = 'resp ' + (p.voz === 'autor' ? 'autor' : 'guia');
     if(p.voz === 'autor' && !p.cita) d.innerHTML = avAutor() + `<div><p>${esc(p.t)}</p></div>`;
     else if(p.voz === 'autor'){
       const c = citaDe(p.cita), ref = c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.ref)}</a>` : esc(c.ref);
@@ -2419,8 +2495,8 @@ function enviarCharla(q){
   let listo;   // si hace falta entrar en Puter, la ventana se abre ahora, dentro del gesto
   try{ listo = window.puter ? (puter.auth.isSignedIn() ? null : puter.auth.signIn()) : loadPuter().then(() => puter.auth.isSignedIn() ? null : puter.auth.signIn()); }
   catch(e){ listo = Promise.reject(e); }
-  abrirCharla(true); CH.busy = true; $('chQs')?.remove();
-  const log = $('chLog'), y = document.createElement('p'); y.className = 'yo'; y.textContent = q; log.appendChild(y);
+  abrirCharla(V5 ? 'enviar' : true); CH.busy = true; $('chQs')?.remove();
+  const log = turno('charla'), y = document.createElement('p'); y.className = 'yo'; y.textContent = q; log.appendChild(y);
   const dots = document.createElement('div'); dots.className = 'dots'; dots.innerHTML = '<i></i><i></i><i></i>'; log.appendChild(dots);
   if(y.scrollIntoView) y.scrollIntoView({block:'start', behavior:RM ? 'auto' : 'smooth'});
   const msgs = [{role:'user', content:promptArtista()}, ...CH.turnos.slice(-3).flatMap(t => [{role:'user', content:t.q}, {role:'assistant', content:t.a}]), {role:'user', content:q}];
@@ -2429,8 +2505,9 @@ function enviarCharla(q){
     const j = jsonDe(txt), partes = partesDe(j);
     if(!partes.length) throw {code:'vacia'};
     dots.remove();
-    pintarRespuestaArtista(partes, j.obras);
-    if(y.scrollIntoView) y.scrollIntoView({block:'start', behavior:RM ? 'auto' : 'smooth'});   // la pregunta arriba y la respuesta debajo
+    pintarRespuestaArtista(partes, j.obras, log);
+    escribir(log);
+    if(y.scrollIntoView && !(V5 && ESTRECHA() && E3 !== 'alta')) y.scrollIntoView({block:'start', behavior:RM ? 'auto' : 'smooth'});   // la pregunta arriba y la respuesta debajo
     CH.turnos.push({q, a:JSON.stringify({partes, obras:j.obras || []})});
   }).catch(e => {
     dots.remove();
@@ -2441,6 +2518,7 @@ function enviarCharla(q){
 }
 $('chLog').onclick = e => {
   if(e.target.closest('[data-paseo]')){ empezarPaseo(); return; }
+  const ac = e.target.closest('.acc [data-a]'); if(ac){ const x = (ARTISTA.accVis || [])[+ac.dataset.a]; if(x){ if(x.f){ if(ARTISTA.paseo) salirPaseo(); aplicarFiltro(x.f); } else x.hacer(); } return; }
   const q = e.target.closest('#chQs button'); if(q){ enviarCharla(q.textContent); return; }
   if(e.target.closest('#chVer, [data-ir]')){ cerrarCharla(); return; }
   const o = e.target.closest('[data-obra]'); if(!o) return;
@@ -2448,7 +2526,7 @@ $('chLog').onclick = e => {
 };
 $('chF').onsubmit = e => { e.preventDefault(); const q = $('chI').value.trim(); if(!q) return; $('chI').value = ''; $('chI').blur(); enviarCharla(q); };
 $('chX').onclick = cerrarCharla;
-$('vAv').onclick = () => abrirCharla(false);
+$('vAv').onclick = () => { if(V5 && E3 === 'media' && ESTRECHA()) estado('alta'); else abrirCharla(false); };   // v5: tocar su imagen enseña toda la conversación
 $('vAccs').onclick = e => { const b = e.target.closest('[data-a]'), x = b && (ARTISTA.accVis || [])[+b.dataset.a]; if(!x) return; e.stopPropagation(); if(x.f){ if(ARTISTA.paseo) salirPaseo(); aplicarFiltro(x.f); } else x.hacer(); };
 document.querySelector('.vbur').addEventListener('click', e => { if(V2 && !e.target.closest('#vAccs') && !ARTISTA.paseo && !ARTISTA.previa) abrirCharla(false); });
 $('chI').addEventListener('focus', () => abrirCharla(true));
