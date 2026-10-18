@@ -63,6 +63,7 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;lin
 .ib{width:44px;height:44px;display:grid;place-items:center;flex:none;margin-right:-10px}
 .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
 .ib:hover{background:var(--fg);color:var(--tinta)}
+.ib.atras{margin-right:0;margin-left:-10px}
 
 /* Inicio: el sello grande y un solo botón (el toque que deja sonar la voz) */
 #inicio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding-block:20px;text-align:center}
@@ -244,6 +245,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <div class="o-in">
       <header class="top">
         <div class="col">
+          <button class="ib atras" id="atras" type="button" aria-label="Todas las obras de la sala"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
           <div class="who"><b id="oTit"></b><small id="oSub"></small></div>
           <button class="ib" id="menuB" type="button" aria-label="Tu visita, ficha y otras obras de la sala"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg></button>
         </div>
@@ -295,7 +297,6 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <div class="menu">
         <button class="fila-m" type="button" id="fichaB"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
         <button class="fila-m" type="button" id="deNuevoB"><span><b>Escucharla desde el principio</b><small id="deNuevoT"></small></span><span aria-hidden="true">→</span></button>
-        <button class="fila-m" type="button" id="salaB"><span><b>Otras obras de la sala</b><small id="salaBT"></small></span><span aria-hidden="true">→</span></button>
       </div>
     </div>
     <div class="foot" id="ajFoot"><button class="b1" id="aplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
@@ -1006,7 +1007,7 @@ function abrirAjustes(){
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
   $('fPerfil').innerHTML = vis.map(k => `<button type="button" data-v="${k}"><span>${esc(OBRA.visitas[k].n)}<small>${esc(OBRA.visitas[k].d || '')}</small></span></button>`).join('');
   $('fsGuia').hidden = meds.length < 2; $('fsPerfil').hidden = vis.length < 2;
-  $('deNuevoT').textContent = `${VIS().n} · ${duracion()}`; $('salaBT').textContent = `${SALA.nombre} · ${SALA.obras.length} obras`;
+  $('deNuevoT').textContent = `${VIS().n} · ${duracion()}`;
   sync(); cerrarPanel();
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
@@ -1039,7 +1040,7 @@ $('aplicar').onclick = () => {
   else if(U.ajAntes) play();
 };
 $('deNuevoB').onclick = () => { $('ajS').hidden = true; preparar(); $('empezar').click(); };
-$('salaB').onclick = () => { $('ajS').hidden = true; volverSala(); };
+$('atras').onclick = volverSala;
 $('fichaB').onclick = () => {
   $('ajS').hidden = true;
   $('fTit').textContent = OBRA.titulo;
