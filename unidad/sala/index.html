@@ -150,6 +150,9 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .sq{width:60px;height:60px;border:1px solid var(--hair);display:grid;place-items:center;flex:none;background:rgba(10,10,11,.55)}
 .sq svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
 .sq.grande{width:74px;height:74px;background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+/* Pruebas de diseño (Tu visita › Diseño): forma de los tres mandos */
+:root[data-botones=redondeados] .sq{border-radius:28%}
+:root[data-botones=redondos] .sq{border-radius:50%}
 .sq.grande svg{width:28px;height:28px}
 .sq[aria-pressed=true]:not(.grande),.sq[aria-expanded=true]{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
 .sq.rec{animation:inv 1s steps(2) infinite}
@@ -288,6 +291,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <fieldset id="fsModo"><legend>Modo</legend><div class="seg" id="fModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset>
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
+      <fieldset id="fsDis"><legend>Diseño · pruebas</legend><div class="seg" id="fBot"><button type="button" data-v="rectos">Rectos<small>Los de ahora</small></button><button type="button" data-v="redondeados">Redondeados<small>Esquinas suaves</small></button><button type="button" data-v="redondos">Redondos<small>Círculos</small></button></div></fieldset>
       <div class="menu">
         <button class="fila-m" type="button" id="fichaB"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
         <button class="fila-m" type="button" id="deNuevoB"><span><b>Escucharla desde el principio</b><small id="deNuevoT"></small></span><span aria-hidden="true">→</span></button>
@@ -342,6 +346,10 @@ const MED = k => OBRA.mediadores[k];
 const MEDG = () => Object.keys(OBRA.mediadores)[0];
 const VIS = () => OBRA.visitas[P.perfil];
 const incl = c => (!c.p || tiene(c.p, P.perfil)) && !(c.x && tiene(c.x, P.perfil));
+// Pruebas de diseño para comparar plantillas; se recuerdan en este dispositivo
+const DIS = {botones:st.get('am.sala.botones', 'rectos')};
+const aplicarDiseno = () => { document.documentElement.dataset.botones = DIS.botones; };
+aplicarDiseno();
 const G = {voz:st.get('am.sala.voz', '1') === '1', texto:st.get('am.sala.texto', '1') === '1', musica:st.get('am.sala.musica', '0') === '1'};
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3400); }
 
@@ -993,7 +1001,7 @@ let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout
 /* ======================= Tu visita, ficha y sala ======================= */
 const Q = {};
 function abrirAjustes(){
-  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada';
+  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.botones = DIS.botones;
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
   $('fPerfil').innerHTML = vis.map(k => `<button type="button" data-v="${k}"><span>${esc(OBRA.visitas[k].n)}<small>${esc(OBRA.visitas[k].d || '')}</small></span></button>`).join('');
@@ -1003,11 +1011,12 @@ function abrirAjustes(){
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
-function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
-[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
+function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
+[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
 $('menuB').onclick = abrirAjustes;
 function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
+  if(Q.botones !== DIS.botones){ DIS.botones = Q.botones; st.set('am.sala.botones', DIS.botones); aplicarDiseno(); }
   // Cambio de modo: la misma obra, con la voz de ese modo y el enlace al día (?v=2 es la conversación)
   if((Q.modo === 'conversa') !== V2){
     const iba = U.started, voz = Q.guia !== P.guia ? Q.guia : null;
