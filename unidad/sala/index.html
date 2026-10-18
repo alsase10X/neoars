@@ -39,9 +39,9 @@ a{color:inherit}
 .eyb{font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;line-height:1;margin:12px 0 14px;text-wrap:balance;max-width:14ch}
 .salaD{font-size:1.06rem;line-height:1.45;color:rgba(246,245,242,.86);max-width:36ch}
-.qr{display:flex;gap:12px;align-items:flex-start;font-size:.9rem;line-height:1.4;color:var(--muted);padding:16px 0;margin-top:24px;border-top:1px solid var(--hair)}
-.qr svg{width:22px;height:22px;flex:none;fill:none;stroke:var(--fg);stroke-width:1.8}
-.obras{list-style:none;border-top:1px solid var(--hair)}
+.salaMenu{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);right:max(6px,env(safe-area-inset-right,0px));margin:0}
+.salaFirma{margin-top:22px}
+.obras{list-style:none;border-top:1px solid var(--hair);margin-top:24px}
 .ob{display:grid;grid-template-columns:26px 64px 1fr 20px;gap:14px;align-items:center;width:100%;padding:14px 0;border-bottom:1px solid var(--hair);text-align:left}
 .ob img{width:64px;height:64px;object-fit:cover;display:block;max-width:none;border-radius:50%}
 .num{font-size:1.35rem;font-weight:900;font-variant-numeric:tabular-nums}
@@ -228,14 +228,13 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 <div id="app">
   <section id="salaV" class="vista" aria-label="La sala" hidden>
     <div class="fondo" id="salaF" aria-hidden="true"></div>
+    <button class="ib salaMenu" id="salaMenu" type="button" aria-label="Modo de la visita"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg></button>
     <div class="salaIn">
       <div class="col">
-        <p class="eyb">artmedium · en sala</p>
         <h1 id="salaT"></h1>
         <p class="salaD" id="salaD"></p>
-        <p class="qr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 14h2v2M14 18h2v2M18 18h2v2"/></svg><span>Junto a cada obra hay un código. Escanéalo y la obra empieza a contarse mientras la miras. Aquí puedes elegirla a mano.</span></p>
         <ol class="obras" id="obras"></ol>
-        <p class="pie">Prototipo de la versión en sala. Imágenes y fichas de colecciones en acceso abierto. Mejor con auriculares. · <b>artmedium</b></p>
+        <p class="firma salaFirma">Con tecnología de <b>artmedium</b></p>
       </div>
     </div>
   </section>
@@ -302,6 +301,13 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <div class="foot" id="ajFoot"><button class="b1" id="aplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
   </div>
 </div>
+<div class="sheet" id="salaS" hidden>
+  <div class="pn" role="dialog" aria-label="Modo de la visita">
+    <div class="hd"><b>Tu visita</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="deep"><fieldset><legend>Modo</legend><div class="seg" id="sModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset></div>
+    <div class="foot"><button class="b1" id="sAplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
+  </div>
+</div>
 <div class="sheet" id="fichaS" hidden>
   <div class="pn" role="dialog" aria-label="Ficha de la obra">
     <div class="hd"><b id="fTit"></b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -316,7 +322,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 let SALA = /*__SALA__*/null;
 const SALA_WEB = {
   nombre:'Cuatro maneras de mirar',
-  d:'Una noche pintada de día, un cuarto para descansar, un vistazo a través del cristal y un incendio visto desde la orilla. Cuatro obras de colecciones abiertas, contadas mientras las miras.',
+  d:'Una noche pintada de día, un cuarto para descansar, un vistazo a través del cristal y un incendio visto desde la orilla.',
   musica:{src:'../obras/satie-gymnopedie-1.mp3', titulo:'Satie, Gymnopédie n.º 1'},
   obras:['../obras/noche-estrellada.json', '../obras/el-dormitorio.json', '../obras/el-panuelo-rojo.json', '../obras/el-incendio-del-parlamento.json']
 };
@@ -328,6 +334,7 @@ const CONFIG = {api:'', puterModelo:''};
 // antes con el banco validado de la obra (qa) que con un modelo.
 let V2 = new URLSearchParams(location.search).get('v') === '2';   // se cambia en directo desde «Tu visita»
 // La voz que empieza en cada modo: en la conversación, la obra o su autor si los hay
+function cambiarModo(conv){ V2 = conv; try{ const u = new URL(location.href); if(V2) u.searchParams.set('v', '2'); else u.searchParams.delete('v'); history.replaceState(null, '', u); }catch(e){} }
 const vozDefecto = meds => V2 ? (['obra', 'autor'].find(k => meds.includes(k)) || meds[0]) : meds[0];
 const alA = s => ('a ' + s).replace(/^a el /, 'al ');
 
@@ -377,15 +384,27 @@ async function cargarSala(){
   if(!obras.length) throw new Error('sin obras');
   SALA = {...SALA_WEB, musica:{...SALA_WEB.musica, src:new URL(SALA_WEB.musica.src, location.href).href}, obras};
 }
+// En la conversación, el gancho de cada obra: quién te habla, si no es la guía («Habla Vincent», «Habla el propio cuadro»)
+function quienHabla(o){
+  if(!V2) return '';
+  const meds = Object.keys(o.mediadores), k = vozDefecto(meds); if(k === meds[0]) return '';
+  const m = o.mediadores[k], n = /^(el|la) /i.test(m.corto || '') ? m.nombre.charAt(0).toLowerCase() + m.nombre.slice(1) : (m.corto || m.nombre);
+  return `<small>Habla ${esc(n)}</small>`;
+}
 function pintarSala(){
   $('salaT').textContent = SALA.nombre; $('salaD').textContent = SALA.d;
   $('salaF').style.backgroundImage = `url(${SALA.obras[0].fondo})`;
-  $('obras').innerHTML = SALA.obras.map((o, n) => `<li><button class="ob" type="button" data-id="${o.id}"><span class="num">${n + 1}</span><img src="${o.img}" alt=""><span class="obt"><b>${esc(o.titulo)}</b><small>${esc(o.autor)} · ${esc(o.fecha)}</small><small>${Object.values(o.mediadores).map(m => esc(m.nombre)).join(' · ')}</small></span><span class="fl" aria-hidden="true">→</span></button></li>`).join('');
+  $('obras').innerHTML = SALA.obras.map((o, n) => `<li><button class="ob" type="button" data-id="${o.id}"><span class="num">${n + 1}</span><img src="${o.img}" alt=""><span class="obt"><b>${esc(o.titulo)}</b><small>${esc(o.autor)} · ${esc(o.fecha)}</small>${quienHabla(o)}</span><span class="fl" aria-hidden="true">→</span></button></li>`).join('');
 }
+let QS = 'guiada';
+const syncS = () => document.querySelectorAll('#sModo [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === QS));
+$('salaMenu').onclick = () => { QS = V2 ? 'conversa' : 'guiada'; syncS(); $('salaS').hidden = false; };
+$('sModo').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; QS = b.dataset.v; syncS(); };
+$('sAplicar').onclick = () => { const conv = QS === 'conversa'; $('salaS').hidden = true; if(conv === V2) return; cambiarModo(conv); pintarSala(); toast(conv ? 'Conversación: pregúntale a cada obra' : 'Visita guiada: como una audioguía'); };
 $('obras').onclick = e => { const b = e.target.closest('[data-id]'); if(b) abrir(b.dataset.id); };
 function volverSala(){
   if(U){ pausa(); cerrarEscribir(); }
-  $('obraV').hidden = true; $('salaV').hidden = false; wake(false);
+  pintarSala(); $('obraV').hidden = true; $('salaV').hidden = false; wake(false);
   try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
 }
 
@@ -1021,8 +1040,7 @@ $('aplicar').onclick = () => {
   // Cambio de modo: la misma obra, con la voz de ese modo y el enlace al día (?v=2 es la conversación)
   if((Q.modo === 'conversa') !== V2){
     const iba = U.started, voz = Q.guia !== P.guia ? Q.guia : null;
-    $('ajS').hidden = true; V2 = Q.modo === 'conversa';
-    try{ const u = new URL(location.href); if(V2) u.searchParams.set('v', '2'); else u.searchParams.delete('v'); history.replaceState(null, '', u); }catch(e){}
+    $('ajS').hidden = true; cambiarModo(Q.modo === 'conversa');
     abrir(OBRA.id);
     let otra = false;
     if(voz && voz !== P.guia){ P.guia = voz; store.set('guia', voz); otra = true; }
@@ -1049,10 +1067,10 @@ $('fichaB').onclick = () => {
   $('fichaS').hidden = false;
 };
 function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes) play(); }
-const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha};
+const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());
-['ajS','fichaS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
-addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
+['ajS','fichaS','salaS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
+addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
 
 /* ======================= Voz y música ======================= */
 let AC = null, MG = null, MSRC = null, MBUF = null;
