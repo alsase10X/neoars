@@ -119,6 +119,13 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .pasar{align-self:flex-start;height:44px;padding:0 14px;border:1px solid var(--fg);font-size:.95rem;font-weight:700}
 .pasar:hover{background:var(--fg);color:var(--tinta)}
 #obraV.sintexto #lineas{visibility:hidden}
+/* v2 · detalles del cuadro dentro de la respuesta: apagados hasta que la voz llega a ellos */
+.imgs{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;min-width:0;max-width:100%}
+.imgs::-webkit-scrollbar{display:none}
+.im{flex:none;position:relative;width:clamp(124px,36vw,160px);aspect-ratio:4/5;overflow:hidden;border:1px solid var(--hair);background:var(--panel);scroll-snap-align:start;text-align:left}
+.imv{position:absolute;inset:0;background-repeat:no-repeat}
+.imt{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 9px;font-size:.85rem;font-weight:700;letter-spacing:0;line-height:1.2;background:linear-gradient(transparent,rgba(0,0,0,.75))}
+.im:hover{border-color:var(--fg)}
 
 /* Abajo: el sello, la pista y los tres mandos */
 .abajo{flex:none;position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:calc(var(--sello)*.64);padding-bottom:10px}
@@ -305,6 +312,9 @@ const SALA_WEB = {
 // Modelo para las preguntas libres. Dentro de Claude responde Claude; en la web, Puter (cada visitante
 // con su propia cuenta) o, si se rellena «api», el servidor intermedio del proyecto.
 const CONFIG = {api:'', puterModelo:''};
+// Variante v2 (?v=2): conversación primero, como las esculturas que hablan. Una presentación breve, sugerencias
+// y preguntas libres que se responden antes con el banco validado de la obra (qa) que con un modelo.
+const V2 = new URLSearchParams(location.search).get('v') === '2';
 
 /* ======================= Utilidades ======================= */
 const $ = id => document.getElementById(id);
@@ -337,7 +347,7 @@ async function cargarSala(){
     if(d.iiif){
       // IIIF: el tamaño sale de su info.json; el sello usa una vista de 1.200 px como la unidad
       const base = abs(d.iiif, url).replace(/\/(info\.json)?$/, '');
-      try{ const info = await fetch(base + '/info.json').then(r => r.json()); d.iw = info.width; d.ih = info.height; }catch(e){}
+      try{ const info = await fetch(base + '/info.json').then(r => r.json()); d.iw = info.width; d.ih = info.height; d._iiif = base; d._recorta = !JSON.stringify(info.profile || '').includes('level0'); }catch(e){}
       d.img = d.img ? abs(d.img, url) : `${base}/full/${d.iw ? Math.min(1200, d.iw) : 843},/0/default.jpg`;
       d.fondo = d.fondo ? abs(d.fondo, url) : `${base}/full/96,/0/default.jpg`;
     } else { d.img = abs(d.img, url); d.fondo = abs(d.fondo || d.img, url); }
@@ -381,11 +391,12 @@ function abrir(id){
 }
 // Vuelve al inicio de la obra: el sello grande y un botón (el toque que deja sonar la voz)
 function preparar(){
-  parar(); U.voz = M().voz; U.caps = construir(); U.els = []; U.i = 0; U.si = 0; U.fin = false; U.started = false; U.playing = false; U.conv = false;
+  parar(); U.voz = M().voz; U.caps = construir(); U.els = []; U.i = 0; U.si = 0; U.fin = false; U.started = false; U.playing = false; U.conv = false; U.intro = false; U.introI = 0;
   U.segundos = Math.round(U.caps.reduce((a, C) => a + (C.au ? C.au.a - C.au.de : C.palabras/2.5), 0) + U.caps.length*1.2 + U.caps.filter(C => C.k === 'pregunta').length*espPregunta()/1000);
   $('lineas').innerHTML = ''; $('lineas').classList.remove('hablando');
-  $('iniQ').textContent = `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando el cuadro.`;
-  $('empT').textContent = `Empezar · ${duracion()}`;
+  $('iniQ').textContent = V2 ? `Pregúntale lo que quieras a ${M().corto || M().nombre}, con la voz o escribiendo. Mejor con auriculares.`
+    : `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando el cuadro.`;
+  $('empT').textContent = V2 ? 'Empezar' : `Empezar · ${duracion()}`;
   $('inicio').hidden = false; $('flujo').hidden = true; $('abajo').hidden = true;
   $('obraV').classList.remove('sonando', 'pausado', 'mirando');
   anillo(0, 0); estado();
@@ -394,6 +405,8 @@ $('empezar').onclick = () => {
   U.started = true; $('inicio').hidden = true; $('flujo').hidden = false; $('abajo').hidden = false;
   $('obraV').classList.toggle('sintexto', !G.texto);
   requestAnimationFrame(() => selloCam(null, false));
+  // v2: solo la presentación (la primera cápsula que no es una pausa para mirar) y después, la conversación
+  if(V2){ U.introI = Math.max(0, U.caps.findIndex(C => C.k !== 'pregunta')); U.i = U.introI; U.intro = true; }
   play();
 };
 
@@ -449,12 +462,13 @@ function duracion(){ const s = U.segundos; return s < 90 ? `${Math.max(30, Math.
 function estado(){
   const V = $('obraV');
   V.classList.toggle('sonando', U.playing);
-  V.classList.toggle('pausado', U.started && !U.playing && !U.fin);
+  V.classList.toggle('pausado', U.started && !U.playing && !U.fin && !(V2 && U.conv && U.i <= U.introI));
   const C = U.caps[U.i], zona = U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : '';
   let p;
   if(V.classList.contains('mirando')) p = 'Levanta la vista y mira el cuadro <button class="lk" type="button" id="yaB">Ya he mirado →</button>';
   else if(U.pensando) p = 'Pensando…';
   else if(U.playing) p = zona ? `Búscalo en el cuadro · ${esc(zona)}` : 'Toca el sello para pausar';
+  else if(V2 && U.conv && !U.fin && U.i <= U.introI) p = zona ? `Búscalo en el cuadro · ${esc(zona)}` : 'Pregunta con el micrófono o el teclado';
   else if(U.conv && !U.fin) p = zona ? `Búscalo en el cuadro · ${esc(zona)}. Toca el sello para seguir la visita` : 'Toca el sello para seguir la visita, o pregunta otra cosa';
   else if(U.fin) p = 'Pregunta con el micrófono o el teclado. Toca el sello para escucharla de nuevo';
   else p = 'Toca el sello para seguir, o pregunta con el micrófono o el teclado';
@@ -491,6 +505,7 @@ function parar(){
 function reiniciar(){ parar(); U.i = 0; U.si = 0; U.fin = false; U.els = []; $('lineas').innerHTML = ''; anillo(0, 0); }
 function siguiente(){
   parar(); $('obraV').classList.remove('mirando');
+  if(V2 && U.intro){ U.intro = false; return invitar(); }
   if(U.i >= U.caps.length - 1) return terminar();
   U.i++; U.si = 0; if(U.playing) sonar(); else estado();
 }
@@ -538,12 +553,21 @@ function elegir(){
   return out.slice(0, 3);
 }
 const qBoton = k => { const x = M().qa[k]; return `<button class="q${x.ia ? ' ia' : ''}" type="button" data-k="${k}">${esc(x.q)}</button>`; };
-function sugerencias(extra = ''){
+function sugerencias(extra = '', ks = null){
   $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
-  const s = elegir(); if(!s.length && !extra) return;
+  const s = ks && ks.length ? ks : elegir();
+  // v2: mientras solo ha oído la presentación, la visita entera es una sugerencia más
+  const ent = V2 && U.started && !U.fin && U.i <= U.introI ? `<button class="q" type="button" data-entera>Cuéntamela entera · ${duracion()}</button>` : '';
+  if(!s.length && !extra && !ent) return;
   const box = document.createElement('div'); box.className = 'sug';
-  box.innerHTML = (s.length ? `<p class="eyb">Sugerencias</p>${s.map(qBoton).join('')}` : '') + extra;
+  box.innerHTML = (s.length || ent ? `<p class="eyb">Sugerencias</p>${ent}${s.map(qBoton).join('')}` : '') + extra;
   $('lineas').appendChild(box);
+}
+// v2: acaba la presentación y empieza la conversación
+function invitar(){
+  U.playing = false; U.conv = true; wake(false);
+  sugerencias(); estado();
+  const s = $('lineas').querySelector('.sug'); if(s) setTimeout(() => s.scrollIntoView({block:'nearest', behavior:RM ? 'auto' : 'smooth'}), 300);
 }
 function mostrarFin(){
   const n = SALA.obras.indexOf(OBRA), sig = SALA.obras.length > 1 ? SALA.obras[(n + 1) % SALA.obras.length] : null;
@@ -555,6 +579,8 @@ function mostrarFin(){
 $('lineas').addEventListener('click', e => {
   if(e.target.closest('a')) return;
   const k = e.target.closest('[data-k]'); if(k){ preguntaPreparada(M().qa[+k.dataset.k]); return; }
+  if(e.target.closest('[data-entera]')){ $('lineas').querySelectorAll('.sug').forEach(s => s.remove()); play(); return; }
+  const zb = e.target.closest('[data-zona]'); if(zb){ zonaTocada(zb.dataset.zona); return; }
   const s = e.target.closest('[data-sig]'); if(s){ abrir(s.dataset.sig); return; }
   const v = e.target.closest('[data-voz]'); if(v){ P.guia = v.dataset.voz; store.set('guia', P.guia); preparar(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); $('empezar').click(); return; }
   const p = e.target.closest('[data-pasa]'); if(p){ pasarALaGuia(p); return; }
@@ -565,7 +591,7 @@ $('lineas').addEventListener('click', e => {
 function encabezar(q){
   if(U.playing) pausa(); else parar();
   if(U.ctl){ U.ctl.abort(); U.ctl = null; }
-  U.conv = true; $('obraV').classList.remove('mirando');
+  U.conv = true; U.intro = false; $('obraV').classList.remove('mirando');
   apagarAnteriores(); $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
   const y = document.createElement('p'); y.className = 'you'; y.textContent = q; $('lineas').appendChild(y);
   const dots = document.createElement('div'); dots.className = 'dots'; dots.setAttribute('aria-label', 'Pensando'); dots.innerHTML = '<i></i><i></i><i></i>'; $('lineas').appendChild(dots);
@@ -578,9 +604,9 @@ function responder(partes, ia, antes = ''){
   const box = document.createElement('div'); box.className = 'ans ahora' + (ia ? ' ia' : '');
   const frases = trocear(partes, box); $('lineas').appendChild(box); return frases;
 }
-function preguntaPreparada(x){
+function preguntaPreparada(x, eco){
   U.asked.add(x.q);
-  const dots = encabezar(x.q), tok = U.tok;
+  const dots = encabezar(eco || x.q), tok = U.tok;
   if(x.z) selloCam(x.z);
   setTimeout(() => {
     if(tok !== U.tok) return;
@@ -784,15 +810,115 @@ async function preguntarIA(q){
   sugerencias(); estado(); hablar(frases);
 }
 
+/* ======================= v2 · Primero lo validado: el banco de preguntas de la obra ======================= */
+// Sin modelo conectado, la pregunta libre se compara con las preguntas preparadas (qa). Sustituye, de momento,
+// a la herramienta que el modelo en tiempo real llamará para buscar la respuesta validada más cercana.
+const STOP = new Set(('a al algo alguien algun alguna ante antes asi aun bien cada como con contra cual cuales cuando cuanto cuanta cuantos cuantas '
+  + 'de del desde donde dos el ella ellas ello ellos en entre era eran es esa esas ese eso esos esta estaba estan estas este esto estos fue fueron '
+  + 'ha habia han hay la las le les lo los mas me mi mis mucho muy nada ni no nos o os para pero por porque puede pueden puedes podria podrias '
+  + 'que quien quienes se ser si sido sin sobre son su sus tambien tan tanto te tenia tiene tienen ti tu tus un una uno unos unas usted y ya yo '
+  + 'oye vale bueno dime cuentame explicame hablame sabes saber quiero quisiera gustaria hola gracias aqui ahi alli sale hace hizo hacer cosa cosas').split(' '));
+const SIN = {cara:'rost', mide:'tama', medi:'tama', dime:'tama', chic:'muje', seno:'muje'};
+const normal = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+const raiz = w => { const r = w.length >= 5 ? w.slice(0, 4) : w.replace(/s$/, ''); return SIN[r] || r; };
+const toks = s => [...new Set(normal(s).split(' ').filter(w => w.length > 2 && !STOP.has(w)).map(raiz))];
+function banco(){
+  const m = M(); if(m._banco) return m._banco;
+  const docs = (m.qa || []).map((x, k) => ({k, q:toks(x.q), z:x.z && OBRA.zonas[x.z] ? toks(OBRA.zonas[x.z].n) : [], a:toks(x.a)}));
+  const df = {}; docs.forEach(d => new Set([...d.q, ...d.z, ...d.a]).forEach(t => { df[t] = (df[t] || 0) + 1; }));
+  return (m._banco = {docs, df, N:docs.length || 1});
+}
+// Cada palabra pesa más cuanto más rara es en el banco; cuenta entera si está en la pregunta preparada,
+// algo menos si nombra su zona y poco si solo sale en la respuesta. Las palabras que el banco no conoce restan.
+function ranking(q){
+  const T = toks(q), B = banco(); if(!T.length) return [];
+  const idf = t => Math.log(1 + B.N/B.df[t]);
+  const den = T.reduce((a, t) => a + (B.df[t] ? idf(t) : .3), 0);
+  return B.docs.map(d => {
+    let s = 0, ancla = false;
+    T.forEach(t => { if(!B.df[t]) return; const w = d.q.includes(t) ? 1 : d.z.includes(t) ? .7 : d.a.includes(t) ? .35 : 0; if(w >= .7) ancla = true; s += w*idf(t); });
+    return {k:d.k, s:ancla ? s/den : 0};
+  }).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
+}
+const zonaNombrada = q => { const T = toks(q); return Object.keys(OBRA.zonas).find(k => toks(OBRA.zonas[k].n).some(t => T.includes(t))) || null; };
+const pideImagenes = q => /\b(imagen|imagenes|foto|fotos|fotografias?|detalles?|ensename|ensenar|muestrame|mostrar|de cerca)\b/.test(normal(q));
+const IAlista = () => IA.modo === 'claude' || IA.modo === 'api' || (IA.modo === 'puter' && puterDentro());
+function preguntarV2(q){
+  q = q.replace(/\s+/g, ' ').trim().slice(0, 300); if(!q) return;
+  if(pideImagenes(q)){ const z = zonaNombrada(q); return z ? zonaTocada(z, q) : imagenes(q); }
+  const r = ranking(q);
+  if(r.length && r[0].s >= .5) return preguntaPreparada(M().qa[r[0].k], q);
+  const z = zonaNombrada(q); if(z) return zonaTocada(z, q);
+  if(IAlista()) return preguntarIA(q);
+  sinPreparada(q, r);
+}
+const NUM = ['', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'];
+// Los lugares del cuadro como imágenes dentro de la respuesta. La voz dice cuántos y se encienden al llegar a ellos
+function imagenes(eco){
+  const zs = Object.keys(OBRA.zonas), dots = encabezar(eco), tok = U.tok;
+  selloCam(null);
+  setTimeout(() => {
+    if(tok !== U.tok) return; dots.remove();
+    const frases = responder([{t:`Aquí tienes ${NUM[zs.length] || zs.length} detalles del cuadro.`, voz:M().voz}, {t:'Toca uno y te digo qué mirar.', voz:M().voz}]);
+    const box = $('lineas').lastElementChild, car = carrusel(zs);
+    box.firstElementChild.after(car); frases[0].w.push(car);
+    sugerencias(); estado(); hablar(frases);
+  }, 450);
+}
+function carrusel(zs){
+  const d = document.createElement('div'); d.className = 'imgs w';
+  d.innerHTML = zs.map(k => `<button class="im" type="button" data-zona="${esc(k)}"><span class="imv" style="${recorte(k)}" role="img" aria-label="${esc('Detalle: ' + OBRA.zonas[k].n)}"></span><span class="imt">${esc(OBRA.zonas[k].n)}</span></button>`).join('');
+  return d;
+}
+// Un detalle en proporción 4:5. Si el IIIF del museo admite recortes, se pide el trozo a buena resolución;
+// si es estático, se recorta la vista de 1.200 px
+function recorte(k, A = .8){
+  const b = caja(k), W = OBRA.iw, H = OBRA.ih;
+  let rw = b.w*W, rh = b.h*H;
+  if(rw/rh > A) rh = rw/A; else rw = rh*A;
+  const f = Math.min(1, W/rw, H/rh); rw *= f; rh *= f;
+  const rx = Math.min(Math.max(0, b.x*W - rw/2), W - rw), ry = Math.min(Math.max(0, b.y*H - rh/2), H - rh);
+  const px = W - rw > 1 ? rx/(W - rw)*100 : 50, py = H - rh > 1 ? ry/(H - rh)*100 : 50;
+  const vista = `url('${OBRA.img}')`, tam = `${(W/rw*100).toFixed(1)}% ${(H/rh*100).toFixed(1)}%`, pos = `${px.toFixed(1)}% ${py.toFixed(1)}%`;
+  // El trozo del museo va encima; si no llega, se ve el recorte de la vista que ya está cargada
+  if(OBRA._recorta && OBRA._iiif) return `background-image:url('${OBRA._iiif}/${Math.round(rx)},${Math.round(ry)},${Math.round(rw)},${Math.round(rh)}/!480,600/0/default.jpg'),${vista};background-size:cover,${tam};background-position:center,${pos}`;
+  return `background-image:${vista};background-size:${tam};background-position:${pos}`;
+}
+// Un lugar del cuadro: su respuesta preparada si la hay; si no, lo que se ve y la pregunta para mirarlo
+function zonaTocada(z, eco){
+  const qa = M().qa || [];
+  let k = qa.findIndex(x => x.z === z && !U.asked.has(x.q)); if(k < 0) k = qa.findIndex(x => x.z === z);
+  if(k >= 0) return preguntaPreparada(qa[k], eco);
+  const Z = OBRA.zonas[z], dots = encabezar(eco || Z.n), tok = U.tok;
+  selloCam(z);
+  setTimeout(() => {
+    if(tok !== U.tok) return; dots.remove();
+    const partes = [Z.vista, Z.mira].filter(Boolean).map(t => ({t, voz:M().voz}));
+    const frases = responder(partes.length ? partes : [{t:'Búscalo en el cuadro.', voz:M().voz}]);
+    sugerencias(); estado(); hablar(frases);
+  }, 450);
+}
+function sinPreparada(q, r){
+  const dots = encabezar(q), tok = U.tok;
+  selloCam(null);
+  setTimeout(() => {
+    if(tok !== U.tok) return; dots.remove();
+    const frases = responder([{t:'Eso no lo tengo preparado. Prueba con alguna de estas preguntas.', voz:M().voz}]);
+    sugerencias(IA.modo ? `<button class="pasar" type="button" data-entrar="${esc(q)}">Pregúntaselo a la IA →</button>` : '', r.slice(0, 3).map(x => x.k));
+    estado(); hablar(frases);
+  }, 450);
+}
+const preguntar = q => (V2 ? preguntarV2 : preguntarIA)(q);
+
 /* ======================= Escribir o preguntar con la voz ======================= */
 function abrirEscribir(){
   cerrarPanel(); $('obraV').classList.add('escribiendo'); $('askF').hidden = false; setTimeout(() => $('askI').focus(), 30);
-  if(IA.modo === 'puter'){ cargarPuter().catch(() => {}); if(!puterDentro()) toast('Te responde un modelo de IA a través de Puter. La primera vez te pedirá entrar con tu cuenta, que es gratuita.'); }
+  if(IA.modo === 'puter' && !V2){ cargarPuter().catch(() => {}); if(!puterDentro()) toast('Te responde un modelo de IA a través de Puter. La primera vez te pedirá entrar con tu cuenta, que es gratuita.'); }
 }
 function cerrarEscribir(){ $('obraV').classList.remove('escribiendo'); $('askF').hidden = true; $('askI').blur(); }
 $('kb').onclick = abrirEscribir;
 $('cancelar').onclick = cerrarEscribir;
-$('askF').onsubmit = e => { e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; cerrarEscribir(); preguntarIA(q); };
+$('askF').onsubmit = e => { e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; cerrarEscribir(); preguntar(q); };
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let rec = null;
 function sinMicro(){ toast('El micrófono no está disponible aquí. Escribe tu pregunta.'); abrirEscribir(); }
@@ -807,7 +933,7 @@ $('mic').onclick = () => {
     rec.onstart = () => { $('mic').classList.add('rec'); $('pista').textContent = 'Te escucho…'; };
     rec.onend = () => { $('mic').classList.remove('rec'); rec = null; if($('pista').textContent === 'Te escucho…') estado(); };
     rec.onerror = ev => { if(['not-allowed','service-not-allowed','audio-capture'].includes(ev.error)) sinMicro(); else toast('No te he oído bien. Prueba otra vez o escribe la pregunta.'); };
-    rec.onresult = ev => { const q = (ev.results[0][0].transcript || '').trim(); if(q) preguntarIA(q); };
+    rec.onresult = ev => { const q = (ev.results[0][0].transcript || '').trim(); if(q) preguntar(q); };
     rec.start();
   }catch(e){ rec = null; sinMicro(); }
 };
