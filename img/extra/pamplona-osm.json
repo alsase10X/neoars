@@ -1,0 +1,899 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-18T18:16:21Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 2769319055,
+  "lat": 42.8153834,
+  "lon": -1.6429383,
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "node",
+  "id": 2769319057,
+  "lat": 42.8153856,
+  "lon": -1.6429028,
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "node",
+  "id": 2769319060,
+  "lat": 42.8153881,
+  "lon": -1.6428638,
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "node",
+  "id": 2769319062,
+  "lat": 42.8153900,
+  "lon": -1.6428336,
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "node",
+  "id": 2769319064,
+  "lat": 42.8153924,
+  "lon": -1.6427961,
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "node",
+  "id": 2769319067,
+  "lat": 42.8153943,
+  "lon": -1.6427656,
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "node",
+  "id": 3030383326,
+  "lat": 42.8116989,
+  "lon": -1.6347871,
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "node",
+  "id": 3210819823,
+  "lat": 42.8158426,
+  "lon": -1.6405145,
+  "tags": {
+    "artwork_type": "bust",
+    "name": "Estatua a Ernest Hemingway",
+    "name:en": "Ernest Hemingway Statue",
+    "name:es": "Estatua a Ernest Hemingway",
+    "panoramax": "7579d886-0e89-408a-b1c3-a280afa5b67f",
+    "subject:wikidata": "Q23434",
+    "subject:wikipedia": "es:Ernest Hemingway",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/monumento-a-ernest-hemingway/",
+    "website2": "https://esculturaurbanapamplona.wordpress.com/2012/09/08/monumento-a-ernest-hermingway/"
+  }
+},
+{
+  "type": "node",
+  "id": 3733655781,
+  "lat": 42.8083923,
+  "lon": -1.6328145,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "statue",
+    "name": "Juan Pablo II",
+    "subject:wikidata": "Q989",
+    "subject:wikipedia": "en:Pope John Paul II"
+  }
+},
+{
+  "type": "node",
+  "id": 4558866749,
+  "lat": 42.8163586,
+  "lon": -1.6425003,
+  "tags": {
+    "artist_name": "Francisco López",
+    "artwork_type": "statue",
+    "name": "Carlos III el Noble",
+    "name:es": "Carlos III el Noble",
+    "name:eu": "Karlos III. Noblearen estatua",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/monumento-a-carlos-iii-el-noble",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 4558866789,
+  "lat": 42.8158027,
+  "lon": -1.6421885,
+  "tags": {
+    "artist_name": "Jorge Oteiza",
+    "artwork_type": "sculpture",
+    "name": "Unidad Triple y Liviana",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/unidad-triple-y-liviana",
+    "wikidata": "Q20031266",
+    "wikipedia": "eu:Unitate hirukoitz eta arina"
+  }
+},
+{
+  "type": "node",
+  "id": 4853570169,
+  "lat": 42.8163910,
+  "lon": -1.6483717,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "obelisk",
+    "name": "Monumento a la Inmaculada Concepción",
+    "website": "https://esculturas.pamplona.es/escultura/inmaculada-concepcion-de-maria"
+  }
+},
+{
+  "type": "node",
+  "id": 4900575700,
+  "lat": 42.8188880,
+  "lon": -1.6433427,
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "7",
+    "addr:postcode": "31002",
+    "addr:street": "Calle de la Mañueta",
+    "historic": "monument",
+    "name": "Casa natal de Sabicas",
+    "subject:wikidata": "Q729933",
+    "subject:wikipedia": "es:Sabicas"
+  }
+},
+{
+  "type": "node",
+  "id": 5213310570,
+  "lat": 42.8176433,
+  "lon": -1.6510512,
+  "tags": {
+    "artist_name": "Fructuoso Orduña",
+    "artwork_type": "statue",
+    "name": "Monumento al tenor Julián Gayarre",
+    "tourism": "artwork",
+    "wikidata": "Q19698167",
+    "wikimedia_commons": "File:Monumento a Julián Gayarre (Pamplona) 01.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 5222603983,
+  "lat": 42.8182247,
+  "lon": -1.6513221,
+  "tags": {
+    "artwork_type": "statue",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 5223660862,
+  "lat": 42.8168088,
+  "lon": -1.6464491,
+  "tags": {
+    "artwork_type": "statue",
+    "name": "San Francisco de Asís",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/san-francisco-de-asis"
+  }
+},
+{
+  "type": "node",
+  "id": 5223660878,
+  "lat": 42.8161121,
+  "lon": -1.6484508,
+  "tags": {
+    "artist_name": "Rafael Huerta",
+    "artwork_type": "statue",
+    "material": "metal",
+    "name": "José Joaquín Arazuri",
+    "subject:wikidata": "Q9013952",
+    "subject:wikipedia": "es:José Joaquín Arazuri",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/monumento-a-jose-joaquin-arazuri"
+  }
+},
+{
+  "type": "node",
+  "id": 5225614428,
+  "lat": 42.8167668,
+  "lon": -1.6454434,
+  "tags": {
+    "amenity": "drinking_water",
+    "artist_name": "Luis Paret",
+    "artwork_type": "sculpture",
+    "man_made": "water_tap",
+    "name": "Fuente de Neptuno Niño",
+    "tourism": "artwork",
+    "wheelchair": "limited",
+    "wikidata": "Q12264784",
+    "wikipedia": "eu:Neptunoren iturria (Iruñea)"
+  }
+},
+{
+  "type": "node",
+  "id": 5434044000,
+  "lat": 42.8247561,
+  "lon": -1.6526239,
+  "tags": {
+    "artist_name": "Jesús Elizainzín",
+    "artwork_type": "installation",
+    "name": "Hauskortasunerantz, agur",
+    "name:es": "Hacia lo frágil",
+    "name:eu": "Hauskortasunerantz, agur",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/VerPagina.asp?IdPag=317&Idioma=1"
+  }
+},
+{
+  "type": "node",
+  "id": 5434044001,
+  "lat": 42.8149725,
+  "lon": -1.6528731,
+  "tags": {
+    "artist_name": "José Ramón Anda",
+    "artwork_type": "sculpture",
+    "name": "Polifemo",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/VerPagina.asp?IdPag=286&Idioma=1"
+  }
+},
+{
+  "type": "node",
+  "id": 5434044002,
+  "lat": 42.8152294,
+  "lon": -1.6545161,
+  "tags": {
+    "artist_name": "José Antonio Eslava",
+    "artwork_type": "sculpture",
+    "name": "Monumento a Pompeyo",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/VerPagina.asp?IdPag=275&Idioma=1"
+  }
+},
+{
+  "type": "node",
+  "id": 6140752701,
+  "lat": 42.8123089,
+  "lon": -1.6535980,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 6511649141,
+  "lat": 42.8139055,
+  "lon": -1.6521014,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 8149768132,
+  "lat": 42.8126502,
+  "lon": -1.6487642,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 8149768133,
+  "lat": 42.8125824,
+  "lon": -1.6495498,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 8149768151,
+  "lat": 42.8124129,
+  "lon": -1.6500705,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 8149768152,
+  "lat": 42.8123044,
+  "lon": -1.6487457,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 8149768153,
+  "lat": 42.8127858,
+  "lon": -1.6491185,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 8149768157,
+  "lat": 42.8117890,
+  "lon": -1.6493033,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 8149768176,
+  "lat": 42.8115012,
+  "lon": -1.6465458,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 9755798719,
+  "lat": 42.8151486,
+  "lon": -1.6348454,
+  "tags": {
+    "historic": "monument",
+    "memorial": "statue",
+    "name": "Monumento a Pablo Sarasate",
+    "website": "https://esculturas.pamplona.es/escultura/monumento-a-pablo-sarasate/"
+  }
+},
+{
+  "type": "node",
+  "id": 9874842652,
+  "lat": 42.8152546,
+  "lon": -1.6398038,
+  "tags": {
+    "artwork_type": "statue",
+    "name": "El mundo de los toros",
+    "panoramax": "7ae7f541-b1b6-4619-831e-8fc4dec1428a",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/el-mundo-de-los-toros-homenaje-al-toro/"
+  }
+},
+{
+  "type": "node",
+  "id": 9874873109,
+  "lat": 42.8147751,
+  "lon": -1.6411691,
+  "tags": {
+    "artwork_type": "statue",
+    "name": "Gogoan (En recuerdo) - Statue Gogoan",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 9874873112,
+  "lat": 42.8144216,
+  "lon": -1.6432075,
+  "tags": {
+    "artwork_type": "statue",
+    "name": "Monumento a San Ignacio de Loyola",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/monumento-a-san-ignacio-de-loyola",
+    "wikidata": "Q20492651",
+    "wikimedia_commons": "File:Monumento a San Ignacio de Loyola (Pamplona) 03.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 9874925620,
+  "lat": 42.8126961,
+  "lon": -1.6455655,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "statue",
+    "name": "Monumento a la Paz"
+  }
+},
+{
+  "type": "node",
+  "id": 10287777817,
+  "lat": 42.8213568,
+  "lon": -1.6372620,
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "node",
+  "id": 11034670305,
+  "lat": 42.8199878,
+  "lon": -1.6413259,
+  "tags": {
+    "amenity": "fountain",
+    "name": "Fuente Farola"
+  }
+},
+{
+  "type": "node",
+  "id": 11467349218,
+  "lat": 42.8188068,
+  "lon": -1.6441212,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "plaque",
+    "name": "Plano de los Burgos de Pamplona"
+  }
+},
+{
+  "type": "node",
+  "id": 11467349730,
+  "lat": 42.8164954,
+  "lon": -1.6427489,
+  "tags": {
+    "artist_name": "Borja Barrajón",
+    "artwork_type": "sculpture",
+    "name": "1423",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/1423/",
+    "wikidata": "Q124286825"
+  }
+},
+{
+  "type": "node",
+  "id": 11516542589,
+  "lat": 42.8099718,
+  "lon": -1.6356944,
+  "tags": {
+    "artwork_type": "sculpture",
+    "name": "Coreano",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/coreano/",
+    "wikidata": "Q20031272",
+    "wikipedia": "eu:Korearra (Iruñea)"
+  }
+},
+{
+  "type": "node",
+  "id": 11659877815,
+  "lat": 42.8149619,
+  "lon": -1.6463004,
+  "tags": {
+    "artwork_type": "statue",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/conjunto-escultorico-en-el-paseo-de-sarasate/"
+  }
+},
+{
+  "type": "node",
+  "id": 11659877816,
+  "lat": 42.8150471,
+  "lon": -1.6460318,
+  "tags": {
+    "artwork_type": "statue",
+    "name": "Felipe III de Navarra",
+    "subject:wikidata": "Q505112",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/conjunto-escultorico-en-el-paseo-de-sarasate/"
+  }
+},
+{
+  "type": "node",
+  "id": 11659877817,
+  "lat": 42.8151330,
+  "lon": -1.6457455,
+  "tags": {
+    "artwork_type": "statue",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/conjunto-escultorico-en-el-paseo-de-sarasate/"
+  }
+},
+{
+  "type": "node",
+  "id": 11659877818,
+  "lat": 42.8149433,
+  "lon": -1.6456327,
+  "tags": {
+    "artwork_type": "statue",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/conjunto-escultorico-en-el-paseo-de-sarasate/"
+  }
+},
+{
+  "type": "node",
+  "id": 11659877819,
+  "lat": 42.8148468,
+  "lon": -1.6459080,
+  "tags": {
+    "artwork_type": "statue",
+    "name": "García Ramírez el Restaurador",
+    "subject:wikidata": "Q431172",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/conjunto-escultorico-en-el-paseo-de-sarasate/"
+  }
+},
+{
+  "type": "node",
+  "id": 11659877820,
+  "lat": 42.8147612,
+  "lon": -1.6461495,
+  "tags": {
+    "artwork_type": "statue",
+    "tourism": "artwork",
+    "website": "https://esculturas.pamplona.es/escultura/conjunto-escultorico-en-el-paseo-de-sarasate/"
+  }
+},
+{
+  "type": "node",
+  "id": 12138712800,
+  "lat": 42.8186173,
+  "lon": -1.6460570,
+  "tags": {
+    "artwork_type": "mural",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 12639075582,
+  "lat": 42.8145281,
+  "lon": -1.6335535,
+  "tags": {
+    "artwork_type": "sculpture",
+    "name": "Irabazi",
+    "name:es": "Vencer",
+    "name:eu": "Irabazi",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 12964169857,
+  "lat": 42.8156248,
+  "lon": -1.6484178,
+  "tags": {
+    "artwork_type": "statue",
+    "name": "Monumento a Navarro Villoslada",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 13003945600,
+  "lat": 42.8184550,
+  "lon": -1.6445902,
+  "tags": {
+    "artwork_type": "mural",
+    "name": "Mural de Diana Cazadora",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 13031442917,
+  "lat": 42.8137624,
+  "lon": -1.6359957,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "statue"
+  }
+},
+{
+  "type": "node",
+  "id": 13158624624,
+  "lat": 42.8198166,
+  "lon": -1.6458672,
+  "tags": {
+    "artwork_type": "mural",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 13171951474,
+  "lat": 42.8204509,
+  "lon": -1.6432175,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "stolperstein",
+    "panoramax": "e92fe61c-9641-4415-8e74-0bf36e3b4d3d"
+  }
+},
+{
+  "type": "node",
+  "id": 13385856769,
+  "lat": 42.8124392,
+  "lon": -1.6454690,
+  "tags": {
+    "artwork_type": "sculpture",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 13929785719,
+  "lat": 42.8153790,
+  "lon": -1.6466314,
+  "tags": {
+    "historic": "memorial",
+    "inscription": "Aquí vivía / Lorenzo / Yoldi Lacima / 19-11-1911 / Hemen Bizi Zen / Asasinado / Erailda / 1936-11-16",
+    "memorial": "stolperstein",
+    "person:date_of_birth": "1911-11-19",
+    "person:date_of_death": "1936-11-16",
+    "person:name": "Yoldi Lacima"
+  }
+},
+{
+  "type": "node",
+  "id": 13930679899,
+  "lat": 42.8182665,
+  "lon": -1.6522926,
+  "tags": {
+    "historic": "memorial",
+    "name": "Monumento a Teobaldo I de Navarra",
+    "wikidata": "Q20492730"
+  }
+},
+{
+  "type": "node",
+  "id": 13939162866,
+  "lat": 42.8202653,
+  "lon": -1.6460408,
+  "tags": {
+    "artwork_type": "sculpture",
+    "material": "metal",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 13939196201,
+  "lat": 42.8199968,
+  "lon": -1.6446128,
+  "tags": {
+    "historic": "memorial",
+    "material": "stone",
+    "name": "Reconocimiento al Reino de Navarra - Nafarroako Erreinuaren Omenez",
+    "name:es": "Reconocimiento al Reino de Navarra",
+    "name:eu": "Nafarroako Erreinuaren Omenez",
+    "start_date": "2012-12-03",
+    "subject:wikidata": "Q200262"
+  }
+},
+{
+  "type": "node",
+  "id": 13954251488,
+  "lat": 42.8184240,
+  "lon": -1.6356648,
+  "tags": {
+    "historic": "memorial",
+    "information": "board",
+    "language:es": "yes",
+    "language:eu": "yes",
+    "subject": "José Ignacio Sanz Arbizu",
+    "tourism": "information"
+  }
+},
+{
+  "type": "way",
+  "id": 82360571,
+  "center": {
+    "lat": 42.8091518,
+    "lon": -1.6347786
+  },
+  "tags": {
+    "alt_name": "Sala de Exposiciones Conde de Rodezno",
+    "building": "civic",
+    "historic": "memorial",
+    "memorial": "war_memorial",
+    "name": "Monumento a los Caídos",
+    "old_name": "Navarra a sus Muertos en la Cruzada",
+    "wikidata": "Q9034981"
+  }
+},
+{
+  "type": "way",
+  "id": 272680452,
+  "center": {
+    "lat": 42.8147746,
+    "lon": -1.6413428
+  },
+  "tags": {
+    "historic": "monument",
+    "name": "Monumento al Encierro",
+    "name:en": "Monument to the Running of the Bulls",
+    "name:es": "Monumento al Encierro",
+    "tourism": "attraction",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 538591304,
+  "center": {
+    "lat": 42.8185030,
+    "lon": -1.6535245
+  },
+  "tags": {
+    "amenity": "fountain",
+    "natural": "water",
+    "water": "pond"
+  }
+},
+{
+  "type": "way",
+  "id": 539418527,
+  "center": {
+    "lat": 42.8168900,
+    "lon": -1.6502335
+  },
+  "tags": {
+    "artist_name": "Luis Paret",
+    "artwork_type": "sculpture",
+    "name": "La Mariblanca",
+    "tourism": "artwork",
+    "wikimedia_commons": "File:Mariblanca (Pamplona) 01.jpg"
+  }
+},
+{
+  "type": "way",
+  "id": 807264758,
+  "center": {
+    "lat": 42.8176459,
+    "lon": -1.6510524
+  },
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "way",
+  "id": 1066631288,
+  "center": {
+    "lat": 42.8168699,
+    "lon": -1.6428977
+  },
+  "tags": {
+    "amenity": "fountain",
+    "drinking_water": "no",
+    "fountain": "decorative",
+    "lit": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1066631289,
+  "center": {
+    "lat": 42.8169143,
+    "lon": -1.6427352
+  },
+  "tags": {
+    "amenity": "fountain",
+    "drinking_water": "no",
+    "fountain": "decorative",
+    "lit": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 1217368556,
+  "center": {
+    "lat": 42.8146864,
+    "lon": -1.6339675
+  },
+  "tags": {
+    "amenity": "fountain",
+    "author": "Víctor Eúsa",
+    "natural": "water",
+    "year_of_construction": "1935"
+  }
+},
+{
+  "type": "way",
+  "id": 1345157865,
+  "center": {
+    "lat": 42.8157259,
+    "lon": -1.6436261
+  },
+  "tags": {
+    "artist_name": "Manuel Martínez de Ubago",
+    "building": "yes",
+    "historic": "monument",
+    "name": "Monumento a los Fueros de Navarra",
+    "name:es": "Monumento a los Fueros de Navarra",
+    "name:eu": "Nafarroako Foruen monumentua",
+    "tourism": "attraction",
+    "website": "https://esculturas.pamplona.es/escultura/monumento-a-los-fueros/",
+    "wheelchair": "no",
+    "wikidata": "Q3322785",
+    "wikipedia": "es:Gamazada"
+  }
+},
+{
+  "type": "way",
+  "id": 1547501632,
+  "center": {
+    "lat": 42.8121286,
+    "lon": -1.6492710
+  },
+  "tags": {
+    "amenity": "fountain",
+    "natural": "water"
+  }
+},
+{
+  "type": "way",
+  "id": 1547501826,
+  "center": {
+    "lat": 42.8128275,
+    "lon": -1.6429399
+  },
+  "tags": {
+    "amenity": "fountain",
+    "natural": "water"
+  }
+},
+{
+  "type": "way",
+  "id": 1547502396,
+  "center": {
+    "lat": 42.8131958,
+    "lon": -1.6392801
+  },
+  "tags": {
+    "amenity": "fountain"
+  }
+},
+{
+  "type": "way",
+  "id": 1547503091,
+  "center": {
+    "lat": 42.8097178,
+    "lon": -1.6354129
+  },
+  "tags": {
+    "amenity": "fountain",
+    "natural": "water"
+  }
+},
+{
+  "type": "way",
+  "id": 1547503976,
+  "center": {
+    "lat": 42.8115525,
+    "lon": -1.6408502
+  },
+  "tags": {
+    "amenity": "fountain",
+    "natural": "water"
+  }
+}
+
+  ]
+}
