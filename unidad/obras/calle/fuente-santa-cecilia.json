@@ -1,0 +1,287 @@
+{
+ "titulo": "Fuente de Santa Cecilia",
+ "autor": "Luis Paret y Alcázar",
+ "fecha": "1798",
+ "pieza": "la fuente",
+ "img": "../../../img/calle/fuente-santa-cecilia.jpg",
+ "iw": 1003,
+ "ih": 1400,
+ "fondo": "../../../img/calle/fuente-santa-cecilia-fondo.jpg",
+ "lugar": {
+  "lat": 42.819323,
+  "lng": -1.64291,
+  "dir": "Plaza de la Navarrería"
+ },
+ "tema": "Una fuente pensada para un sitio que tardó ciento quince años en llegar a él.",
+ "zonas": {
+  "remate": {
+   "n": "El remate",
+   "poly": [
+    [
+     0.37,
+     0.19
+    ],
+    [
+     0.5,
+     0.19
+    ],
+    [
+     0.5,
+     0.28
+    ],
+    [
+     0.37,
+     0.28
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué forma tiene lo que la corona?",
+   "vista": "Arriba del todo, un remate de piedra en forma de copa."
+  },
+  "cuerpo": {
+   "n": "El cuerpo",
+   "poly": [
+    [
+     0.33,
+     0.29
+    ],
+    [
+     0.55,
+     0.29
+    ],
+    [
+     0.55,
+     0.62
+    ],
+    [
+     0.33,
+     0.62
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué adorno recorre el cuerpo de arriba abajo?",
+   "vista": "Un fuste de piedra con molduras, recorrido en vertical por un adorno tallado."
+  },
+  "volutas": {
+   "n": "Las volutas",
+   "poly": [
+    [
+     0.3,
+     0.61
+    ],
+    [
+     0.62,
+     0.61
+    ],
+    [
+     0.62,
+     0.71
+    ],
+    [
+     0.3,
+     0.71
+    ]
+   ],
+   "rel": [
+    "cuerpo"
+   ],
+   "mira": "¿Cuántas volutas cuentas alrededor?",
+   "vista": "En la parte baja del cuerpo, volutas talladas que se enrollan hacia fuera."
+  },
+  "pilas": {
+   "n": "Las pilas",
+   "poly": [
+    [
+     0.21,
+     0.73
+    ],
+    [
+     0.64,
+     0.73
+    ],
+    [
+     0.64,
+     0.81
+    ],
+    [
+     0.21,
+     0.81
+    ]
+   ],
+   "rel": [],
+   "mira": "¿A qué te recuerda la forma de las pilas?",
+   "vista": "Pilas de piedra con forma de concha, a los lados del pie de la fuente."
+  },
+  "base": {
+   "n": "La base",
+   "poly": [
+    [
+     0.08,
+     0.82
+    ],
+    [
+     0.8,
+     0.82
+    ],
+    [
+     0.8,
+     0.89
+    ],
+    [
+     0.08,
+     0.89
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué separa la fuente del suelo de la plaza?",
+   "vista": "Una plataforma redonda y baja que la separa de los adoquines de la plaza."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.04,
+   "rate": 0.96,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Ayuntamiento de Pamplona · restauración de fuentes monumentales (2020)",
+   "t": "La fuente «nueva» de Santa Cecilia, en la calle Navarrería, es obra de Luis Paret y Alcázar, de estilo neoclásico y catalogada como fuente monumental. Se instaló en 1798 frente a la basílica de Santa Cecilia y en 1913 se trasladó a su ubicación actual, en la plaza de Navarrería (también llamada de Santa Cecilia o de Zugarrondo), para la que originariamente fue concebida. Se intervino en 2010 y se restauró en enero de 2020: limpieza con bisturí y cepillos, consolidación inyectando cal hidráulica en las fisuras, morteros coloreados con pigmentos minerales y reconstrucción de volúmenes en zonas fracturadas."
+  },
+  {
+   "id": "B2",
+   "f": "Ayuntamiento de Pamplona · restauración de fuentes monumentales (2020)",
+   "t": "El Casco Antiguo tiene cinco fuentes monumentales, que se diseñaron para la traída de aguas asociada al acueducto de Noáin: Neptuno niño, Santa Cecilia, Recoletas, Descalzos y la de la plazuela de San José."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia fuente",
+   "desc": "en primera persona",
+   "por": "la propia fuente",
+   "corto": "la fuente",
+   "ini": "F",
+   "acc": "#c9a46a",
+   "voz": "obra",
+   "intro": 5,
+   "placeholder": "Pregúntale a la fuente…",
+   "conversa": "Conversa con la fuente",
+   "te": "La fuente te pregunta",
+   "vts": "Dime: ¿qué es lo primero que ves en mí?",
+   "rol": "Eres la propia fuente de Santa Cecilia, en la plaza de Navarrería de Pamplona, y hablas en primera persona. Sabes lo que te ha pasado desde que te instalaron en 1798; no sabes por qué se tomaron las decisiones si no consta.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Soy la fuente de Santa Cecilia. Me diseñó Luis Paret y Alcázar, y estoy en esta plaza de la Navarrería desde 1913."
+    },
+    {
+     "z": "pilas",
+     "t": "Me hicieron para dar agua: soy una de las cinco fuentes monumentales que se diseñaron cuando llegó el agua por el acueducto de Noáin. Mira mis pilas: tienen forma de concha."
+    },
+    {
+     "z": null,
+     "t": "Primero me pusieron delante de la basílica de Santa Cecilia, en 1798. Y este era el sitio para el que me habían pensado: tardé ciento quince años en llegar."
+    },
+    {
+     "z": "remate",
+     "t": "Me han restaurado en 2010 y en 2020: me limpiaron y me rellenaron las grietas con cal. Mira arriba, al remate en forma de copa."
+    },
+    {
+     "z": null,
+     "t": "Pregúntame lo que quieras: quién me diseñó, por qué me movieron o de dónde venía mi agua."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Quién te diseñó?",
+     "d": "obra",
+     "z": "volutas",
+     "a": "Luis Paret y Alcázar. El Ayuntamiento me cataloga como fuente monumental de estilo neoclásico. Mira las volutas de la parte baja: se enrollan hacia fuera, una tras otra."
+    },
+    {
+     "q": "¿Por qué te movieron?",
+     "d": "obra",
+     "z": "base",
+     "a": "Eso no lo sé. Solo consta que en 1798 me instalaron delante de la basílica de Santa Cecilia y que en 1913 me trasladaron aquí, al sitio para el que me habían concebido. Mira mi base redonda: es lo que me asienta en esta plaza."
+    },
+    {
+     "q": "¿De dónde venía tu agua?",
+     "d": "fuera",
+     "z": "pilas",
+     "a": "Las cinco fuentes monumentales del Casco Antiguo se diseñaron para el agua que traía el acueducto de Noáin. Mira las pilas: ahí caía."
+    },
+    {
+     "q": "¿Cuántos años tienes?",
+     "d": "obra",
+     "a": "Me instalaron en 1798, así que tengo más de doscientos veinte años. En esta plaza, desde 1913. Mira la piedra: ha pasado por dos siglos de lluvia."
+    },
+    {
+     "q": "¿Te han restaurado?",
+     "d": "obra",
+     "z": "cuerpo",
+     "a": "Sí, en 2010 y en enero de 2020. La última vez me limpiaron con bisturí y cepillo, me rellenaron las grietas con cal hidráulica y me rehicieron las partes rotas. Recorre mi cuerpo con la mirada, de abajo arriba."
+    },
+    {
+     "q": "¿Cómo se llama esta plaza?",
+     "d": "fuera",
+     "a": "Navarrería, aunque también se la ha llamado de Santa Cecilia o de Zugarrondo. Por eso a mí me llaman de las dos maneras: fuente de Santa Cecilia y fuente de la Navarrería. Rodéame despacio."
+    },
+    {
+     "q": "¿Qué hay arriba del todo?",
+     "d": "mirar",
+     "z": "remate",
+     "a": "Un remate en forma de copa. Desde muy cerca cuesta verlo: retrocede unos pasos y míralo contra la fachada."
+    },
+    {
+     "q": "¿Hay más fuentes como tú?",
+     "d": "fuera",
+     "a": "En el Casco Antiguo somos cinco fuentes monumentales: Neptuno niño, en la plaza del Consejo; yo; Recoletas; Descalzos, y la de la plazuela de San José. Mírame bien antes de ir a buscar a las otras."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Fuente de Santa Cecilia, también llamada de la Navarrería"
+  ],
+  [
+   "Diseño",
+   "Luis Paret y Alcázar"
+  ],
+  [
+   "Fecha",
+   "Instalada en 1798; en esta plaza desde 1913"
+  ],
+  [
+   "Estilo",
+   "Neoclásico"
+  ],
+  [
+   "Lugar",
+   "Plaza de la Navarrería, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.pamplona.es/en/node/38002\" target=\"_blank\" rel=\"noopener\">Ayuntamiento de Pamplona: restauración de las fuentes monumentales</a>"
+  ],
+  [
+   "Foto",
+   "Joanbanjo, 2014. <a href=\"https://commons.wikimedia.org/wiki/File:Nabarreriako_iturria.JPG\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY-SA 3.0"
+  ],
+  [
+   "Ubicación",
+   "OpenStreetMap"
+  ]
+ ],
+ "nota": "Prototipo «en la calle». La voz de la fuente es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona y con lo que se ve en la foto."
+}

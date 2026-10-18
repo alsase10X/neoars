@@ -1,0 +1,312 @@
+{
+ "titulo": "Monumento a los Fueros",
+ "autor": "Manuel Martínez de Ubago y Ramón Carmona",
+ "fecha": "1903",
+ "pieza": "el monumento",
+ "img": "../../../img/calle/fueros.jpg",
+ "iw": 1050,
+ "ih": 1400,
+ "fondo": "../../../img/calle/fueros-fondo.jpg",
+ "encuadre": [
+  0.28,
+  0.1,
+  0.46,
+  0.4
+ ],
+ "lugar": {
+  "lat": 42.815726,
+  "lng": -1.643626,
+  "dir": "Paseo de Sarasate"
+ },
+ "tema": "Un monumento pagado entre muchos para decir que unas leyes eran suyas.",
+ "zonas": {
+  "navarra": {
+   "n": "Navarra, arriba",
+   "poly": [
+    [
+     0.42,
+     0.17
+    ],
+    [
+     0.6,
+     0.15
+    ],
+    [
+     0.62,
+     0.22
+    ],
+    [
+     0.57,
+     0.45
+    ],
+    [
+     0.41,
+     0.46
+    ],
+    [
+     0.39,
+     0.3
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué lleva en la cabeza?",
+   "vista": "Arriba del todo, una mujer de bronce vestida a la manera clásica, con corona, de pie sobre la columna."
+  },
+  "cadenas": {
+   "n": "Las cadenas",
+   "poly": [
+    [
+     0.38,
+     0.29
+    ],
+    [
+     0.45,
+     0.29
+    ],
+    [
+     0.45,
+     0.43
+    ],
+    [
+     0.38,
+     0.43
+    ]
+   ],
+   "rel": [
+    "navarra"
+   ],
+   "mira": "¿Qué cuelga de su mano derecha?",
+   "vista": "De su mano derecha, que está a tu izquierda, cuelga un trozo de cadena."
+  },
+  "pergamino": {
+   "n": "El pergamino",
+   "poly": [
+    [
+     0.52,
+     0.13
+    ],
+    [
+     0.62,
+     0.13
+    ],
+    [
+     0.62,
+     0.23
+    ],
+    [
+     0.52,
+     0.23
+    ]
+   ],
+   "rel": [
+    "navarra"
+   ],
+   "mira": "¿Qué levanta con la otra mano?",
+   "vista": "Con la mano izquierda, en alto, sostiene un pergamino."
+  },
+  "capitel": {
+   "n": "El capitel",
+   "poly": [
+    [
+     0.33,
+     0.5
+    ],
+    [
+     0.69,
+     0.5
+    ],
+    [
+     0.69,
+     0.75
+    ],
+    [
+     0.33,
+     0.75
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Encuentras una cara entre las hojas del capitel?",
+   "vista": "Un capitel blanco muy labrado, con hojas y volutas, sobre la columna."
+  },
+  "columna": {
+   "n": "La columna",
+   "poly": [
+    [
+     0.43,
+     0.75
+    ],
+    [
+     0.59,
+     0.75
+    ],
+    [
+     0.59,
+     1.0
+    ],
+    [
+     0.43,
+     1.0
+    ]
+   ],
+   "rel": [],
+   "mira": "¿De qué color es la columna?",
+   "vista": "Una columna de mármol rojo con una cartela de bronce."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 0.9,
+   "rate": 0.95,
+   "fem": false
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra",
+   "t": "El monumento responde a la reacción navarra contra el proyecto antiforal de 1893 del ministro de Hacienda Germán Gamazo, que menoscababa la autonomía fiscal reconocida por la Ley Paccionada de 1841; «vino a simbolizar la reacción navarra en defensa de sus derechos». Fecha: 1903. Proyecto de Manuel Martínez de Ubago; esculturas del primer cuerpo de Ramón Carmona. Bronce, mármol y piedras de distintos tipos. Altura: 23,40 m. Pedestal poligonal alto, templete cúbico de dos cuerpos y columna de mármol rojo con capitel blanco. Cinco figuras alegóricas en los ángulos del primer cuerpo: Historia, Justicia, Autonomía, Paz y Trabajo; el número cinco es una referencia constante a las merindades. Arriba, una estatua monumental de bronce representa a Navarra como una matrona victoriosa: en la mano derecha, un fragmento de las cadenas del escudo del Reino, símbolo de la libertad conquistada; en la izquierda, un pergamino con sello de cera y la leyenda «Ley Foral». Planchas de bronce con inscripciones sobre las libertades navarras."
+  },
+  {
+   "id": "B2",
+   "f": "Wikipedia en español, «Monumento a los Fueros (Pamplona)»",
+   "t": "Se costeó por suscripción popular, con una cuota mínima de 25 céntimos de peseta y máxima de 25 pesetas; el coste total fue de 200.000 pesetas. La idea inicial era levantarlo en la plaza de la Constitución, hoy plaza del Castillo, pero las dificultades para reunir fondos llevaron a cambiar la ubicación. Materiales de canteras navarras. La estatua de Navarra mide 5,5 m. Las inscripciones de bronce se colocaron en 1905 y la polémica por las inscripciones en euskera hizo que el monumento no se inaugurara oficialmente, aunque ya se habían acuñado medallas conmemorativas. El basamento pentagonal tiene cinco escalinatas. Está frente a la fachada occidental del Palacio de Navarra. En 2010 se restauró: el trabajo principal fue la limpieza del conjunto durante cinco semanas."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "El propio monumento",
+   "desc": "en primera persona",
+   "por": "el propio monumento",
+   "corto": "el monumento",
+   "ini": "M",
+   "acc": "#b4483a",
+   "voz": "obra",
+   "intro": 5,
+   "placeholder": "Pregúntale al monumento…",
+   "conversa": "Conversa con el monumento",
+   "te": "El monumento te pregunta",
+   "vts": "Dime: ¿qué hace la mujer de arriba?",
+   "rol": "Eres el propio Monumento a los Fueros, en el Paseo de Sarasate de Pamplona, y hablas en primera persona. No eres Navarra ni sus leyes: eres la piedra y el bronce que las recuerdan. Distingues lo que consta de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Soy el Monumento a los Fueros. Mido más de veintitrés metros, y la mujer que ves arriba no es una reina: es Navarra."
+    },
+    {
+     "z": "cadenas",
+     "t": "En la mano derecha lleva un trozo de las cadenas del escudo del Reino. Están rotas: son la libertad conquistada."
+    },
+    {
+     "z": "pergamino",
+     "t": "En la otra, en alto, un pergamino con su sello de cera. Dice «Ley Foral»."
+    },
+    {
+     "z": null,
+     "t": "Me pagaron muchos, por suscripción popular, después de que en 1893 el ministro Germán Gamazo quisiera recortar la autonomía fiscal de Navarra."
+    },
+    {
+     "z": null,
+     "t": "Y algo curioso: nunca me inauguraron oficialmente. Pregúntame por qué, o por las cinco figuras de abajo."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Por qué no te inauguraron?",
+     "d": "obra",
+     "a": "Por la polémica que levantaron mis inscripciones en euskera cuando se colocaron, en 1905. Para entonces ya se habían acuñado medallas para celebrarlo. Busca abajo las planchas de bronce con las inscripciones."
+    },
+    {
+     "q": "¿Quién te pagó?",
+     "d": "obra",
+     "z": "columna",
+     "a": "La gente, por suscripción popular: cada uno daba entre veinticinco céntimos y veinticinco pesetas. En total costé doscientas mil pesetas, y la piedra salió de canteras navarras. Mira el mármol rojo de la columna."
+    },
+    {
+     "q": "¿Qué fue la Gamazada?",
+     "d": "fuera",
+     "z": "pergamino",
+     "a": "La reacción de Navarra al proyecto de 1893 del ministro de Hacienda Germán Gamazo, que recortaba la autonomía fiscal reconocida por la Ley Paccionada de 1841. Yo vine a simbolizar esa defensa. Mira el pergamino de arriba: «Ley Foral»."
+    },
+    {
+     "q": "¿Qué son las cinco figuras de abajo?",
+     "d": "obra",
+     "a": "Son alegorías: la Historia, la Justicia, la Autonomía, la Paz y el Trabajo. Las esculpió Ramón Carmona. Cinco, como las merindades: ese número se repite por todo mi cuerpo. Cuenta las escalinatas de la base."
+    },
+    {
+     "q": "¿Cuánto mides?",
+     "d": "mirar",
+     "z": "navarra",
+     "a": "Veintitrés metros y cuarenta centímetros. Solo Navarra, la estatua de arriba, mide cinco y medio. Échate hacia atrás para verla entera."
+    },
+    {
+     "q": "¿Quién te diseñó?",
+     "d": "obra",
+     "z": "capitel",
+     "a": "El proyecto es de Manuel Martínez de Ubago, y las esculturas de abajo, de Ramón Carmona. Mira el capitel blanco sobre la columna roja: hojas y volutas talladas."
+    },
+    {
+     "q": "¿Por qué estás aquí y no en la plaza del Castillo?",
+     "d": "fuera",
+     "a": "La idea era levantarme en la plaza, que entonces se llamaba de la Constitución, pero costó reunir el dinero y se cambió el sitio. Aquí estoy, frente a la fachada del Palacio de Navarra. Busca el palacio a tu alrededor."
+    },
+    {
+     "q": "¿Qué son las cadenas?",
+     "d": "mirar",
+     "z": "cadenas",
+     "a": "Un fragmento de las cadenas del escudo del Reino de Navarra, roto: es la libertad conquistada. Mira su mano derecha, la que queda a tu izquierda."
+    },
+    {
+     "q": "¿Te han restaurado?",
+     "d": "obra",
+     "a": "En 2010: me limpiaron durante cinco semanas. Mira el bronce de arriba y la piedra de abajo: no envejecen igual."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Monumento a los Fueros"
+  ],
+  [
+   "Autores",
+   "Proyecto de Manuel Martínez de Ubago; esculturas del primer cuerpo, de Ramón Carmona"
+  ],
+  [
+   "Fecha",
+   "1903"
+  ],
+  [
+   "Materiales",
+   "Bronce, mármol y piedras de distintos tipos"
+  ],
+  [
+   "Altura",
+   "23,40 m"
+  ],
+  [
+   "Lugar",
+   "Paseo de Sarasate, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.unav.edu/web/catedra-patrimonio/itinerarios-visitas/monumento-pamplona/monumento-a-los-fueros\" target=\"_blank\" rel=\"noopener\">Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra</a>; Wikipedia en español, «Monumento a los Fueros (Pamplona)»"
+  ],
+  [
+   "Foto",
+   "Lancastermerrin88, 2010. <a href=\"https://commons.wikimedia.org/wiki/File:Monumento_a_los_Fueros_de_Navarra_en_Pamplona--3.JPG\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY-SA 4.0"
+  ],
+  [
+   "Ubicación",
+   "OpenStreetMap"
+  ]
+ ],
+ "nota": "Prototipo «en la calle». La voz del monumento es una recreación en primera persona escrita solo con los datos de la Universidad de Navarra y de Wikipedia, y con lo que se ve en la foto."
+}

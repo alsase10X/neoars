@@ -1,0 +1,11 @@
+{
+ "nombre": "Lo que la ciudad quiso recordar",
+ "lugar": "Pamplona · en la calle",
+ "d": "Una fuente que llegó tarde a su plaza, un monumento pagado entre muchos, una carrera detenida en bronce y un escritor que contó las fiestas.",
+ "obras": [
+  "../obras/calle/fuente-santa-cecilia.json",
+  "../obras/calle/fueros.json",
+  "../obras/calle/encierro.json",
+  "../obras/calle/hemingway.json"
+ ]
+}

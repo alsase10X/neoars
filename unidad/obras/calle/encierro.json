@@ -1,0 +1,327 @@
+{
+ "titulo": "Monumento al Encierro",
+ "autor": "Rafael Huerta Celaya",
+ "fecha": "2007",
+ "pieza": "el monumento",
+ "img": "../../../img/calle/encierro.jpg",
+ "iw": 1400,
+ "ih": 1050,
+ "fondo": "../../../img/calle/encierro-fondo.jpg",
+ "lugar": {
+  "lat": 42.814775,
+  "lng": -1.641343,
+  "dir": "Avenida de Roncesvalles con Carlos III"
+ },
+ "tema": "Un instante de una carrera que ya no se acaba nunca.",
+ "zonas": {
+  "toros": {
+   "n": "Los toros",
+   "poly": [
+    [
+     0.08,
+     0.37
+    ],
+    [
+     0.2,
+     0.36
+    ],
+    [
+     0.36,
+     0.33
+    ],
+    [
+     0.46,
+     0.37
+    ],
+    [
+     0.47,
+     0.55
+    ],
+    [
+     0.38,
+     0.62
+    ],
+    [
+     0.22,
+     0.63
+    ],
+    [
+     0.09,
+     0.62
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuántos toros cuentas?",
+   "vista": "A la izquierda y en el centro, la manada de toros de bronce, con las cabezas bajas y los cuernos por delante."
+  },
+  "caidos": {
+   "n": "Los caídos",
+   "poly": [
+    [
+     0.4,
+     0.41
+    ],
+    [
+     0.53,
+     0.42
+    ],
+    [
+     0.59,
+     0.55
+    ],
+    [
+     0.56,
+     0.69
+    ],
+    [
+     0.4,
+     0.69
+    ],
+    [
+     0.36,
+     0.6
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde mira el corredor que está en el suelo?",
+   "vista": "En primer plano, un corredor en el suelo, medio incorporado, delante de los toros; hay otro caído a la derecha."
+  },
+  "corredores": {
+   "n": "Los corredores",
+   "poly": [
+    [
+     0.55,
+     0.2
+    ],
+    [
+     0.95,
+     0.14
+    ],
+    [
+     0.99,
+     0.63
+    ],
+    [
+     0.7,
+     0.67
+    ],
+    [
+     0.55,
+     0.62
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué llevan en las manos los que corren?",
+   "vista": "A la derecha, corredores en plena carrera, delante de la manada."
+  },
+  "pastores": {
+   "n": "Los pastores",
+   "poly": [
+    [
+     0.0,
+     0.34
+    ],
+    [
+     0.11,
+     0.34
+    ],
+    [
+     0.11,
+     0.62
+    ],
+    [
+     0.0,
+     0.62
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Dónde están los que van detrás de la manada?",
+   "vista": "A la izquierda del todo, detrás de los toros, figuras de pie que acompañan a la manada."
+  },
+  "base": {
+   "n": "La base",
+   "poly": [
+    [
+     0.0,
+     0.62
+    ],
+    [
+     0.7,
+     0.64
+    ],
+    [
+     1.0,
+     0.66
+    ],
+    [
+     1.0,
+     0.75
+    ],
+    [
+     0.45,
+     0.78
+    ],
+    [
+     0.0,
+     0.7
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Se parece el suelo de la escultura al de la acera?",
+   "vista": "La plataforma de piedra sobre la que corre el grupo, con la palabra «ENCIERRO» tallada en el frente."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 0.96,
+   "rate": 1.0,
+   "fem": false
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra",
+   "t": "Autor: Rafael Huerta Celaya, escultor vizcaíno. Bronce patinado sobre plataforma de granito y hormigón armado. Medidas: 1.100 × 400 cm. Avenida de Roncesvalles, en su confluencia con la avenida de Carlos III. Inaugurado el 21 de abril de 2007, dentro del proceso de peatonalización y embellecimiento de la avenida de Carlos III. Diecinueve figuras: seis toros, inspirados en la ganadería de Victorino Martín; tres cabestros y diez corredores. Representa un momento del encierro por la calle Estafeta: los pastores que guían la manada, corredores alcanzados, caídos en el suelo y corneados. Uno de los caídos es un autorretrato del artista. Huerta suelda las figuras entre sí, lo que da al conjunto cohesión, ligereza y sensación de movimiento. La plataforma se recubre con baldosas idénticas a las del pavimento de la avenida de Carlos III."
+  },
+  {
+   "id": "B2",
+   "f": "Ayuntamiento de Pamplona · Plaza de toros y monumento al encierro",
+   "t": "Escultura de bronce fundido de Rafael Huerta que congela un único instante del encierro."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "El propio monumento",
+   "desc": "en primera persona",
+   "por": "el propio monumento",
+   "corto": "el monumento",
+   "ini": "E",
+   "acc": "#8a9a7a",
+   "voz": "obra",
+   "intro": 5,
+   "placeholder": "Pregúntale al monumento…",
+   "conversa": "Conversa con el monumento",
+   "te": "El monumento te pregunta",
+   "vts": "Dime: ¿quién corre más peligro?",
+   "rol": "Eres el propio Monumento al Encierro, en la avenida de Roncesvalles de Pamplona, y hablas en primera persona. No eres un corredor ni un toro: eres el bronce que guarda un instante de la carrera.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Soy el Monumento al Encierro. Lo que ves es un solo instante de una carrera, parado en bronce desde 2007."
+    },
+    {
+     "z": "toros",
+     "t": "Somos diecinueve: seis toros, tres cabestros y diez corredores. Los toros se inspiraron en una ganadería real, la de Victorino Martín."
+    },
+    {
+     "z": "caidos",
+     "t": "Fíjate en los que están en el suelo. Uno de ellos es el propio escultor, Rafael Huerta: se puso a sí mismo entre los caídos."
+    },
+    {
+     "z": "base",
+     "t": "La escena es la calle Estafeta. Y las baldosas de mi base son las mismas que las de la avenida de Carlos III: la carrera empieza en la acera que pisas."
+    },
+    {
+     "z": null,
+     "t": "Pregúntame lo que quieras: quién es quién, cómo parecen moverse diecinueve figuras de bronce o qué toros eran."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Quién te hizo?",
+     "d": "obra",
+     "z": "caidos",
+     "a": "Rafael Huerta Celaya, un escultor vizcaíno. Y está aquí mismo: uno de los corredores caídos es su autorretrato. Búscalo entre los que están en el suelo."
+    },
+    {
+     "q": "¿Cuántas figuras hay?",
+     "d": "mirar",
+     "z": "toros",
+     "a": "Diecinueve: seis toros, tres cabestros y diez corredores. Intenta distinguir los tres cabestros entre los toros."
+    },
+    {
+     "q": "¿Por qué parecen moverse?",
+     "d": "obra",
+     "z": "corredores",
+     "a": "Porque Huerta soldó las figuras unas a otras. La Universidad de Navarra lo explica así: eso da al grupo cohesión, ligereza y sensación de movimiento. Mira cómo se tocan los corredores de la derecha."
+    },
+    {
+     "q": "¿Qué toros son?",
+     "d": "fuera",
+     "z": "toros",
+     "a": "Se inspiraron en los de la ganadería de Victorino Martín. Mira los cuernos del primero, a la izquierda: van por delante de todo."
+    },
+    {
+     "q": "¿Qué momento del encierro es?",
+     "d": "obra",
+     "a": "Un instante de la carrera por la calle Estafeta: los pastores guiando a la manada, corredores alcanzados, caídos y otros a los que el toro cornea. Busca a los que ya están en el suelo."
+    },
+    {
+     "q": "¿Cuánto mides?",
+     "d": "mirar",
+     "z": "base",
+     "a": "Once metros de largo por cuatro de ancho, sobre una plataforma de granito y hormigón armado. Recórreme andando, de la cola de la manada a la cabeza."
+    },
+    {
+     "q": "¿Cuándo te pusieron?",
+     "d": "obra",
+     "z": "base",
+     "a": "Me inauguraron el 21 de abril de 2007, cuando se peatonalizó la avenida de Carlos III. Mira las baldosas de mi base: son las de la avenida."
+    },
+    {
+     "q": "¿Dónde están los pastores?",
+     "d": "mirar",
+     "z": "pastores",
+     "a": "Detrás de la manada: son los que la guían. Míralos y después mira hacia dónde corre todo lo demás."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Monumento al Encierro"
+  ],
+  [
+   "Autor",
+   "Rafael Huerta Celaya"
+  ],
+  [
+   "Fecha",
+   "Inaugurado el 21 de abril de 2007"
+  ],
+  [
+   "Materiales",
+   "Bronce patinado sobre plataforma de granito y hormigón armado"
+  ],
+  [
+   "Medidas",
+   "1.100 × 400 cm"
+  ],
+  [
+   "Lugar",
+   "Avenida de Roncesvalles con avenida de Carlos III, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.unav.edu/web/catedra-patrimonio/itinerarios-visitas/monumento-pamplona/monumento-al-encierro\" target=\"_blank\" rel=\"noopener\">Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra</a>; <a href=\"https://www.pamplona.es/en/turismo/plazadetoros\" target=\"_blank\" rel=\"noopener\">Ayuntamiento de Pamplona</a>"
+  ],
+  [
+   "Foto",
+   "Jorab, 2008. <a href=\"https://commons.wikimedia.org/wiki/File:Monumento_al_Encierro.JPG\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY 3.0"
+  ],
+  [
+   "Ubicación",
+   "OpenStreetMap"
+  ]
+ ],
+ "nota": "Prototipo «en la calle». La voz del monumento es una recreación en primera persona escrita solo con los datos de la Universidad de Navarra y del Ayuntamiento de Pamplona, y con lo que se ve en la foto."
+}

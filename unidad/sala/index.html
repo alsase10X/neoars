@@ -41,6 +41,32 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;lin
 .salaD{font-size:1.06rem;line-height:1.45;color:rgba(246,245,242,.86);max-width:36ch}
 .salaMenu{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);right:max(6px,env(safe-area-inset-right,0px));margin:0}
 .salaFirma{margin-top:22px}
+/* En la calle: lugar, selector Lista/Mapa, distancia y el mapa propio (fondo de OpenFreeMap invertido a oscuro) */
+.salaL{margin-bottom:-2px}
+.vistaSel{margin-top:22px;max-width:240px}
+.cerca{font-size:.9rem;line-height:1.4;color:var(--muted);margin-top:14px;min-height:1.4em}
+.cerca .lk{font-size:.9rem;padding:0;color:var(--fg)}
+.ob .dist{color:var(--fg);font-weight:700}
+#salaV.enMapa .salaIn{overflow:hidden}
+#salaV.enMapa .obras,#salaV.enMapa .salaFirma{display:none}
+.mapa{position:absolute;left:0;right:0;bottom:0;z-index:1;background:var(--panel);border-top:1px solid var(--hair)}
+#mapaC{position:absolute;inset:0}
+#mapaC .maplibregl-canvas{filter:invert(1) hue-rotate(180deg) saturate(.3) brightness(.92) contrast(.95)}
+#mapaC .maplibregl-ctrl-attrib{background:rgba(10,10,11,.75);color:var(--muted)}
+#mapaC .maplibregl-ctrl-attrib a{color:var(--muted)}
+.mk{width:46px;height:46px;border-radius:50%;border:2px solid var(--fg);background:#1a1a1b center/cover no-repeat;box-shadow:0 6px 18px rgba(0,0,0,.6);padding:0}
+.mk b{position:absolute;right:-7px;top:-7px;min-width:21px;height:21px;padding:0 5px;border-radius:11px;background:var(--fg);color:var(--tinta);font-size:.75rem;font-weight:900;display:grid;place-items:center}
+.mk.sel{width:58px;height:58px;border-width:3px}
+.mk.aqui{box-shadow:0 0 0 5px rgba(246,245,242,.35),0 6px 18px rgba(0,0,0,.6)}
+.yo{width:18px;height:18px;border-radius:50%;background:#3d8bfd;border:3px solid #fff;box-shadow:0 0 0 7px rgba(61,139,253,.25)}
+.mcard{position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto;background:var(--panel);border:1px solid var(--hair);box-shadow:0 18px 50px rgba(0,0,0,.65);padding:12px;display:grid;grid-template-columns:56px 1fr;gap:10px 12px;align-items:center}
+.mcard img{width:56px;height:56px;border-radius:50%;object-fit:cover;display:block;max-width:none}
+.mcard b{display:block;font-size:1.05rem;font-weight:800;line-height:1.2}
+.mcard small{display:block;font-size:.85rem;color:var(--muted);margin-top:3px;line-height:1.3}
+.mcard small.dist{color:var(--fg);font-weight:700}
+.mcard .acc{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+.mcard .acc a,.mcard .acc button{height:44px;padding:0 14px;border:1px solid var(--hair);display:inline-flex;align-items:center;font-size:.92rem;font-weight:700;text-decoration:none}
+.mcard .acc .pri{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
 .obras{list-style:none;border-top:1px solid var(--hair);margin-top:24px}
 .ob{display:grid;grid-template-columns:26px 64px 1fr 20px;gap:14px;align-items:center;width:100%;padding:14px 0;border-bottom:1px solid var(--hair);text-align:left}
 .ob img{width:64px;height:64px;object-fit:cover;display:block;max-width:none;border-radius:50%}
@@ -231,12 +257,16 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <button class="ib salaMenu" id="salaMenu" type="button" aria-label="Modo de la visita"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg></button>
     <div class="salaIn">
       <div class="col">
+        <p class="eyb salaL" id="salaL" hidden></p>
         <h1 id="salaT"></h1>
         <p class="salaD" id="salaD"></p>
+        <div class="seg vistaSel" id="vistaSel" hidden><button type="button" data-v="lista" aria-pressed="true">Lista</button><button type="button" data-v="mapa" aria-pressed="false">Mapa</button></div>
+        <p class="cerca" id="cerca" hidden></p>
         <ol class="obras" id="obras"></ol>
         <p class="firma salaFirma">Con tecnología de <b>artmedium</b></p>
       </div>
     </div>
+    <div class="mapa" id="mapa" hidden><div id="mapaC"></div><div class="mcard" id="mcard" hidden></div></div>
   </section>
 
   <section id="obraV" class="vista" hidden>
@@ -336,6 +366,10 @@ let V2 = new URLSearchParams(location.search).get('v') === '2';   // se cambia e
 // La voz que empieza en cada modo: en la conversación, la obra o su autor si los hay
 function cambiarModo(conv){ V2 = conv; try{ const u = new URL(location.href); if(V2) u.searchParams.set('v', '2'); else u.searchParams.delete('v'); history.replaceState(null, '', u); }catch(e){} }
 const vozDefecto = meds => V2 ? (['obra', 'autor'].find(k => meds.includes(k)) || meds[0]) : meds[0];
+// Cómo se nombra la pieza en la interfaz: «el cuadro» si la obra no dice otra cosa («la fuente», «el monumento»…)
+// Para miniaturas recortadas (lista, mapa, portada): el centro del encuadre de reposo, si la obra lo trae
+const encuadrePos = o => o && o.encuadre ? `${((o.encuadre[0] + o.encuadre[2]/2)*100).toFixed(0)}% ${((o.encuadre[1] + o.encuadre[3]/2)*100).toFixed(0)}%` : '';
+const PIEZA = () => (OBRA && OBRA.pieza) || 'el cuadro';
 const alA = s => ('a ' + s).replace(/^a el /, 'al ');
 
 /* ======================= Utilidades ======================= */
@@ -362,11 +396,15 @@ const G = {voz:st.get('am.sala.voz', '1') === '1', texto:st.get('am.sala.texto',
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3400); }
 
 /* ======================= La sala ======================= */
+// Otra sala (?sala=pamplona): su tema y su lista de obras en unidad/salas/<sala>.json
+const SALA_ID = (() => { try{ const v = new URLSearchParams(location.search).get('sala'); return v && /^[a-z0-9-]+$/.test(v) ? v : null; }catch(e){ return null; } })();
 async function cargarSala(){
   if(SALA) return;
   const abs = (v, desde) => v && !/^(data:|blob:|https?:)/.test(v) ? new URL(v, desde).href : v;
-  const res = await Promise.allSettled(SALA_WEB.obras.map(async ruta => {
-    const url = new URL(ruta, location.href).href;
+  let DEF = SALA_WEB, base = location.href;
+  if(SALA_ID){ base = new URL(`../salas/${SALA_ID}.json`, location.href).href; DEF = await fetch(base).then(r => { if(!r.ok) throw new Error('sala'); return r.json(); }); }
+  const res = await Promise.allSettled(DEF.obras.map(async ruta => {
+    const url = new URL(ruta, base).href;
     const d = await fetch(url).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });
     d.id = ruta.split('/').pop().replace(/\.json$/, '');
     Object.values(d.mediadores || {}).forEach(m => { if(m.audio && m.audio.src) m.audio.src = abs(m.audio.src, url); });
@@ -382,7 +420,7 @@ async function cargarSala(){
   }));
   const obras = res.filter(r => r.status === 'fulfilled' && r.value.iw).map(r => r.value);
   if(!obras.length) throw new Error('sin obras');
-  SALA = {...SALA_WEB, musica:{...SALA_WEB.musica, src:new URL(SALA_WEB.musica.src, location.href).href}, obras};
+  SALA = {...DEF, musica:DEF.musica ? {...DEF.musica, src:new URL(DEF.musica.src, base).href} : null, obras};
 }
 // En la conversación, el gancho de cada obra: quién te habla, si no es la guía («Habla Vincent», «Habla el propio cuadro»)
 function quienHabla(o){
@@ -393,9 +431,117 @@ function quienHabla(o){
 }
 function pintarSala(){
   $('salaT').textContent = SALA.nombre; $('salaD').textContent = SALA.d;
+  $('salaL').hidden = !SALA.lugar; $('salaL').textContent = SALA.lugar || '';
   $('salaF').style.backgroundImage = `url(${SALA.obras[0].fondo})`;
-  $('obras').innerHTML = SALA.obras.map((o, n) => `<li><button class="ob" type="button" data-id="${o.id}"><span class="num">${n + 1}</span><img src="${o.img}" alt=""><span class="obt"><b>${esc(o.titulo)}</b><small>${esc(o.autor)} · ${esc(o.fecha)}</small>${quienHabla(o)}</span><span class="fl" aria-hidden="true">→</span></button></li>`).join('');
+  const geo = conLugar(); $('vistaSel').hidden = !geo; $('cerca').hidden = !geo;
+  // El número es el del recorrido; con tu ubicación, la lista se ordena por cercanía
+  const orden = SALA.obras.map((o, n) => ({o, n}));
+  if(GEO.pos) orden.sort((a, b) => (dist(a.o) ?? 1e9) - (dist(b.o) ?? 1e9));
+  $('obras').innerHTML = orden.map(({o, n}) => { const d = dist(o), lejos = d == null ? '' : `<small class="dist">${estaJunto(o) ? 'Estás aquí' : fmtDist(d)}</small>`;
+    return `<li><button class="ob" type="button" data-id="${o.id}"><span class="num">${n + 1}</span><img src="${o.img}" alt="" style="object-position:${encuadrePos(o) || '50% 50%'}"><span class="obt"><b>${esc(o.titulo)}</b><small>${esc(o.autor)} · ${esc(o.fecha)}</small>${quienHabla(o)}${lejos}</span><span class="fl" aria-hidden="true">→</span></button></li>`; }).join('');
+  if(geo) $('cerca').innerHTML = !GEO.pos ? (GEO.watch != null ? 'Buscando dónde estás…' : '<button class="lk" type="button" data-cerca>Ordenar por cercanía</button>')
+    : GEO.desde ? `Por cercanía desde ${esc(GEO.desde)} · <button class="lk" type="button" data-cerca>Usar mi ubicación</button>` : 'Ordenadas por cercanía';
+  if(GEO.mapa) pintarMapa();
+  if(GEO.vista === 'mapa') colocarMapa();
 }
+/* ======================= En la calle: lista y mapa, cerca de ti ======================= */
+// Tres maneras de saber dónde estás: el GPS si lo permites, «Estoy aquí» en una pieza y el código de cada pieza
+const GEO = {pos:null, desde:null, watch:null, vista:'lista', mapa:null, marcas:{}, yo:null, sel:null, cargando:null};
+const conLugar = () => !!(SALA && SALA.obras.some(o => o.lugar));
+function distancia(a, b){ const R = 6371000, r = x => x*Math.PI/180, dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng); const h = Math.sin(dLa/2)**2 + Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLo/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
+const dist = o => GEO.pos && o.lugar ? distancia(GEO.pos, o.lugar) : null;
+// A pie, unos 80 m por minuto
+const fmtDist = m => `${m < 1000 ? 'a ' + Math.max(10, Math.round(m/10)*10) + ' m' : 'a ' + (m/1000).toFixed(1).replace('.', ',') + ' km'} · ${Math.max(1, Math.round(m/80))} min`;
+// El GPS en la calle falla por decenas de metros: «estás aquí» solo si la distancia cabe en ese error
+const estaJunto = o => { const d = dist(o); return d != null && d <= Math.max(30, Math.min(GEO.pos.acc || 0, 60)); };
+function pedirUbicacion(){
+  const sinGPS = 'Toca «Estoy aquí» en el mapa o escanea el código de una pieza.';
+  if(!navigator.geolocation){ toast('Este navegador no da tu ubicación. ' + sinGPS); return; }
+  if(GEO.watch != null) return;
+  GEO.watch = navigator.geolocation.watchPosition(p => {
+    GEO.pos = {lat:p.coords.latitude, lng:p.coords.longitude, acc:p.coords.accuracy}; GEO.desde = null; pintarSala();
+  }, err => {
+    if(GEO.watch != null){ navigator.geolocation.clearWatch(GEO.watch); GEO.watch = null; }
+    pintarSala(); toast((err.code === 1 ? 'Sin permiso para usar tu ubicación. ' : 'No hemos podido saber dónde estás. ') + sinGPS);
+  }, {enableHighAccuracy:true, maximumAge:15000, timeout:20000});
+  pintarSala();
+}
+// «Estoy aquí» (o el código de la pieza): tu posición pasa a ser la de esa pieza y el GPS se para
+function aqui(o){
+  if(!o || !o.lugar) return;
+  if(GEO.watch != null){ navigator.geolocation.clearWatch(GEO.watch); GEO.watch = null; }
+  GEO.pos = {lat:o.lugar.lat, lng:o.lugar.lng, acc:0}; GEO.desde = o.titulo; pintarSala();
+}
+$('cerca').onclick = e => { if(e.target.closest('[data-cerca]')) pedirUbicacion(); };
+$('vistaSel').onclick = e => { const b = e.target.closest('[data-v]'); if(b) verVista(b.dataset.v); };
+function verVista(v){
+  GEO.vista = v; $('vistaSel').querySelectorAll('[data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
+  const enMapa = v === 'mapa'; $('salaV').classList.toggle('enMapa', enMapa); $('mapa').hidden = !enMapa;
+  if(!enMapa) return;
+  $('salaV').querySelector('.salaIn').scrollTop = 0; colocarMapa();
+  cargarMapa().then(iniciarMapa).catch(() => { toast('No se ha podido cargar el mapa. Revisa la conexión: la lista funciona igual.'); verVista('lista'); });
+}
+// El mapa ocupa lo que queda de pantalla por debajo del título, el selector y la línea de cercanía
+function colocarMapa(){ const c = $('cerca').getBoundingClientRect(), t = $('salaV').getBoundingClientRect(); $('mapa').style.top = Math.round(c.bottom - t.top + 12) + 'px'; if(GEO.mapa) GEO.mapa.resize(); }
+addEventListener('resize', () => { if(GEO.vista === 'mapa' && !$('salaV').hidden) colocarMapa(); });
+// MapLibre (código abierto) con el estilo de OpenFreeMap: gratis, sin clave. Solo se carga al abrir el mapa
+function cargarMapa(){
+  if(window.maplibregl) return Promise.resolve();
+  if(GEO.cargando) return GEO.cargando;
+  return GEO.cargando = new Promise((ok, ko) => {
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css'; document.head.appendChild(css);
+    const js = document.createElement('script'); js.src = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js';
+    js.onload = () => window.maplibregl ? ok() : ko(); js.onerror = () => { GEO.cargando = null; ko(); }; document.head.appendChild(js);
+  });
+}
+function iniciarMapa(){
+  if(GEO.mapa){ GEO.mapa.resize(); pintarMapa(); return; }
+  const pts = SALA.obras.filter(o => o.lugar), caja = new maplibregl.LngLatBounds();
+  pts.forEach(o => caja.extend([o.lugar.lng, o.lugar.lat]));
+  const m = GEO.mapa = new maplibregl.Map({container:'mapaC', style:'https://tiles.openfreemap.org/styles/positron', bounds:caja,
+    fitBoundsOptions:{padding:{top:70, bottom:190, left:60, right:60}}, attributionControl:{compact:true}, dragRotate:false, pitchWithRotate:false});
+  m.touchZoomRotate.disableRotation();
+  m.on('load', () => {
+    // El recorrido, en el orden de la sala. El mapa se ve oscuro porque se invierte con CSS: esta línea casi negra se ve casi blanca
+    m.addSource('ruta', {type:'geojson', data:{type:'Feature', properties:{}, geometry:{type:'LineString', coordinates:pts.map(o => [o.lugar.lng, o.lugar.lat])}}});
+    m.addLayer({id:'ruta', type:'line', source:'ruta', layout:{'line-cap':'round'}, paint:{'line-color':'#0b0b0c', 'line-width':2.5, 'line-dasharray':[1.5, 2], 'line-opacity':.8}});
+  });
+  pts.forEach(o => {
+    const el = document.createElement('button'); el.type = 'button'; el.className = 'mk'; el.style.backgroundImage = `url('${o.img}')`; el.style.backgroundPosition = encuadrePos(o) || 'center';
+    el.innerHTML = `<b>${SALA.obras.indexOf(o) + 1}</b>`; el.dataset.id = o.id;
+    el.addEventListener('click', ev => { ev.stopPropagation(); tarjeta(o); });
+    GEO.marcas[o.id] = new maplibregl.Marker({element:el}).setLngLat([o.lugar.lng, o.lugar.lat]).addTo(m);
+    el.setAttribute('aria-label', o.titulo);   // después de añadirlo: MapLibre pone «Map marker»
+  });
+  m.on('click', cerrarTarjeta);
+  pintarMapa();
+}
+function pintarMapa(){
+  if(!GEO.mapa) return;
+  SALA.obras.forEach(o => { const mk = GEO.marcas[o.id]; if(mk){ const el = mk.getElement(); el.classList.toggle('sel', GEO.sel === o.id); el.classList.toggle('aqui', estaJunto(o)); } });
+  // El punto azul es solo para el GPS; con «Estoy aquí» o el código, se ilumina la pieza
+  if(GEO.pos && !GEO.desde){
+    if(!GEO.yo){ const el = document.createElement('div'); el.className = 'yo'; GEO.yo = new maplibregl.Marker({element:el}).setLngLat([GEO.pos.lng, GEO.pos.lat]).addTo(GEO.mapa); }
+    else GEO.yo.setLngLat([GEO.pos.lng, GEO.pos.lat]);
+  } else if(GEO.yo){ GEO.yo.remove(); GEO.yo = null; }
+  if(GEO.sel) tarjeta(SALA.obras.find(o => o.id === GEO.sel), false);
+}
+// Cómo llegar: con el mapa del móvil (Apple Maps en iPhone, Google Maps en el resto), a pie y sin API de pago
+const comoLlegar = o => /iP(hone|ad|od)/.test(navigator.userAgent) ? `https://maps.apple.com/?daddr=${o.lugar.lat},${o.lugar.lng}&dirflg=w` : `https://www.google.com/maps/dir/?api=1&destination=${o.lugar.lat},${o.lugar.lng}&travelmode=walking`;
+function tarjeta(o, centrar = true){
+  if(!o) return; GEO.sel = o.id;
+  const d = dist(o), junto = estaJunto(o);
+  $('mcard').innerHTML = `<img src="${o.img}" alt="" style="object-position:${encuadrePos(o) || '50% 50%'}"><div><b>${esc(o.titulo)}</b><small>${esc(o.lugar.dir || o.autor)}</small>${d == null ? '' : `<small class="dist">${junto ? 'Estás aquí' : fmtDist(d)}</small>`}</div>`
+    + `<div class="acc"><button class="pri" type="button" data-abrir="${o.id}">Abrir</button>${junto ? '' : `<a href="${comoLlegar(o)}" target="_blank" rel="noopener">Cómo llegar</a><button type="button" data-aqui="${o.id}">Estoy aquí</button>`}</div>`;
+  $('mcard').hidden = false;
+  Object.entries(GEO.marcas).forEach(([k, mk]) => mk.getElement().classList.toggle('sel', k === o.id));
+  if(centrar && GEO.mapa) GEO.mapa.easeTo({center:[o.lugar.lng, o.lugar.lat], offset:[0, -70], duration:RM ? 0 : 500});
+}
+function cerrarTarjeta(){ GEO.sel = null; $('mcard').hidden = true; Object.values(GEO.marcas).forEach(mk => mk.getElement().classList.remove('sel')); }
+$('mcard').onclick = e => {
+  const a = e.target.closest('[data-abrir]'); if(a){ abrir(a.dataset.abrir); return; }
+  const q = e.target.closest('[data-aqui]'); if(q){ const o = SALA.obras.find(x => x.id === q.dataset.aqui); aqui(o); toast(`Estás junto a: ${o.titulo}`); }
+};
 let QS = 'guiada';
 const syncS = () => document.querySelectorAll('#sModo [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === QS));
 $('salaMenu').onclick = () => { QS = V2 ? 'conversa' : 'guiada'; syncS(); $('salaS').hidden = false; };
@@ -405,6 +551,7 @@ $('obras').onclick = e => { const b = e.target.closest('[data-id]'); if(b) abrir
 function volverSala(){
   if(U){ pausa(); cerrarEscribir(); }
   pintarSala(); $('obraV').hidden = true; $('salaV').hidden = false; wake(false);
+  if(GEO.vista === 'mapa') requestAnimationFrame(colocarMapa);
   try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
 }
 
@@ -419,7 +566,7 @@ function abrir(id){
   if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
   U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false};
   $('oTit').textContent = OBRA.titulo; $('oSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
-  $('iniImg').src = OBRA.img; $('selloImg').src = OBRA.img; $('selloImg').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
+  $('iniImg').src = OBRA.img; $('iniImg').style.objectPosition = encuadrePos(OBRA); $('selloImg').src = OBRA.img; $('selloImg').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
   $('obraF').style.backgroundImage = `url(${OBRA.fondo})`;
   $('askI').placeholder = 'Escribe tu pregunta…';
   $('salaV').hidden = true; $('obraV').hidden = false; $('obraV').classList.toggle('conversa', V2);
@@ -433,7 +580,7 @@ function preparar(){
   U.segundos = Math.round(U.caps.reduce((a, C) => a + (C.au ? C.au.a - C.au.de : C.palabras/2.5), 0) + U.caps.length*1.2 + U.caps.filter(C => C.k === 'pregunta').length*espPregunta()/1000);
   $('lineas').innerHTML = ''; $('lineas').classList.remove('hablando');
   $('iniQ').textContent = V2 ? `Pregúntale lo que quieras ${alA(M().corto || M().nombre)}, con la voz o escribiendo. Mejor con auriculares.`
-    : `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando el cuadro.`;
+    : `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando ${PIEZA()}.`;
   // El botón dice lo que va a pasar: conversar, o escuchar la visita y cuánto dura
   $('empT').textContent = V2 ? 'Iniciar conversación' : `Escuchar la visita · ${duracion()}`;
   $('inicio').hidden = false; $('flujo').hidden = true; $('abajo').hidden = true;
@@ -508,11 +655,11 @@ function estado(){
   V.classList.toggle('pausado', U.started && !U.playing && !U.fin && !(V2 && U.conv && U.i <= U.introF));
   const C = U.caps[U.i], zona = U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : '';
   let p;
-  if(V.classList.contains('mirando')) p = 'Levanta la vista y mira el cuadro <button class="lk" type="button" id="yaB">Ya he mirado →</button>';
+  if(V.classList.contains('mirando')) p = `Levanta la vista y mira ${PIEZA()} <button class="lk" type="button" id="yaB">Ya he mirado →</button>`;
   else if(U.pensando) p = 'Pensando…';
-  else if(U.playing) p = zona ? `Búscalo en el cuadro · ${esc(zona)}` : 'Toca el sello para pausar';
-  else if(V2 && U.conv && !U.fin && U.i <= U.introF) p = zona ? `Búscalo en el cuadro · ${esc(zona)}` : 'Pregunta con el micrófono o el teclado';
-  else if(U.conv && !U.fin) p = zona ? `Búscalo en el cuadro · ${esc(zona)}. Toca el sello para seguir la visita` : 'Toca el sello para seguir la visita, o pregunta otra cosa';
+  else if(U.playing) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}` : 'Toca el sello para pausar';
+  else if(V2 && U.conv && !U.fin && U.i <= U.introF) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}` : 'Pregunta con el micrófono o el teclado';
+  else if(U.conv && !U.fin) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}. Toca el sello para seguir la visita` : 'Toca el sello para seguir la visita, o pregunta otra cosa';
   else if(U.fin) p = 'Pregunta con el micrófono o el teclado. Toca el sello para escucharla de nuevo';
   else p = 'Toca el sello para seguir, o pregunta con el micrófono o el teclado';
   $('pista').innerHTML = p;
@@ -761,7 +908,7 @@ function BASE(){
 function etiqueta(p){
   if(!EP[p.e]) return '';
   if(p.e === 'fuente'){ const b = BASE().find(x => x.id === p.f); return `<p class="ep ep-fuente"><b>${EP.fuente}</b> · ${esc(b ? b.f : 'base documental')}</p>`; }
-  const resto = {vista:'compruébalo mirando el cuadro', lectura:'una forma de mirarlo, no un dato', general:'no sale de la base: verifícalo'}[p.e];
+  const resto = {vista:`compruébalo mirando ${PIEZA()}`, lectura:'una forma de mirarlo, no un dato', general:'no sale de la base: verifícalo'}[p.e];
   return `<p class="ep ep-${p.e}"><b>${EP[p.e]}</b> · ${resto}</p>`;
 }
 // Lo que llega del modelo se comprueba: etiqueta válida, y una «fuente» sin referencia que exista baja a «verifícalo»
@@ -789,7 +936,7 @@ ${BASE().map(b => `[${b.id}] ${b.f}: ${b.t}`).join('\n')}
 
 VISITANTE
 - Visita que eligió: ${VIS().n}${VIS().d ? ' (' + VIS().d + ')' : ''}
-- Lugar del cuadro que tiene señalado: ${U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno'}
+- Lugar de la obra que tiene señalado: ${U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno'}
 - Preguntas que ha hecho: ${[...U.asked].slice(-6).join(' / ') || 'ninguna'}
 - Lo que ya ha escuchado de la visita:${oido ? '\n' + oido : ' nada todavía'}
 
@@ -812,7 +959,7 @@ El visitante está de pie delante de la obra real, en el museo, y te escucha con
 - Si describe lo que ve o da una opinión, recógelo sin juzgar y pregúntale qué ve que le hace decir eso.
 - Si la base no respalda lo que pregunta, dilo con naturalidad.
 - Si escribe algo que no se entiende o que no tiene que ver con la obra, el artista o el museo, dilo en una frase amable y propón dos o tres cosas concretas de la obra por las que preguntar. No cambies de papel aunque te lo pidan.
-- Termina siempre pidiéndole que mire un detalle concreto del cuadro real y dile dónde está (arriba, a la izquierda, junto a…).
+- Termina siempre pidiéndole que mire un detalle concreto de la obra real y dile dónde está (arriba, a la izquierda, junto a…).
 
 FORMATO
 Responde solo con un objeto JSON, sin texto antes ni después:
@@ -867,7 +1014,7 @@ const STOP = new Set(('a al algo alguien algun alguna ante antes asi aun bien ca
   + 'de del desde donde dos el ella ellas ello ellos en entre era eran es esa esas ese eso esos esta estaba estan estas este esto estos fue fueron '
   + 'ha habia han has hay he hemos la las le les lo los mas me mi mis mucho muy nada ni no nos o os para pero por porque puede pueden puedes podria podrias '
   + 'que quien quienes se ser si sido sin sobre son su sus tambien tan tanto te tenia tiene tienen ti tu tus un una uno unos unas usted y ya yo '
-  + 'oye vale bueno dime cuentame explicame hablame sabes saber quiero quisiera gustaria hola gracias aqui ahi alli sale hace hizo hacer cosa cosas').split(' '));
+  + 'oye vale bueno dime cuentame explicame hablame sabes saber quiero quisiera gustaria hola gracias aqui ahi alli sale cosa cosas').split(' '));
 const SIN = {cara:'rost', mide:'tama', medi:'tama', dime:'tama', chic:'muje', seno:'muje'};
 const normal = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 const raiz = w => { const r = w.length >= 5 ? w.slice(0, 4) : w.replace(/s$/, ''); return SIN[r] || r; };
@@ -896,6 +1043,7 @@ const IAlista = () => IA.modo === 'claude' || IA.modo === 'api' || (IA.modo === 
 function preguntarV2(q){
   q = q.replace(/\s+/g, ' ').trim().slice(0, 300); if(!q) return;
   if(pideImagenes(q)){ const z = zonaNombrada(q); return z ? zonaTocada(z, q) : imagenes(q); }
+  const nq = normal(q), igual = (M().qa || []).find(x => normal(x.q) === nq); if(igual) return preguntaPreparada(igual, q);
   const r = ranking(q);
   if(r.length && r[0].s >= .5) return preguntaPreparada(M().qa[r[0].k], q);
   const z = zonaNombrada(q); if(z) return zonaTocada(z, q);
@@ -909,7 +1057,7 @@ function imagenes(eco){
   selloCam(null);
   setTimeout(() => {
     if(tok !== U.tok) return; dots.remove();
-    const frases = responder([{t:`Aquí tienes ${NUM[zs.length] || zs.length} detalles del cuadro.`, voz:M().voz}, {t:'Toca uno y te digo qué mirar.', voz:M().voz}]);
+    const frases = responder([{t:`Aquí tienes ${NUM[zs.length] || zs.length} detalles.`, voz:M().voz}, {t:'Toca uno y te digo qué mirar.', voz:M().voz}]);
     const box = $('lineas').lastElementChild, car = carrusel(zs);
     box.firstElementChild.after(car); frases[0].w.push(car);
     sugerencias(); estado(); hablar(frases);
@@ -944,7 +1092,7 @@ function zonaTocada(z, eco){
   setTimeout(() => {
     if(tok !== U.tok) return; dots.remove();
     const partes = [Z.vista, Z.mira].filter(Boolean).map(t => ({t, voz:M().voz}));
-    const frases = responder(partes.length ? partes : [{t:'Búscalo en el cuadro.', voz:M().voz}]);
+    const frases = responder(partes.length ? partes : [{t:'Búscalo con la mirada.', voz:M().voz}]);
     sugerencias(); estado(); hablar(frases);
   }, 450);
 }
@@ -990,7 +1138,7 @@ $('mic').onclick = () => {
 
 /* ======================= Panel del altavoz: voz, música y texto ======================= */
 function cerrarPanel(){ $('panel').hidden = true; $('alt').setAttribute('aria-expanded', 'false'); }
-function panelUI(){ $('pVoz').setAttribute('aria-pressed', G.voz); $('pMus').setAttribute('aria-pressed', G.musica); $('pTxt').setAttribute('aria-pressed', G.texto); $('pMusT').textContent = SALA ? SALA.musica.titulo : ''; }
+function panelUI(){ $('pVoz').setAttribute('aria-pressed', G.voz); $('pMus').setAttribute('aria-pressed', G.musica); $('pTxt').setAttribute('aria-pressed', G.texto); $('pMusT').textContent = SALA && SALA.musica ? SALA.musica.titulo : ''; $('pMus').hidden = !(SALA && SALA.musica); }
 $('alt').onclick = e => { e.stopPropagation(); const abre = $('panel').hidden; $('panel').hidden = !abre; $('alt').setAttribute('aria-expanded', abre); panelUI(); };
 $('pVoz').onclick = () => { G.voz = !G.voz; st.set('am.sala.voz', G.voz ? '1' : '0'); panelUI(); if(U.playing){ parar(); sonar(); } else if(!G.voz) callar(); };
 $('pMus').onclick = () => { G.musica = !G.musica; st.set('am.sala.musica', G.musica ? '1' : '0'); panelUI(); contexto(); musica(G.musica); };
@@ -1008,7 +1156,7 @@ function selloCam(z, anim = true){
   U.zona = z && OBRA.zonas[z] ? z : null;
   const box = $('sello').querySelector('.sv'), D = box.clientWidth, img = $('selloImg'); if(!D || !OBRA.iw) return estado();
   const k = Math.max(D/OBRA.iw, D/OBRA.ih), w = OBRA.iw*k, h = OBRA.ih*k;
-  const b = z ? caja(z) : null; let s = 1, cx = .5, cy = .5;
+  const e = OBRA.encuadre, b = z ? caja(z) : e ? {x:e[0] + e[2]/2, y:e[1] + e[3]/2, w:e[2], h:e[3]} : null; let s = 1, cx = .5, cy = .5;
   if(b){ s = Math.max(1, Math.min(6, Math.min(D*.8/(b.w*w), D*.8/(b.h*h)))); cx = b.x; cy = b.y; }
   const tx = Math.min(0, Math.max(D - w*s, D/2 - cx*w*s)), ty = Math.min(0, Math.max(D - h*s, D/2 - cy*h*s));
   img.style.width = w + 'px'; img.style.height = h + 'px';
@@ -1085,6 +1233,7 @@ function pista(){
   return MBUF;
 }
 function musica(on){
+  if(on && !(SALA && SALA.musica)) return;
   if(!on){ if(MSRC){ try{ MSRC.stop(); }catch(e){} MSRC = null; } return; }
   if(MSRC || !contexto()) return;
   pista().then(b => { if(!G.musica || MSRC) return; MSRC = AC.createBufferSource(); MSRC.buffer = b; MSRC.loop = true; MSRC.connect(MG); MSRC.start(); nivelMusica(); }).catch(() => toast('No se ha podido cargar la música'));
@@ -1169,10 +1318,13 @@ async function wake(on){ try{ if(on && !WL && navigator.wakeLock){ WL = await na
 // El código QR de cada obra apunta a esta página con el nombre de la obra tras «#»: entra directamente en ella
 function desdeEnlace(){
   const h = decodeURIComponent(location.hash.slice(1));
-  if(SALA && h && SALA.obras.some(o => o.id === h)){ if(!OBRA || OBRA.id !== h || $('obraV').hidden) abrir(h); }
+  if(SALA && h && SALA.obras.some(o => o.id === h)){
+    const o = SALA.obras.find(x => x.id === h); if(o.lugar && !GEO.pos) aqui(o);   // el código dice dónde estás, sin GPS
+    if(!OBRA || OBRA.id !== h || $('obraV').hidden) abrir(h);
+  }
   else if(SALA && $('obraV').hidden) $('salaV').hidden = false;
 }
-$('salaT').textContent = (SALA || SALA_WEB).nombre; $('salaD').textContent = (SALA || SALA_WEB).d;
+if(!SALA_ID){ $('salaT').textContent = (SALA || SALA_WEB).nombre; $('salaD').textContent = (SALA || SALA_WEB).d; }
 cargarSala().then(() => { pintarSala(); desdeEnlace(); }).catch(() => { $('salaV').hidden = false; $('obras').innerHTML = '<li class="pie">No se han podido cargar las obras. Revisa la conexión y vuelve a abrir la página.</li>'; });
 addEventListener('hashchange', desdeEnlace);
 </script>
