@@ -71,6 +71,7 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;lin
 .ini-q{font-size:.95rem;color:rgba(246,245,242,.82);line-height:1.4;max-width:30ch}
 #empezar{height:56px;padding:0 26px;background:var(--fg);color:var(--tinta);font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:10px}
 #empezar svg{width:16px;height:16px;fill:currentColor}
+#obraV.conversa #empezar svg{display:none}
 
 /* El relato y la conversación, como un solo texto que crece hacia abajo */
 #flujo{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
@@ -405,7 +406,8 @@ function preparar(){
   $('lineas').innerHTML = ''; $('lineas').classList.remove('hablando');
   $('iniQ').textContent = V2 ? `Pregúntale lo que quieras ${alA(M().corto || M().nombre)}, con la voz o escribiendo. Mejor con auriculares.`
     : `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando el cuadro.`;
-  $('empT').textContent = V2 ? 'Empezar' : `Empezar · ${duracion()}`;
+  // El botón dice lo que va a pasar: conversar, o escuchar la visita y cuánto dura
+  $('empT').textContent = V2 ? 'Iniciar conversación' : `Escuchar la visita · ${duracion()}`;
   $('inicio').hidden = false; $('flujo').hidden = true; $('abajo').hidden = true;
   $('obraV').classList.remove('sonando', 'pausado', 'mirando');
   anillo(0, 0); estado();
