@@ -139,6 +139,10 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .sico{position:absolute;inset:7px;border-radius:50%;display:grid;place-items:center;background:rgba(10,10,11,.5);opacity:0;transition:opacity .3s}
 .sico svg{width:34px;height:34px;fill:var(--fg)}
 #obraV.pausado .sico{opacity:1}
+/* Conversación: el anillo no mide cuánto queda; late con la voz y se queda quieto mientras escucha */
+#obraV.conversa .sring .sf{display:none}
+#obraV.conversa .sello.late .sb{animation:late .36s ease-out}
+@keyframes late{from{stroke:var(--fg);stroke-width:5.5}to{stroke:var(--hair);stroke-width:2.4}}
 .pista{font-size:.92rem;line-height:1.4;color:rgba(246,245,242,.82);text-align:center;min-height:2.8em;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;max-width:36ch;padding:0 8px}
 .pista .lk{padding:2px 0;align-self:auto}
 .mandos{display:flex;align-items:center;justify-content:center;gap:22px}
@@ -280,6 +284,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
   <div class="pn" role="dialog" aria-label="Tu visita">
     <div class="hd"><b>Tu visita</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="deep">
+      <fieldset id="fsModo"><legend>Modo</legend><div class="seg" id="fModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset>
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
       <div class="menu">
@@ -315,7 +320,9 @@ const CONFIG = {api:'', puterModelo:''};
 // Variante v2 (?v=2): conversación primero, como las esculturas que hablan. Habla la propia obra si tiene voz
 // («obra»), si no el autor, y si no la guía. Una presentación, sugerencias y preguntas libres que se responden
 // antes con el banco validado de la obra (qa) que con un modelo.
-const V2 = new URLSearchParams(location.search).get('v') === '2';
+let V2 = new URLSearchParams(location.search).get('v') === '2';   // se cambia en directo desde «Tu visita»
+// La voz que empieza en cada modo: en la conversación, la obra o su autor si los hay
+const vozDefecto = meds => V2 ? (['obra', 'autor'].find(k => meds.includes(k)) || meds[0]) : meds[0];
 const alA = s => ('a ' + s).replace(/^a el /, 'al ');
 
 /* ======================= Utilidades ======================= */
@@ -378,8 +385,7 @@ function abrir(id){
   if(U){ parar(); U.playing = false; }
   OBRA = o; KEY = (V2 ? 'am.sala2.' : 'am.sala.') + id + '.';
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
-  const voz = V2 ? (['obra', 'autor'].find(k => meds.includes(k)) || meds[0]) : meds[0];
-  P = {guia:store.get('guia', voz), perfil:store.get('perfil', vis[0])};
+  P = {guia:store.get('guia', vozDefecto(meds)), perfil:store.get('perfil', vis[0])};
   if(!OBRA.mediadores[P.guia]) P.guia = meds[0];
   if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
   U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false};
@@ -387,7 +393,7 @@ function abrir(id){
   $('iniImg').src = OBRA.img; $('selloImg').src = OBRA.img; $('selloImg').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
   $('obraF').style.backgroundImage = `url(${OBRA.fondo})`;
   $('askI').placeholder = 'Escribe tu pregunta…';
-  $('salaV').hidden = true; $('obraV').hidden = false;
+  $('salaV').hidden = true; $('obraV').hidden = false; $('obraV').classList.toggle('conversa', V2);
   cerrarEscribir(); cerrarPanel();
   preparar();
   try{ history.replaceState(null, '', '#' + id); }catch(e){}
@@ -517,7 +523,9 @@ function siguiente(){
   U.i++; U.si = 0; if(U.playing) sonar(); else estado();
 }
 function limpiar(C){ if(C && C.frases) C.frases.forEach(f => f.w.forEach(w => w.classList.remove('on'))); }
-function encender(f, n){ const ws = f.w.slice(0, n == null ? f.w.length : n); ws.forEach(w => w.classList.add('on')); seguir(ws[ws.length - 1]); }
+function encender(f, n){ const ws = f.w.slice(0, n == null ? f.w.length : n); let nuevas = 0; ws.forEach(w => { if(!w.classList.contains('on')){ w.classList.add('on'); nuevas++; } }); if(nuevas && n != null) latido(); seguir(ws[ws.length - 1]); }
+// Conversación: el anillo del sello late con cada palabra que se dice (la obra habla)
+function latido(){ if(!V2 || RM) return; const s = $('sello'); s.classList.remove('late'); void s.getBoundingClientRect(); s.classList.add('late'); }
 const espPregunta = () => (VIS().lenta || VIS().preguntaZonas) ? 9000 : 7000;
 function sonar(){
   const C = U.caps[U.i]; if(!C) return terminar();
@@ -983,21 +991,35 @@ let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout
 /* ======================= Tu visita, ficha y sala ======================= */
 const Q = {};
 function abrirAjustes(){
-  Object.assign(Q, P);
+  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada';
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
-  $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${n === 0 ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
+  $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
   $('fPerfil').innerHTML = vis.map(k => `<button type="button" data-v="${k}"><span>${esc(OBRA.visitas[k].n)}<small>${esc(OBRA.visitas[k].d || '')}</small></span></button>`).join('');
-  $('fsGuia').hidden = meds.length < 2; $('fsPerfil').hidden = vis.length < 2; $('ajFoot').hidden = $('fsGuia').hidden && $('fsPerfil').hidden;
+  $('fsGuia').hidden = meds.length < 2; $('fsPerfil').hidden = vis.length < 2;
   $('deNuevoT').textContent = `${VIS().n} · ${duracion()}`; $('salaBT').textContent = `${SALA.nombre} · ${SALA.obras.length} obras`;
   sync(); cerrarPanel();
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
-function sync(){ [['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
-[['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
+function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
+[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
 $('menuB').onclick = abrirAjustes;
 function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
+  // Cambio de modo: la misma obra, con la voz de ese modo y el enlace al día (?v=2 es la conversación)
+  if((Q.modo === 'conversa') !== V2){
+    const iba = U.started, voz = Q.guia !== P.guia ? Q.guia : null;
+    $('ajS').hidden = true; V2 = Q.modo === 'conversa';
+    try{ const u = new URL(location.href); if(V2) u.searchParams.set('v', '2'); else u.searchParams.delete('v'); history.replaceState(null, '', u); }catch(e){}
+    abrir(OBRA.id);
+    let otra = false;
+    if(voz && voz !== P.guia){ P.guia = voz; store.set('guia', voz); otra = true; }
+    if(Q.perfil !== P.perfil){ P.perfil = Q.perfil; store.set('perfil', P.perfil); otra = true; }
+    if(otra) preparar();
+    toast(`${V2 ? 'Conversación' : 'Visita guiada'} · ${M().nombre}`);
+    if(iba) $('empezar').click();
+    return;
+  }
   const cambia = Q.guia !== P.guia || Q.perfil !== P.perfil;
   P.guia = Q.guia; P.perfil = Q.perfil; store.set('guia', P.guia); store.set('perfil', P.perfil);
   $('ajS').hidden = true;
@@ -1064,6 +1086,7 @@ function decirCapsula(C, tok){
       const t = desde + Math.max(0, ac.currentTime - t0);
       let n = k; while(n < ws.length && au.w[n] <= t + .04) n++;
       if(n !== n0){
+        if(n0 >= 0 && n > n0) latido();
         n0 = n; ws.slice(0, n).forEach(w => w.classList.add('on')); seguir(ws[n - 1]);
         let a = 0, si = 0; while(si < C.frases.length - 1 && a + C.frases[si].w.length < n){ a += C.frases[si].w.length; si++; }
         U.si = Math.max(si0, si); anillo((U.i + n/ws.length)/U.caps.length, 300);
