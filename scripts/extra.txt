@@ -5,3 +5,13 @@ monet-panuelo-rojo.jpg  https://openaccess-cdn.clevelandart.org/1958.39/1958.39_
 cma-1958.39.json  https://openaccess-api.clevelandart.org/api/artworks/135382
 turner-incendio-parlamento.jpg  https://openaccess-cdn.clevelandart.org/1942.647/1942.647_print.jpg
 cma-1942.647.json  https://openaccess-api.clevelandart.org/api/artworks/122351
+
+# Prototipo «Pamplona en la calle»: piezas públicas, sus datos en Commons y su ubicación en OpenStreetMap
+pamplona-encierro.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Monumento_al_Encierro.JPG?width=1600
+pamplona-fueros.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Monumento_a_los_Fueros_de_Navarra_en_Pamplona--3.JPG?width=1600
+pamplona-fueros-cuerpo.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Cos_central_del_monument_als_furs%2C_Pamplona.JPG?width=1600
+pamplona-santa-cecilia.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Nabarreriako_iturria.JPG?width=1600
+pamplona-hemingway.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Pamplona_-_Monumento_a_Hemingway.jpg?width=1600
+pamplona-hemingway-2.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Monument_a_Ernest_Hemingway%2C_Pamplona.JPG?width=1600
+pamplona-imagenes.json  https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&iiprop=extmetadata%7Csize&format=json&titles=File%3AMonumento_al_Encierro.JPG%7CFile%3AMonumento_a_los_Fueros_de_Navarra_en_Pamplona--3.JPG%7CFile%3ACos_central_del_monument_als_furs%2C_Pamplona.JPG%7CFile%3ANabarreriako_iturria.JPG%7CFile%3APamplona_-_Monumento_a_Hemingway.jpg%7CFile%3AMonument_a_Ernest_Hemingway%2C_Pamplona.JPG
+pamplona-osm.json  https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3B%28nwr%5B%22tourism%22%3D%22artwork%22%5D%2842.808%2C-1.655%2C42.826%2C-1.632%29%3Bnwr%5B%22historic%22~%22monument%7Cmemorial%22%5D%2842.808%2C-1.655%2C42.826%2C-1.632%29%3Bnwr%5B%22amenity%22%3D%22fountain%22%5D%2842.808%2C-1.655%2C42.826%2C-1.632%29%3B%29%3Bout%20center%20tags%3B
