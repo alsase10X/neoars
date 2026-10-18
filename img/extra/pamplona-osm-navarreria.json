@@ -1,0 +1,388 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-18T18:17:21Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 799249356,
+  "lat": 42.8184852,
+  "lon": -1.6412358,
+  "tags": {
+    "amenity": "drinking_water",
+    "check_date": "2021-08-30"
+  }
+},
+{
+  "type": "node",
+  "id": 819450738,
+  "lat": 42.8188626,
+  "lon": -1.6447174,
+  "tags": {
+    "amenity": "drinking_water",
+    "check_date": "2021-08-30",
+    "drinking_water": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 819450741,
+  "lat": 42.8193231,
+  "lon": -1.6429101,
+  "tags": {
+    "amenity": "drinking_water",
+    "check_date": "2025-06-29",
+    "drinking_water": "yes",
+    "man_made": "water_tap",
+    "name": "Fuente de Navarrería",
+    "name:es": "Fuente de Navarrería",
+    "tourism": "attraction",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 3014507260,
+  "lat": 42.8200692,
+  "lon": -1.6436704,
+  "tags": {
+    "amenity": "drinking_water",
+    "drinking_water": "yes",
+    "name": "Fuente Dos de Mayo",
+    "name:es": "Fuente Dos de Mayo",
+    "name:eu": "Maiatzaren biaren iturria"
+  }
+},
+{
+  "type": "node",
+  "id": 4900575700,
+  "lat": 42.8188880,
+  "lon": -1.6433427,
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "7",
+    "addr:postcode": "31002",
+    "addr:street": "Calle de la Mañueta",
+    "historic": "monument",
+    "name": "Casa natal de Sabicas",
+    "subject:wikidata": "Q729933",
+    "subject:wikipedia": "es:Sabicas"
+  }
+},
+{
+  "type": "node",
+  "id": 5244837693,
+  "lat": 42.8189192,
+  "lon": -1.6427732,
+  "tags": {
+    "name": "La Tentación de Navarrería",
+    "shop": "beverages"
+  }
+},
+{
+  "type": "node",
+  "id": 11034670305,
+  "lat": 42.8199878,
+  "lon": -1.6413259,
+  "tags": {
+    "amenity": "fountain",
+    "name": "Fuente Farola"
+  }
+},
+{
+  "type": "node",
+  "id": 11467349218,
+  "lat": 42.8188068,
+  "lon": -1.6441212,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "plaque",
+    "name": "Plano de los Burgos de Pamplona"
+  }
+},
+{
+  "type": "node",
+  "id": 12639319131,
+  "lat": 42.8208060,
+  "lon": -1.6411879,
+  "tags": {
+    "historic": "pillory"
+  }
+},
+{
+  "type": "node",
+  "id": 13003945600,
+  "lat": 42.8184550,
+  "lon": -1.6445902,
+  "tags": {
+    "artwork_type": "mural",
+    "name": "Mural de Diana Cazadora",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 13158624624,
+  "lat": 42.8198166,
+  "lon": -1.6458672,
+  "tags": {
+    "artwork_type": "mural",
+    "tourism": "artwork"
+  }
+},
+{
+  "type": "node",
+  "id": 13171951474,
+  "lat": 42.8204509,
+  "lon": -1.6432175,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "stolperstein",
+    "panoramax": "e92fe61c-9641-4415-8e74-0bf36e3b4d3d"
+  }
+},
+{
+  "type": "node",
+  "id": 13667367801,
+  "lat": 42.8208995,
+  "lon": -1.6436910,
+  "tags": {
+    "amenity": "drinking_water",
+    "check_date": "2026-03-21",
+    "level": "0",
+    "man_made": "water_tap",
+    "operator": "Iruñeako Udala"
+  }
+},
+{
+  "type": "node",
+  "id": 13939162863,
+  "lat": 42.8192978,
+  "lon": -1.6458367,
+  "tags": {
+    "denomination": "catholic",
+    "historic": "wayside_shrine",
+    "religion": "christian",
+    "subject:wikidata": "Q468206",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 13939196201,
+  "lat": 42.8199968,
+  "lon": -1.6446128,
+  "tags": {
+    "historic": "memorial",
+    "material": "stone",
+    "name": "Reconocimiento al Reino de Navarra - Nafarroako Erreinuaren Omenez",
+    "name:es": "Reconocimiento al Reino de Navarra",
+    "name:eu": "Nafarroako Erreinuaren Omenez",
+    "start_date": "2012-12-03",
+    "subject:wikidata": "Q200262"
+  }
+},
+{
+  "type": "way",
+  "id": 265883845,
+  "center": {
+    "lat": 42.8179862,
+    "lon": -1.6449326
+  },
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:postcode": "31001",
+    "addr:street": "Calle San Saturnino",
+    "alt_name": "Iglesia de San Cernin",
+    "alt_name:eu": "San Saturnino eliza",
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "roman_catholic",
+    "historic": "church",
+    "level": "0",
+    "name": "Iglesia de San Saturnino",
+    "name:es": "Iglesia de San Saturnino",
+    "name:eu": "San Zernin eliza",
+    "nohousenumber": "yes",
+    "religion": "christian",
+    "wheelchair": "no",
+    "wikidata": "Q3756728",
+    "wikipedia": "eu:San Zernin eliza"
+  }
+},
+{
+  "type": "way",
+  "id": 265883924,
+  "center": {
+    "lat": 42.8177653,
+    "lon": -1.6410216
+  },
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "1",
+    "addr:postcode": "31001",
+    "addr:street": "Calle San Agustín",
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "historic": "church",
+    "name": "Iglesia de San Agustín",
+    "name:es": "Iglesia de San Agustín",
+    "name:eu": "San Agustin eliza",
+    "religion": "christian",
+    "wheelchair": "no",
+    "wikidata": "Q16518820"
+  }
+},
+{
+  "type": "way",
+  "id": 297938683,
+  "center": {
+    "lat": 42.8196016,
+    "lon": -1.6461289
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "historic": "church",
+    "name": "Capilla Universitaria",
+    "religion": "christian",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 346310821,
+  "center": {
+    "lat": 42.8202982,
+    "lon": -1.6444278
+  },
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "6",
+    "addr:postcode": "31001",
+    "addr:street": "Calle del Dos de Mayo",
+    "alt_name": "Archivo Real y General de Navarra",
+    "alt_name:en": "Royal and General Archive of Navarre",
+    "alt_name:es": "Archivo Real y General de Navarra",
+    "building": "yes",
+    "castle_type": "stately",
+    "historic": "yes",
+    "name": "Palacio de los Reyes de Navarra",
+    "name:es": "Palacio de los Reyes de Navarra",
+    "name:eu": "Nafarroako errege-erreginen jauregia",
+    "wikidata": "Q3111483",
+    "wikipedia": "eu:Nafarroako errege-erreginen jauregia"
+  }
+},
+{
+  "type": "way",
+  "id": 858210760,
+  "center": {
+    "lat": 42.8210307,
+    "lon": -1.6432483
+  },
+  "tags": {
+    "building": "yes",
+    "historic": "city_gate",
+    "name": "Portal de Zumalacarregui",
+    "name:es": "Portal de Zumalacarregui",
+    "name:eu": "Zumalakarregiko atea"
+  }
+},
+{
+  "type": "way",
+  "id": 1228734226,
+  "center": {
+    "lat": 42.8211154,
+    "lon": -1.6434473
+  },
+  "tags": {
+    "building": "yes",
+    "castle_type": "fortress",
+    "historic": "yes",
+    "name": "Baluarte del Abrevador",
+    "name:es": "Baluarte del Abrevador",
+    "name:eu": "Uraskaren gotorra"
+  }
+},
+{
+  "type": "way",
+  "id": 1228734228,
+  "center": {
+    "lat": 42.8203635,
+    "lon": -1.6456611
+  },
+  "tags": {
+    "building": "yes",
+    "castle_type": "fortress",
+    "historic": "yes",
+    "name": "Baluarte de Parma"
+  }
+},
+{
+  "type": "way",
+  "id": 1311369730,
+  "center": {
+    "lat": 42.8184119,
+    "lon": -1.6455964
+  },
+  "tags": {
+    "access": "yes",
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "2",
+    "addr:postcode": "31001",
+    "addr:street": "Calle Mayor",
+    "bic:inscription_date": "1997",
+    "building": "civic",
+    "castle_type": "palace",
+    "fee": "no",
+    "heritage": "2",
+    "historic": "castle",
+    "name": "Palacio del Condestable",
+    "name:es": "Palacio del Condestable",
+    "name:eu": "Kondestablearen Jauregia",
+    "opening_hours": "Mo-Fr 09:00-22:00; Sa,Su 09:30-14:00,17:00-21:00",
+    "protection_title": "Bien de Interés Cultural",
+    "protection_title:category": "Monumento histórico",
+    "ref:bic": "RI-51-0009735",
+    "tourism": "attraction",
+    "wheelchair": "yes",
+    "wikidata": "Q16518040",
+    "wikipedia": "es:Palacio del Condestable (Pamplona)"
+  }
+},
+{
+  "type": "relation",
+  "id": 1727138,
+  "center": {
+    "lat": 42.8194047,
+    "lon": -1.6407364
+  },
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "1",
+    "addr:postcode": "31001",
+    "addr:street": "Calle Dormitalería",
+    "amenity": "place_of_worship",
+    "building": "cathedral",
+    "denomination": "catholic",
+    "historic": "church",
+    "name": "Iruñeko katedrala",
+    "name:en": "Cathedral of Pamplona",
+    "name:es": "Catedral de Pamplona",
+    "name:eu": "Iruñeko katedrala",
+    "religion": "christian",
+    "type": "multipolygon",
+    "wikidata": "Q389210",
+    "wikipedia": "eu:Iruñeko katedrala"
+  }
+}
+
+  ]
+}
