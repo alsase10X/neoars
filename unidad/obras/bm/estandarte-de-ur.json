@@ -1,0 +1,302 @@
+{
+ "titulo": "El estandarte de Ur",
+ "autor": "Sumer, Ur",
+ "fecha": "hacia 2550–⁠2400 a. C.",
+ "pieza": "el estandarte",
+ "img": "../../../img/bm/estandarte-de-ur.jpg",
+ "iw": 2400,
+ "ih": 1036,
+ "fondo": "../../../img/bm/estandarte-de-ur-fondo.jpg",
+ "acento": "#6993cc",
+ "encuadre": [
+  0.36,
+  0.0,
+  0.3,
+  1.0
+ ],
+ "wikidata": "Q524447",
+ "wikidataOmite": [
+  "material",
+  "fecha"
+ ],
+ "tema": "Una caja de madera que ya no existe, cubierta de un mosaico que cuenta una guerra.",
+ "zonas": {
+  "rey": {
+   "n": "El rey",
+   "poly": [
+    [
+     0.488,
+     0.03
+    ],
+    [
+     0.556,
+     0.03
+    ],
+    [
+     0.556,
+     0.33
+    ],
+    [
+     0.488,
+     0.33
+    ]
+   ],
+   "rel": [
+    "prisioneros"
+   ],
+   "mira": "¿Qué parte de él se sale del marco?",
+   "vista": "Arriba, en el centro, la figura más alta de todas: su cabeza se sale de la franja."
+  },
+  "carro": {
+   "n": "El carro de arriba",
+   "poly": [
+    [
+     0.02,
+     0.07
+    ],
+    [
+     0.31,
+     0.07
+    ],
+    [
+     0.31,
+     0.33
+    ],
+    [
+     0.02,
+     0.33
+    ]
+   ],
+   "rel": [
+    "rey"
+   ],
+   "mira": "¿Cuántas ruedas ves?",
+   "vista": "Arriba a la izquierda, un carro tirado por animales, con un hombre que lo guía."
+  },
+  "prisioneros": {
+   "n": "Los prisioneros",
+   "poly": [
+    [
+     0.56,
+     0.07
+    ],
+    [
+     0.975,
+     0.07
+    ],
+    [
+     0.975,
+     0.33
+    ],
+    [
+     0.56,
+     0.33
+    ]
+   ],
+   "rel": [
+    "rey"
+   ],
+   "mira": "¿Quién está vestido y quién no?",
+   "vista": "Arriba a la derecha, una fila de hombres desnudos y atados, llevados ante el rey."
+  },
+  "soldados": {
+   "n": "Los soldados",
+   "poly": [
+    [
+     0.02,
+     0.37
+    ],
+    [
+     0.41,
+     0.37
+    ],
+    [
+     0.41,
+     0.64
+    ],
+    [
+     0.02,
+     0.64
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Encuentras alguna diferencia entre ellos?",
+   "vista": "En medio a la izquierda, ocho soldados casi iguales, con capa y casco."
+  },
+  "batalla": {
+   "n": "La batalla",
+   "poly": [
+    [
+     0.41,
+     0.37
+    ],
+    [
+     0.975,
+     0.37
+    ],
+    [
+     0.975,
+     0.64
+    ],
+    [
+     0.41,
+     0.64
+    ]
+   ],
+   "rel": [
+    "soldados"
+   ],
+   "mira": "¿Dónde ves a alguien caído?",
+   "vista": "En medio a la derecha, la lucha y los cautivos a los que se llevan."
+  },
+  "carros": {
+   "n": "Los carros",
+   "poly": [
+    [
+     0.02,
+     0.67
+    ],
+    [
+     0.975,
+     0.67
+    ],
+    [
+     0.975,
+     0.96
+    ],
+    [
+     0.02,
+     0.96
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué carro va más rápido?",
+   "vista": "Abajo, cuatro carros tirados por cuatro animales cada uno, y enemigos caídos bajo sus patas."
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "British Museum · ficha del objeto",
+   "t": "El estandarte de Ur, caja (?). Número 121201; registro 1928,1010.3; número de excavación U.11164. Decorada por los cuatro lados con escenas de mosaico incrustado: en un lado, la guerra; en el otro, hombres que traen botín o tributo y un banquete; en los extremos triangulares, otras escenas. Se encontró aplastada y se ha restaurado. Fecha: 2550–2400 a. C. (Dinástico Arcaico III). Hallazgo: Cementerio Real de Ur, excavado por Sir Leonard Woolley. Materiales: concha, caliza roja, lapislázuli y betún. Medidas: 21,7–22 cm de alto, 50,4 cm de largo, 11,6 cm de ancho en la base y 5,6 cm arriba. Adquisición: reparto de hallazgos con el Departamento de Antigüedades de Irak. Expuesta en la sala 56. Comentario del conservador: se reconstruye como una caja de madera hueca y trapezoidal; la madera se pudrió del todo y las teselas se recompusieron. No se sabe para qué servía: el lugar del hallazgo sugiere que pudo llevarse en lo alto de un palo en procesión, aunque también pudo ser un adorno de la tumba. Apareció en una tumba de cuatro cámaras saqueada (PG 779), cerca de un esqueleto de hombre y de cuentas de lapislázuli de un posible tocado. El lado de la guerra muestra carros que pisotean a los enemigos y, después, prisioneros llevados ante el rey, que es la figura más alta. El otro lado muestra un banquete de victoria, con portadores de tributo, invitados sentados y músicos."
+  },
+  {
+   "id": "B2",
+   "f": "Wikipedia en inglés, «Standard of Ur»",
+   "t": "Woolley la excavó en 1927–1928 en la tumba PG 779, una de las mayores del Cementerio Real de Ur, saqueada en la Antigüedad. La llamó estandarte porque estaba junto al hombro de un hombre que pudo llevarla en un palo; hoy se cree poco probable. Se ha propuesto también que fuera la caja de resonancia de un instrumento o un cofre para guardar fondos. Se desmontó y se volvió a montar en 1973. El lado de la guerra: arriba, una figura de rey, más alta que las demás, con la cabeza fuera del marco, ante su guardia y un carro de cuatro ruedas tirado por équidos (quizá onagros, asnos o kungas); delante, una fila de prisioneros desnudos y atados, con heridas. En medio, ocho soldados casi idénticos con capas de cuero y cascos; luego la batalla y los cautivos llevados. Abajo, cuatro carros, cada uno con conductor y guerrero, tirados por cuatro équidos que pasan del paso al galope; los enemigos caídos yacen bajo los cascos de los tres últimos tiros. El lado de la paz: arriba, el rey sentado ante seis invitados con copas, un músico con lira y quizá un cantante; en medio y abajo, figuras que llevan animales, peces y mercancías."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "La guía",
+   "por": "la guía",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "Dime: ¿qué está pasando en estas tres franjas?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esto es el estandarte de Ur. Tiene unos 4.500 años y viene del Cementerio Real de Ur, en el actual Irak."
+    },
+    {
+     "z": null,
+     "t": "Es una caja de madera cubierta de concha, piedra caliza roja y lapislázuli, pegados con betún. La madera se pudrió, y el mosaico se recompuso."
+    },
+    {
+     "z": "carros",
+     "t": "El British Museum lo describe así: primero, abajo, los carros. Fíjate en los animales: empiezan al paso y acaban al galope, sobre los enemigos caídos."
+    },
+    {
+     "z": "soldados",
+     "t": "En medio, los soldados, con capa y casco, casi iguales. Y la batalla."
+    },
+    {
+     "z": "rey",
+     "t": "Arriba, el rey: es el más alto, tanto que su cabeza se sale del marco. Delante, le traen prisioneros desnudos y atados."
+    },
+    {
+     "z": null,
+     "t": "Nadie sabe para qué servía. Leonard Woolley, que la excavó, pensó que se llevaba en lo alto de un palo, como un estandarte. Hoy se duda."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Para qué servía?",
+     "d": "obra",
+     "a": "No se sabe. Woolley pensó que se llevaba en un palo, porque estaba junto al hombro de un hombre. También se ha propuesto que fuera la caja de resonancia de un instrumento o un cofre para guardar fondos, o un adorno de la tumba. Mira su forma: es una caja estrecha y alargada."
+    },
+    {
+     "q": "¿Quién es el más alto?",
+     "d": "mirar",
+     "z": "rey",
+     "a": "El rey. Es tan alto que su cabeza se sale de la franja. Le acompaña su guardia, y delante le traen prisioneros. Compara su tamaño con el de los demás."
+    },
+    {
+     "q": "¿Qué hay en el otro lado?",
+     "d": "obra",
+     "a": "Un banquete. Arriba, el rey sentado ante seis invitados con copas, con un músico que toca la lira. Debajo, gente que trae animales, peces y mercancías. Por eso a este lado lo llaman la guerra, y al otro, la paz."
+    },
+    {
+     "q": "¿Qué animales tiran de los carros?",
+     "d": "mirar",
+     "z": "carros",
+     "a": "Équidos, pero no se sabe bien cuáles: onagros, asnos o kungas, un cruce. Cuatro por carro. Fíjate en las patas: del paso al galope."
+    },
+    {
+     "q": "¿Dónde la encontraron?",
+     "d": "obra",
+     "a": "En el Cementerio Real de Ur, en una gran tumba de cuatro cámaras que ya habían saqueado en la Antigüedad. La excavó Leonard Woolley en 1927 y 1928. Estaba cerca del esqueleto de un hombre."
+    },
+    {
+     "q": "¿De qué está hecha?",
+     "d": "mirar",
+     "a": "De concha, piedra caliza roja y lapislázuli, pegados con betún sobre una caja de madera que se pudrió. Se reconstruyó, y en 1973 se desmontó y se volvió a montar. Busca el azul del lapislázuli: es el fondo de todo."
+    },
+    {
+     "q": "¿Cuánto mide?",
+     "d": "mirar",
+     "a": "Unos 22 centímetros de alto y 50,4 de largo. Es pequeña: acércate para ver las figuras."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "El estandarte de Ur (The Standard of Ur)"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://www.britishmuseum.org/collection/object/W_1928-1010-3\" target=\"_blank\" rel=\"noopener\">British Museum, Londres · ficha del objeto</a>"
+  ],
+  [
+   "Imagen",
+   "<a href=\"https://commons.wikimedia.org/wiki/File:Standard_of_Ur_-_War_side.jpg\" target=\"_blank\" rel=\"noopener\">LeastCommonAncestor</a>, a partir de una foto de BabelStone, CC BY-SA 3.0, en Wikimedia Commons"
+  ],
+  [
+   "Textos",
+   "Adaptados de la ficha del museo y de <a href=\"https://en.wikipedia.org/wiki/Standard_of_Ur\" target=\"_blank\" rel=\"noopener\">Wikipedia</a>"
+  ]
+ ],
+ "nota": "La ficha de catálogo se carga en directo de Wikidata; se omiten su fecha y su material, que no coinciden con la ficha del museo."
+}

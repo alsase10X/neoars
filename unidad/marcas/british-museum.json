@@ -1,0 +1,25 @@
+{
+ "nombre": "British Museum · concepto no oficial",
+ "nota": "Tokens sacados del manual de diseño del British Museum de marzo de 2012: fondo negro y texto blanco, un segundo color elegido para cada objeto, el amarillo de los botones de su web, Arial en lo digital (aquí Arimo, su equivalente libre), caja de frase sin mayúsculas, texto alineado a la izquierda, sin filtros sobre las fotos y el círculo como único adorno. El logotipo no se usa: el manual prohíbe recrearlo.",
+ "tema": "oscuro",
+ "fondo": "#040404",
+ "secundario": "#949699",
+ "acento": "#FCCB08",
+ "sobreAcento": "#040404",
+ "acentoPorObra": true,
+ "texto": {
+  "familia": "Arimo",
+  "css": "https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;700&display=swap"
+ },
+ "titulos": {
+  "familia": "Arimo",
+  "peso": 500,
+  "tracking": "-.01em"
+ },
+ "botones": "redondos",
+ "cta": "recto",
+ "mayusculas": false,
+ "fondoImagen": false,
+ "alinear": "izquierda",
+ "pie": "Concepto no oficial de artmedium, sin relación con el British Museum ni su aprobación. Aplica su manual de diseño de 2012, sin su logotipo."
+}

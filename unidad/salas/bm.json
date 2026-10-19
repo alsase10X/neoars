@@ -1,0 +1,12 @@
+{
+ "nombre": "Cuatro hallazgos",
+ "nombre2": "y lo que se sabe de ellos",
+ "d": "Una piedra en el muro de un fuerte, una caja en una tumba saqueada, un casco en un barco enterrado y un ajedrez de marfil en una isla escocesa. Cuatro objetos de la colección del British Museum.",
+ "marca": "../marcas/british-museum.json",
+ "obras": [
+  "../obras/bm/piedra-de-rosetta.json",
+  "../obras/bm/estandarte-de-ur.json",
+  "../obras/bm/casco-de-sutton-hoo.json",
+  "../obras/bm/ajedrez-de-lewis.json"
+ ]
+}

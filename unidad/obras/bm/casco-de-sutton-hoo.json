@@ -1,0 +1,399 @@
+{
+ "titulo": "El casco de Sutton Hoo",
+ "autor": "Inglaterra",
+ "fecha": "finales del siglo VI o principios del VII",
+ "pieza": "el casco",
+ "img": "../../../img/bm/casco-de-sutton-hoo.jpg",
+ "iw": 978,
+ "ih": 1400,
+ "fondo": "../../../img/bm/casco-de-sutton-hoo-fondo.jpg",
+ "acento": "#b99761",
+ "encuadre": [
+  0.08,
+  0.22,
+  0.84,
+  0.6
+ ],
+ "wikidata": "Q1603141",
+ "tema": "Un casco hecho pedazos que hubo que reconstruir dos veces.",
+ "zonas": {
+  "cresta": {
+   "n": "La cresta",
+   "poly": [
+    [
+     0.44,
+     0.0
+    ],
+    [
+     0.56,
+     0.0
+    ],
+    [
+     0.56,
+     0.37
+    ],
+    [
+     0.44,
+     0.37
+    ]
+   ],
+   "rel": [
+    "dragon"
+   ],
+   "mira": "¿Ves los ojos rojos?",
+   "vista": "Por el centro de la cabeza, una cresta que acaba en una cabeza de animal dorada."
+  },
+  "dragon": {
+   "n": "El dragón de la cara",
+   "poly": [
+    [
+     0.19,
+     0.4
+    ],
+    [
+     0.3,
+     0.37
+    ],
+    [
+     0.5,
+     0.37
+    ],
+    [
+     0.7,
+     0.37
+    ],
+    [
+     0.8,
+     0.41
+    ],
+    [
+     0.8,
+     0.49
+    ],
+    [
+     0.6,
+     0.47
+    ],
+    [
+     0.58,
+     0.62
+    ],
+    [
+     0.62,
+     0.7
+    ],
+    [
+     0.62,
+     0.8
+    ],
+    [
+     0.38,
+     0.8
+    ],
+    [
+     0.38,
+     0.7
+    ],
+    [
+     0.42,
+     0.62
+    ],
+    [
+     0.4,
+     0.47
+    ],
+    [
+     0.19,
+     0.49
+    ]
+   ],
+   "rel": [
+    "jabali"
+   ],
+   "mira": "¿Dónde tiene las alas?",
+   "vista": "Las cejas, la nariz y el bigote, de bronce dorado: juntos forman un animal con las alas abiertas."
+  },
+  "jabali": {
+   "n": "La cabeza de jabalí",
+   "poly": [
+    [
+     0.08,
+     0.41
+    ],
+    [
+     0.19,
+     0.41
+    ],
+    [
+     0.19,
+     0.5
+    ],
+    [
+     0.08,
+     0.5
+    ]
+   ],
+   "rel": [
+    "dragon"
+   ],
+   "mira": "¿Encuentras la otra, al otro lado?",
+   "vista": "Al final de la ceja, una pequeña cabeza de jabalí dorada."
+  },
+  "original": {
+   "n": "Un trozo original",
+   "poly": [
+    [
+     0.28,
+     0.19
+    ],
+    [
+     0.41,
+     0.19
+    ],
+    [
+     0.41,
+     0.36
+    ],
+    [
+     0.28,
+     0.36
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Ves dónde acaba lo rugoso y empieza lo liso?",
+   "vista": "Sobre el marrón liso, una placa rugosa y gastada."
+  },
+  "carrillera": {
+   "n": "La carrillera",
+   "poly": [
+    [
+     0.0,
+     0.48
+    ],
+    [
+     0.12,
+     0.48
+    ],
+    [
+     0.16,
+     0.99
+    ],
+    [
+     0.02,
+     0.99
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué protegía?",
+   "vista": "A los lados, dos piezas largas que bajan junto a la cara."
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  },
+  "obra": {
+   "pitch": 0.78,
+   "rate": 0.92,
+   "fem": false
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "British Museum · ficha del objeto",
+   "t": "El casco de Sutton Hoo. Número 1939,1010.93. Hierro con piezas de aleación de cobre; muchos fragmentos se han montado en una reconstrucción con tela de yute y yeso. Tiene calota, carrilleras, máscara y guardanuca, cubiertos de chapa de aleación de cobre estañada con dibujos repujados: entrelazos de animales y dos escenas de guerreros, «los guerreros que bailan» y «el guerrero caído». Una cresta de hierro con hilo de plata recorre la calota y acaba en cabezas de animal delante y detrás. Unas cejas de aleación de cobre dorada, con granates, flanquean la nariz y acaban en cabezas de jabalí. Manchas negras en el interior indican un forro de cuero. Fecha: finales del siglo VI o principios del VII; la reconstrucción actual es de 1971. Lugar del hallazgo: Sutton Hoo, enterramiento en barco, túmulo 1. Hecho quizá en Suecia, quizá en Inglaterra. Medidas tal como está restaurado: 31,8 cm de alto, 21,5 de ancho; peso estimado del original: 2,5 kg. Donación de Edith M. Pretty. Expuesto en la sala 41. Comentario del conservador: en 2025, un detectorista encontró en Tåsinge, en Fionia (Dinamarca), un troquel con un motivo parecido al del guerrero caído de Sutton Hoo; más que indicar que el casco se hizo en Dinamarca, muestra lo extendido que estaba ese motivo entre las élites europeas de la Alta Edad Media. La reconstrucción actual es la segunda: la primera, de Herbert Maryon en 1946, se consideró inexacta; la segunda, de Nigel Williams, es de 1971."
+  },
+  {
+   "id": "B2",
+   "f": "Wikipedia en inglés, «Sutton Hoo helmet»",
+   "t": "Se encontró en 1939 al excavar el enterramiento en barco de Sutton Hoo, en Suffolk, en cientos de fragmentos oxidados. Se rompió por el derrumbe de la cámara funeraria o por el golpe de otro objeto que cayó encima. Las cejas, la nariz y el bigote crean la impresión de un dragón en vuelo, con las alas abiertas; las cejas llevan granates cuadrados y acaban en cabezas de jabalí doradas. En las placas hay guerreros que quizá bailan con espadas y un jinete que, lanza en alto, pisotea a un enemigo caído. La tierra era de Edith Pretty, que donó el tesoro al museo. Se ha propuesto que fuera de Rædwald, rey de los anglos del este, pero es una identificación posible e incierta."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "La guía",
+   "por": "la guía",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "Dime: ¿qué ves en esta cara?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esto es el casco de Sutton Hoo. Se hizo a finales del siglo VI o principios del VII, y apareció en 1939 dentro de un barco enterrado bajo un túmulo, en Inglaterra."
+    },
+    {
+     "z": "original",
+     "t": "Salió en cientos de trozos oxidados. Lo que ves liso y marrón es la reconstrucción; los trozos rugosos son el casco original."
+    },
+    {
+     "z": null,
+     "t": "Hubo que montarlo dos veces. La primera, en 1946, resultó inexacta. La que ves es de 1971."
+    },
+    {
+     "z": "dragon",
+     "t": "Mira la cara: las cejas, la nariz y el bigote forman un dragón en vuelo, con las alas abiertas."
+    },
+    {
+     "z": "jabali",
+     "t": "Las cejas llevan granates y acaban en dos cabezas de jabalí."
+    },
+    {
+     "z": null,
+     "t": "No se sabe de quién era. Se ha pensado en Rædwald, rey de los anglos del este, pero es una posibilidad, no una certeza."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿De quién era?",
+     "d": "fuera",
+     "a": "No se sabe. Se ha propuesto que fuera de Rædwald, rey de los anglos del este, pero es una identificación posible e incierta. Mírale a la cara y piensa a quién protegía."
+    },
+    {
+     "q": "¿Cómo se rompió?",
+     "d": "obra",
+     "z": "original",
+     "a": "Se rompió bajo tierra, por el derrumbe de la cámara funeraria o por el golpe de otro objeto que le cayó encima. Salió en cientos de trozos. Busca los trozos rugosos: son los que quedaron."
+    },
+    {
+     "q": "¿Qué parte es original?",
+     "d": "mirar",
+     "z": "original",
+     "a": "Los trozos rugosos y las piezas de metal. Lo liso y marrón es de la reconstrucción, hecha con tela de yute y yeso. Busca dónde se juntan."
+    },
+    {
+     "q": "¿Qué dibujos tiene?",
+     "d": "obra",
+     "z": "original",
+     "a": "Las placas llevaban entrelazos de animales y dos escenas: guerreros que quizá bailan con espadas, y un jinete que pisotea a un enemigo caído. Hoy solo quedan trozos. Busca alguna figura en las placas."
+    },
+    {
+     "q": "¿Dónde se hizo?",
+     "d": "fuera",
+     "a": "Quizá en Suecia, quizá en Inglaterra: el British Museum no lo da por seguro. En 2025 apareció en Dinamarca un troquel con una escena muy parecida a la de su jinete, y el museo cree que muestra lo extendido que estaba ese motivo entre las élites de la época."
+    },
+    {
+     "q": "¿Quién lo encontró?",
+     "d": "obra",
+     "a": "Apareció en 1939, al excavar el barco enterrado. La tierra era de Edith Pretty, y ella donó el tesoro al British Museum."
+    },
+    {
+     "q": "¿Cuánto pesa?",
+     "d": "mirar",
+     "a": "Se calcula que el original pesaba unos 2,5 kilos. Tal como está montado, mide 31,8 centímetros de alto. Imagínalo en una cabeza."
+    }
+   ]
+  },
+  "obra": {
+   "nombre": "El propio casco",
+   "desc": "en primera persona",
+   "por": "el propio casco",
+   "corto": "el casco",
+   "ini": "C",
+   "acc": "#b99761",
+   "voz": "obra",
+   "intro": 3,
+   "placeholder": "Pregúntale al casco…",
+   "conversa": "Conversa con el casco",
+   "te": "El casco te pregunta",
+   "vts": "Dime: ¿qué ves en mi cara?",
+   "rol": "Eres el propio casco de Sutton Hoo, y hablas en primera persona. No eres quien te llevó: de él no sabes ni el nombre. Sabes lo que te ha pasado desde que te hicieron hasta hoy, según tus fuentes.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Soy un casco. Me hicieron a finales del siglo VI o principios del VII, quizá en Suecia, quizá en Inglaterra."
+    },
+    {
+     "z": "original",
+     "t": "Me enterraron en un barco, bajo un túmulo. En 1939 me sacaron hecho cientos de trozos oxidados."
+    },
+    {
+     "z": null,
+     "t": "Me han montado dos veces. La primera, en 1946, no quedó bien. La de ahora es de 1971."
+    },
+    {
+     "z": "dragon",
+     "t": "Mírame a la cara: mis cejas, mi nariz y mi bigote forman un dragón en vuelo, con las alas abiertas."
+    },
+    {
+     "z": null,
+     "t": "No sé de quién fui. Se ha dicho que de un rey, Rædwald, pero nadie lo ha podido probar."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Cómo te rompiste?",
+     "d": "obra",
+     "z": "original",
+     "a": "Bajo tierra. Se hundió la cámara del barco, o me cayó algo encima: no se sabe cuál de las dos. Me hice cientos de pedazos."
+    },
+    {
+     "q": "¿Qué parte es tuya de verdad?",
+     "d": "mirar",
+     "z": "original",
+     "a": "Los trozos rugosos y las piezas de metal. Lo liso y marrón es de la reconstrucción, con tela de yute y yeso. Mira dónde acaba lo mío."
+    },
+    {
+     "q": "¿Qué llevas dibujado?",
+     "d": "obra",
+     "z": "original",
+     "a": "Entrelazos de animales y dos escenas: unos guerreros que quizá bailan con espadas, y un jinete que pisotea a un enemigo caído. De todo eso me quedan trozos."
+    },
+    {
+     "q": "¿Quién te encontró?",
+     "d": "obra",
+     "a": "Salí en 1939, cuando excavaron el barco. La tierra era de Edith Pretty, y ella me donó al British Museum."
+    },
+    {
+     "q": "¿De quién fuiste?",
+     "d": "fuera",
+     "a": "No lo sé. Se ha dicho que de Rædwald, rey de los anglos del este, pero es una posibilidad, no una certeza. De quien me llevó no queda ni el nombre."
+    },
+    {
+     "q": "¿Tienes parientes?",
+     "d": "fuera",
+     "a": "Quizá lejanos. En 2025, un detectorista encontró en Dinamarca un troquel con una escena muy parecida a la de mi jinete. Al British Museum le dice que ese dibujo corría por muchas cortes de la época."
+    },
+    {
+     "q": "¿Cuánto pesas?",
+     "d": "mirar",
+     "a": "Se calcula que pesaba unos 2,5 kilos. Montado como estoy, mido 31,8 centímetros de alto."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "El casco de Sutton Hoo (The Sutton Hoo Helmet)"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://www.britishmuseum.org/collection/object/H_1939-1010-93\" target=\"_blank\" rel=\"noopener\">British Museum, Londres · ficha del objeto</a>"
+  ],
+  [
+   "Imagen",
+   "<a href=\"https://commons.wikimedia.org/wiki/File:Sutton_Hoo_helmet_2016.png\" target=\"_blank\" rel=\"noopener\">Geni</a>, dominio público, en Wikimedia Commons"
+  ],
+  [
+   "Textos",
+   "Adaptados de la ficha del museo y de <a href=\"https://en.wikipedia.org/wiki/Sutton_Hoo_helmet\" target=\"_blank\" rel=\"noopener\">Wikipedia</a>"
+  ]
+ ],
+ "nota": "La ficha de catálogo se carga en directo de Wikidata."
+}

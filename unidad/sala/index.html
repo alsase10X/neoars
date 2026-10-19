@@ -16,7 +16,7 @@
 :root{
   color-scheme:dark;
   --bg:var(--c-fondo,#0A0A0B); --fg:var(--c-texto,#F6F5F2); --muted:var(--c-apagado,#A29E97); --hair:var(--c-filete,rgba(246,245,242,.2)); --panel:var(--c-panel,#0D0D0E); --tinta:#000;
-  --acento:var(--fg); --sobre-acento:var(--tinta); --fuente-titulos:var(--font); --peso-titulos:900; --peso-titulos-2:800;
+  --acento:var(--fg); --sobre-acento:var(--tinta); --fuente-titulos:var(--font); --peso-titulos:900; --peso-titulos-2:800; --track-titulos:-.035em;
   --font:var(--fuente,"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif);
   --col:560px; --sello:clamp(118px,34vw,164px);
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
@@ -40,7 +40,7 @@ a{color:inherit}
 #salaF{filter:blur(40px) brightness(.26) saturate(1.1)}
 .salaIn{position:relative;height:100%;overflow-y:auto;padding-block:28px}
 .eyb{font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-h1{font-size:clamp(2.1rem,9vw,3.1rem);font-family:var(--fuente-titulos);font-weight:var(--peso-titulos);letter-spacing:-.035em;line-height:1;margin:12px 0 14px;text-wrap:balance;max-width:14ch}
+h1{font-size:clamp(2.1rem,9vw,3.1rem);font-family:var(--fuente-titulos);font-weight:var(--peso-titulos);letter-spacing:var(--track-titulos);line-height:1;margin:12px 0 14px;text-wrap:balance;max-width:14ch}
 .salaD{font-size:1.06rem;line-height:1.45;color:color-mix(in srgb,var(--fg) 86%,transparent);max-width:36ch}
 .salaMenu{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);right:max(6px,env(safe-area-inset-right,0px));margin:0}
 .salaFirma{margin-top:22px}
@@ -262,6 +262,15 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 .marcaLogo{display:block;height:34px;margin-bottom:22px;color:var(--fg)}
 .marcaLogo svg{height:100%;width:auto;display:block;max-width:100%}
 #inicio .marcaLogo{height:28px;margin:0 auto 6px}
+/* Reglas de la marca: sin mayúsculas, sin la foto difuminada de fondo, texto alineado a la izquierda, botón principal recto */
+:root[data-mayus=no] .eyb,:root[data-mayus=no] .ep b{text-transform:none;letter-spacing:0}
+:root[data-fondo=liso] .fondo{display:none}
+:root[data-alinear=izquierda] #inicio{align-items:flex-start;text-align:left}
+:root[data-alinear=izquierda] #inicio .marcaLogo{margin-inline:0}
+:root[data-cta=recto] #empezar{border-radius:0}
+.marcaPie{font-size:.8rem;line-height:1.4;color:var(--muted);margin-top:8px;max-width:46ch}
+.vivo{color:var(--muted)}
+.h1b{display:block;color:var(--acento)}
 @media (max-height:640px){ :root{--sello:clamp(96px,26vw,124px)} .mandos{gap:16px} .sq{width:54px;height:54px} .sq.grande{width:64px;height:64px} }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important} .sv img,.w,.cap,.fondo,#flujo,.sico{transition:none!important} }
 </style>
@@ -280,6 +289,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
         <p class="cerca" id="cerca" hidden></p>
         <ol class="obras" id="obras"></ol>
         <p class="firma salaFirma">Con tecnología de <b>artmedium</b></p>
+        <p class="marcaPie" id="marcaPie" hidden></p>
       </div>
     </div>
     <div class="mapa" id="mapa" hidden><div id="mapaC"></div><div class="mcard" id="mcard" hidden></div></div>
@@ -424,16 +434,25 @@ async function aplicarMarca(url){
     const m = await fetch(url).then(r => { if(!r.ok) throw new Error('marca'); return r.json(); });
     const R = document.documentElement, pon = (k, v) => { if(v) R.style.setProperty(k, String(v)); };
     if(m.tema === 'claro' || m.tema === 'oscuro') R.dataset.tema = m.tema;
-    pon('--bg', m.fondo); pon('--acento', m.acento); pon('--sobre-acento', m.sobreAcento);
+    pon('--bg', m.fondo); pon('--acento', m.acento); pon('--sobre-acento', m.sobreAcento); pon('--muted', m.secundario);
     if(m.titulos && m.titulos.familia){
       if(m.titulos.css){ const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = m.titulos.css; document.head.appendChild(l); }
       pon('--fuente-titulos', `"${m.titulos.familia}", var(--font)`); pon('--peso-titulos', m.titulos.peso); pon('--peso-titulos-2', m.titulos.peso);
     }
+    if(m.texto && m.texto.familia){
+      if(m.texto.css){ const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = m.texto.css; document.head.appendChild(l); }
+      pon('--fuente', `"${m.texto.familia}", Arial, Helvetica, sans-serif`);
+    }
+    if(m.titulos && m.titulos.tracking != null) pon('--track-titulos', m.titulos.tracking);
+    if(m.mayusculas === false) R.dataset.mayus = 'no';
+    if(m.fondoImagen === false) R.dataset.fondo = 'liso';
+    if(m.alinear) R.dataset.alinear = m.alinear;
+    if(m.cta) R.dataset.cta = m.cta;
     if(m.botones){ DIS.botones = m.botones; aplicarDiseno(); }
     // El logo es un SVG propio: va dentro de la página para que tome el color del texto (claro u oscuro)
     let svg = '';
     if(m.logo){ try{ svg = await fetch(new URL(m.logo, url).href).then(r => r.ok ? r.text() : ''); }catch(e){} }
-    MARCA = {nombre:m.nombre || '', logo:/^\s*<svg[\s>]/i.test(svg) && !/<script/i.test(svg) ? svg : ''};
+    MARCA = {nombre:m.nombre || '', logo:/^\s*<svg[\s>]/i.test(svg) && !/<script/i.test(svg) ? svg : '', pie:m.pie || '', acentoPorObra:!!m.acentoPorObra};
   }catch(e){ MARCA = null; }
 }
 function pintarLogo(id){ const el = $(id), ok = !!(MARCA && MARCA.logo); el.hidden = !ok; if(ok){ el.innerHTML = MARCA.logo; el.setAttribute('aria-label', MARCA.nombre); } }
@@ -470,8 +489,10 @@ function quienHabla(o){
   return `<small>Habla ${esc(n)}</small>`;
 }
 function pintarSala(){
-  $('salaT').textContent = SALA.nombre; $('salaD').textContent = SALA.d;
+  // El título puede llevar una segunda línea en el color de acento
+  $('salaT').innerHTML = esc(SALA.nombre) + (SALA.nombre2 ? `<span class="h1b">${esc(SALA.nombre2)}</span>` : ''); $('salaD').textContent = SALA.d;
   pintarLogo('salaLogo');
+  $('marcaPie').hidden = !(MARCA && MARCA.pie); $('marcaPie').textContent = MARCA && MARCA.pie || '';
   $('salaL').hidden = !SALA.lugar; $('salaL').textContent = SALA.lugar || '';
   $('salaF').style.backgroundImage = `url(${SALA.obras[0].fondo})`;
   const geo = conLugar(); $('vistaSel').hidden = !geo; $('cerca').hidden = !geo;
@@ -608,6 +629,10 @@ function abrir(id){
   U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false};
   $('oTit').textContent = OBRA.titulo; $('oSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
   pintarLogo('iniLogo');
+  // El segundo color de cada pieza, si la marca lo pide (el texto sobre él, claro u oscuro según su luz)
+  const OV = $('obraV');
+  if(MARCA && MARCA.acentoPorObra && OBRA.acento){ OV.style.setProperty('--acento', OBRA.acento); const L = luz(OBRA.acento); OV.style.setProperty('--sobre-acento', (L + .05)/.05 >= 1.05/(L + .05) ? '#0b0b0b' : '#ffffff'); }
+  else { OV.style.removeProperty('--acento'); OV.style.removeProperty('--sobre-acento'); }
   $('iniImg').src = OBRA.img; $('iniImg').style.objectPosition = encuadrePos(OBRA); $('selloImg').src = OBRA.img; $('selloImg').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
   $('obraF').style.backgroundImage = `url(${OBRA.fondo})`;
   $('askI').placeholder = 'Escribe tu pregunta…';
@@ -1253,9 +1278,62 @@ $('fichaB').onclick = () => {
   $('ajS').hidden = true;
   $('fTit').textContent = OBRA.titulo;
   $('fDl').innerHTML = (OBRA.ficha || []).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('');
-  $('fNota').textContent = (OBRA.nota ? OBRA.nota + ' ' : '') + 'Prototipo de la versión en sala de artmedium: las preguntas libres las responde un modelo de IA a partir de la base documental de la obra, y cada parte de la respuesta dice de dónde sale.';
+  if(OBRA.wikidata) fichaViva(OBRA);
+  $('fNota').textContent = (MARCA && MARCA.pie ? MARCA.pie + ' ' : '') + (OBRA.nota ? OBRA.nota + ' ' : '') + 'Prototipo de la versión en sala de artmedium: las preguntas libres las responde un modelo de IA a partir de la base documental de la obra, y cada parte de la respuesta dice de dónde sale.';
   $('fichaS').hidden = false;
 };
+// Ficha en directo: los datos de catálogo de la pieza se piden a Wikidata (abierta, CC0) al abrir la ficha
+const luz = hex => { const n = parseInt(String(hex).replace('#', ''), 16), c = [n >> 16 & 255, n >> 8 & 255, n & 255].map(v => { v /= 255; return v <= .03928 ? v/12.92 : ((v + .055)/1.055)**2.4; }); return .2126*c[0] + .7152*c[1] + .0722*c[2]; };
+const WD = {};
+const WDAPI = 'https://www.wikidata.org/w/api.php?format=json&origin=*&action=wbgetentities&languages=es|en&languagefallback=1';
+async function wdDatos(q){
+  if(WD[q]) return WD[q];
+  const e = (await fetch(`${WDAPI}&props=claims&ids=${q}`).then(r => r.json())).entities[q], C = e.claims || {};
+  const val = p => (C[p] || []).filter(c => c.rank !== 'deprecated' && c.mainsnak.datavalue);
+  const ids = new Set(), item = c => { const id = c.mainsnak.datavalue.value.id; ids.add(id); return id; };
+  const BM = 'Q6373';
+  const inv = val('P217'), invBM = inv.find(c => ((c.qualifiers || {}).P195 || []).some(x => x.datavalue && x.datavalue.value.id === BM)) || inv[0];
+  const d = {inv:invBM ? invBM.mainsnak.datavalue.value : '', fecha:val('P571')[0], hallado:val('P575')[0], material:val('P186').map(item), lugar:val('P189').map(item),
+    medidas:[['P2048', 'alto'], ['P2043', 'largo'], ['P2049', 'ancho'], ['P2610', 'grosor']].map(([p, n]) => [n, val(p)[0]]).filter(x => x[1])};
+  const lab = ids.size ? (await fetch(`${WDAPI}&props=labels&ids=${[...ids].join('|')}`).then(r => r.json())).entities : {};
+  const nom = id => { const L = (lab[id] || {}).labels || {}; return (L.es || L.en || {value:id}).value; };
+  d.material = d.material.map(nom); d.lugar = d.lugar.map(nom);
+  return WD[q] = d;
+}
+function wdFecha(c){
+  if(!c) return '';
+  const v = c.mainsnak.datavalue.value, m = /^([+-])0*(\d+)/.exec(v.time); if(!m) return '';
+  const y = +m[2], ac = m[1] === '-', p = v.precision, era = ac ? ' a. C.' : '';
+  if(!y) return '';
+  const romano = n => [['M', 1000], ['CM', 900], ['D', 500], ['CD', 400], ['C', 100], ['XC', 90], ['L', 50], ['XL', 40], ['X', 10], ['IX', 9], ['V', 5], ['IV', 4], ['I', 1]].reduce((s, [r, k]) => { while(n >= k){ s += r; n -= k; } return s; }, '');
+  const Q = c.qualifiers || {}, q = k => (Q[k] || [])[0] && Q[k][0].datavalue ? wdFecha({mainsnak:Q[k][0], qualifiers:{}}) : '';
+  const entre = q('P1319') && q('P1326') ? ` (entre ${q('P1319')} y ${q('P1326')})` : '';
+  if(p >= 9) return `${y}${era}${entre}`;
+  if(p === 8) return `años ${y}${era}${entre}`;
+  if(p === 7) return `siglo ${romano(Math.ceil(y/100) || 1)}${era}${entre}`;
+  if(p === 6) return `milenio ${romano(Math.ceil(y/1000) || 1)}${era}${entre}`;
+  return entre.slice(2, -1);
+}
+function wdMedida(c){
+  const v = c.mainsnak.datavalue.value, a = Math.abs(parseFloat(v.amount)), u = v.unit.split('/').pop();
+  const cm = {Q174728:1, Q11573:100, Q174789:.1, Q218593:2.54}[u]; if(!cm) return '';
+  return `${(a*cm).toLocaleString('es-ES', {maximumFractionDigits:1})} cm`;
+}
+async function fichaViva(o){
+  const dl = $('fDl'), id = 'fViva';
+  dl.insertAdjacentHTML('beforeend', `<dt id="${id}">Catálogo abierto</dt><dd class="vivo">Cargando desde Wikidata…</dd>`);
+  try{
+    const d = await wdDatos(o.wikidata); if(OBRA !== o || !document.getElementById(id)) return;
+    // La pieza puede dejar fuera un dato de Wikidata que no coincide con sus fuentes («wikidataOmite»)
+    const omite = new Set(o.wikidataOmite || []);
+    const filas = [['inventario', 'Número de inventario', d.inv], ['fecha', 'Fecha', wdFecha(d.fecha)], ['material', 'Material', d.material.join(', ')], ['lugar', 'Lugar del hallazgo', d.lugar.join(', ')], ['hallazgo', 'Hallazgo', wdFecha(d.hallado)],
+      ['medidas', 'Medidas', d.medidas.map(([n, c]) => `${n} ${wdMedida(c)}`).filter(x => !/ $/.test(x)).join(' · ')]].filter(f => f[2] && !omite.has(f[0])).map(f => f.slice(1));
+    const t = document.getElementById(id); t.nextElementSibling.remove();
+    t.insertAdjacentHTML('afterend', filas.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('') +
+      `<dt>Fuente</dt><dd><a href="https://www.wikidata.org/wiki/${esc(o.wikidata)}" target="_blank" rel="noopener">Wikidata ${esc(o.wikidata)}</a>, en directo · CC0</dd>`);
+    t.remove();
+  }catch(e){ const t = document.getElementById(id); if(t) t.nextElementSibling.textContent = 'No se ha podido cargar ahora.'; }
+}
 function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes) play(); }
 const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());

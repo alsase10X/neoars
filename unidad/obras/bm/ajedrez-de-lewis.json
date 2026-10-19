@@ -1,0 +1,259 @@
+{
+ "titulo": "El ajedrez de Lewis",
+ "autor": "Probablemente Noruega",
+ "fecha": "hacia 1150–⁠1200",
+ "pieza": "las piezas",
+ "img": "../../../img/bm/ajedrez-de-lewis.jpg",
+ "iw": 1400,
+ "ih": 1038,
+ "fondo": "../../../img/bm/ajedrez-de-lewis-fondo.jpg",
+ "acento": "#ee3524",
+ "encuadre": [
+  0.02,
+  0.18,
+  0.4,
+  0.5
+ ],
+ "wikidata": "Q217796",
+ "wikidataOmite": [
+  "hallazgo"
+ ],
+ "tema": "Un ejército de marfil en miniatura, con caras que no se olvidan.",
+ "zonas": {
+  "obispo": {
+   "n": "El obispo",
+   "poly": [
+    [
+     0.02,
+     0.21
+    ],
+    [
+     0.11,
+     0.19
+    ],
+    [
+     0.22,
+     0.2
+    ],
+    [
+     0.27,
+     0.33
+    ],
+    [
+     0.29,
+     0.92
+    ],
+    [
+     0.02,
+     0.93
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hace con la otra mano?",
+   "vista": "Delante, un obispo con mitra y báculo, más grande que las demás piezas en la foto."
+  },
+  "guerrero": {
+   "n": "El guerrero",
+   "poly": [
+    [
+     0.39,
+     0.38
+    ],
+    [
+     0.505,
+     0.38
+    ],
+    [
+     0.505,
+     0.79
+    ],
+    [
+     0.39,
+     0.79
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué lleva en cada mano?",
+   "vista": "Un guerrero de pie, con casco, escudo y espada: hace de torre."
+  },
+  "rey": {
+   "n": "El rey",
+   "poly": [
+    [
+     0.505,
+     0.47
+    ],
+    [
+     0.595,
+     0.47
+    ],
+    [
+     0.595,
+     0.77
+    ],
+    [
+     0.505,
+     0.77
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué tiene sobre las rodillas?",
+   "vista": "Detrás, un rey sentado en su trono, con corona."
+  },
+  "reina": {
+   "n": "La reina",
+   "poly": [
+    [
+     0.79,
+     0.43
+    ],
+    [
+     0.905,
+     0.43
+    ],
+    [
+     0.905,
+     0.74
+    ],
+    [
+     0.79,
+     0.74
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Dónde apoya la mano?",
+   "vista": "A la derecha, una reina sentada, con corona y la mano en la cara."
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "British Museum · ficha del objeto (rey 1831,1101.78)",
+   "t": "Serie: el ajedrez de Lewis. Pieza de ajedrez de marfil de morsa: rey con barba, corona, manto, broche y túnica, sentado en un trono de respaldo alto, con una espada envainada sobre las rodillas. Fecha: hacia 1150–1200. Hecho quizá en Escandinavia o en Noruega. Lugar del hallazgo: Uig, isla de Lewis, Hébridas Exteriores. Medidas: 9,8 cm de alto. Comprado a T. A. Forrest. Expuesto en la sala 40. Comentario del conservador: las piezas no forman juegos completos y casi no tienen desgaste, así que pudieron ser parte de la mercancía de un comerciante, escondida y nunca recuperada. Se fechan a mediados o finales del siglo XII por su forma y la talla de los tronos; no es seguro si se tallaron en Britania o en Escandinavia: ese estilo aparece a ambos lados del mar del Norte, en Lund o en Ely."
+  },
+  {
+   "id": "B2",
+   "f": "Wikipedia en inglés, «Lewis chessmen»",
+   "t": "El hallazgo, de 1831 en la isla de Lewis (Hébridas Exteriores, Escocia), tenía 78 piezas de ajedrez, 14 piezas de damas y una hebilla. El British Museum tiene 82 objetos y el Museo Nacional de Escocia, 11; al menos una pieza es privada: un guerrero se vendió en Sotheby's en 2019 por 735.000 libras. Casi todas son de marfil de morsa, algunas de diente de ballena. Probablemente de 1150–1200, y se suele pensar que se hicieron en Trondheim (Noruega), aunque hay quien propone Islandia o las Hébridas. Los reyes y las reinas están sentados en tronos, con corona; las reinas, con la mano derecha en la cara. Los obispos llevan báculo, y algunos un libro. Los caballeros montan caballos pequeños. Las torres son guerreros de pie con escudo y espada; cuatro muerden el escudo, con la furia de los bersérkers. Algunas piezas tenían restos de tinte rojo al encontrarse, ya desaparecidos: quizá rojo y blanco distinguían los dos bandos."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "La guía",
+   "por": "la guía",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "Dime: ¿quién te parece que manda aquí?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esto es el ajedrez de Lewis. Son piezas talladas casi todas en marfil de morsa, hacia 1150 o 1200, probablemente en Noruega."
+    },
+    {
+     "z": null,
+     "t": "Aparecieron en 1831 en la isla de Lewis, en Escocia. Hoy hay 82 objetos de aquel hallazgo en el British Museum y 11 en el Museo Nacional de Escocia, en Edimburgo."
+    },
+    {
+     "z": "obispo",
+     "t": "Este de delante es un obispo, con su mitra y su báculo."
+    },
+    {
+     "z": "rey",
+     "t": "Este rey, sentado en su trono, apoya la espada sobre las rodillas."
+    },
+    {
+     "z": "reina",
+     "t": "Las reinas apoyan la mano en la cara."
+    },
+    {
+     "z": "guerrero",
+     "t": "Y las torres son guerreros a pie, con escudo y espada. Cuatro de ellos muerden su escudo, con la furia de los bersérkers."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Por qué la reina se toca la cara?",
+     "d": "mirar",
+     "z": "reina",
+     "a": "Todas las reinas apoyan la mano derecha en la cara. Nadie sabe con certeza qué quiere decir ese gesto. Mírala: ¿qué te parece que piensa?"
+    },
+    {
+     "q": "¿Dónde las encontraron?",
+     "d": "obra",
+     "a": "En 1831, en la isla de Lewis, en las Hébridas Exteriores de Escocia. Se suele decir que en la bahía de Uig, aunque investigadores del Museo Nacional de Escocia creen más probable Mealista, unos 10 kilómetros al sur."
+    },
+    {
+     "q": "¿Quién las hizo?",
+     "d": "fuera",
+     "a": "Se suele pensar que se tallaron en Trondheim, en Noruega, aunque hay quien propone Islandia o las propias Hébridas. El British Museum no lo da por seguro: ese estilo se ve a los dos lados del mar del Norte."
+    },
+    {
+     "q": "¿Por qué estaban juntas?",
+     "d": "obra",
+     "a": "No forman juegos completos y casi no tienen desgaste. Por eso se piensa que pudieron ser la mercancía de un comerciante, escondida y nunca recuperada. Fíjate: parecen recién talladas."
+    },
+    {
+     "q": "¿Eran todas blancas?",
+     "d": "fuera",
+     "a": "No del todo. Algunas tenían restos de tinte rojo cuando se encontraron, que ya han desaparecido. Quizá el rojo y el blanco distinguían los dos bandos."
+    },
+    {
+     "q": "¿Qué hacen los guerreros?",
+     "d": "mirar",
+     "z": "guerrero",
+     "a": "Son las torres: guerreros a pie con escudo y espada. Cuatro de ellos muerden el borde de su escudo, como los bersérkers en la batalla. Busca uno con la boca en el escudo."
+    },
+    {
+     "q": "¿Cuánto mide el rey?",
+     "d": "mirar",
+     "z": "rey",
+     "a": "El rey 1831,1101.78 del British Museum mide 9,8 centímetros de alto: cabe en la mano. Mira cuánto detalle hay en tan poco."
+    },
+    {
+     "q": "¿Hay alguna fuera de los museos?",
+     "d": "fuera",
+     "a": "Al menos una. En 2019 se vendió en Sotheby's un guerrero de este ajedrez por 735.000 libras."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "El ajedrez de Lewis (The Lewis Chessmen)"
+  ],
+  [
+   "Museos",
+   "<a href=\"https://www.britishmuseum.org/collection/object/H_1831-1101-78\" target=\"_blank\" rel=\"noopener\">British Museum, Londres · ficha del rey 1831,1101.78</a>, y Museo Nacional de Escocia, Edimburgo"
+  ],
+  [
+   "Imagen",
+   "<a href=\"https://commons.wikimedia.org/wiki/File:Lewis_chessmen.jpg\" target=\"_blank\" rel=\"noopener\">Jessica Spengler</a>, CC BY 2.0, en Wikimedia Commons"
+  ],
+  [
+   "Textos",
+   "Adaptados de la ficha del museo y de <a href=\"https://en.wikipedia.org/wiki/Lewis_chessmen\" target=\"_blank\" rel=\"noopener\">Wikipedia</a>"
+  ]
+ ],
+ "nota": "La ficha de catálogo se carga en directo de Wikidata; se omite su fecha del hallazgo (1833), que no coincide con la del museo y Wikipedia (1831)."
+}

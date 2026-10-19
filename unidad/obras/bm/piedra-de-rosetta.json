@@ -1,0 +1,353 @@
+{
+ "titulo": "La piedra de Rosetta",
+ "autor": "Egipto ptolemaico",
+ "fecha": "196 a. C.",
+ "pieza": "la piedra",
+ "img": "../../../img/bm/piedra-de-rosetta.jpg",
+ "iw": 1197,
+ "ih": 1400,
+ "fondo": "../../../img/bm/piedra-de-rosetta-fondo.jpg",
+ "acento": "#bbb1a6",
+ "encuadre": [
+  0.12,
+  0.05,
+  0.66,
+  0.8
+ ],
+ "wikidata": "Q48584",
+ "tema": "Una misma orden escrita tres veces, que sirvió para volver a leer una lengua.",
+ "zonas": {
+  "jeroglificos": {
+   "n": "Los jeroglíficos",
+   "poly": [
+    [
+     0.08,
+     0.3
+    ],
+    [
+     0.12,
+     0.2
+    ],
+    [
+     0.22,
+     0.1
+    ],
+    [
+     0.35,
+     0.04
+    ],
+    [
+     0.5,
+     0.01
+    ],
+    [
+     0.6,
+     0.01
+    ],
+    [
+     0.66,
+     0.14
+    ],
+    [
+     0.7,
+     0.3
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Ves algún pájaro o algún ojo?",
+   "vista": "Arriba, la parte rota: filas de jeroglíficos, signos con forma de animales, ojos y objetos."
+  },
+  "cartucho": {
+   "n": "Un cartucho",
+   "poly": [
+    [
+     0.305,
+     0.105
+    ],
+    [
+     0.39,
+     0.105
+    ],
+    [
+     0.39,
+     0.15
+    ],
+    [
+     0.305,
+     0.15
+    ]
+   ],
+   "rel": [
+    "jeroglificos"
+   ],
+   "mira": "¿Encuentras otro óvalo como este?",
+   "vista": "Entre los jeroglíficos, unos signos rodeados por un óvalo."
+  },
+  "demotico": {
+   "n": "El demótico",
+   "poly": [
+    [
+     0.07,
+     0.3
+    ],
+    [
+     0.7,
+     0.3
+    ],
+    [
+     0.79,
+     0.45
+    ],
+    [
+     0.8,
+     0.62
+    ],
+    [
+     0.06,
+     0.62
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Se parece más a letras o a dibujos?",
+   "vista": "En medio, líneas de una escritura más corrida y apretada, sin dibujos."
+  },
+  "griego": {
+   "n": "El griego",
+   "poly": [
+    [
+     0.06,
+     0.62
+    ],
+    [
+     0.81,
+     0.62
+    ],
+    [
+     0.84,
+     0.86
+    ],
+    [
+     0.06,
+     0.89
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Reconoces alguna letra?",
+   "vista": "Abajo, muchas líneas en letras griegas mayúsculas, muy juntas."
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  },
+  "obra": {
+   "pitch": 0.8,
+   "rate": 0.92,
+   "fem": false
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "British Museum · ficha del objeto",
+   "t": "La piedra de Rosetta, estela. Número EA24. Parte de una estela de granodiorita gris y rosa con un decreto sacerdotal sobre Ptolomeo V. Fecha: 196 a. C. Hallada en Fort Saint Julien; excavada por Pierre François Xavier Bouchard. Medidas: 112,3 cm de largo máximo, 75,7 cm de ancho, 28,4 cm de grosor. Inscripciones: jeroglífico (14 líneas), demótico (32 líneas), griego (54 líneas). Donación de Jorge III, rey del Reino Unido. Expuesta en la sala 4. Comentario del conservador: es un decreto de un consejo de sacerdotes, uno de varios emitidos en el primer aniversario de la coronación de Ptolomeo V, que tenía 13 años; la familia ptolemaica había perdido el control de algunas regiones, como Tebas, y aún restablecía el orden. Que los decretos los emitieran los sacerdotes es un cambio respecto a la época faraónica, cuando los emitían los reyes. A principios del siglo XIX, el texto griego sirvió para descifrar los jeroglíficos, que habían dejado de usarse. La encontraron soldados en 1799 cerca de Rosetta y pasó a los británicos con el Tratado de Alejandría (1801). Se expone en el museo desde 1802, salvo en 1917, cuando la llevaron a una estación del ferrocarril postal subterráneo en Holborn para protegerla durante la Primera Guerra Mundial."
+  },
+  {
+   "id": "B2",
+   "f": "Wikipedia en inglés, «Rosetta Stone»",
+   "t": "Acabó como material de construcción del fuerte Julien, cerca de Rashid. La encontraron a mediados de julio de 1799 soldados franceses que derribaban un muro del fuerte; el teniente Pierre-François Bouchard vio su importancia. Tras la derrota francesa, pasó a Londres por la Capitulación de Alejandría de 1801. Llegó a Portsmouth en febrero de 1802 y se expone en el museo desde junio de 1802. En sus costados lleva pintado: «Captured in Egypt by the British Army in 1801» (izquierda) y «Presented by King George III» (derecha). El propio decreto mandaba poner una copia en cada templo, en jeroglífico, demótico y griego; el texto egipcio mostraba su vínculo con la población a través de los sacerdotes. El griego, que ya se podía leer, fue el punto de partida: Thomas Young encontró en 1814 jeroglíficos fonéticos que escribían el nombre de Ptolomeo, y Jean-François Champollion presentó su desciframiento en París en 1822. La estela entera medía unos 149 cm; falta la parte de arriba de los jeroglíficos. Es el objeto más visitado del museo. En 1917, por miedo a los bombardeos, pasó dos años a unos 15 metros bajo tierra, en una estación del ferrocarril postal cerca de Holborn. Zahi Hawass pidió en 2005 un préstamo de tres meses con la meta de su vuelta definitiva, y en 2009 propuso renunciar a ella a cambio del préstamo para la apertura del Gran Museo Egipcio."
+  },
+  {
+   "id": "B3",
+   "f": "The National, 16 de julio de 2026",
+   "t": "Zahi Hawass, antiguo ministro de Antigüedades de Egipto, encabeza una campaña para que la piedra vuelva y se exponga en el Gran Museo Egipcio de Giza; una petición iniciada en 2022 reúne unas 350.000 firmas. El artículo no habla de una petición oficial del Gobierno egipcio."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "La guía",
+   "por": "la guía",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "Dime: ¿qué ves en esta piedra?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esto es la piedra de Rosetta. La grabaron en Egipto en el año 196 antes de Cristo."
+    },
+    {
+     "z": "griego",
+     "t": "Es un decreto de los sacerdotes en honor del rey Ptolomeo V, que tenía trece años. Abajo está escrito en griego."
+    },
+    {
+     "z": "demotico",
+     "t": "En medio, el mismo texto en demótico, otra escritura egipcia."
+    },
+    {
+     "z": "jeroglificos",
+     "t": "Y arriba, en jeroglíficos. Falta un trozo: entera, la piedra medía casi metro y medio."
+    },
+    {
+     "z": "cartucho",
+     "t": "Como el griego se podía leer, sirvió de llave. En 1822, Jean-François Champollion presentó en París su desciframiento de los jeroglíficos."
+    },
+    {
+     "z": null,
+     "t": "Había acabado dentro del muro de un fuerte, cerca de Rashid. Unos soldados franceses la encontraron allí en 1799, y desde 1802 está en el British Museum."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué dice?",
+     "d": "obra",
+     "z": "griego",
+     "a": "Es un decreto de un consejo de sacerdotes, por el primer aniversario de la coronación de Ptolomeo V, que tenía trece años. Su familia había perdido el control de algunas regiones, como Tebas. Busca abajo el griego: dice lo mismo."
+    },
+    {
+     "q": "¿Por qué está escrito tres veces?",
+     "d": "obra",
+     "z": "demotico",
+     "a": "El propio decreto mandaba poner una copia en cada templo, en jeroglífico, en demótico y en griego. Compara las tres partes: cambia la escritura, no lo que dicen."
+    },
+    {
+     "q": "¿Quién descifró los jeroglíficos?",
+     "d": "fuera",
+     "z": "cartucho",
+     "a": "Se empezó por el griego, que ya se leía. En 1814, Thomas Young encontró el nombre de Ptolomeo escrito con jeroglíficos, y en 1822 Jean-François Champollion presentó en París su desciframiento. Busca arriba los óvalos: rodean nombres."
+    },
+    {
+     "q": "¿Dónde la encontraron?",
+     "d": "obra",
+     "a": "Había acabado como material de construcción en el fuerte Julien, cerca de Rashid, en el delta del Nilo. En julio de 1799, unos soldados franceses que derribaban un muro la encontraron. Mira los bordes rotos: así salió del muro."
+    },
+    {
+     "q": "¿Por qué está en Londres?",
+     "d": "obra",
+     "a": "Tras la derrota francesa en Egipto pasó a los británicos, por la Capitulación de Alejandría de 1801. La donó Jorge III, y el British Museum la expone desde 1802. En un costado lleva pintado «Captured in Egypt by the British Army in 1801». Asómate a su lado izquierdo."
+    },
+    {
+     "q": "¿Egipto la reclama?",
+     "d": "fuera",
+     "a": "Zahi Hawass, que fue ministro de Antigüedades de Egipto, la ha pedido varias veces. En 2026 encabeza una campaña para exponerla en el Gran Museo Egipcio de Giza, con una petición que reúne unas 350.000 firmas. No consta una petición oficial del Gobierno egipcio."
+    },
+    {
+     "q": "¿Cuánto mide?",
+     "d": "mirar",
+     "z": "jeroglificos",
+     "a": "112,3 centímetros de alto, 75,7 de ancho y 28,4 de grosor. Entera medía unos 149: falta la parte de arriba. Mira el borde roto sobre los jeroglíficos."
+    },
+    {
+     "q": "¿Siempre ha estado aquí?",
+     "d": "fuera",
+     "a": "Desde 1802, salvo una vez. En 1917, por miedo a los bombardeos, la bajaron a una estación del ferrocarril postal, a unos 15 metros bajo tierra, cerca de Holborn. Pasó allí dos años."
+    }
+   ]
+  },
+  "obra": {
+   "nombre": "La propia piedra",
+   "desc": "en primera persona",
+   "por": "la propia piedra",
+   "corto": "la piedra",
+   "ini": "P",
+   "acc": "#bbb1a6",
+   "voz": "obra",
+   "intro": 3,
+   "placeholder": "Pregúntale a la piedra…",
+   "conversa": "Conversa con la piedra",
+   "te": "La piedra te pregunta",
+   "vts": "Dime: ¿qué ves en mí?",
+   "rol": "Eres la propia piedra de Rosetta, y hablas en primera persona. No eres Ptolomeo ni los sacerdotes. Sabes lo que te ha pasado desde que te grabaron hasta hoy, según tus fuentes.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Soy un trozo de una estela de granodiorita. Me grabaron en Egipto en el año 196 antes de Cristo."
+    },
+    {
+     "z": "griego",
+     "t": "Digo lo mismo tres veces. Abajo, en griego."
+    },
+    {
+     "z": "jeroglificos",
+     "t": "En medio, en demótico. Y arriba, en jeroglíficos. Me falta un trozo de arriba: entera medía casi metro y medio."
+    },
+    {
+     "z": "cartucho",
+     "t": "Mi griego se podía leer, y por eso sirvió de llave. Gracias a mí, en 1822 se volvieron a leer los jeroglíficos."
+    },
+    {
+     "z": null,
+     "t": "Acabé dentro del muro de un fuerte. En 1799, unos soldados franceses lo derribaban y me encontraron."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué dices?",
+     "d": "obra",
+     "z": "griego",
+     "a": "Un decreto de los sacerdotes de Egipto, por el primer aniversario de la coronación de Ptolomeo V, que tenía trece años. Lo digo tres veces. Mírame abajo: en griego."
+    },
+    {
+     "q": "¿Quién te leyó?",
+     "d": "fuera",
+     "z": "cartucho",
+     "a": "Primero se leyó mi griego. Desde ahí, Thomas Young encontró en 1814 el nombre de Ptolomeo en mis jeroglíficos, y Jean-François Champollion los descifró en 1822. Busca mis óvalos de arriba."
+    },
+    {
+     "q": "¿Dónde estabas?",
+     "d": "obra",
+     "a": "En el muro del fuerte Julien, cerca de Rashid, en el delta del Nilo: me usaron como material de construcción. En julio de 1799, unos soldados franceses lo derribaban y me encontraron."
+    },
+    {
+     "q": "¿Cómo llegaste a Londres?",
+     "d": "obra",
+     "a": "Tras la derrota francesa, por la Capitulación de Alejandría de 1801. Llegué a Portsmouth en febrero de 1802 y desde junio de ese año estoy aquí. En un costado me pintaron «Captured in Egypt by the British Army in 1801»."
+    },
+    {
+     "q": "¿Te falta algo?",
+     "d": "mirar",
+     "z": "jeroglificos",
+     "a": "Sí, un trozo de arriba. Entera medía unos 149 centímetros; ahora mido 112. Lo que falta son jeroglíficos. Mira mi borde roto."
+    },
+    {
+     "q": "¿Has salido del museo?",
+     "d": "fuera",
+     "a": "Una vez. En 1917, por miedo a los bombardeos, me bajaron a una estación del ferrocarril postal, a unos 15 metros bajo tierra, cerca de Holborn. Pasé allí dos años."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "La piedra de Rosetta (The Rosetta Stone)"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://www.britishmuseum.org/collection/object/Y_EA24\" target=\"_blank\" rel=\"noopener\">British Museum, Londres · ficha del objeto</a>"
+  ],
+  [
+   "Imagen",
+   "<a href=\"https://commons.wikimedia.org/wiki/File:Rosetta_Stone.JPG\" target=\"_blank\" rel=\"noopener\">Hans Hillewaert</a>, CC BY-SA 4.0, en Wikimedia Commons"
+  ],
+  [
+   "Textos",
+   "Adaptados de la ficha del museo, de <a href=\"https://en.wikipedia.org/wiki/Rosetta_Stone\" target=\"_blank\" rel=\"noopener\">Wikipedia</a> y de <a href=\"https://www.thenationalnews.com/arts-culture/2026/07/16/what-is-the-rosetta-stone-and-why-does-egypt-want-it-back/\" target=\"_blank\" rel=\"noopener\">The National</a>"
+  ]
+ ],
+ "nota": "La ficha de catálogo se carga en directo de Wikidata."
+}
