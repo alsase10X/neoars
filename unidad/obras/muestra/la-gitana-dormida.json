@@ -1,0 +1,367 @@
+{
+ "titulo": "La gitana dormida",
+ "autor": "Henri Rousseau",
+ "fecha": "1897",
+ "img": "../../../img/muestra/la-gitana-dormida.jpg",
+ "iw": 1400,
+ "ih": 895,
+ "fondo": "../../../img/muestra/la-gitana-dormida-fondo.jpg",
+ "encuadre": [
+  0.18,
+  0.2,
+  0.62,
+  0.7
+ ],
+ "tema": "Un instante en que el peligro se detiene: el león que no ataca.",
+ "zonas": {
+  "leon": {
+   "n": "El león",
+   "poly": [
+    [
+     0.15,
+     0.23
+    ],
+    [
+     0.19,
+     0.24
+    ],
+    [
+     0.2,
+     0.32
+    ],
+    [
+     0.32,
+     0.37
+    ],
+    [
+     0.4,
+     0.34
+    ],
+    [
+     0.52,
+     0.29
+    ],
+    [
+     0.6,
+     0.32
+    ],
+    [
+     0.67,
+     0.42
+    ],
+    [
+     0.71,
+     0.55
+    ],
+    [
+     0.62,
+     0.58
+    ],
+    [
+     0.55,
+     0.62
+    ],
+    [
+     0.36,
+     0.65
+    ],
+    [
+     0.3,
+     0.58
+    ],
+    [
+     0.31,
+     0.42
+    ],
+    [
+     0.2,
+     0.37
+    ],
+    [
+     0.15,
+     0.32
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hace con la cola?",
+   "vista": "Un león con melena, de perfil, que se inclina sobre la mujer dormida; la cola, levantada."
+  },
+  "gitana": {
+   "n": "La mujer dormida",
+   "poly": [
+    [
+     0.29,
+     0.7
+    ],
+    [
+     0.42,
+     0.62
+    ],
+    [
+     0.58,
+     0.54
+    ],
+    [
+     0.8,
+     0.55
+    ],
+    [
+     0.93,
+     0.61
+    ],
+    [
+     0.92,
+     0.72
+    ],
+    [
+     0.67,
+     0.72
+    ],
+    [
+     0.62,
+     0.84
+    ],
+    [
+     0.43,
+     0.9
+    ],
+    [
+     0.29,
+     0.83
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuántos colores tiene su túnica?",
+   "vista": "Una mujer dormida, tumbada, con una túnica de rayas de muchos colores y un bastón en la mano."
+  },
+  "mandolina": {
+   "n": "La mandolina",
+   "poly": [
+    [
+     0.67,
+     0.72
+    ],
+    [
+     0.92,
+     0.72
+    ],
+    [
+     0.92,
+     0.9
+    ],
+    [
+     0.67,
+     0.9
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuántas cuerdas ves?",
+   "vista": "A sus pies, una mandolina con la caja redonda y clara."
+  },
+  "jarra": {
+   "n": "La jarra",
+   "poly": [
+    [
+     0.92,
+     0.67
+    ],
+    [
+     1.0,
+     0.67
+    ],
+    [
+     1.0,
+     0.92
+    ],
+    [
+     0.92,
+     0.92
+    ]
+   ],
+   "rel": [],
+   "mira": "¿De qué color es la jarra?",
+   "vista": "A la derecha, una jarra alta de cuello fino."
+  },
+  "luna": {
+   "n": "La luna",
+   "poly": [
+    [
+     0.79,
+     0.02
+    ],
+    [
+     0.88,
+     0.02
+    ],
+    [
+     0.88,
+     0.13
+    ],
+    [
+     0.79,
+     0.13
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Ves alguna estrella cerca de la luna?",
+   "vista": "Arriba a la derecha, una luna llena en un cielo oscuro con pocas estrellas."
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  },
+  "rousseau": {
+   "pitch": 0.86,
+   "rate": 0.94,
+   "fem": false
+  }
+ },
+ "citas": {
+  "leon": {
+   "t": "Un león pasa por casualidad, la huele y no la devora.",
+   "breve": "Rousseau, sobre el cuadro",
+   "ref": "Henri Rousseau, citado por Wikipedia (traducción propia de la versión inglesa)",
+   "url": "https://en.wikipedia.org/wiki/The_Sleeping_Gypsy",
+   "voz": "rousseau"
+  }
+ },
+ "base": [
+  {
+   "id": "B1",
+   "f": "The Museum of Modern Art (MoMA) · ficha y procedencia",
+   "t": "Henri Rousseau (francés, 1844–1910). La gitana dormida, 1897. Óleo sobre lienzo, 129,5 × 200,7 cm. Donación de la señora Simon Guggenheim. Número 646.1939. Procedencia: el artista, tras el Salon des Indépendants de 1897; un coleccionista privado, comerciante de carbón, en París, hasta 1924; Louis Vauxcelles, 1924; Daniel-Henry Kahnweiler, 1924; John Quinn, Nueva York, 1924; subasta en el Hôtel Drouot, París, 1926; colección Ruckstuhl-Siegwart, Suiza, 1926–1939; donada al museo en diciembre de 1939."
+  },
+  {
+   "id": "B2",
+   "f": "The Museum of Modern Art (MoMA) · sobre Rousseau",
+   "t": "Rousseau fue un pintor autodidacta. En noviembre de 1908, una generación más joven de artistas y escritores le dedicó una fiesta en París."
+  },
+  {
+   "id": "B3",
+   "f": "Wikipedia en inglés, «The Sleeping Gypsy»",
+   "t": "Rousseau lo expuso por primera vez en el 13.º Salon des Indépendants, en 1897, e intentó sin éxito vendérselo al alcalde de Laval, su ciudad natal. El crítico Louis Vauxcelles lo descubrió y lo compró en 1924; ese año hubo una polémica sobre si era una falsificación. Una mujer duerme en un paisaje árido con montañas al fondo, bajo un cielo oscuro con pocas estrellas y luna llena; lleva una túnica larga de rayas de muchos colores, sostiene un bastón y tiene al lado una mandolina y una jarra alta de cuello fino. Un león con melena se acerca y la olfatea con cautela. Rousseau lo describió así: un león pasa por casualidad, la huele y no la devora."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "Guía del museo",
+   "por": "la guía del museo",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "Dime: ¿qué va a pasar ahora?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esto es La gitana dormida, de Henri Rousseau, de 1897. Rousseau era un pintor autodidacta."
+    },
+    {
+     "z": "gitana",
+     "t": "En mitad de un desierto, de noche, duerme una mujer con una túnica de rayas de muchos colores."
+    },
+    {
+     "z": "leon",
+     "t": "Un león se le acerca y la huele. Rousseau lo contó así:",
+     "c": "leon"
+    },
+    {
+     "z": "mandolina",
+     "t": "A su lado, una mandolina y una jarra de cuello fino. Y arriba, la luna llena."
+    },
+    {
+     "z": null,
+     "t": "Rousseau intentó vendérselo al alcalde de Laval, su ciudad natal, y no lo quiso. En 1924 lo descubrió un crítico, Louis Vauxcelles."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Por qué no la ataca el león?",
+     "d": "obra",
+     "z": "leon",
+     "a": "Rousseau no lo explicó más allá de su frase: el león pasa, la huele y no la devora. Mira su cola levantada y su ojo: decide tú qué está pensando."
+    },
+    {
+     "q": "¿Quién era Rousseau?",
+     "d": "fuera",
+     "a": "Henri Rousseau, francés, de 1844 a 1910: un pintor autodidacta. En 1908, artistas y escritores más jóvenes le dedicaron una fiesta en París. Busca su firma, abajo a la derecha."
+    },
+    {
+     "q": "¿Cómo llegó al MoMA?",
+     "d": "obra",
+     "a": "Después de exponerse en 1897 pasó años con un comerciante de carbón de París. En 1924 la descubrió el crítico Louis Vauxcelles y pasó por varias manos, entre ellas las del coleccionista John Quinn. En 1939 la donó al museo la señora Simon Guggenheim. Mírala y piensa en todo lo que ha viajado."
+    },
+    {
+     "q": "¿Qué hay junto a ella?",
+     "d": "mirar",
+     "z": "mandolina",
+     "a": "Una mandolina y, a la derecha, una jarra alta de cuello fino. En la mano lleva un bastón. Busca los tres."
+    },
+    {
+     "q": "¿Dónde está la luna?",
+     "d": "mirar",
+     "z": "luna",
+     "a": "Arriba a la derecha: una luna llena, en un cielo oscuro con pocas estrellas. Busca las estrellas; hay que acercarse."
+    },
+    {
+     "q": "¿Era falso?",
+     "d": "fuera",
+     "a": "Cuando apareció en 1924 hubo una polémica sobre si era una falsificación. Hoy el MoMA lo cataloga como obra de Rousseau de 1897. Mira la firma, abajo a la derecha."
+    },
+    {
+     "q": "¿Cuánto mide?",
+     "d": "mirar",
+     "a": "129,5 por 200,7 centímetros: dos metros de ancho. Mira cuánto desierto vacío deja alrededor de los dos."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "La gitana dormida (The Sleeping Gypsy)"
+  ],
+  [
+   "Autor",
+   "Henri Rousseau (1844–1910)"
+  ],
+  [
+   "Fecha",
+   "1897"
+  ],
+  [
+   "Técnica",
+   "Óleo sobre lienzo"
+  ],
+  [
+   "Medidas",
+   "129,5 × 200,7 cm"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://www.moma.org/collection/works/80172\" target=\"_blank\" rel=\"noopener\">The Museum of Modern Art, Nueva York</a>. Donación de la señora Simon Guggenheim, 1939. Número 646.1939"
+  ],
+  [
+   "Imagen",
+   "<a href=\"https://commons.wikimedia.org/wiki/File:La_Boh%C3%A9mienne_endormie.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, dominio público"
+  ],
+  [
+   "Textos",
+   "Datos de la ficha del MoMA y de <a href=\"https://en.wikipedia.org/wiki/The_Sleeping_Gypsy\" target=\"_blank\" rel=\"noopener\">Wikipedia</a>. La frase de Rousseau se traduce de la versión inglesa"
+  ]
+ ],
+ "nota": "Muestra de marca: Museo Imaginario es una marca inventada; la obra es de la colección del MoMA. La visita adapta datos del museo y de Wikipedia."
+}

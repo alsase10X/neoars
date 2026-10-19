@@ -1,0 +1,317 @@
+{
+ "titulo": "El sueño",
+ "autor": "Henri Rousseau",
+ "fecha": "1910",
+ "img": "../../../img/muestra/el-sueno.jpg",
+ "iw": 1400,
+ "ih": 953,
+ "fondo": "../../../img/muestra/el-sueno-fondo.jpg",
+ "tema": "Una selva que nunca existió, soñada en París.",
+ "zonas": {
+  "yadwigha": {
+   "n": "La mujer en el sofá",
+   "poly": [
+    [
+     0.09,
+     0.42
+    ],
+    [
+     0.2,
+     0.43
+    ],
+    [
+     0.3,
+     0.5
+    ],
+    [
+     0.42,
+     0.55
+    ],
+    [
+     0.42,
+     0.8
+    ],
+    [
+     0.25,
+     0.8
+    ],
+    [
+     0.08,
+     0.7
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde señala con la mano?",
+   "vista": "A la izquierda, una mujer tumbada en un sofá rojo oscuro, con el brazo extendido hacia la selva."
+  },
+  "musico": {
+   "n": "El músico",
+   "poly": [
+    [
+     0.56,
+     0.33
+    ],
+    [
+     0.65,
+     0.33
+    ],
+    [
+     0.66,
+     0.55
+    ],
+    [
+     0.56,
+     0.55
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Ves su instrumento?",
+   "vista": "En el centro, en la penumbra, una figura oscura que toca un instrumento de viento, con una prenda de rayas de colores."
+  },
+  "leones": {
+   "n": "El león y la leona",
+   "poly": [
+    [
+     0.5,
+     0.56
+    ],
+    [
+     0.68,
+     0.56
+    ],
+    [
+     0.68,
+     0.76
+    ],
+    [
+     0.5,
+     0.76
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Te miran?",
+   "vista": "Entre las hojas, un león y una leona con los ojos muy abiertos."
+  },
+  "elefante": {
+   "n": "El elefante",
+   "poly": [
+    [
+     0.33,
+     0.32
+    ],
+    [
+     0.42,
+     0.32
+    ],
+    [
+     0.42,
+     0.46
+    ],
+    [
+     0.33,
+     0.46
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Ves su trompa?",
+   "vista": "Detrás de las flores, casi oculta, la cabeza gris de un elefante con un ojo abierto."
+  },
+  "serpiente": {
+   "n": "La serpiente",
+   "poly": [
+    [
+     0.68,
+     0.72
+    ],
+    [
+     0.82,
+     0.72
+    ],
+    [
+     0.82,
+     0.88
+    ],
+    [
+     0.68,
+     0.88
+    ]
+   ],
+   "rel": [],
+   "mira": "¿De qué color es la serpiente?",
+   "vista": "Abajo a la derecha, una serpiente rosada que avanza entre la hierba."
+  },
+  "luna": {
+   "n": "La luna",
+   "poly": [
+    [
+     0.77,
+     0.02
+    ],
+    [
+     0.85,
+     0.02
+    ],
+    [
+     0.85,
+     0.12
+    ],
+    [
+     0.77,
+     0.12
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué ilumina la luna?",
+   "vista": "Arriba a la derecha, una luna llena entre las hojas."
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "The Museum of Modern Art (MoMA) · ficha y procedencia",
+   "t": "Henri Rousseau (francés, 1844–1910), pintor autodidacta. El sueño, 1910. Óleo sobre lienzo, 204,5 × 298,5 cm. Donación de Nelson A. Rockefeller. Número 252.1954. Procedencia: Ambroise Vollard se lo compró a Rousseau en febrero de 1910 y lo tuvo hasta 1933; Knoedler Galleries, Nueva York, 1933–1934; Sidney Janis, hasta 1953; Nelson A. Rockefeller, que lo compró en 1953 y lo donó al museo en 1954, con motivo de su 25.º aniversario."
+  },
+  {
+   "id": "B2",
+   "f": "The Museum of Modern Art (MoMA) · textos de la obra",
+   "t": "Rousseau estudió plantas tropicales en museos de historia natural y jardines botánicos, pero gran parte de la composición es invención suya, como la mujer reclinada y el músico casi imperceptible detrás de ella. La escena se inspiró en el Jardin des Plantes de París. Rousseau la describió como un sueño: la mujer dormida en el sofá sueña que la han transportado al bosque y oye el instrumento del encantador. Fue un precedente de los surrealistas, como Dalí y Magritte. Pintó más de veinticinco selvas y nunca viajó fuera de Francia; se inspiró en la literatura popular, las exposiciones coloniales y el zoológico de París."
+  },
+  {
+   "id": "B3",
+   "f": "Wikipedia en inglés, «The Dream (Rousseau)»",
+   "t": "Se expuso en el Salon des Indépendants del 18 de marzo al 1 de mayo de 1910. Rousseau escribió un poema para acompañarlo, «Inscription pour Le Rêve», que empieza «Yadwigha dans un beau rêve». Yadwigha (Jadwiga) fue una amante polaca de su juventud. El encantador de serpientes toca una flauta bajo la luz de la luna llena. Hay pájaros, monos, un elefante, un león y una leona, y una serpiente de vientre rosado. Guillaume Apollinaire escribió que el cuadro irradiaba belleza y que ese año nadie se reiría. Rousseau murió el 2 de septiembre de 1910."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "Guía del museo",
+   "por": "la guía del museo",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "Dime: ¿qué es lo primero que ves en la selva?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esto es El sueño, de Henri Rousseau. Lo pintó en 1910, el año en que murió."
+    },
+    {
+     "z": "yadwigha",
+     "t": "Una mujer duerme en un sofá en mitad de la selva. Rousseau lo explicó: sueña que la han llevado al bosque y oye la música del encantador."
+    },
+    {
+     "z": "musico",
+     "t": "Ahí lo tienes, casi escondido en la penumbra: el músico, tocando."
+    },
+    {
+     "z": "leones",
+     "t": "Entre las hojas, un león y una leona con los ojos muy abiertos. Busca también una serpiente rosada."
+    },
+    {
+     "z": null,
+     "t": "Rousseau pintó más de veinticinco selvas y nunca salió de Francia: estudiaba las plantas en el Jardin des Plantes de París."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Quién es la mujer?",
+     "d": "obra",
+     "z": "yadwigha",
+     "a": "Rousseau la llamó Yadwigha en el poema que escribió para el cuadro. Según Wikipedia, fue una amante polaca de su juventud. Mira cómo tiende la mano hacia la selva."
+    },
+    {
+     "q": "¿Qué hace un sofá en la selva?",
+     "d": "obra",
+     "z": "yadwigha",
+     "a": "Es el sueño: Rousseau explicó que la mujer duerme en el sofá y sueña que la han llevado al bosque. El museo lo ve como un precedente de los surrealistas, como Dalí y Magritte. Mira el sofá: es lo único que viene de una casa."
+    },
+    {
+     "q": "¿Estuvo Rousseau en la selva?",
+     "d": "fuera",
+     "a": "Nunca salió de Francia. Estudiaba plantas tropicales en museos y jardines botánicos, sobre todo el Jardin des Plantes de París, y se inspiraba en libros populares, exposiciones coloniales y el zoológico. Mira las hojas: cada una está pintada entera, una a una."
+    },
+    {
+     "q": "¿Qué animales hay?",
+     "d": "mirar",
+     "z": "elefante",
+     "a": "Pájaros, monos, un elefante, un león y una leona, y una serpiente rosada. Busca el elefante: cuesta encontrarlo."
+    },
+    {
+     "q": "¿Dónde está el músico?",
+     "d": "mirar",
+     "z": "musico",
+     "a": "En el centro, en la penumbra, a la luz de la luna llena. Es casi invisible: busca su instrumento."
+    },
+    {
+     "q": "¿Qué dijeron de él?",
+     "d": "fuera",
+     "a": "Se expuso en el Salon des Indépendants de 1910. El poeta Guillaume Apollinaire escribió que el cuadro irradiaba belleza y que ese año nadie se reiría. Mira el cuadro entero y decide si tenía razón."
+    },
+    {
+     "q": "¿Cuánto mide?",
+     "d": "mirar",
+     "a": "204,5 por 298,5 centímetros: casi tres metros de ancho, el más grande de esta sala. Retrocede para verlo entero."
+    },
+    {
+     "q": "¿Cómo llegó al MoMA?",
+     "d": "obra",
+     "a": "El marchante Ambroise Vollard se lo compró a Rousseau en febrero de 1910. Pasó después por Nueva York, y en 1954 Nelson A. Rockefeller lo regaló al museo por su 25.º aniversario. Busca la firma y la fecha, abajo a la derecha."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "El sueño (The Dream)"
+  ],
+  [
+   "Autor",
+   "Henri Rousseau (1844–1910)"
+  ],
+  [
+   "Fecha",
+   "1910"
+  ],
+  [
+   "Técnica",
+   "Óleo sobre lienzo"
+  ],
+  [
+   "Medidas",
+   "204,5 × 298,5 cm"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://www.moma.org/collection/works/79277\" target=\"_blank\" rel=\"noopener\">The Museum of Modern Art, Nueva York</a>. Donación de Nelson A. Rockefeller, 1954. Número 252.1954"
+  ],
+  [
+   "Imagen",
+   "<a href=\"https://commons.wikimedia.org/wiki/File:Henri_Rousseau_-_Le_R%C3%AAve_-_Google_Art_Project.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a> (Google Arts & Culture), dominio público"
+  ],
+  [
+   "Textos",
+   "Datos de la ficha y los textos del MoMA y de <a href=\"https://en.wikipedia.org/wiki/The_Dream_(Rousseau)\" target=\"_blank\" rel=\"noopener\">Wikipedia</a>"
+  ]
+ ],
+ "nota": "Muestra de marca: Museo Imaginario es una marca inventada; la obra es de la colección del MoMA. La visita adapta datos del museo y de Wikipedia."
+}

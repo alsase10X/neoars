@@ -16,10 +16,13 @@
 :root{
   color-scheme:dark;
   --bg:var(--c-fondo,#0A0A0B); --fg:var(--c-texto,#F6F5F2); --muted:var(--c-apagado,#A29E97); --hair:var(--c-filete,rgba(246,245,242,.2)); --panel:var(--c-panel,#0D0D0E); --tinta:#000;
+  --acento:var(--fg); --sobre-acento:var(--tinta); --fuente-titulos:var(--font); --peso-titulos:900; --peso-titulos-2:800;
   --font:var(--fuente,"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif);
   --col:560px; --sello:clamp(118px,34vw,164px);
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
+/* Tema claro (una marca, o la calle a pleno sol): el mismo sistema con otros valores. El fondo sigue saliendo de la obra */
+:root[data-tema=claro]{color-scheme:light;--bg:#F6F4EF;--fg:#141414;--muted:#66625B;--hair:rgba(20,20,20,.16);--panel:#FFFFFF;--tinta:#FFFFFF}
 *{box-sizing:border-box;margin:0;padding:0;border-radius:0}
 [hidden]{display:none!important}
 html,body{height:100%;overflow:hidden;background:var(--bg)}
@@ -37,8 +40,8 @@ a{color:inherit}
 #salaF{filter:blur(40px) brightness(.26) saturate(1.1)}
 .salaIn{position:relative;height:100%;overflow-y:auto;padding-block:28px}
 .eyb{font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;line-height:1;margin:12px 0 14px;text-wrap:balance;max-width:14ch}
-.salaD{font-size:1.06rem;line-height:1.45;color:rgba(246,245,242,.86);max-width:36ch}
+h1{font-size:clamp(2.1rem,9vw,3.1rem);font-family:var(--fuente-titulos);font-weight:var(--peso-titulos);letter-spacing:-.035em;line-height:1;margin:12px 0 14px;text-wrap:balance;max-width:14ch}
+.salaD{font-size:1.06rem;line-height:1.45;color:color-mix(in srgb,var(--fg) 86%,transparent);max-width:36ch}
 .salaMenu{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);right:max(6px,env(safe-area-inset-right,0px));margin:0}
 .salaFirma{margin-top:22px}
 /* En la calle: lugar, selector Lista/Mapa, distancia y el mapa propio (fondo de OpenFreeMap invertido a oscuro) */
@@ -52,27 +55,27 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;lin
 .mapa{position:absolute;left:0;right:0;bottom:0;z-index:1;background:var(--panel);border-top:1px solid var(--hair)}
 #mapaC{position:absolute;inset:0}
 #mapaC .maplibregl-canvas{filter:invert(1) hue-rotate(180deg) saturate(.3) brightness(.92) contrast(.95)}
-#mapaC .maplibregl-ctrl-attrib{background:rgba(10,10,11,.75);color:var(--muted)}
+#mapaC .maplibregl-ctrl-attrib{background:color-mix(in srgb,var(--bg) 75%,transparent);color:var(--muted)}
 #mapaC .maplibregl-ctrl-attrib a{color:var(--muted)}
 .mk{width:46px;height:46px;border-radius:50%;border:2px solid var(--fg);background:#1a1a1b center/cover no-repeat;box-shadow:0 6px 18px rgba(0,0,0,.6);padding:0}
 .mk b{position:absolute;right:-7px;top:-7px;min-width:21px;height:21px;padding:0 5px;border-radius:11px;background:var(--fg);color:var(--tinta);font-size:.75rem;font-weight:900;display:grid;place-items:center}
 .mk.sel{width:58px;height:58px;border-width:3px}
-.mk.aqui{box-shadow:0 0 0 5px rgba(246,245,242,.35),0 6px 18px rgba(0,0,0,.6)}
+.mk.aqui{box-shadow:0 0 0 5px color-mix(in srgb,var(--fg) 35%,transparent),0 6px 18px rgba(0,0,0,.6)}
 .yo{width:18px;height:18px;border-radius:50%;background:#3d8bfd;border:3px solid #fff;box-shadow:0 0 0 7px rgba(61,139,253,.25)}
 .mcard{position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto;background:var(--panel);border:1px solid var(--hair);box-shadow:0 18px 50px rgba(0,0,0,.65);padding:12px;display:grid;grid-template-columns:56px 1fr;gap:10px 12px;align-items:center}
 .mcard img{width:56px;height:56px;border-radius:50%;object-fit:cover;display:block;max-width:none}
-.mcard b{display:block;font-size:1.05rem;font-weight:800;line-height:1.2}
+.mcard b{display:block;font-size:1.05rem;font-family:var(--fuente-titulos);font-weight:var(--peso-titulos-2);line-height:1.2}
 .mcard small{display:block;font-size:.85rem;color:var(--muted);margin-top:3px;line-height:1.3}
 .mcard small.dist{color:var(--fg);font-weight:700}
 .mcard .acc{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
 .mcard .acc a,.mcard .acc button{height:44px;padding:0 14px;border:1px solid var(--hair);display:inline-flex;align-items:center;font-size:.92rem;font-weight:700;text-decoration:none}
-.mcard .acc .pri{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+.mcard .acc .pri{background:var(--acento);color:var(--sobre-acento);border-color:var(--acento)}
 .obras{list-style:none;border-top:1px solid var(--hair);margin-top:24px}
 .ob{display:grid;grid-template-columns:26px 64px 1fr 20px;gap:14px;align-items:center;width:100%;padding:14px 0;border-bottom:1px solid var(--hair);text-align:left}
 .ob img{width:64px;height:64px;object-fit:cover;display:block;max-width:none;border-radius:50%}
 .num{font-size:1.35rem;font-weight:900;font-variant-numeric:tabular-nums}
 .obt{min-width:0}
-.obt b{display:block;font-size:1.12rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.obt b{display:block;font-size:1.12rem;font-family:var(--fuente-titulos);font-weight:var(--peso-titulos-2);letter-spacing:-.01em;line-height:1.2}
 .obt small{display:block;font-size:.85rem;color:var(--muted);margin-top:4px;line-height:1.3}
 .ob .fl{font-weight:700;color:var(--muted)}
 .ob:hover .obt b{text-decoration:underline;text-underline-offset:3px}
@@ -84,8 +87,8 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;lin
 .top{flex:none;border-bottom:1px solid var(--hair);position:relative;z-index:3}
 .top .col{display:flex;align-items:center;gap:8px;min-height:70px;padding-block:10px}
 .who{flex:1;min-width:0}
-.who b{display:block;font-size:1.18rem;font-weight:900;letter-spacing:-.015em;line-height:1.15}
-.who small{display:block;font-size:.9rem;color:rgba(246,245,242,.8);margin-top:3px}
+.who b{display:block;font-size:1.18rem;font-family:var(--fuente-titulos);font-weight:var(--peso-titulos);letter-spacing:-.015em;line-height:1.15}
+.who small{display:block;font-size:.9rem;color:color-mix(in srgb,var(--fg) 80%,transparent);margin-top:3px}
 .ib{width:44px;height:44px;display:grid;place-items:center;flex:none;margin-right:-10px}
 .ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
 .ib:hover{background:var(--fg);color:var(--tinta)}
@@ -95,8 +98,8 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:-.035em;lin
 #inicio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding-block:20px;text-align:center}
 .ini-s{width:min(62vw,260px);aspect-ratio:1;max-width:100%;border-radius:50%;overflow:hidden;border:3px solid var(--fg);box-shadow:0 24px 70px rgba(0,0,0,.55)}
 .ini-s img{width:100%;height:100%;object-fit:cover;display:block;max-width:none}
-.ini-q{font-size:.95rem;color:rgba(246,245,242,.82);line-height:1.4;max-width:30ch}
-#empezar{height:56px;padding:0 26px;background:var(--fg);color:var(--tinta);font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:10px}
+.ini-q{font-size:.95rem;color:color-mix(in srgb,var(--fg) 82%,transparent);line-height:1.4;max-width:30ch}
+#empezar{height:56px;padding:0 26px;background:var(--acento);color:var(--sobre-acento);font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:10px}
 #empezar svg{width:16px;height:16px;fill:currentColor}
 #obraV.conversa #empezar svg{display:none}
 
@@ -138,10 +141,10 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 @keyframes dt{40%{opacity:1}}
 .sug{display:flex;flex-direction:column;gap:6px;animation:entra .6s cubic-bezier(.2,.8,.2,1)}
 .sug .eyb{margin-bottom:4px}
-.q{text-align:left;border:1px solid var(--hair);padding:12px 14px;font-size:1.02rem;font-weight:600;line-height:1.3;min-height:50px;background:rgba(10,10,11,.3)}
+.q{text-align:left;border:1px solid var(--hair);padding:12px 14px;font-size:1.02rem;font-weight:600;line-height:1.3;min-height:50px;background:color-mix(in srgb,var(--bg) 30%,transparent)}
 .q.ia{border-style:dashed}
 .q:hover{border-color:var(--fg)}
-.b1{min-height:56px;background:var(--fg);color:var(--tinta);font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;text-align:left;margin-top:8px}
+.b1{min-height:56px;background:var(--acento);color:var(--sobre-acento);font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;text-align:left;margin-top:8px}
 .b1 span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lk{font-size:.92rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:6px 0;text-align:left;align-self:flex-start}
 .pasar{align-self:flex-start;height:44px;padding:0 14px;border:1px solid var(--fg);font-size:.95rem;font-weight:700}
@@ -152,7 +155,7 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .imgs::-webkit-scrollbar{display:none}
 .im{flex:none;position:relative;width:clamp(124px,36vw,160px);aspect-ratio:4/5;overflow:hidden;border:1px solid var(--hair);background:var(--panel);scroll-snap-align:start;text-align:left}
 .imv{position:absolute;inset:0;background-repeat:no-repeat}
-.imt{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 9px;font-size:.85rem;font-weight:700;letter-spacing:0;line-height:1.2;background:linear-gradient(transparent,rgba(0,0,0,.75))}
+.imt{position:absolute;left:0;right:0;bottom:0;color:#fff;padding:24px 10px 9px;font-size:.85rem;font-weight:700;letter-spacing:0;line-height:1.2;background:linear-gradient(transparent,rgba(0,0,0,.75))}
 .im:hover{border-color:var(--fg)}
 
 /* Abajo: el sello, la pista y los tres mandos */
@@ -163,23 +166,25 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .sring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none}
 .sring circle{fill:none;stroke-width:2.4}
 .sring .sb{stroke:var(--hair)}
-.sring .sf{stroke:var(--fg);stroke-dasharray:301.6;stroke-dashoffset:301.6}
-.sico{position:absolute;inset:7px;border-radius:50%;display:grid;place-items:center;background:rgba(10,10,11,.5);opacity:0;transition:opacity .3s}
+.sring .sf{stroke:var(--acento);stroke-dasharray:301.6;stroke-dashoffset:301.6}
+.sico{position:absolute;inset:7px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 50%,transparent);opacity:0;transition:opacity .3s}
 .sico svg{width:34px;height:34px;fill:var(--fg)}
 #obraV.pausado .sico{opacity:1}
 /* Conversación: el anillo no mide cuánto queda; late con la voz y se queda quieto mientras escucha */
 #obraV.conversa .sring .sf{display:none}
 #obraV.conversa .sello.late .sb{animation:late .36s ease-out}
 @keyframes late{from{stroke:var(--fg);stroke-width:5.5}to{stroke:var(--hair);stroke-width:2.4}}
-.pista{font-size:.92rem;line-height:1.4;color:rgba(246,245,242,.82);text-align:center;min-height:2.8em;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;max-width:36ch;padding:0 8px}
+.pista{font-size:.92rem;line-height:1.4;color:color-mix(in srgb,var(--fg) 82%,transparent);text-align:center;min-height:2.8em;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;max-width:36ch;padding:0 8px}
 .pista .lk{padding:2px 0;align-self:auto}
 .mandos{display:flex;align-items:center;justify-content:center;gap:22px}
-.sq{width:60px;height:60px;border:1px solid var(--hair);display:grid;place-items:center;flex:none;background:rgba(10,10,11,.55)}
+.sq{width:60px;height:60px;border:1px solid var(--hair);display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--bg) 55%,transparent)}
 .sq svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2}
-.sq.grande{width:74px;height:74px;background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+.sq.grande{width:74px;height:74px;background:var(--acento);color:var(--sobre-acento);border-color:var(--acento)}
 /* Pruebas de diseño (Tu visita › Diseño): forma de los tres mandos */
 :root[data-botones=redondeados] .sq{border-radius:28%}
 :root[data-botones=redondos] .sq{border-radius:50%}
+:root[data-botones=redondeados] #empezar{border-radius:14px}
+:root[data-botones=redondos] #empezar{border-radius:999px;padding-inline:32px}
 .sq.grande svg{width:28px;height:28px}
 .sq[aria-pressed=true]:not(.grande),.sq[aria-expanded=true]{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
 .sq.rec{animation:inv 1s steps(2) infinite}
@@ -189,7 +194,7 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 /* Escribir: el campo ocupa el sitio de los mandos, grande */
 #askF{width:100%;display:flex;flex-direction:column;gap:14px;padding-block:6px 4px}
 #askI{width:100%;font-size:clamp(1.4rem,6vw,1.7rem);font-weight:600;letter-spacing:-.01em;padding:10px 0;border-bottom:1px solid var(--hair)}
-#askI::placeholder{color:rgba(246,245,242,.42)}
+#askI::placeholder{color:color-mix(in srgb,var(--fg) 42%,transparent)}
 #askI:focus{outline:none;border-bottom-color:var(--fg)}
 .esc-b{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .b2{height:50px;padding:0 20px;border:1px solid var(--fg);font-size:.98rem;font-weight:800;display:flex;align-items:center;gap:10px}
@@ -230,7 +235,7 @@ legend{font-size:.95rem;font-weight:800;margin-bottom:8px}
 .seg button{padding:12px 6px;font-size:.92rem;font-weight:700;border-left:1px solid var(--hair);line-height:1.2}
 .seg button:first-child{border-left:0}
 .seg button small{display:block;font-size:.8rem;font-weight:500;margin-top:3px;opacity:.75}
-.seg button[aria-pressed=true]{background:var(--fg);color:var(--tinta)}
+.seg button[aria-pressed=true]{background:var(--acento);color:var(--sobre-acento)}
 .opts{display:flex;flex-direction:column;border-top:1px solid var(--hair)}
 .opts button{display:flex;align-items:flex-start;gap:12px;text-align:left;padding:12px 0;border-bottom:1px solid var(--hair);font-size:.98rem;font-weight:700;line-height:1.25}
 .opts button::before{content:"";width:16px;height:16px;flex:none;margin-top:2px;border:2px solid var(--muted);border-radius:50%}
@@ -247,6 +252,16 @@ dd{min-width:0;overflow-wrap:anywhere}
 dd a{text-decoration:underline;text-underline-offset:2px}
 #toast{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 80px);z-index:60;max-width:528px;margin:0 auto;background:var(--fg);color:var(--tinta);padding:11px 14px;font-size:.88rem;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s}
 #toast.on{opacity:1}
+:root[data-tema=claro] .fondo{filter:blur(40px) saturate(.85) brightness(1.15);opacity:.34}
+:root[data-tema=claro] #salaF{filter:blur(46px) saturate(.85) brightness(1.2);opacity:.3}
+:root[data-tema=claro] #obraV.mirando .fondo{filter:blur(40px) saturate(.6);opacity:.12}
+:root[data-tema=claro] #mapaC .maplibregl-canvas{filter:none}
+:root[data-tema=claro] .sv,:root[data-tema=claro] .ini-s{box-shadow:0 14px 40px rgba(0,0,0,.18)}
+:root[data-tema=claro] .mk,:root[data-tema=claro] .mcard{box-shadow:0 8px 24px rgba(0,0,0,.18)}
+/* El logo del cliente, si lo hay: arriba del índice y en la portada */
+.marcaLogo{display:block;height:34px;margin-bottom:22px;color:var(--fg)}
+.marcaLogo svg{height:100%;width:auto;display:block;max-width:100%}
+#inicio .marcaLogo{height:28px;margin:0 auto 6px}
 @media (max-height:640px){ :root{--sello:clamp(96px,26vw,124px)} .mandos{gap:16px} .sq{width:54px;height:54px} .sq.grande{width:64px;height:64px} }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important} .sv img,.w,.cap,.fondo,#flujo,.sico{transition:none!important} }
 </style>
@@ -257,6 +272,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <button class="ib salaMenu" id="salaMenu" type="button" aria-label="Modo de la visita"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg></button>
     <div class="salaIn">
       <div class="col">
+        <span class="marcaLogo" id="salaLogo" role="img" hidden></span>
         <p class="eyb salaL" id="salaL" hidden></p>
         <h1 id="salaT"></h1>
         <p class="salaD" id="salaD"></p>
@@ -281,6 +297,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       </header>
 
       <div id="inicio" class="col">
+        <span class="marcaLogo" id="iniLogo" role="img" hidden></span>
         <div class="ini-s"><img id="iniImg" alt=""></div>
         <p class="ini-q" id="iniQ"></p>
         <button id="empezar" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg><span id="empT">Empezar</span></button>
@@ -398,11 +415,34 @@ function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'
 /* ======================= La sala ======================= */
 // Otra sala (?sala=pamplona): su tema y su lista de obras en unidad/salas/<sala>.json
 const SALA_ID = (() => { try{ const v = new URLSearchParams(location.search).get('sala'); return v && /^[a-z0-9-]+$/.test(v) ? v : null; }catch(e){ return null; } })();
+// La marca del cliente: un archivo con su logo, tema, acento, tipografía de títulos y forma de los botones.
+// La lee la sala («marca») o el enlace (?marca=<marca>, o ?marca=ninguna para verla sin marca). La mediación no cambia
+let MARCA = null;
+const MARCA_ID = (() => { try{ const v = new URLSearchParams(location.search).get('marca'); return v && /^[a-z0-9-]+$/.test(v) ? v : null; }catch(e){ return null; } })();
+async function aplicarMarca(url){
+  try{
+    const m = await fetch(url).then(r => { if(!r.ok) throw new Error('marca'); return r.json(); });
+    const R = document.documentElement, pon = (k, v) => { if(v) R.style.setProperty(k, String(v)); };
+    if(m.tema === 'claro' || m.tema === 'oscuro') R.dataset.tema = m.tema;
+    pon('--bg', m.fondo); pon('--acento', m.acento); pon('--sobre-acento', m.sobreAcento);
+    if(m.titulos && m.titulos.familia){
+      if(m.titulos.css){ const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = m.titulos.css; document.head.appendChild(l); }
+      pon('--fuente-titulos', `"${m.titulos.familia}", var(--font)`); pon('--peso-titulos', m.titulos.peso); pon('--peso-titulos-2', m.titulos.peso);
+    }
+    if(m.botones){ DIS.botones = m.botones; aplicarDiseno(); }
+    // El logo es un SVG propio: va dentro de la página para que tome el color del texto (claro u oscuro)
+    let svg = '';
+    if(m.logo){ try{ svg = await fetch(new URL(m.logo, url).href).then(r => r.ok ? r.text() : ''); }catch(e){} }
+    MARCA = {nombre:m.nombre || '', logo:/^\s*<svg[\s>]/i.test(svg) && !/<script/i.test(svg) ? svg : ''};
+  }catch(e){ MARCA = null; }
+}
+function pintarLogo(id){ const el = $(id), ok = !!(MARCA && MARCA.logo); el.hidden = !ok; if(ok){ el.innerHTML = MARCA.logo; el.setAttribute('aria-label', MARCA.nombre); } }
 async function cargarSala(){
   if(SALA) return;
   const abs = (v, desde) => v && !/^(data:|blob:|https?:)/.test(v) ? new URL(v, desde).href : v;
   let DEF = SALA_WEB, base = location.href;
   if(SALA_ID){ base = new URL(`../salas/${SALA_ID}.json`, location.href).href; DEF = await fetch(base).then(r => { if(!r.ok) throw new Error('sala'); return r.json(); }); }
+  if(MARCA_ID !== 'ninguna'){ const mu = MARCA_ID ? new URL(`../marcas/${MARCA_ID}.json`, location.href).href : DEF.marca ? new URL(DEF.marca, base).href : null; if(mu) await aplicarMarca(mu); }
   const res = await Promise.allSettled(DEF.obras.map(async ruta => {
     const url = new URL(ruta, base).href;
     const d = await fetch(url).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });
@@ -431,6 +471,7 @@ function quienHabla(o){
 }
 function pintarSala(){
   $('salaT').textContent = SALA.nombre; $('salaD').textContent = SALA.d;
+  pintarLogo('salaLogo');
   $('salaL').hidden = !SALA.lugar; $('salaL').textContent = SALA.lugar || '';
   $('salaF').style.backgroundImage = `url(${SALA.obras[0].fondo})`;
   const geo = conLugar(); $('vistaSel').hidden = !geo; $('cerca').hidden = !geo;
@@ -566,6 +607,7 @@ function abrir(id){
   if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
   U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false};
   $('oTit').textContent = OBRA.titulo; $('oSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
+  pintarLogo('iniLogo');
   $('iniImg').src = OBRA.img; $('iniImg').style.objectPosition = encuadrePos(OBRA); $('selloImg').src = OBRA.img; $('selloImg').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
   $('obraF').style.backgroundImage = `url(${OBRA.fondo})`;
   $('askI').placeholder = 'Escribe tu pregunta…';

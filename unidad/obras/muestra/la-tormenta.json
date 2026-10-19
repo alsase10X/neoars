@@ -1,0 +1,235 @@
+{
+ "titulo": "La tormenta",
+ "autor": "Edvard Munch",
+ "fecha": "1893",
+ "img": "../../../img/muestra/la-tormenta.jpg",
+ "iw": 1400,
+ "ih": 987,
+ "fondo": "../../../img/muestra/la-tormenta-fondo.jpg",
+ "tema": "Una tormenta que no está en el cielo, sino por dentro.",
+ "zonas": {
+  "mujer": {
+   "n": "La joven de blanco",
+   "poly": [
+    [
+     0.35,
+     0.49
+    ],
+    [
+     0.42,
+     0.49
+    ],
+    [
+     0.43,
+     0.86
+    ],
+    [
+     0.35,
+     0.86
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Dónde tiene las manos?",
+   "vista": "En el centro, una joven con un vestido blanco, de pie, con las manos en la cabeza."
+  },
+  "grupo": {
+   "n": "Las mujeres de la izquierda",
+   "poly": [
+    [
+     0.06,
+     0.51
+    ],
+    [
+     0.3,
+     0.51
+    ],
+    [
+     0.3,
+     0.77
+    ],
+    [
+     0.06,
+     0.77
+    ]
+   ],
+   "rel": [
+    "mujer"
+   ],
+   "mira": "¿Cuántas mujeres hay juntas?",
+   "vista": "A la izquierda, un grupo de mujeres de pie, muy juntas, con ropas oscuras y claras."
+  },
+  "casa": {
+   "n": "La casa iluminada",
+   "poly": [
+    [
+     0.42,
+     0.13
+    ],
+    [
+     0.72,
+     0.13
+    ],
+    [
+     0.72,
+     0.44
+    ],
+    [
+     0.42,
+     0.44
+    ]
+   ],
+   "rel": [],
+   "mira": "¿De qué color es la luz de las ventanas?",
+   "vista": "Al fondo, una casa con tejado oscuro y las ventanas encendidas de amarillo."
+  }
+ },
+ "voces": {
+  "guia": {
+   "pitch": 1.06,
+   "rate": 1,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "The Museum of Modern Art (MoMA) · ficha",
+   "t": "Edvard Munch (noruego, 1863–1944). La tormenta, 1893. Óleo sobre lienzo, 91,8 × 130,8 cm. Donación de los señores H. Irgens Larsen y adquisición con el legado Lillie P. Bliss (por intercambio) y los fondos Abby Aldrich Rockefeller. Número 1351.1974."
+  },
+  {
+   "id": "B2",
+   "f": "The Museum of Modern Art (MoMA) · texto de la obra",
+   "t": "La escena se sitúa en Åsgårdstrand, un pequeño pueblo de veraneo en la costa noruega donde Munch pasaba a menudo el verano. La pintó el mismo año en que concibió el motivo de El grito; aquí es más naturalista y los personajes son mujeres, pero ambas obras reflejan su interés por el individuo solitario apartado de la comunidad. Aunque ese verano hubo una tormenta violenta en Åsgårdstrand, el cuadro no parece representarla: la tormenta es interior. Una joven se lleva las manos a la cabeza, junto a otras mujeres con el mismo gesto, sin que se sepa por qué. El círculo que forman, el vestido blanco y la luz azulada de la noche evocan un ritual antiguo. Al fondo, una casa con las ventanas iluminadas sugiere una vida corriente de la que están excluidas, o que les resulta insoportable."
+  },
+  {
+   "id": "B3",
+   "f": "The Museum of Modern Art (MoMA) · sobre Munch",
+   "t": "El arte de Munch convierte recuerdos y emociones en un mundo de sueño, mito y enigma. Su contacto con la poesía simbolista francesa en París lo convenció de la necesidad de un arte más subjetivo. El museo lo considera precursor del expresionismo."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "guia": {
+   "nombre": "Guía del museo",
+   "por": "la guía del museo",
+   "corto": "la guía",
+   "ini": "G",
+   "acc": "#f6f5f2",
+   "voz": "guia",
+   "placeholder": "Pregunta a la guía…",
+   "conversa": "Conversa con la guía",
+   "te": "La guía te pregunta",
+   "vts": "Dime: ¿qué está pasando aquí?",
+   "rol": "Eres una guía de museo. Hablas en tercera persona y distingues lo que se sabe de lo que se discute.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esto es La tormenta, de Edvard Munch. La pintó en 1893, el mismo año en que dio con el motivo de El grito."
+    },
+    {
+     "z": "casa",
+     "t": "Estamos en Åsgårdstrand, un pueblo de la costa noruega donde Munch pasaba los veranos. Es de noche, y la casa tiene las ventanas encendidas."
+    },
+    {
+     "z": "mujer",
+     "t": "Delante, una joven vestida de blanco se lleva las manos a la cabeza."
+    },
+    {
+     "z": "grupo",
+     "t": "A la izquierda, otras mujeres hacen el mismo gesto. No se sabe por qué."
+    },
+    {
+     "z": null,
+     "t": "Ese verano hubo una tormenta de verdad, pero el museo cree que el cuadro no la pinta: la tormenta es por dentro."
+    },
+    {
+     "z": "casa",
+     "t": "Mira otra vez la casa: dentro, luz y vida corriente. Ellas se han quedado fuera."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué tiene que ver con El grito?",
+     "d": "fuera",
+     "z": "mujer",
+     "a": "Los dos son de 1893. Aquí la pintura es más naturalista y quienes aparecen son mujeres, pero el museo ve en ambas lo mismo: alguien solo, apartado de los demás. Mira a la joven de blanco, sola en el centro."
+    },
+    {
+     "q": "¿Dónde está pintado?",
+     "d": "obra",
+     "z": "casa",
+     "a": "En Åsgårdstrand, un pequeño pueblo de veraneo de la costa de Noruega, donde Munch pasaba a menudo el verano. Mira las casas del fondo y sus tejados oscuros."
+    },
+    {
+     "q": "¿Por qué se lleva las manos a la cabeza?",
+     "d": "obra",
+     "z": "mujer",
+     "a": "No se sabe. El museo lo lee como una angustia interior, más que como miedo a la tormenta. Fíjate: las mujeres de la izquierda hacen el mismo gesto."
+    },
+    {
+     "q": "¿Hubo una tormenta de verdad?",
+     "d": "fuera",
+     "a": "Sí, ese verano hubo una muy violenta en Åsgårdstrand. Pero el museo cree que el cuadro no la representa. Busca la tormenta en el cielo: casi no está."
+    },
+    {
+     "q": "¿Qué hacen las mujeres de la izquierda?",
+     "d": "mirar",
+     "z": "grupo",
+     "a": "Están de pie, muy juntas, y hacen el mismo gesto que la joven. Para el museo, el círculo que forman, el vestido blanco y la luz azulada recuerdan un ritual antiguo. Cuenta cuántas son."
+    },
+    {
+     "q": "¿Qué tiene que ver con el expresionismo?",
+     "d": "fuera",
+     "z": "casa",
+     "a": "El museo considera a Munch un precursor del expresionismo: convierte recuerdos y emociones en un mundo de sueño, mito y enigma. Mira el amarillo de las ventanas contra el azul de la noche."
+    },
+    {
+     "q": "¿Cuánto mide?",
+     "d": "mirar",
+     "a": "91,8 por 130,8 centímetros: algo más de un metro de ancho. Mira lo pequeña que es la joven en medio de todo."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Título",
+   "La tormenta (The Storm)"
+  ],
+  [
+   "Autor",
+   "Edvard Munch (1863–1944)"
+  ],
+  [
+   "Fecha",
+   "1893"
+  ],
+  [
+   "Técnica",
+   "Óleo sobre lienzo"
+  ],
+  [
+   "Medidas",
+   "91,8 × 130,8 cm"
+  ],
+  [
+   "Museo",
+   "<a href=\"https://www.moma.org/collection/works/80644\" target=\"_blank\" rel=\"noopener\">The Museum of Modern Art, Nueva York</a>. Número 1351.1974"
+  ],
+  [
+   "Imagen",
+   "<a href=\"https://commons.wikimedia.org/wiki/File:Edvard_Munch_-_The_storm_(1893).jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, dominio público"
+  ],
+  [
+   "Textos",
+   "Adaptados y traducidos de la ficha y los textos del MoMA"
+  ]
+ ],
+ "nota": "Muestra de marca: Museo Imaginario es una marca inventada; la obra es de la colección del MoMA. La visita adapta los datos y textos del museo."
+}

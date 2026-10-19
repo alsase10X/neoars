@@ -1,0 +1,11 @@
+{
+ "nombre": "Noches que no pasaron",
+ "d": "Un museo imaginario reúne obras que están en otro sitio. Estas cuatro son de la colección del MoMA de Nueva York, y ninguna pinta una noche tal como fue.",
+ "marca": "../marcas/museo-imaginario.json",
+ "obras": [
+  "../obras/noche-estrellada.json",
+  "../obras/muestra/la-tormenta.json",
+  "../obras/muestra/la-gitana-dormida.json",
+  "../obras/muestra/el-sueno.json"
+ ]
+}
