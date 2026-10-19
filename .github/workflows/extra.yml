@@ -21,6 +21,7 @@ jobs:
           grep -v '^#' scripts/extra.txt | while read -r nombre url; do
             [ -z "$nombre" ] && continue
             [ -f "img/extra/$nombre" ] && continue
+            mkdir -p "$(dirname "img/extra/$nombre")"
             curl -fsSL -A "neoars-explorador/1.0 (https://github.com/alsase10X/neoars)" -o "img/extra/$nombre" "$url" && echo "ok $nombre" || echo "FALLO $nombre"
           done
           ls -la img/extra
