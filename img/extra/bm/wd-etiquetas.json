@@ -1,0 +1,578 @@
+{
+  "head" : {
+    "vars" : [ "obj", "p", "v", "es", "en" ]
+  },
+  "results" : {
+    "bindings" : [ {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q287"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "wood"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "madera"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q524447"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q677"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "iron"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "hierro"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q897"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "gold"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "oro"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1090"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "silver"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "plata"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1096"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "tin"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "estaño"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6373"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "British Museum"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo Británico"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q48584"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P195"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6373"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "British Museum"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo Británico"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q48584"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P276"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6373"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "British Museum"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo Británico"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q217796"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P195"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6373"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "British Museum"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo Británico"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q217796"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P276"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6373"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "British Museum"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo Británico"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q524447"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P195"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6373"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "British Museum"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo Británico"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q524447"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P276"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6373"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "British Museum"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo Británico"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P195"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6373"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "British Museum"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo Británico"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P276"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q34095"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "bronze"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "bronce"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q82001"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "ivory"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "marfil"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q217796"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q105368"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "garnet group"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "granate"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q215690"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "granodiorite"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "granodiorita"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q48584"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P186"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q503256"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Sutton Hoo"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Sutton Hoo"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P189"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6453423"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Isle of Lewis"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Isla de Lewis"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q217796"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P189"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6453423"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Isle of Lewis"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Isla de Lewis"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q217796"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P276"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q135273437"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mound 1"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1603141"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P189"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1633842"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "National Museum of Scotland"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo de Escocia"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q217796"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P195"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1633842"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "National Museum of Scotland"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Museo de Escocia"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q217796"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P276"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1796355"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Royal Cemetery at Ur"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Cementerio Real de Ur"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q524447"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P189"
+      }
+    }, {
+      "v" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3077898"
+      },
+      "en" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Fort Julien"
+      },
+      "es" : {
+        "xml:lang" : "es",
+        "type" : "literal",
+        "value" : "Fuerte Julien"
+      },
+      "obj" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q48584"
+      },
+      "p" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/prop/direct/P189"
+      }
+    } ]
+  }
+}
