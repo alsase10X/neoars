@@ -35,3 +35,26 @@ bm/wd-busca-rosetta.json  https://www.wikidata.org/w/api.php?action=wbsearchenti
 bm/wd-busca-ur.json  https://www.wikidata.org/w/api.php?action=wbsearchentities&search=Standard+of+Ur&language=en&limit=5&format=json
 bm/wd-busca-sutton.json  https://www.wikidata.org/w/api.php?action=wbsearchentities&search=Sutton+Hoo+helmet&language=en&limit=5&format=json
 bm/wd-busca-lewis.json  https://www.wikidata.org/w/api.php?action=wbsearchentities&search=Lewis+chessmen&language=en&limit=5&format=json
+
+# British Museum (concepto): miniaturas para elegir imagen
+bm/min-rosetta-06.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/London_-_British_Museum_-_Rosetta_Stone.jpg/330px-London_-_British_Museum_-_Rosetta_Stone.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-rosetta-03.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Rosetta_Stone%2C_British_Museum.jpg/330px-Rosetta_Stone%2C_British_Museum.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-rosetta-01.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Rosetta_Stone.JPG/330px-Rosetta_Stone.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-rosetta-14.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Rosetta_Stone_at_the_British_Museum.jpg/330px-Rosetta_Stone_at_the_British_Museum.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-ur-02.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Denis_Bourez_-_British_Museum%2C_London_%288747049029%29_%282%29.jpg/330px-Denis_Bourez_-_British_Museum%2C_London_%288747049029%29_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-ur-10.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8e/Standard_of_Ur_-_Peace.jpg/330px-Standard_of_Ur_-_Peace.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-ur-03.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b4/Standard_of_Ur_-_Peace_Panel_-_Sumer.jpg/330px-Standard_of_Ur_-_Peace_Panel_-_Sumer.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-ur-01.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Standard_of_Ur_-_War.jpg/330px-Standard_of_Ur_-_War.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-ur-12.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Standard_of_Ur_-_War_side.jpg/330px-Standard_of_Ur_-_War_side.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-ur-11.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Standard_of_Ur_front_view.jpg/330px-Standard_of_Ur_front_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-sutton-17.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/1966_Ordnance_Survey_-_Sutton_Hoo_helmet.jpg/330px-1966_Ordnance_Survey_-_Sutton_Hoo_helmet.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-sutton-04.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Sutton_Hoo_helmet_2016.png/330px-Sutton_Hoo_helmet_2016.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-sutton-10.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/Sutton_Hoo_mask_-_geograph.org.uk_-_178637.jpg/330px-Sutton_Hoo_mask_-_geograph.org.uk_-_178637.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-sutton-20.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/The_Sutton_Hoo_helmet_-_geograph.org.uk_-_7024675.jpg/330px-The_Sutton_Hoo_helmet_-_geograph.org.uk_-_7024675.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-lewis-12.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1e/Lewis_Chessmen%2C_British_Museum.jpg/330px-Lewis_Chessmen%2C_British_Museum.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-lewis-19.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Lewis_chessmen.jpg/330px-Lewis_chessmen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-lewis-03.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Lewis_chessmen_%28crop%29.jpg/330px-Lewis_chessmen_%28crop%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-lewis-16.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/The_Lewis_Chessmen.jpg/330px-The_Lewis_Chessmen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-lewis-09.jpg  https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1b/UigChessmen_SelectionOfKings.jpg/330px-UigChessmen_SelectionOfKings.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+bm/min-rosetta-wd.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Rosetta_Stone_-_front_face_-_corrected_image.jpg?width=330
+bm/info-rosetta-wd.json  https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&iiprop=size%7Cextmetadata&format=json&titles=File%3ARosetta+Stone+-+front+face+-+corrected+image.jpg
