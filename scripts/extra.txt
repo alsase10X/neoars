@@ -17,3 +17,10 @@ pamplona-imagenes.json  https://commons.wikimedia.org/w/api.php?action=query&pro
 pamplona-osm.json  https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3B%28nwr%5B%22tourism%22%3D%22artwork%22%5D%2842.808%2C-1.655%2C42.826%2C-1.632%29%3Bnwr%5B%22historic%22~%22monument%7Cmemorial%22%5D%2842.808%2C-1.655%2C42.826%2C-1.632%29%3Bnwr%5B%22amenity%22%3D%22fountain%22%5D%2842.808%2C-1.655%2C42.826%2C-1.632%29%3B%29%3Bout%20center%20tags%3B
 pamplona-osm-navarreria.json  https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3B%28nwr%5B%22amenity%22~%22fountain%7Cdrinking_water%22%5D%2842.8180%2C-1.6460%2C42.8210%2C-1.6410%29%3Bnwr%5B%22historic%22%5D%2842.8180%2C-1.6460%2C42.8210%2C-1.6410%29%3Bnwr%5B%22tourism%22%3D%22artwork%22%5D%2842.8180%2C-1.6460%2C42.8210%2C-1.6410%29%3Bnwr%5B%22name%22~%22Navarrer%22%5D%2842.8170%2C-1.6470%2C42.8215%2C-1.6400%29%3B%29%3Bout%20center%20tags%3B
 pamplona-nominatim-santa-cecilia.json  https://nominatim.openstreetmap.org/search?q=Fuente%20de%20Santa%20Cecilia%2C%20Pamplona&format=jsonv2&extratags=1&limit=5
+
+# Muestra de marca: obras de dominio público de la colección del MoMA (imágenes de Wikimedia Commons)
+muestra-gitana.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/La_Boh%C3%A9mienne_endormie.jpg?width=1600
+muestra-gitana-2.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Henri_Rousseau_010.jpg?width=1600
+muestra-tormenta.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Edvard_Munch_-_The_storm_%281893%29.jpg?width=1600
+muestra-sueno.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Henri_Rousseau_-_Le_R%C3%AAve_-_Google_Art_Project.jpg?width=1600
+muestra-imagenes.json  https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&iiprop=extmetadata%7Csize&format=json&titles=File%3ALa_Boh%C3%A9mienne_endormie.jpg%7CFile%3AHenri_Rousseau_010.jpg%7CFile%3AEdvard_Munch_-_The_storm_%281893%29.jpg%7CFile%3AHenri_Rousseau_-_Le_R%C3%AAve_-_Google_Art_Project.jpg
