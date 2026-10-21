@@ -1,0 +1,795 @@
+{
+ "titulos": {
+  "aic-28862": "Campesina cavando delante de su casa",
+  "cma-135286": "Paisaje con carretilla",
+  "aic-31640": "Árboles desmochados",
+  "aic-202382": "Avenida de abedules desmochados y álamos",
+  "aic-150802": "Arrancando zanahorias",
+  "aic-109314": "Pesca en primavera, el puente de Clichy",
+  "aic-27954": "Terraza y mirador del Moulin de Blute-Fin",
+  "aic-64957": "Uvas, limones, peras y manzanas",
+  "aic-27949": "Madame Roulin mece la cuna (La berceuse)",
+  "aic-52733": "Árbol llorón",
+  "aic-87327": "Cipreses",
+  "cma-125249": "Los grandes plátanos",
+  "cma-135310": "Dos álamos en los Alpilles",
+  "aic-79349": "Los bebedores",
+  "aic-65479": "Casas con una mujer trabajando",
+  "aic-88393": "El doctor Gachet",
+  "cma-135299": "Adeline Ravoux",
+  "cma-126085": "El doctor Gachet"
+ },
+ "alias": {
+  "aic-28560": "dormitorio",
+  "aic-80607": "autorretrato"
+ },
+ "propias": {
+  "noche": {
+   "titulo": "La noche estrellada",
+   "fecha": "1889",
+   "tecnica": "Óleo sobre lienzo",
+   "museo": "Museum of Modern Art, Nueva York",
+   "año": 1889,
+   "tema": "la noche tiene más color que el día",
+   "visitaQA": [
+    "N1",
+    "N2",
+    "N3"
+   ],
+   "mira": "¿Qué estrella brilla más para ti?",
+   "encuadre": [
+    0.15,
+    0.02,
+    0.62,
+    0.78
+   ],
+   "zonas": {
+    "cielo": {
+     "n": "El cielo",
+     "b": [
+      0.26,
+      0.1,
+      0.54,
+      0.34
+     ],
+     "mira": "¿Hacia dónde empuja el remolino grande?"
+    },
+    "cipres": {
+     "n": "El ciprés",
+     "b": [
+      0.12,
+      0.06,
+      0.26,
+      0.94
+     ],
+     "mira": "Sigue el contorno del ciprés con la vista: ¿dónde termina?"
+    },
+    "estrella": {
+     "n": "La estrella de la mañana",
+     "b": [
+      0.29,
+      0.44,
+      0.13,
+      0.16
+     ],
+     "mira": "¿Qué estrella brilla más para ti?"
+    },
+    "luna": {
+     "n": "La luna",
+     "b": [
+      0.795,
+      0.055,
+      0.18,
+      0.23
+     ],
+     "mira": "¿Te parece una luz que calma o que inquieta?"
+    },
+    "pueblo": {
+     "n": "El pueblo",
+     "b": [
+      0.38,
+      0.72,
+      0.62,
+      0.26
+     ],
+     "mira": "Mira el pueblo: ¿qué ves encendido?"
+    }
+   },
+   "img": "unidad/iiif/noche-estrellada/full/1200,/0/default.jpg",
+   "th": "unidad/iiif/noche-estrellada/full/1200,/0/default.jpg",
+   "iw": 1200,
+   "ih": 950
+  },
+  "dormitorio": {
+   "titulo": "El dormitorio",
+   "fecha": "1889",
+   "tecnica": "Óleo sobre lienzo",
+   "museo": "Art Institute of Chicago",
+   "año": 1889,
+   "tema": "un cuadro para que descanse la cabeza",
+   "visitaQA": [
+    "D1",
+    "D2",
+    "D4"
+   ],
+   "mira": "¿Cuántas cosas encuentras de dos en dos?",
+   "encuadre": [
+    0.3,
+    0.05,
+    0.62,
+    0.79
+   ],
+   "zonas": {
+    "pared": {
+     "n": "Las paredes",
+     "b": [
+      0.36,
+      0.02,
+      0.36,
+      0.3
+     ],
+     "mira": "¿De qué color ves las paredes?"
+    },
+    "cama": {
+     "n": "La cama",
+     "b": [
+      0.48,
+      0.25,
+      0.45,
+      0.61
+     ],
+     "mira": "¿De qué color es la manta?"
+    },
+    "cuadros": {
+     "n": "Los cuadros de la pared",
+     "b": [
+      0.42,
+      0,
+      0.45,
+      0.25
+     ],
+     "mira": "¿Qué cuadros cuelgan en la pared?"
+    },
+    "silla": {
+     "n": "Las sillas",
+     "b": [
+      0,
+      0.39,
+      0.17,
+      0.46
+     ],
+     "mira": "¿Cuántas sillas hay en el cuarto?"
+    },
+    "ventana": {
+     "n": "La ventana",
+     "b": [
+      0.24,
+      0,
+      0.15,
+      0.28
+     ],
+     "mira": "¿Está abierta o cerrada?"
+    }
+   },
+   "imgKey": "aic-28560",
+   "img": "img/aic-28560-1600.jpg",
+   "th": "img/aic-28560-400.jpg",
+   "iw": 1600,
+   "ih": 1253
+  },
+  "autorretrato": {
+   "titulo": "Autorretrato",
+   "fecha": "1887",
+   "tecnica": "Óleo sobre cartón",
+   "museo": "Art Institute of Chicago",
+   "año": 1887,
+   "tema": "probar en mi propia cara los colores nuevos",
+   "visitaQA": [
+    "A1",
+    "A2",
+    "A3"
+   ],
+   "mira": "¿De qué color son sus ojos?",
+   "encuadre": [
+    0.2,
+    0.1,
+    0.6,
+    0.47
+   ],
+   "zonas": {
+    "ojos": {
+     "n": "Los ojos",
+     "b": [
+      0.26,
+      0.3,
+      0.36,
+      0.14
+     ],
+     "mira": "¿De qué color son sus ojos?"
+    },
+    "cara": {
+     "n": "La cara",
+     "b": [
+      0.25,
+      0.1,
+      0.52,
+      0.6
+     ],
+     "mira": "¿Dónde se acumula más color en la cara?"
+    },
+    "fondo": {
+     "n": "El fondo",
+     "b": [
+      0,
+      0.04,
+      0.28,
+      0.56
+     ],
+     "mira": "¿Cuántos colores distintos encuentras en el fondo?"
+    }
+   },
+   "imgKey": "aic-80607",
+   "img": "img/aic-80607-1600.jpg",
+   "th": "img/aic-80607-400.jpg",
+   "iw": 1600,
+   "ih": 2039
+  }
+ },
+ "empezar": [
+  {
+   "k": "noche",
+   "gancho": "Lo que veía desde mi ventana antes del amanecer."
+  },
+  {
+   "k": "dormitorio",
+   "gancho": "Mi cuarto en Arlés, pintado para descansar la cabeza."
+  },
+  {
+   "k": "autorretrato",
+   "gancho": "Así me veía en París, con los colores nuevos."
+  },
+  {
+   "k": "aic-27949",
+   "gancho": "Madame Roulin, meciendo una cuna que no ves."
+  },
+  {
+   "k": "cma-125249",
+   "gancho": "Obreros arreglando la calle bajo unos árboles enormes."
+  },
+  {
+   "k": "aic-79349",
+   "gancho": "Copié a Daumier y le puse mi color."
+  },
+  {
+   "k": "cma-135310",
+   "gancho": "Dos álamos que se tuercen contra el cielo de otoño."
+  },
+  {
+   "k": "aic-64957",
+   "gancho": "Fruta para probar colores que se encienden entre sí."
+  }
+ ],
+ "catalogo": [
+  {
+   "k": "aic-28862",
+   "titulo": "Campesina cavando delante de su casa",
+   "fecha": "h. 1885",
+   "año": 1885,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-28862-1600.jpg",
+   "th": "img/aic-28862-400.jpg",
+   "iw": 1600,
+   "ih": 1199,
+   "visita": [
+    {
+     "t": "En La Haya lo pasé mal: solo y sin dinero. A finales de 1883 volví a casa de mis padres, en Nuenen, y me puse a pintar. Nada más que a pintar."
+    },
+    {
+     "t": "Allí volví a los marrones, los verdes y los grises. Y paseando por el pueblo fui pintando sus casas, una detrás de otra."
+    },
+    {
+     "t": "A Theo le conté lo que sentía por ellas:",
+     "c": "nidos"
+    },
+    {
+     "t": "A ella, a la casa y a la tierra les di los mismos colores y la misma pincelada. Ella es de este sitio, y el sitio es de ella."
+    }
+   ],
+   "mira": "Sigue la pincelada desde su espalda hasta el tejado. ¿Dónde acaba ella y empieza la tierra?",
+   "citas": {
+    "nidos": {
+     "t": "Me conmueven las nidadas y los nidos, sobre todo esos nidos humanos: las casitas del brezal y quienes viven en ellas.",
+     "voz": "autor",
+     "ref": "Carta a Theo, citada por el Art Institute of Chicago. Traducción propia del inglés",
+     "url": "https://www.artic.edu/artworks/28862"
+    }
+   },
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "cma-135286",
+   "titulo": "Paisaje con carretilla",
+   "fecha": "1883",
+   "año": 1883,
+   "museo": "Cleveland Museum of Art",
+   "tipo": "Dibujo",
+   "img": "img/cma-135286-1600.jpg",
+   "th": "img/cma-135286-400.jpg",
+   "iw": 1600,
+   "ih": 1129,
+   "visita": [
+    {
+     "t": "Septiembre de 1883. Dejé La Haya, con tanto ajetreo, y me fui a Drenthe, en el noreste de los Países Bajos, a buscar campo abierto."
+    },
+    {
+     "t": "Lo que encontré lo dije así:",
+     "c": "calma"
+    },
+    {
+     "t": "Con pocos colores, verdes acerados y azules fríos, pinté el brezal bajo el lila de la tarde:",
+     "c": "llanura"
+    },
+    {
+     "t": "Llevaba poco más de un año trabajando como artista."
+    }
+   ],
+   "mira": "Busca la carretilla en medio de tanta llanura.",
+   "citas": {
+    "calma": {
+     "t": "¡Qué tranquilidad, qué amplitud, qué calma en esta naturaleza!",
+     "voz": "autor",
+     "ref": "Van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés",
+     "url": "https://clevelandart.org/art/1958.30"
+    },
+    "llanura": {
+     "t": "una llanura inmensa que se pierde en el infinito",
+     "voz": "autor",
+     "ref": "Van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés",
+     "url": "https://clevelandart.org/art/1958.30"
+    }
+   },
+   "fuente": "Cleveland Museum of Art"
+  },
+  {
+   "k": "aic-31640",
+   "titulo": "Árboles desmochados",
+   "fecha": "1884",
+   "año": 1884,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Dibujo y acuarela",
+   "img": "img/aic-31640-1600.jpg",
+   "th": "img/aic-31640-400.jpg",
+   "iw": 1600,
+   "ih": 1262
+  },
+  {
+   "k": "aic-202382",
+   "titulo": "Avenida de abedules desmochados y álamos",
+   "fecha": "Marzo de 1884",
+   "año": 1884,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Dibujo y acuarela",
+   "img": "img/aic-202382-1600.jpg",
+   "th": "img/aic-202382-400.jpg",
+   "iw": 1600,
+   "ih": 1161,
+   "visita": [
+    {
+     "t": "Marzo de 1884. Una avenida de abedules desmochados y álamos, dibujada con pluma de caña y tinta, línea a línea."
+    },
+    {
+     "t": "Hay un poema de François Coppée, el poeta de los humildes, que se llama «Tristement». En él, una viuda de luto camina por",
+     "c": "coppee"
+    }
+   ],
+   "mira": "Recorre mi avenida con la vista hasta el fondo, como la viuda del poema.",
+   "citas": {
+    "coppee": {
+     "t": "una avenida muy larga de plátanos gigantes, medio desnudos",
+     "voz": "autor",
+     "ref": "François Coppée, «Tristement», citado por el Art Institute of Chicago. Traducción propia del inglés",
+     "url": "https://www.artic.edu/artworks/202382"
+    }
+   },
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-150802",
+   "titulo": "Arrancando zanahorias",
+   "fecha": "1885",
+   "año": 1885,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Dibujo y acuarela",
+   "img": "img/aic-150802-1600.jpg",
+   "th": "img/aic-150802-400.jpg",
+   "iw": 1600,
+   "ih": 2008
+  },
+  {
+   "k": "aic-109314",
+   "titulo": "Pesca en primavera, el puente de Clichy",
+   "fecha": "1887",
+   "año": 1887,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-109314-1600.jpg",
+   "th": "img/aic-109314-400.jpg",
+   "iw": 1600,
+   "ih": 1334,
+   "visita": [
+    {
+     "t": "Esto es el Sena, junto al puente de Clichy, en Asnières, al norte de París. Allí salí a pintar varias veces con mi amigo Paul Signac."
+    },
+    {
+     "t": "Signac y Seurat ponían el color en toques sueltos, con teorías científicas, para sacarle toda la luz. Aquí lo probé yo: pinceladas pequeñas de color puro."
+    }
+   ],
+   "mira": "Busca al pescador en su barca y mira el agua a su alrededor: esos toques de color son la luz rebotando.",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-27954",
+   "titulo": "Terraza y mirador del Moulin de Blute-Fin",
+   "fecha": "Principios de 1887",
+   "año": 1887,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-27954-1600.jpg",
+   "th": "img/aic-27954-400.jpg",
+   "iw": 1600,
+   "ih": 2110,
+   "visita": [
+    {
+     "t": "Invierno de 1887. Llevaba un año en París, viviendo con Theo en la calle Lepic. Desde casa, una cuesta corta y estás en lo alto de Montmartre."
+    },
+    {
+     "t": "Montmartre aún tenía algo de pueblo: canteras abandonadas, huertos y tres molinos en pie. Este, el de Blute-Fin, ya no molía."
+    },
+    {
+     "t": "Al lado habían puesto una torre, y la gente subía a ver París entero desde arriba."
+    }
+   ],
+   "mira": "Busca el mirador junto al molino.",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-64957",
+   "titulo": "Uvas, limones, peras y manzanas",
+   "fecha": "1887",
+   "año": 1887,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-64957-1600.jpg",
+   "th": "img/aic-64957-400.jpg",
+   "iw": 1600,
+   "ih": 1325,
+   "visita": [
+    {
+     "t": "Otoño de 1887: fruta de temporada y una tanda de cuadros con ella. Aquí simplifiqué la paleta, puse colores más vivos y cargué más el pincel."
+    },
+    {
+     "t": "Lo que ensayaba eran parejas: amarillo y violeta, azul y naranja, rojo y verde. Cada color empuja al otro y los dos ganan fuerza."
+    }
+   ],
+   "mira": "Mira el mantel: las pinceladas laten alrededor de la fruta, como un campo de fuerza. ¿Hacia dónde te llevan?",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-27949",
+   "titulo": "Madame Roulin mece la cuna (La berceuse)",
+   "fecha": "1889",
+   "año": 1889,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-27949-1600.jpg",
+   "th": "img/aic-27949-400.jpg",
+   "iw": 1600,
+   "ih": 2021,
+   "visita": [
+    {
+     "t": "Es Augustine Roulin. Ella, su marido Joseph y sus hijos eran para mí lo que tiene que ser una familia: cariño y vida en casa."
+    },
+    {
+     "t": "Mece la cuna tirando de una cuerda. Por eso la llamo La berceuse, la que canta la nana. Y sus colores son eso mismo:",
+     "c": "nana"
+    },
+    {
+     "t": "La terminé en enero de 1889, al poco de salir del hospital, después de que Gauguin se marchara. Fue una marcha difícil. A ella la senté en su silla: quería llenar ese hueco."
+    },
+    {
+     "t": "Hice cinco versiones. En mayo le regalé esta a Gauguin, para hacer las paces, y le pedí que la colgara entre dos cuadros de girasoles."
+    }
+   ],
+   "mira": "Busca la cuerda en sus manos. Desde ahí se mece todo.",
+   "citas": {
+    "nana": {
+     "t": "una nana en colores",
+     "voz": "autor",
+     "ref": "Van Gogh sobre los colores de este cuadro, citado por el Art Institute of Chicago. Traducción propia del inglés",
+     "url": "https://www.artic.edu/artworks/27949"
+    }
+   },
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-52733",
+   "titulo": "Árbol llorón",
+   "fecha": "1889",
+   "año": 1889,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Dibujo y acuarela",
+   "img": "img/aic-52733-1600.jpg",
+   "th": "img/aic-52733-400.jpg",
+   "iw": 1600,
+   "ih": 1279
+  },
+  {
+   "k": "aic-87327",
+   "titulo": "Cipreses",
+   "fecha": "1889",
+   "año": 1889,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Dibujo y acuarela",
+   "img": "img/aic-87327-1600.jpg",
+   "th": "img/aic-87327-400.jpg",
+   "iw": 1600,
+   "ih": 2117
+  },
+  {
+   "k": "cma-125249",
+   "titulo": "Los grandes plátanos",
+   "fecha": "1889",
+   "año": 1889,
+   "museo": "Cleveland Museum of Art",
+   "tipo": "Pintura",
+   "img": "img/cma-125249-1600.jpg",
+   "th": "img/cma-125249-400.jpg",
+   "iw": 1600,
+   "ih": 1277,
+   "visita": [
+    {
+     "t": "Otoño de 1889, en el hospital, cerca de Saint-Rémy. Mi médico me dejaba pintar fuera: sabía que pintar del natural me sentaba bien."
+    },
+    {
+     "t": "A Theo se lo describí así:",
+     "c": "platanos"
+    },
+    {
+     "t": "A veces repetía un cuadro: el mismo tema y la misma composición otra vez. A eso lo llamaba una repetición. De este hice una, y este es el primero."
+    }
+   ],
+   "mira": "Busca a los obreros y los montones de arena y de piedra. Mira qué pequeños se ven al lado de esos troncos.",
+   "citas": {
+    "platanos": {
+     "t": "El último estudio que he hecho es una vista del pueblo, donde estaban trabajando bajo unos plátanos enormes, arreglando las aceras. […] Hay montones de arena, piedras y los troncos gigantescos; las hojas amarillean y aquí y allá se ve una fachada y figuras pequeñas.",
+     "voz": "autor",
+     "ref": "Carta a Theo, citada por el Museo de Arte de Cleveland. Traducción propia del inglés",
+     "url": "https://clevelandart.org/art/1947.209"
+    }
+   },
+   "fuente": "Cleveland Museum of Art"
+  },
+  {
+   "k": "cma-135310",
+   "titulo": "Dos álamos en los Alpilles",
+   "fecha": "1889",
+   "año": 1889,
+   "museo": "Cleveland Museum of Art",
+   "tipo": "Pintura",
+   "img": "img/cma-135310-1600.jpg",
+   "th": "img/cma-135310-400.jpg",
+   "iw": 1600,
+   "ih": 2139,
+   "visita": [
+    {
+     "t": "Otoño en Saint-Rémy. Al principio, en el hospital, solo podía pintar en mi cuarto. Pronto volví a salir al campo."
+    },
+    {
+     "t": "Pintaba la naturaleza tal como la veía, sin adornarla. Y creía que pintar me iba a ayudar a curarme."
+    }
+   ],
+   "mira": "Sigue con la vista cómo se tuercen los dos álamos contra un cielo que oscurece.",
+   "citas": {},
+   "fuente": "Cleveland Museum of Art"
+  },
+  {
+   "k": "aic-79349",
+   "titulo": "Los bebedores",
+   "fecha": "1890",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-79349-1600.jpg",
+   "th": "img/aic-79349-400.jpg",
+   "iw": 1600,
+   "ih": 1292,
+   "visita": [
+    {
+     "t": "En el hospital de Saint-Paul, en Saint-Rémy, copiaba a pintores que admiraba. Así no tenía que inventar la composición y me quedaba toda la cabeza para interpretar."
+    },
+    {
+     "t": "Este sale de un grabado en madera de Daumier, Los bebedores: una parodia de las cuatro edades del hombre."
+    },
+    {
+     "t": "Daumier exagera las figuras y te hace reír, pero lo que cuenta es triste: lo que el alcohol hace con la gente."
+    }
+   ],
+   "mira": "Cuenta las edades: un niño, un joven y dos viejos. Mira con qué seriedad beben, entre tanto verde. ¿Qué sed quieren quitarse?",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-65479",
+   "titulo": "Casas con una mujer trabajando",
+   "fecha": "1890",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Dibujo y acuarela",
+   "img": "img/aic-65479-1600.jpg",
+   "th": "img/aic-65479-400.jpg",
+   "iw": 1600,
+   "ih": 1207
+  },
+  {
+   "k": "aic-88393",
+   "titulo": "El doctor Gachet",
+   "fecha": "1890",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Grabado",
+   "img": "img/aic-88393-1600.jpg",
+   "th": "img/aic-88393-400.jpg",
+   "iw": 1600,
+   "ih": 1919,
+   "visita": [
+    {
+     "t": "Es el único aguafuerte que he hecho. Fue en Auvers, en 1890. Fui allí a ponerme en manos del doctor Paul Gachet, porque me lo aconsejó Pissarro."
+    },
+    {
+     "t": "Gachet grababa por afición. Me dio una plancha de cobre barnizada y me ayudó a estamparla en su pequeña prensa. Era mi primer intento, y lo retraté a él, sentado en su jardín, fumando en pipa."
+    },
+    {
+     "t": "Theo dijo de este grabado:",
+     "c": "theo"
+    }
+   ],
+   "mira": "Busca la pipa. Y fíjate en la línea: un dibujo hecho sobre metal, sin más.",
+   "citas": {
+    "theo": {
+     "t": "Es un verdadero aguafuerte de pintor. Nada de refinamiento en el procedimiento, sino un dibujo hecho sobre metal.",
+     "voz": "autor",
+     "ref": "Theo van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés",
+     "url": "https://clevelandart.org/art/1948.303"
+    }
+   },
+   "fuente": "Cleveland Museum of Art, texto sobre otra estampa del mismo grabado"
+  },
+  {
+   "k": "cma-135299",
+   "titulo": "Adeline Ravoux",
+   "fecha": "1890",
+   "año": 1890,
+   "museo": "Cleveland Museum of Art",
+   "tipo": "Pintura",
+   "img": "img/cma-135299-1600.jpg",
+   "th": "img/cma-135299-400.jpg",
+   "iw": 1600,
+   "ih": 1595,
+   "visita": [
+    {
+     "t": "En mayo de 1890 llegué a Auvers, un pueblo al norte de París, y alquilé una habitación en la posada de Arthur Ravoux. Esta es su hija, Adeline. Tenía trece años."
+    },
+    {
+     "t": "No buscaba un parecido de fotografía. Quería que un retrato tuviera lo apasionado de la vida moderna, y eso lo da el color."
+    }
+   ],
+   "mira": "¿Qué colores he elegido para hablar de ella?",
+   "citas": {},
+   "fuente": "Cleveland Museum of Art"
+  },
+  {
+   "k": "cma-126085",
+   "titulo": "El doctor Gachet",
+   "fecha": "1890",
+   "año": 1890,
+   "museo": "Cleveland Museum of Art",
+   "tipo": "Grabado",
+   "img": "img/cma-126085-1600.jpg",
+   "th": "img/cma-126085-400.jpg",
+   "iw": 1600,
+   "ih": 2050,
+   "visita": [
+    {
+     "t": "Es el único aguafuerte que he hecho. Fue en Auvers, en 1890. Fui allí a ponerme en manos del doctor Paul Gachet, porque me lo aconsejó Pissarro."
+    },
+    {
+     "t": "Gachet grababa por afición. Me dio una plancha de cobre barnizada y me ayudó a estamparla en su pequeña prensa. Era mi primer intento, y lo retraté a él, sentado en su jardín, fumando en pipa."
+    },
+    {
+     "t": "Theo dijo de este grabado:",
+     "c": "theo"
+    }
+   ],
+   "mira": "Busca la pipa. Y fíjate en la línea: un dibujo hecho sobre metal, sin más.",
+   "citas": {
+    "theo": {
+     "t": "Es un verdadero aguafuerte de pintor. Nada de refinamiento en el procedimiento, sino un dibujo hecho sobre metal.",
+     "voz": "autor",
+     "ref": "Theo van Gogh, citado por el Museo de Arte de Cleveland. Traducción propia del inglés",
+     "url": "https://clevelandart.org/art/1948.303"
+    }
+   },
+   "fuente": "Cleveland Museum of Art"
+  }
+ ],
+ "epocas": [
+  {
+   "titulo": "Hasta 1885",
+   "hasta": 1885,
+   "dice": "Decidí ser artista en 1880, con veintisiete años. Mis años holandeses: La Haya, Drenthe y Nuenen, en casa de mis padres."
+  },
+  {
+   "titulo": "1886–1887",
+   "hasta": 1887,
+   "dice": "En 1886 me fui a París con Theo. Allí conocí a los impresionistas, aclaré la paleta y probé los puntos de Seurat."
+  },
+  {
+   "titulo": "1888",
+   "hasta": 1888,
+   "dice": "En febrero de 1888 me fui a Arlés, buscando la luz del sur. Alquilé la Casa Amarilla y soñaba con un taller de pintores."
+  },
+  {
+   "titulo": "1889",
+   "hasta": 1889,
+   "dice": "En mayo de 1889 entré por mi voluntad en el hospital de Saint-Rémy. Seguí pintando: primero en mi cuarto, luego en el campo."
+  },
+  {
+   "titulo": "1890",
+   "hasta": 1890,
+   "dice": "En mayo de 1890 me instalé en Auvers, cerca del doctor Gachet. Allí hice mi único aguafuerte: su retrato."
+  }
+ ],
+ "selecciones": [
+  {
+   "id": "retratos",
+   "titulo": "Retratos",
+   "dice": "Me pinté a mí mismo una y otra vez, y a la gente que tenía cerca: Augustine Roulin, Adeline, el doctor Gachet.",
+   "obras": [
+    "autorretrato",
+    "aic-27949",
+    "cma-135299",
+    "cma-126085",
+    "aic-88393"
+   ]
+  },
+  {
+   "id": "arboles",
+   "titulo": "Árboles",
+   "dice": "Árboles entre 1884 y 1889: de una avenida de abedules desmochados a los plátanos y los álamos de Saint-Rémy.",
+   "obras": [
+    "aic-31640",
+    "aic-202382",
+    "aic-52733",
+    "aic-87327",
+    "cma-125249",
+    "cma-135310"
+   ]
+  },
+  {
+   "id": "campo",
+   "titulo": "Campo y trabajo",
+   "dice": "El trabajo del campo y la gente sencilla fueron temas centrales para mí: una mujer cavando, obreros arreglando aceras.",
+   "obras": [
+    "cma-135286",
+    "aic-28862",
+    "aic-150802",
+    "cma-125249",
+    "aic-65479"
+   ]
+  }
+ ]
+}

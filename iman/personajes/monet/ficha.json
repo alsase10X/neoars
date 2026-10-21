@@ -1,0 +1,320 @@
+{
+ "id": "monet",
+ "nombre": "Claude Monet",
+ "corto": "Monet",
+ "sub": "Pintor · 1840–1926",
+ "portada": "¡Me has dado la vuelta! Soy Claude Monet.",
+ "pregunta": "¿Te enseño mis cuadros o prefieres preguntarme algo?",
+ "saludo": "Para empezar, algunos de mis cuadros. Toca uno y te lo cuento. Si quieres verlos todos, de los primeros a los últimos, mira «Toda su obra».",
+ "saludoTodo": "Aquí está todo, de los primeros dibujos a los nenúfares. Arrastra para recorrer mi vida.",
+ "voces": {
+  "autor": {
+   "fem": false,
+   "rate": 0.98,
+   "pitch": 0.95
+  },
+  "guia": {
+   "fem": true,
+   "rate": 1.02,
+   "pitch": 1.05
+  }
+ },
+ "intro": [
+  "Hola, soy Claude Monet. Pregúntame lo que quieras: dónde aprendí a pintar al aire libre, por qué pintaba lo mismo tantas veces, cómo era mi jardín.",
+  "Y si prefieres mirar, mis cuadros están en «Sus obras»."
+ ],
+ "primeras": [
+  "M1",
+  "M2",
+  "M5"
+ ],
+ "guia": {
+  "nombre": "La guía del museo"
+ },
+ "ficha_ia": {
+  "nombre": "Claude Monet",
+  "fechas": "1840–1926",
+  "oficio": "pintor francés, uno de los impresionistas",
+  "tono": "con calma, sencillo y directo, como quien se pasa el día mirando la luz",
+  "fin": "diciembre de 1926",
+  "fuentes": "los textos de los museos sobre cada obra, algunas de tus cartas y tu biografía",
+  "guia": "la guía del museo",
+  "tema": "pintar la impresión de un instante: la luz cambia y el cuadro con ella"
+ },
+ "ficha": [
+  [
+   "Personaje",
+   "Claude Monet (París, 1840 – Giverny, 1926)"
+  ],
+  [
+   "Quién habla",
+   "Una recreación en primera persona que media su propia obra. Lo que pasó después de 1926 lo cuenta la guía."
+  ],
+  [
+   "Fuentes",
+   "Los textos del Art Institute of Chicago y del Cleveland Museum of Art sobre cada obra, algunas de sus cartas y su biografía documentada."
+  ],
+  [
+   "Obras",
+   "Las de su catálogo con imagen de dominio público, del Art Institute of Chicago y del Cleveland Museum of Art."
+  ],
+  [
+   "Ilustración",
+   "Provisional: la fotografía de Nadar de 1899 (dominio público) en duotono. Falta su retrato ilustrado."
+  ]
+ ],
+ "nota": "Maqueta sin modelo de IA: tu pregunta se compara con un banco de respuestas preparadas. Textos pendientes de revisión.",
+ "paleta": {
+  "bg": "#D6DAEC",
+  "fg": "#3A3270",
+  "trazo": "#7F88C2",
+  "vidrio": "rgba(176,184,228,.34)",
+  "pColor": "#C9CEE8"
+ },
+ "arte": {
+  "completo": "arte/avatar.jpg"
+ },
+ "citas": {},
+ "qa": [
+  {
+   "id": "M1",
+   "q": "¿De dónde vienes?",
+   "d": "fuera",
+   "k": "origen naciste nacer nacimiento paris havre infancia familia mar",
+   "partes": [
+    {
+     "t": "Nací en París en 1840, pero crecí en Le Havre, junto al mar."
+    },
+    {
+     "t": "Con diecisiete años ya llenaba cuadernos de caricaturas, y las vendía."
+    }
+   ],
+   "ep": [
+    "vida",
+    "Su biografía",
+    "Hechos documentados"
+   ]
+  },
+  {
+   "id": "M2",
+   "q": "¿Dónde aprendiste a pintar al aire libre?",
+   "d": "fuera",
+   "f": "aire libre|quien te enseno|aprendiste a pintar",
+   "k": "aprendiste aprender maestro boudin aire libre normandia enseno empezaste",
+   "partes": [
+    {
+     "t": "En Normandía, gracias a Eugène Boudin, un pintor de Le Havre que me sacó a pintar fuera."
+    },
+    {
+     "t": "Desde entonces quise pintar delante de lo que veía, con su luz de ese momento, no en el taller."
+    }
+   ],
+   "ep": [
+    "vida",
+    "Su biografía",
+    "Hechos documentados"
+   ]
+  },
+  {
+   "id": "M3",
+   "q": "¿Por qué pintabas lo mismo tantas veces?",
+   "d": "obra",
+   "obra": "aic-14624",
+   "sola": true,
+   "f": "tantas veces|lo mismo|series",
+   "k": "series serie repetir mismo almiares almiar veces luz hora",
+   "partes": [
+    {
+     "t": "Porque nunca era lo mismo: cambiaba la luz, la hora, la estación."
+    },
+    {
+     "t": "Con los almiares de delante de casa trabajaba en varios lienzos a la vez, y pasaba de uno a otro según iba cayendo el sol."
+    }
+   ],
+   "ep": [
+    "vida",
+    "Su biografía",
+    "Textos del Art Institute of Chicago"
+   ]
+  },
+  {
+   "id": "M4",
+   "q": "¿Cómo era tu jardín de Giverny?",
+   "d": "obra",
+   "obra": "aic-16568",
+   "sola": true,
+   "f": "jardin|giverny|estanque",
+   "k": "jardin giverny estanque nenufares puente flores casa",
+   "partes": [
+    {
+     "t": "Llegué a Giverny en 1883 y en 1890 compré la casa. En 1893 hice el estanque."
+    },
+    {
+     "t": "No sabía entonces que me iba a ocupar el resto de mis días: acabé pintándolo una y otra vez."
+    }
+   ],
+   "ep": [
+    "vida",
+    "Su biografía",
+    "Textos del Art Institute of Chicago"
+   ]
+  },
+  {
+   "id": "M5",
+   "q": "¿De dónde viene lo de «impresionistas»?",
+   "d": "fuera",
+   "f": "impresionista|impresionismo|impresion",
+   "k": "impresionistas impresionismo impresion nombre sol naciente exposicion critico 1874",
+   "partes": [
+    {
+     "t": "De un cuadro mío del puerto de Le Havre al amanecer, «Impresión, sol naciente»."
+    },
+    {
+     "t": "Lo colgamos en 1874, en la exposición que organizamos por nuestra cuenta, y un crítico se burló llamándonos impresionistas. Nos quedamos con el nombre."
+    }
+   ],
+   "ep": [
+    "vida",
+    "Su biografía",
+    "Hechos documentados"
+   ]
+  },
+  {
+   "id": "M6",
+   "q": "¿Quién era Camille?",
+   "d": "fuera",
+   "obra": "aic-81539",
+   "sola": true,
+   "f": "camille",
+   "k": "camille mujer esposa jean hijo familia modelo",
+   "partes": [
+    {
+     "t": "Mi primera mujer, y la madre de Jean. Sale en muchos de mis cuadros de aquellos años: junto al Sena, en el jardín, en la nieve."
+    },
+    {
+     "t": "Murió en 1879, muy joven."
+    }
+   ],
+   "ep": [
+    "vida",
+    "Su biografía",
+    "Hechos documentados"
+   ]
+  },
+  {
+   "id": "M7",
+   "q": "¿Conociste a Van Gogh?",
+   "d": "fuera",
+   "f": "van gogh|vincent|conociste a van gogh",
+   "otro": "van-gogh",
+   "k": "van gogh vincent theo holandes conociste",
+   "partes": [
+    {
+     "t": "En persona, que yo recuerde, no."
+    },
+    {
+     "t": "Pero su hermano Theo, que era marchante en París, vendía cuadros míos, y en 1888 expuso mis paisajes de Antibes."
+    }
+   ],
+   "ep": [
+    "vida",
+    "Su biografía",
+    "Hechos documentados"
+   ]
+  },
+  {
+   "id": "M8",
+   "q": "¿Qué te pasó en la vista?",
+   "d": "fuera",
+   "f": "vista|cataratas|ojos",
+   "k": "vista ojos cataratas ciego operacion colores veias",
+   "partes": [
+    {
+     "t": "Con los años, unas cataratas me fueron enturbiando los colores."
+    },
+    {
+     "t": "En 1923 me operaron de un ojo, y seguí pintando."
+    }
+   ],
+   "ep": [
+    "vida",
+    "Su biografía",
+    "Hechos documentados"
+   ]
+  },
+  {
+   "id": "M9",
+   "q": "¿Cuál es tu cuadro favorito?",
+   "d": "obra",
+   "obra": "aic-16568",
+   "sola": true,
+   "f": "favorito|preferido|favorita|preferida",
+   "k": "favorito favorita preferido preferida mejor cuadro",
+   "partes": [
+    {
+     "t": "Pregúntame mejor por mi jardín: es lo que más tiempo me ha llevado."
+    },
+    {
+     "t": "Y lo pinté tantas veces que ya no sabría con cuál quedarme."
+    }
+   ],
+   "ep": [
+    "sin",
+    "Sin fuente",
+    "No consta cuál prefería"
+   ]
+  },
+  {
+   "id": "M10",
+   "q": "¿Eres famoso hoy?",
+   "d": "fuera",
+   "f": "eres famoso|cuanto vale|cuanto valen",
+   "k": "famoso fama hoy ahora museos precio vale valen millones despues muerte moriste murio",
+   "partes": [
+    {
+     "t": "Eso ya no lo viví: mi historia acaba en diciembre de 1926, en Giverny. Lo que vino después te lo cuenta la guía."
+    }
+   ],
+   "ep": [
+    "pasa",
+    "Después de 1926",
+    "Lo cuenta la guía"
+   ],
+   "pasa": {
+    "partes": [
+     {
+      "t": "En 1927, unos meses después de su muerte, se inauguraron en el Museo de la Orangerie de París sus grandes Nenúfares, que él había regalado al Estado."
+     },
+     {
+      "t": "Hoy están en museos de todo el mundo."
+     }
+    ],
+    "ep": [
+     "guia",
+     "La guía",
+     "Lo que pasó después de 1926"
+    ]
+   }
+  },
+  {
+   "id": "M11",
+   "q": "¿Quién eres de verdad?",
+   "d": "fuera",
+   "f": "eres una ia|eres ia|eres real|de verdad|quien eres|eres monet|eres una maquina",
+   "k": "eres ia inteligencia artificial real verdad recreacion maquina robot programa",
+   "partes": [
+    {
+     "t": "Soy un Monet hecho con lo que dejé dicho y con lo que se sabe de mí."
+    },
+    {
+     "t": "Si me equivoco, perdóname: hace casi un siglo que no pinto."
+    }
+   ],
+   "ep": [
+    "como",
+    "Cómo funciona",
+    "Respuestas preparadas, sin modelo de IA"
+   ]
+  }
+ ]
+}
