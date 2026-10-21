@@ -1,0 +1,20 @@
+{
+ "id": "vincent-y-monet",
+ "nombre": "Vincent y Monet",
+ "cliente": "Exposición de prueba",
+ "tema": "el color moderno: pintar lo que se siente y lo que dura un instante",
+ "nota": "Dos personajes con el mismo motor para probar la plantilla. Cada uno tiene su ficha, su paleta, su retrato y sus obras.",
+ "personajes": [
+  {
+   "id": "van-gogh",
+   "nombre": "Vincent van Gogh",
+   "avatar": "personajes/van-gogh/arte/avatar.webp",
+   "recorte": true
+  },
+  {
+   "id": "monet",
+   "nombre": "Claude Monet",
+   "avatar": "personajes/monet/arte/avatar.jpg"
+  }
+ ]
+}

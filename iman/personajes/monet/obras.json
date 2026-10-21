@@ -1,0 +1,647 @@
+{
+ "titulos": {
+  "aic-186315": "Muchacho en el campo",
+  "aic-14598": "La playa de Sainte-Adresse",
+  "aic-81539": "A orillas del Sena, Bennecourt",
+  "cma-135382": "El pañuelo rojo",
+  "aic-16554": "La casa del artista en Argenteuil",
+  "aic-16571": "Llegada del tren de Normandía, estación de Saint-Lazare",
+  "aic-14620": "Paseo por el acantilado en Pourville",
+  "cma-125234": "Marea baja en Pourville, cerca de Dieppe",
+  "aic-59927": "Barcas en la playa de Étretat",
+  "aic-81540": "La salida de las barcas, Étretat",
+  "aic-64818": "Almiares (final del verano)",
+  "aic-14624": "Almiares (final del día, otoño)",
+  "aic-81545": "Almiares (puesta de sol, efecto de nieve)",
+  "aic-111318": "Almiar",
+  "aic-100191": "Almiar (deshielo, puesta de sol)",
+  "aic-16560": "Almiar (efecto de nieve, día nublado)",
+  "aic-86998": "Sandvika, Noruega",
+  "aic-16564": "Brazo del Sena cerca de Giverny (niebla)",
+  "aic-87088": "Estanque de nenúfares",
+  "aic-16584": "El Parlamento de Londres",
+  "aic-103139": "El puente de Waterloo, tiempo gris",
+  "aic-16544": "El puente de Charing Cross, Londres",
+  "aic-14634": "Vétheuil",
+  "aic-16579": "Vétheuil",
+  "aic-20701": "El puente de Waterloo, efecto de sol",
+  "aic-16568": "Nenúfares",
+  "cma-136510": "Nenúfares (agapantos)",
+  "aic-97933": "Estanque de nenúfares"
+ },
+ "alias": {},
+ "propias": {},
+ "empezar": [
+  {
+   "k": "aic-14598",
+   "gancho": "La playa de mi infancia, con los pescadores que mejor conocía."
+  },
+  {
+   "k": "aic-81539",
+   "gancho": "Camille, sentada junto al río, antes de ser mi mujer."
+  },
+  {
+   "k": "aic-16554",
+   "gancho": "Nuestra casa de Argenteuil, con Jean jugando al aro."
+  },
+  {
+   "k": "aic-16571",
+   "gancho": "El vapor de las locomotoras y la luz entrando por los cristales."
+  },
+  {
+   "k": "aic-14620",
+   "gancho": "Hierba, vestidos y mar, movidos por el mismo viento."
+  },
+  {
+   "k": "aic-14624",
+   "gancho": "Los almiares de delante de casa, a la última luz del otoño."
+  },
+  {
+   "k": "aic-16584",
+   "gancho": "Las torres del Parlamento, perdidas en la niebla."
+  },
+  {
+   "k": "aic-16568",
+   "gancho": "Mi estanque, sin orilla ni cielo: solo agua y reflejos."
+  }
+ ],
+ "catalogo": [
+  {
+   "k": "aic-186315",
+   "titulo": "Muchacho en el campo",
+   "fecha": "1857",
+   "año": 1857,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Dibujo y acuarela",
+   "img": "img/aic-186315-1600.jpg",
+   "th": "img/aic-186315-400.jpg",
+   "iw": 843,
+   "ih": 1135,
+   "visita": [
+    {
+     "t": "Tenía diecisiete años y siempre llevaba un cuaderno encima."
+    },
+    {
+     "t": "Mira el blusón del chico: un contorno firme y ya está, sin entretenerme en el cuerpo de debajo. Apretaba tanto el lápiz que se nota."
+    }
+   ],
+   "mira": "Pasa la vista por la hierba: ahí casi rompo el papel.",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-14598",
+   "titulo": "La playa de Sainte-Adresse",
+   "fecha": "1867",
+   "año": 1867,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-14598-1600.jpg",
+   "th": "img/aic-14598-400.jpg",
+   "iw": 1600,
+   "ih": 1182,
+   "visita": [
+    {
+     "t": "Verano de 1867. Me quedé en casa de mi tía, en Sainte-Adresse, al lado de Le Havre. Conocía esa playa desde niño, pero el tren la estaba llenando de veraneantes."
+    },
+    {
+     "t": "Empecé el cuadro allí mismo, al aire libre, y lo terminé en el taller. Había puesto más turistas y yates; los tapé y me quedé con los pescadores, que es lo que mejor conocía."
+    },
+    {
+     "t": "Nueve años después lo colgué en la segunda exposición de los impresionistas."
+    }
+   ],
+   "mira": "Busca a los dos veraneantes entre las barcas: un catalejo y un sombrero con cinta roja.",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-81539",
+   "titulo": "A orillas del Sena, Bennecourt",
+   "fecha": "1868",
+   "año": 1868,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-81539-1600.jpg",
+   "th": "img/aic-81539-400.jpg",
+   "iw": 1600,
+   "ih": 1293,
+   "visita": [
+    {
+     "t": "1868. Esta es Camille, que luego sería mi mujer, sentada en una isla del Sena. Al otro lado, Gloton, junto a Bennecourt."
+    },
+    {
+     "t": "Zola me lo recomendó: un sitio barato, en el campo y bien comunicado con París."
+    },
+    {
+     "t": "Por entonces casi nadie me conocía, y a mucha gente mi manera de pintar le parecía sin terminar."
+    }
+   ],
+   "mira": "Busca la barca en la orilla y el pueblo al otro lado del río.",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "cma-135382",
+   "titulo": "El pañuelo rojo",
+   "fecha": "h. 1868–73",
+   "año": 1868,
+   "museo": "Cleveland Museum of Art",
+   "tipo": "Pintura",
+   "img": "img/cma-135382-1600.jpg",
+   "th": "img/cma-135382-400.jpg",
+   "iw": 1600,
+   "ih": 1991
+  },
+  {
+   "k": "aic-16554",
+   "titulo": "La casa del artista en Argenteuil",
+   "fecha": "1873",
+   "año": 1873,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-16554-1600.jpg",
+   "th": "img/aic-16554-400.jpg",
+   "iw": 1600,
+   "ih": 1307,
+   "visita": [
+    {
+     "t": "Esta es nuestra casa de Argenteuil, a las afueras de París. Vivimos allí de 1871 a 1878."
+    },
+    {
+     "t": "El pequeño del aro es nuestro hijo Jean. Y en la puerta, entre la parra, Camille."
+    },
+    {
+     "t": "Durand-Ruel me compraba cuadros y por fin estábamos tranquilos. Ya entonces me gustaba cuidar el jardín."
+    }
+   ],
+   "mira": "Busca a Camille en la puerta, entre tanta hoja.",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-16571",
+   "titulo": "Llegada del tren de Normandía, estación de Saint-Lazare",
+   "fecha": "1877",
+   "año": 1877,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-16571-1600.jpg",
+   "th": "img/aic-16571-400.jpg",
+   "iw": 1600,
+   "ih": 1200,
+   "visita": [
+    {
+     "t": "La estación de Saint-Lazare. De aquí salían los trenes a Normandía, donde aprendí a pintar al aire libre."
+    },
+    {
+     "t": "Hice doce cuadros de la estación y llegué con ocho a la tercera exposición impresionista, en 1877."
+    },
+    {
+     "t": "Me atraía la mezcla: el vapor de las locomotoras, atrapado bajo la cubierta, y la luz del día entrando por los cristales."
+    }
+   ],
+   "mira": "Busca a la gente entre el humo: apenas se distingue.",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-14620",
+   "titulo": "Paseo por el acantilado en Pourville",
+   "fecha": "1882",
+   "año": 1882,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-14620-1600.jpg",
+   "th": "img/aic-14620-400.jpg",
+   "iw": 1600,
+   "ih": 1281,
+   "visita": [
+    {
+     "t": "Febrero de 1882. Me fui a pintar a Normandía. Camille había muerto tres años antes, vivía con Alice Hoschedé y sus hijos, y los cuadros se vendían mal."
+    },
+    {
+     "t": "Dieppe me pareció demasiado ciudad, así que me quedé en Pourville, un pueblo de pescadores. A Alice y a los niños les escribí:",
+     "c": "rincones"
+    },
+    {
+     "t": "En junio vinieron a verlo."
+    }
+   ],
+   "mira": "Mira la hierba, los vestidos y el mar: la misma pincelada, movida por el viento.",
+   "citas": {
+    "rincones": {
+     "t": "¡Qué bonito se está poniendo el campo, y qué alegría me daría enseñaros todos sus rincones encantadores!",
+     "voz": "autor",
+     "ref": "Carta a Alice Hoschedé y sus hijos, citada por el Art Institute of Chicago. Traducción propia del inglés",
+     "url": "https://www.artic.edu/artworks/14620"
+    }
+   },
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "cma-125234",
+   "titulo": "Marea baja en Pourville, cerca de Dieppe",
+   "fecha": "1882",
+   "año": 1882,
+   "museo": "Cleveland Museum of Art",
+   "tipo": "Pintura",
+   "img": "img/cma-125234-1600.jpg",
+   "th": "img/cma-125234-400.jpg",
+   "iw": 1600,
+   "ih": 1180
+  },
+  {
+   "k": "aic-59927",
+   "titulo": "Barcas en la playa de Étretat",
+   "fecha": "1885",
+   "año": 1885,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-59927-1600.jpg",
+   "th": "img/aic-59927-400.jpg",
+   "iw": 1600,
+   "ih": 1275
+  },
+  {
+   "k": "aic-81540",
+   "titulo": "La salida de las barcas, Étretat",
+   "fecha": "1885",
+   "año": 1885,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-81540-1600.jpg",
+   "th": "img/aic-81540-400.jpg",
+   "iw": 1600,
+   "ih": 1262,
+   "visita": [
+    {
+     "t": "Otoño de 1885, en Étretat. Llovía tanto que pinté desde la ventana de mi habitación del hotel."
+    },
+    {
+     "t": "A Alice se lo conté en una de mis cartas. Las caloges son barcas viejas, cubiertas con tablas alquitranadas, que se usan de almacén:",
+     "c": "ventana"
+    },
+    {
+     "t": "Para el agua y lo mojado mezclé azules, rosas, violetas y verdes."
+    }
+   ],
+   "mira": "Busca a la gente en la orilla: cuatro trazos rápidos y ya están.",
+   "citas": {
+    "ventana": {
+     "t": "Por la tarde trabajé en mi habitación en mis caloges, bajo la lluvia, y luego intenté hacer, siempre desde la ventana, un cuadro de las barcas que salen.",
+     "voz": "autor",
+     "ref": "Carta a Alice Hoschedé, 24 de noviembre de 1885, citada por el Art Institute of Chicago. Traducción propia del inglés",
+     "url": "https://www.artic.edu/artworks/81540"
+    }
+   },
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-64818",
+   "titulo": "Almiares (final del verano)",
+   "fecha": "1890–91",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-64818-1600.jpg",
+   "th": "img/aic-64818-400.jpg",
+   "iw": 1600,
+   "ih": 945
+  },
+  {
+   "k": "aic-14624",
+   "titulo": "Almiares (final del día, otoño)",
+   "fecha": "1890–91",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-14624-1600.jpg",
+   "th": "img/aic-14624-400.jpg",
+   "iw": 1600,
+   "ih": 1041,
+   "visita": [
+    {
+     "t": "Estos almiares estaban junto a mi casa de Giverny, y eran enormes. En 1890 y 1891 los pinté en el campo, con varios caballetes a la vez, y luego los afinaba en el taller."
+    },
+    {
+     "t": "En mayo de 1891 colgué quince juntos en una salita de la galería Durand-Ruel, en París. Fue un éxito como nunca había tenido."
+    }
+   ],
+   "mira": "Es final del día, en otoño: mira cómo la punta del almiar se mete en el cielo.",
+   "citas": {},
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-81545",
+   "titulo": "Almiares (puesta de sol, efecto de nieve)",
+   "fecha": "1890–91",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-81545-1600.jpg",
+   "th": "img/aic-81545-400.jpg",
+   "iw": 1600,
+   "ih": 1033
+  },
+  {
+   "k": "aic-111318",
+   "titulo": "Almiar",
+   "fecha": "1890–91",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-111318-1600.jpg",
+   "th": "img/aic-111318-400.jpg",
+   "iw": 1600,
+   "ih": 1126
+  },
+  {
+   "k": "aic-100191",
+   "titulo": "Almiar (deshielo, puesta de sol)",
+   "fecha": "1890–91",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-100191-1600.jpg",
+   "th": "img/aic-100191-400.jpg",
+   "iw": 1600,
+   "ih": 1114
+  },
+  {
+   "k": "aic-16560",
+   "titulo": "Almiar (efecto de nieve, día nublado)",
+   "fecha": "1890–91",
+   "año": 1890,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-16560-1600.jpg",
+   "th": "img/aic-16560-400.jpg",
+   "iw": 1600,
+   "ih": 1123
+  },
+  {
+   "k": "aic-86998",
+   "titulo": "Sandvika, Noruega",
+   "fecha": "1895",
+   "año": 1895,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-86998-1600.jpg",
+   "th": "img/aic-86998-400.jpg",
+   "iw": 1600,
+   "ih": 1252
+  },
+  {
+   "k": "aic-16564",
+   "titulo": "Brazo del Sena cerca de Giverny (niebla)",
+   "fecha": "1897",
+   "año": 1897,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-16564-1600.jpg",
+   "th": "img/aic-16564-400.jpg",
+   "iw": 1600,
+   "ih": 1553
+  },
+  {
+   "k": "aic-87088",
+   "titulo": "Estanque de nenúfares",
+   "fecha": "1900",
+   "año": 1900,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-87088-1600.jpg",
+   "th": "img/aic-87088-400.jpg",
+   "iw": 1600,
+   "ih": 1423
+  },
+  {
+   "k": "aic-16584",
+   "titulo": "El Parlamento de Londres",
+   "fecha": "1900–1",
+   "año": 1900,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-16584-1600.jpg",
+   "th": "img/aic-16584-400.jpg",
+   "iw": 1600,
+   "ih": 1396,
+   "visita": [
+    {
+     "t": "Londres. Pintaba el Parlamento por la tarde y al ponerse el sol, desde una terraza del hospital de Saint Thomas.",
+     "c": "niebla"
+    },
+    {
+     "t": "Turner pintó el incendio del viejo Parlamento casi desde ahí. Pero a mí, para la niebla y el crepúsculo, me tiraba más Whistler."
+    }
+   ],
+   "mira": "Busca las torres en la niebla. ¿Dónde acaba el edificio y empieza el aire?",
+   "citas": {
+    "niebla": {
+     "t": "Si no fuera por la niebla, Londres no sería una ciudad bonita.",
+     "voz": "autor",
+     "ref": "Monet, en el texto sobre «Waterloo Bridge, Gray Weather», citado por el Art Institute of Chicago. Traducción propia del inglés",
+     "url": "https://www.artic.edu/artworks/103139"
+    }
+   },
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "aic-103139",
+   "titulo": "El puente de Waterloo, tiempo gris",
+   "fecha": "1900",
+   "año": 1900,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-103139-1600.jpg",
+   "th": "img/aic-103139-400.jpg",
+   "iw": 1600,
+   "ih": 1133
+  },
+  {
+   "k": "aic-16544",
+   "titulo": "El puente de Charing Cross, Londres",
+   "fecha": "1901",
+   "año": 1901,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-16544-1600.jpg",
+   "th": "img/aic-16544-400.jpg",
+   "iw": 1600,
+   "ih": 1117
+  },
+  {
+   "k": "aic-14634",
+   "titulo": "Vétheuil",
+   "fecha": "1901",
+   "año": 1901,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-14634-1600.jpg",
+   "th": "img/aic-14634-400.jpg",
+   "iw": 1600,
+   "ih": 1540
+  },
+  {
+   "k": "aic-16579",
+   "titulo": "Vétheuil",
+   "fecha": "1901",
+   "año": 1901,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-16579-1600.jpg",
+   "th": "img/aic-16579-400.jpg",
+   "iw": 1600,
+   "ih": 1545
+  },
+  {
+   "k": "aic-20701",
+   "titulo": "El puente de Waterloo, efecto de sol",
+   "fecha": "1903",
+   "año": 1903,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-20701-1600.jpg",
+   "th": "img/aic-20701-400.jpg",
+   "iw": 1600,
+   "ih": 1031
+  },
+  {
+   "k": "aic-16568",
+   "titulo": "Nenúfares",
+   "fecha": "1906",
+   "año": 1906,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-16568-1600.jpg",
+   "th": "img/aic-16568-400.jpg",
+   "iw": 1600,
+   "ih": 1536,
+   "visita": [
+    {
+     "t": "En 1890 compré la casa de Giverny y en 1893 hice el estanque. No sabía entonces que me iba a ocupar el resto de mis días."
+    },
+    {
+     "t": "Aquí ya no hay orilla ni cielo: solo el agua, los nenúfares y lo que se refleja en ella. Se me había convertido en",
+     "c": "obsesion"
+    }
+   ],
+   "mira": "Busca el camino de agua entre los nenúfares, y las nubes reflejadas.",
+   "citas": {
+    "obsesion": {
+     "t": "una obsesión",
+     "voz": "autor",
+     "ref": "Monet, sobre estos cuadros, citado por el Art Institute of Chicago. Traducción propia del inglés",
+     "url": "https://www.artic.edu/artworks/16568"
+    }
+   },
+   "fuente": "Art Institute of Chicago"
+  },
+  {
+   "k": "cma-136510",
+   "titulo": "Nenúfares (agapantos)",
+   "fecha": "h. 1915–26",
+   "año": 1915,
+   "museo": "Cleveland Museum of Art",
+   "tipo": "Pintura",
+   "img": "img/cma-136510-1600.jpg",
+   "th": "img/cma-136510-400.jpg",
+   "iw": 1600,
+   "ih": 744,
+   "visita": [
+    {
+     "t": "Al final de mi vida pintaba casi solo mi jardín de Giverny, que diseñé y cultivé yo."
+    },
+    {
+     "t": "Aquí quité el horizonte y las orillas: solo el agua y el sol, que entra en ella y rebota."
+    }
+   ],
+   "mira": "Deja que el cuadro te llene la vista: ¿dónde acaba el agua?",
+   "citas": {},
+   "fuente": "Cleveland Museum of Art"
+  },
+  {
+   "k": "aic-97933",
+   "titulo": "Estanque de nenúfares",
+   "fecha": "1917–19",
+   "año": 1917,
+   "museo": "Art Institute of Chicago",
+   "tipo": "Pintura",
+   "img": "img/aic-97933-1600.jpg",
+   "th": "img/aic-97933-400.jpg",
+   "iw": 1600,
+   "ih": 1032
+  }
+ ],
+ "epocas": [
+  {
+   "titulo": "Hasta 1870",
+   "hasta": 1870,
+   "dice": "Crecí en Le Havre, junto al mar, y con diecisiete años ya llenaba cuadernos. En los años sesenta aprendí a pintar al aire libre en Normandía."
+  },
+  {
+   "titulo": "1871–1882",
+   "hasta": 1882,
+   "dice": "De 1871 a 1878 vivimos en Argenteuil, a las afueras de París: Camille, Jean y yo. Pinté el río, el jardín y la estación de Saint-Lazare."
+  },
+  {
+   "titulo": "1883–1899",
+   "hasta": 1899,
+   "dice": "Salí a pintar la costa: Pourville, Étretat, Belle-Île, Bordighera. En 1890 compré la casa de Giverny y empecé mis series: los almiares, delante de casa."
+  },
+  {
+   "titulo": "1900–1926",
+   "hasta": 1926,
+   "dice": "Fui a Londres a pintar la niebla sobre el Támesis, pero sobre todo pinté mi jardín de Giverny: el estanque y los nenúfares, cada vez más grandes."
+  }
+ ],
+ "selecciones": [
+  {
+   "id": "series",
+   "titulo": "Series",
+   "dice": "Pintaba el mismo motivo una y otra vez, en lienzos distintos según la hora y la luz: los almiares, los puentes de Londres, Vétheuil desde el balcón.",
+   "obras": [
+    "aic-14624",
+    "aic-81545",
+    "aic-16560",
+    "aic-100191",
+    "aic-111318",
+    "aic-64818",
+    "aic-16584",
+    "aic-103139",
+    "aic-20701",
+    "aic-16544",
+    "aic-14634",
+    "aic-16579"
+   ]
+  },
+  {
+   "id": "agua",
+   "titulo": "Agua",
+   "dice": "Pinté mucha agua: el Sena, el mar de Normandía y, al final, mi estanque de nenúfares.",
+   "obras": [
+    "aic-81539",
+    "cma-125234",
+    "aic-59927",
+    "aic-81540",
+    "aic-16564",
+    "aic-86998",
+    "aic-87088",
+    "aic-16568",
+    "aic-97933",
+    "cma-136510"
+   ]
+  },
+  {
+   "id": "familia",
+   "titulo": "Camille y Jean",
+   "dice": "Camille, mi primera mujer, y nuestro hijo Jean salen en mis cuadros de aquellos años: junto al Sena, en la nieve, en el jardín de Argenteuil.",
+   "obras": [
+    "aic-81539",
+    "cma-135382",
+    "aic-16554"
+   ]
+  }
+ ]
+}
