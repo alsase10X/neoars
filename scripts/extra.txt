@@ -72,3 +72,13 @@ bm/ur-orig.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Standard_of_
 bm/sutton-orig.png  https://commons.wikimedia.org/wiki/Special:FilePath/Sutton_Hoo_helmet_2016.png
 bm/lewis-1920.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Lewis_chessmen.jpg?width=1920
 bm/rosetta-1920.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Rosetta_Stone.JPG?width=1920
+
+# Fuente de las Galeras (El Puerto de Santa María): búsqueda de imágenes en Commons y ubicación
+galeras/busca-fuente.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=Fuente+de+las+Galeras+Puerto+Santa+Mar%C3%ADa&gsrnamespace=6&gsrlimit=40&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
+galeras/busca-plaza.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=Plaza+de+las+Galeras+Puerto+de+Santa+Mar%C3%ADa&gsrnamespace=6&gsrlimit=40&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
+galeras/busca-puerto-antiguo.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=Puerto+de+Santa+Mar%C3%ADa+grabado+OR+postal+OR+fotograf%C3%ADa+antigua+Guadalete&gsrnamespace=6&gsrlimit=40&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
+galeras/busca-galera-es.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=galera+espa%C3%B1ola+siglo+XVIII&gsrnamespace=6&gsrlimit=40&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
+galeras/busca-galera.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=galley+18th+century+engraving+Mediterranean+gal%C3%A8re&gsrnamespace=6&gsrlimit=40&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
+galeras/busca-sierra.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=Sierra+de+San+Crist%C3%B3bal+Puerto+de+Santa+Mar%C3%ADa+acueducto+OR+manantial&gsrnamespace=6&gsrlimit=40&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
+galeras/nominatim.json  https://nominatim.openstreetmap.org/search?q=Fuente+de+las+Galeras%2C+El+Puerto+de+Santa+Mar%C3%ADa&format=json&limit=5
+galeras/wikidata.json  https://www.wikidata.org/w/api.php?action=wbsearchentities&search=Fuente+de+las+Galeras&language=es&format=json&limit=10
