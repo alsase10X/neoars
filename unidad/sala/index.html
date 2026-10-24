@@ -80,6 +80,16 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-family:var(--fuente-titulos);font-wei
 .ob .fl{font-weight:700;color:var(--muted)}
 .ob:hover .obt b{text-decoration:underline;text-underline-offset:3px}
 .pie{font-size:.8rem;line-height:1.5;color:var(--muted);margin-top:22px}
+/* Portada del recorrido (si la sala trae «portada»): la imagen a sangre, el tema y dónde empieza.
+   Se ve al entrar sin código de pieza; el índice queda con lista y mapa, y su flecha vuelve aquí */
+#portV{display:flex;flex-direction:column;justify-content:flex-end}
+#portV>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+.p-velo{position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.4),transparent 18%,transparent 30%,color-mix(in srgb,var(--bg) 82%,transparent) 54%,var(--bg) 90%)}
+.p-cuerpo{position:relative;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 28px)}
+.p-datos{font-size:.9rem;line-height:1.45;color:var(--muted);margin-top:14px}
+#portV .b1{width:100%;max-width:340px;margin-top:22px}
+.salaAtras{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);left:max(6px,env(safe-area-inset-left,0px));margin:0}
+#salaV.conPortada .salaIn{padding-top:64px}
 .pie b,.firma b{color:var(--fg);font-weight:900;letter-spacing:-.01em}
 
 /* ---------- La obra ---------- */
@@ -276,8 +286,22 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 </style>
 
 <div id="app">
+  <section id="portV" class="vista" aria-label="Portada del recorrido" hidden>
+    <img id="portImg" alt="">
+    <div class="p-velo" aria-hidden="true"></div>
+    <div class="col p-cuerpo">
+      <span class="marcaLogo" id="portLogo" role="img" hidden></span>
+      <p class="eyb" id="portL" hidden></p>
+      <h1 id="portT"></h1>
+      <p class="salaD" id="portD"></p>
+      <p class="p-datos" id="portDatos"></p>
+      <button class="b1" id="portEmpezar" type="button"><span>Empezar</span><span aria-hidden="true">→</span></button>
+    </div>
+  </section>
+
   <section id="salaV" class="vista" aria-label="La sala" hidden>
     <div class="fondo" id="salaF" aria-hidden="true"></div>
+    <button class="ib atras salaAtras" id="salaAtras" type="button" aria-label="Portada del recorrido" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
     <button class="ib salaMenu" id="salaMenu" type="button" aria-label="Modo de la visita"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg></button>
     <div class="salaIn">
       <div class="col">
@@ -494,6 +518,9 @@ function pintarSala(){
   pintarLogo('salaLogo');
   $('marcaPie').hidden = !(MARCA && MARCA.pie); $('marcaPie').textContent = MARCA && MARCA.pie || '';
   $('salaL').hidden = !SALA.lugar; $('salaL').textContent = SALA.lugar || '';
+  // Con portada, el lugar y la entradilla están en ella: el índice no los repite
+  const conP = !!SALA.portada; $('salaV').classList.toggle('conPortada', conP); $('salaAtras').hidden = !conP;
+  if(conP){ $('salaL').hidden = true; $('salaD').hidden = true; }
   $('salaF').style.backgroundImage = `url(${SALA.obras[0].fondo})`;
   const geo = conLugar(); $('vistaSel').hidden = !geo; $('cerca').hidden = !geo;
   // El número es el del recorrido; con tu ubicación, la lista se ordena por cercanía
@@ -617,6 +644,32 @@ function volverSala(){
   try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
 }
 
+/* ======================= Portada del recorrido ======================= */
+// Lo que se tarda en escuchar una pieza en la visita guiada: unas 2,5 palabras por segundo y una pausa entre cápsulas
+function escucha(o){
+  const m = Object.values(o.mediadores)[0], v = Object.keys(o.visitas)[0];
+  return m.relato.filter(c => (!c.p || tiene(c.p, v)) && !(c.x && tiene(c.x, v)))
+    .reduce((a, c) => a + 1.2 + [c.t, c.c != null && o.citas && o.citas[c.c] ? o.citas[c.c].t : '', c.tras || ''].join(' ').trim().split(/\s+/).length/2.5, 0);
+}
+function verPortada(){
+  const P0 = SALA.portada, o = SALA.obras[Math.min(P0.obra || 0, SALA.obras.length - 1)], ini = SALA.obras[0];
+  $('portImg').src = o.img; $('portImg').style.objectPosition = encuadrePos({encuadre:P0.encuadre || o.encuadre}) || '50% 50%';
+  pintarLogo('portLogo');
+  $('portL').hidden = !SALA.lugar; $('portL').textContent = SALA.lugar || '';
+  $('portT').innerHTML = esc(SALA.nombre) + (SALA.nombre2 ? `<span class="h1b">${esc(SALA.nombre2)}</span>` : ''); $('portD').textContent = SALA.d;
+  // Cuántas piezas, cuánto se camina (a unos 80 m por minuto) más lo que se escucha, y dónde empieza
+  const n = SALA.obras.length, calle = conLugar(), seg = SALA.obras.reduce((a, x) => a + escucha(x), 0) + (SALA.km ? SALA.km*1000/80*60 : 0);
+  const datos = [`${n} ${calle ? 'piezas' : 'obras'}`, SALA.km ? `${String(SALA.km).replace('.', ',')} km` : '', `unos ${Math.max(5, Math.round(seg/60/5)*5)} min`].filter(Boolean).join(' · ');
+  $('portDatos').innerHTML = esc(datos) + (calle && ini.lugar && ini.lugar.dir ? `<br>Empieza en ${esc(ini.lugar.dir)}` : '');
+  $('salaV').hidden = true; $('obraV').hidden = true; $('portV').hidden = false;
+}
+// Empezar: en la calle, el mapa con la primera pieza señalada (cómo llegar, o abrirla si ya estás allí); en una sala, la lista
+$('portEmpezar').onclick = () => {
+  $('portV').hidden = true; $('salaV').hidden = false; pintarSala();
+  if(conLugar()){ GEO.sel = SALA.obras[0].id; verVista('mapa'); }
+};
+$('salaAtras').onclick = () => { if(GEO.vista === 'mapa') verVista('lista'); cerrarTarjeta(); verPortada(); };
+
 /* ======================= Abrir una obra (como al escanear su código) ======================= */
 function abrir(id){
   const o = SALA.obras.find(x => x.id === id); if(!o) return;
@@ -636,7 +689,7 @@ function abrir(id){
   $('iniImg').src = OBRA.img; $('iniImg').style.objectPosition = encuadrePos(OBRA); $('selloImg').src = OBRA.img; $('selloImg').alt = `${OBRA.titulo}, de ${OBRA.autor}`;
   $('obraF').style.backgroundImage = `url(${OBRA.fondo})`;
   $('askI').placeholder = 'Escribe tu pregunta…';
-  $('salaV').hidden = true; $('obraV').hidden = false; $('obraV').classList.toggle('conversa', V2);
+  $('salaV').hidden = true; $('portV').hidden = true; $('obraV').hidden = false; $('obraV').classList.toggle('conversa', V2);
   cerrarEscribir(); cerrarPanel();
   preparar();
   try{ history.replaceState(null, '', '#' + id); }catch(e){}
@@ -1442,7 +1495,8 @@ function desdeEnlace(){
     const o = SALA.obras.find(x => x.id === h); if(o.lugar && !GEO.pos) aqui(o);   // el código dice dónde estás, sin GPS
     if(!OBRA || OBRA.id !== h || $('obraV').hidden) abrir(h);
   }
-  else if(SALA && $('obraV').hidden) $('salaV').hidden = false;
+  // Sin código de pieza: la portada del recorrido, si la sala la trae; si no, el índice
+  else if(SALA && $('obraV').hidden && $('salaV').hidden && $('portV').hidden){ if(SALA.portada) verPortada(); else $('salaV').hidden = false; }
 }
 if(!SALA_ID){ $('salaT').textContent = (SALA || SALA_WEB).nombre; $('salaD').textContent = (SALA || SALA_WEB).d; }
 cargarSala().then(() => { pintarSala(); desdeEnlace(); }).catch(() => { $('salaV').hidden = false; $('obras').innerHTML = '<li class="pie">No se han podido cargar las obras. Revisa la conexión y vuelve a abrir la página.</li>'; });
