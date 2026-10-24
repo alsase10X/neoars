@@ -283,17 +283,14 @@
    "relato": [
     {
      "z": "escudo",
-     "img": "I2",
      "t": "Me hicieron en 1735 para dar agua a las galeras del rey, que pasaban el invierno aquí desde el siglo XVI. Llevo el escudo real, con dos leones a los lados y una corona encima. Trece años después, en 1748, el rey suprimió las galeras. Me quedé sin los barcos a los que tenía que dar de beber."
     },
     {
      "z": "grifos",
-     "img": "I3",
      "t": "Pero seguí dando agua a la ciudad doscientos años más, hasta mediados del siglo XX. El agua bajaba de los manantiales de la sierra de San Cristóbal por un acueducto bajo tierra, y salía aquí, por mis seis grifos de cobre. Esta orilla del Guadalete era el final de su camino."
     },
     {
      "z": "cupula-izq",
-     "img": "I5",
      "t": "En 2020 me quitaron la pintura blanca y los azulejos de las cúpulas, que me habían puesto después. Volví a la piedra y al ladrillo. Mira mis cúpulas: así me vieron las galeras."
     }
    ],
@@ -337,7 +334,8 @@
      "q": "¿Qué pasó con las galeras?",
      "d": "fuera",
      "z": "corona",
-     "a": "En 1748 se disolvió el Cuerpo de Galeras. La escuadra había tenido su base aquí y en Cartagena. Yo seguí, pero ya para la ciudad. Mira mi corona: sigue ahí, aunque las galeras se fueran."
+     "a": "En 1748 se disolvió el Cuerpo de Galeras. La escuadra había tenido su base aquí y en Cartagena. Yo seguí, pero ya para la ciudad. Mira mi corona: sigue ahí, aunque las galeras se fueran.",
+     "img": "I3"
     }
    ]
   }
