@@ -1,0 +1,24 @@
+{
+ "ejemplo": true,
+ "nota": "Memorias de ejemplo, escritas para enseñar cómo funciona la puerta. No son de vecinos reales. En real, cada una sonaría con la voz grabada de quien la cuenta.",
+ "memorias": [
+  {
+   "id": "m1",
+   "quien": "Vecina de la Navarrería",
+   "cuando": "años sesenta",
+   "origen": "taller",
+   "z": "pilas",
+   "fem": true,
+   "t": "Aquí quedábamos todas las tardes. Nadie decía «la fuente de Santa Cecilia»: decíamos «en la fuente», y ya está. Nos sentábamos en el borde de las conchas, y nuestras madres nos llamaban desde los balcones a la hora de cenar."
+  },
+  {
+   "id": "m2",
+   "quien": "Vecino de la calle Navarrería",
+   "cuando": "1985",
+   "origen": "abierta",
+   "z": "remate",
+   "fem": false,
+   "t": "Mi padre me decía que la copa de arriba estaba llena de agua y que por eso la fuente nunca se secaba. Me lo creí hasta los doce años. Todavía, cuando paso por la plaza, levanto la vista hacia la copa."
+  }
+ ]
+}

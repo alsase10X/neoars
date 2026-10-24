@@ -143,6 +143,16 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .ep-vista::before{border-radius:50%}
 .ep-lectura::before{transform:rotate(45deg) scale(.85)}
 .ep-general::before{border-style:dashed}
+.ep-testimonio::before{border-radius:50%;background:var(--fg)}
+.ans audio{width:100%;max-width:340px}
+/* Dejar una memoria del lugar */
+.campo{width:100%;box-sizing:border-box;font-family:inherit;font-size:1rem;line-height:1.4;padding:12px;border:1px solid var(--hair);background:transparent;color:var(--fg)}
+.campo:focus{outline:none;border-color:var(--fg)}
+textarea.campo{resize:vertical;min-height:84px}
+.etq{display:flex;flex-direction:column;gap:6px;font-size:.88rem;font-weight:700}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:.88rem;line-height:1.4}
+.consent input{width:20px;height:20px;flex:none;margin:1px 0 0;accent-color:var(--fg)}
+.b2.rec{background:var(--fg);color:var(--tinta)}
 .src{font-size:.85rem;color:var(--muted);line-height:1.4;margin-top:-8px}
 .dots{display:flex;gap:6px;height:24px;align-items:center}
 .dots i{width:7px;height:7px;background:var(--fg);opacity:.15;animation:dt 1.2s ease-in-out infinite}
@@ -393,6 +403,24 @@ dd a{text-decoration:underline;text-underline-offset:2px}
   <div class="pn" role="dialog" aria-label="Ficha de la obra">
     <div class="hd"><b id="fTit"></b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="deep"><dl id="fDl"></dl><p class="note" id="fNota"></p></div>
+  </div>
+</div>
+<div class="sheet" id="memS" hidden>
+  <div class="pn" role="dialog" aria-labelledby="memT">
+    <div class="hd"><b id="memT">Deja tu memoria</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <form class="deep" id="memF" autocomplete="off">
+      <p class="note">Algo que viviste aquí, contado con tu voz. Hasta un minuto. Antes de que lo oigan otros, se revisa.</p>
+      <fieldset><legend>Tu memoria</legend>
+        <button class="b2" type="button" id="memRec"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span id="memRecT">Grabar</span></button>
+        <audio id="memAud" controls hidden></audio>
+        <label class="etq" for="memTxt">O escríbela<textarea class="campo" id="memTxt" rows="3"></textarea></label>
+      </fieldset>
+      <fieldset><legend>¿De qué parte habla?</legend><div class="opts" id="memZ"></div></fieldset>
+      <label class="etq" for="memQuien">Quién eres<input class="campo" id="memQuien" placeholder="Por ejemplo: vecino de la Rochapea"></label>
+      <label class="etq" for="memCuando">De cuándo es el recuerdo<input class="campo" id="memCuando" placeholder="Por ejemplo: 1975, o los años ochenta"></label>
+      <label class="consent" for="memOk"><input type="checkbox" id="memOk"><span>Acepto que se revise y, si se aprueba, se publique con mi voz o mi texto y con lo que he puesto arriba. Puedo pedir que se retire cuando quiera.</span></label>
+    </form>
+    <div class="foot"><button class="b1" id="memEnviar" type="button"><span>Enviar a revisión</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
   </div>
 </div>
 <div id="toast" role="status"></div>
@@ -692,6 +720,7 @@ function abrir(id){
   $('salaV').hidden = true; $('portV').hidden = true; $('obraV').hidden = false; $('obraV').classList.toggle('conversa', V2);
   cerrarEscribir(); cerrarPanel();
   preparar();
+  cargarMemorias(o);
   try{ history.replaceState(null, '', '#' + id); }catch(e){}
 }
 // Vuelve al inicio de la obra: el sello grande y un botón (el toque que deja sonar la voz)
@@ -872,9 +901,10 @@ function sugerencias(extra = '', ks = null){
   const ent = V2 && U.started && !U.fin && U.i <= U.introF ? `<button class="q" type="button" data-entera>Cuéntamela entera · ${duracion()}</button>` : '';
   // v2: cuando ya no queda relato, las otras voces de la obra (la visita guiada, contada por la guía)
   if(V2 && U.fin && !extra.includes('data-voz')) extra += otrasVoces();
-  if(!s.length && !extra && !ent) return;
+  const mem = puertaMem();
+  if(!s.length && !extra && !ent && !mem) return;
   const box = document.createElement('div'); box.className = 'sug';
-  box.innerHTML = (s.length || ent ? `<p class="eyb">Sugerencias</p>${ent}${s.map(qBoton).join('')}` : '') + extra;
+  box.innerHTML = (s.length || ent ? `<p class="eyb">Sugerencias</p>${ent}${s.map(qBoton).join('')}` : '') + mem + extra;
   $('lineas').appendChild(box);
 }
 const otrasVoces = () => Object.keys(OBRA.mediadores).filter(k => k !== P.guia).map(k => `<button class="lk" type="button" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join('');
@@ -902,7 +932,102 @@ $('lineas').addEventListener('click', e => {
   const v = e.target.closest('[data-voz]'); if(v){ P.guia = v.dataset.voz; store.set('guia', P.guia); preparar(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); $('empezar').click(); U.intro = false; return; }
   const p = e.target.closest('[data-pasa]'); if(p){ pasarALaGuia(p); return; }
   const en = e.target.closest('[data-entrar]'); if(en){ en.remove(); preguntarIA(en.dataset.entrar); return; }
+  const mm = e.target.closest('[data-mem]'); if(mm){ oirMemoria(+mm.dataset.mem); return; }
+  if(e.target.closest('[data-dejar]')){ abrirDejar(); return; }
 });
+
+/* ======================= Memorias del lugar ======================= */
+// Testimonios de quien lo vivió: una puerta junto a las preguntas. Solo existe si el promotor la abre para la pieza
+// (en la maqueta, unidad/memorias/<pieza>.json; en real, un almacén con su cola de revisión). Primero las recogidas
+// en taller, después las abiertas ya revisadas. Las tuyas, pendientes de revisión, solo las ves tú, en este dispositivo
+const MEM = {i:0, rec:null, trozos:[], url:null, z:null, audios:{}, reloj:0, tope:0, sonando:null};
+async function cargarMemorias(o){
+  if(o._mem) return o._mem;
+  try{ const d = await fetch(new URL(`../memorias/${o.id}.json`, location.href).href).then(r => r.ok ? r.json() : null);
+    o._mem = d && Array.isArray(d.memorias) ? {...d, activo:true} : {memorias:[], activo:false};
+  }catch(e){ o._mem = {memorias:[], activo:false}; }
+  return o._mem;
+}
+const misMemorias = id => { try{ return JSON.parse(st.get('am.mem.' + id, '[]')) || []; }catch(e){ return []; } };
+function todas(){
+  const d = OBRA._mem || {memorias:[]}, rango = m => m.origen === 'taller' ? 0 : 1;
+  return d.memorias.map(m => ({...m, ejemplo:!!d.ejemplo})).sort((a, b) => rango(a) - rango(b)).concat(misMemorias(OBRA.id));
+}
+function puertaMem(){
+  if(!OBRA || !OBRA._mem || !OBRA._mem.activo) return '';
+  const n = todas().length;
+  return n ? `<button class="q" type="button" data-mem="0">Memorias de este lugar · ${n}</button>` : `<button class="lk" type="button" data-dejar>Deja la primera memoria de este lugar</button>`;
+}
+function oirMemoria(k){
+  const lista = todas(), m = lista[k]; if(!m) return;
+  MEM.i = k; if(MEM.sonando){ MEM.sonando.pause(); MEM.sonando = null; }
+  if(U.playing) pausa(); else parar();
+  U.conv = true; U.intro = false; $('obraV').classList.remove('mirando');
+  apagarAnteriores(); $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
+  selloCam(m.z && OBRA.zonas[m.z] ? m.z : null);
+  // Cada memoria suena con su voz; en la maqueta, una voz del navegador en lugar de la grabación
+  const vk = 'mem:' + m.id; if(!OBRA.voces[vk]) OBRA.voces[vk] = {fem:!!m.fem, pitch:m.fem ? 1.02 : .95, rate:.94};
+  const quien = `<p class="qn">${esc(m.quien)}${m.cuando ? ' · ' + esc(m.cuando) : ''}</p>`;
+  const frases = m.t ? responder([{t:m.t, voz:vk}], false, quien) : (responder([], false, quien), []);
+  const url = m.mia && MEM.audios[m.id];
+  if(url){ const box = $('lineas').lastElementChild, a = document.createElement('audio'); a.controls = true; a.src = url; box.appendChild(a); MEM.sonando = a; a.play().catch(() => {}); }
+  const origen = m.mia ? 'tu memoria, pendiente de revisión: solo la ves tú' + (m.audio && !url ? ' (la grabación se envió con ella)' : '')
+    : m.ejemplo ? 'memoria de ejemplo, escrita para esta maqueta; en real suena la voz grabada de quien la cuenta'
+    : m.origen === 'taller' ? 'recogida en un taller de memoria' : 'enviada por un vecino y revisada';
+  $('lineas').insertAdjacentHTML('beforeend', `<p class="ep ep-testimonio"><b>Testimonio</b> · ${origen}</p>`);
+  const sig = lista[k + 1], box = document.createElement('div'); box.className = 'sug';
+  box.innerHTML = (sig ? `<button class="q" type="button" data-mem="${k + 1}">Siguiente memoria · ${esc(sig.quien)}</button>` : '') + '<button class="lk" type="button" data-dejar>Deja la tuya</button>';
+  $('lineas').appendChild(box); estado();
+  if(frases.length && !url) hablar(frases); else alTope($('lineas').querySelector('.ans.ahora'));
+}
+function abrirDejar(){
+  if(U.playing) pausa(); else parar();
+  if(MEM.sonando){ MEM.sonando.pause(); MEM.sonando = null; }
+  $('memT').textContent = `Deja tu memoria de ${PIEZA()}`;
+  MEM.z = null; pintarZonasMem(); limpiarGrabacion();
+  ['memTxt', 'memQuien', 'memCuando'].forEach(id => { $(id).value = ''; }); $('memOk').checked = false;
+  $('memS').hidden = false;
+}
+function pintarZonasMem(){
+  $('memZ').innerHTML = [['', `De ${PIEZA()} entera`], ...Object.entries(OBRA.zonas).map(([k, z]) => [k, z.n])]
+    .map(([k, n]) => `<button type="button" data-z="${k}" aria-pressed="${(MEM.z || '') === k}">${esc(n)}</button>`).join('');
+}
+$('memZ').onclick = e => { const b = e.target.closest('[data-z]'); if(!b) return; MEM.z = b.dataset.z || null; pintarZonasMem(); selloCam(MEM.z); };
+function limpiarGrabacion(){
+  if(MEM.rec && MEM.rec.state === 'recording') MEM.rec.stop();
+  clearInterval(MEM.reloj); clearTimeout(MEM.tope); MEM.url = null;
+  $('memAud').hidden = true; $('memAud').removeAttribute('src'); $('memRecT').textContent = 'Grabar · hasta 1 minuto'; $('memRec').classList.remove('rec');
+}
+$('memRec').onclick = async () => {
+  if(MEM.rec && MEM.rec.state === 'recording'){ MEM.rec.stop(); return; }
+  if(!navigator.mediaDevices || !window.MediaRecorder){ toast('Aquí no se puede grabar. Puedes escribirla.'); $('memTxt').focus(); return; }
+  try{
+    const s = await navigator.mediaDevices.getUserMedia({audio:true});
+    const r = MEM.rec = new MediaRecorder(s); MEM.trozos = [];
+    r.ondataavailable = e => { if(e.data.size) MEM.trozos.push(e.data); };
+    r.onstop = () => {
+      s.getTracks().forEach(t => t.stop()); clearInterval(MEM.reloj); clearTimeout(MEM.tope);
+      MEM.url = URL.createObjectURL(new Blob(MEM.trozos, {type:r.mimeType || 'audio/webm'}));
+      $('memAud').src = MEM.url; $('memAud').hidden = false; $('memRecT').textContent = 'Grabar de nuevo'; $('memRec').classList.remove('rec');
+    };
+    r.start(); const t0 = Date.now(); $('memRec').classList.add('rec'); $('memRecT').textContent = 'Parar · 0:00';
+    MEM.reloj = setInterval(() => { $('memRecT').textContent = `Parar · 0:${String(Math.min(59, Math.floor((Date.now() - t0)/1000))).padStart(2, '0')}`; }, 250);
+    MEM.tope = setTimeout(() => { if(r.state === 'recording') r.stop(); }, 60000);
+  }catch(e){ toast('Sin permiso para el micrófono. Puedes escribirla.'); }
+};
+$('memEnviar').onclick = () => {
+  const t = $('memTxt').value.trim();
+  if(MEM.rec && MEM.rec.state === 'recording'){ toast('Para la grabación antes de enviarla.'); return; }
+  if(!t && !MEM.url){ toast('Graba o escribe tu memoria.'); return; }
+  if(!$('memOk').checked){ toast('Falta aceptar la revisión y la publicación.'); return; }
+  const m = {id:'mia-' + Date.now(), quien:$('memQuien').value.trim() || 'Sin nombre', cuando:$('memCuando').value.trim(), z:MEM.z, t, mia:true, audio:!!MEM.url, fecha:new Date().toISOString()};
+  const mias = misMemorias(OBRA.id); mias.push(m); st.set('am.mem.' + OBRA.id, JSON.stringify(mias));
+  if(MEM.url){ MEM.audios[m.id] = MEM.url; MEM.url = null; }   // la grabación, solo en esta sesión: en real se sube a revisión
+  $('memS').hidden = true; toast('Enviada. Los demás la oirán cuando se revise.');
+  oirMemoria(todas().findIndex(x => x.id === m.id));
+};
+function cerrarDejar(){ limpiarGrabacion(); $('memS').hidden = true; }
+$('memF').onsubmit = e => e.preventDefault();
 
 /* ======================= Conversación: se añade al mismo texto ======================= */
 function encabezar(q){
@@ -1388,10 +1513,10 @@ async function fichaViva(o){
   }catch(e){ const t = document.getElementById(id); if(t) t.nextElementSibling.textContent = 'No se ha podido cargar ahora.'; }
 }
 function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes) play(); }
-const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }};
+const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }, memS:cerrarDejar};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());
-['ajS','fichaS','salaS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
-addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
+['ajS','fichaS','salaS','memS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
+addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('memS').hidden) cerrarDejar(); else if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
 
 /* ======================= Voz y música ======================= */
 let AC = null, MG = null, MSRC = null, MBUF = null;
