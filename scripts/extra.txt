@@ -92,3 +92,15 @@ galeras/busca-galley.json  https://commons.wikimedia.org/w/api.php?action=query&
 galeras/cat-galleys-art.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=categorymembers&gcmtitle=Category%3AGalleys+in+art&gcmlimit=100&gcmtype=file%7Csubcat&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
 galeras/cat-historia-puerto.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=categorymembers&gcmtitle=Category%3AHistory+of+El+Puerto+de+Santa+Mar%C3%ADa&gcmlimit=100&gcmtype=file%7Csubcat&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
 galeras/cat-puerto.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=categorymembers&gcmtitle=Category%3AEl+Puerto+de+Santa+Mar%C3%ADa&gcmlimit=100&gcmtype=file%7Csubcat&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&iiurlwidth=400
+# Fuente de las Galeras: candidatas (la fuente hoy, vistas antiguas de El Puerto y galeras de la época)
+galeras/fuente-1.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/El_Puerto_de_Santa_Mar%C3%ADa_-_Fuente_de_las_Galeras_1.jpg?width=1400
+galeras/fuente-2.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/El_Puerto_de_Santa_Mar%C3%ADa_-_Fuente_de_las_Galeras_2.jpg?width=1400
+galeras/fuente-3.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/El_Puerto_de_Santa_Mar%C3%ADa_-_Fuente_de_las_Galeras_3.jpg?width=1400
+galeras/fuente-delso.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Fuente_de_las_Galeras%2C_El_Puerto_de_Santa_Mar%C3%ADa%2C_Espa%C3%B1a%2C_2015-12-08%2C_DD_10.JPG?width=1400
+galeras/plaza.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Plaza_de_las_Galeras_Reales_%289839952206%29.jpg?width=1400
+galeras/wyngaerde-1567.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/El_Puerto_de_Santa_Mar%C3%ADa_-_Anton_van_den_Wyngaerde_-_1567.jpg?width=2800
+galeras/vista-1780.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Museonavalpuertosantamar.jpg
+galeras/puerto-xix.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/PuertoantXIX.jpg
+galeras/galera-malta.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/A_Castro%2C_Lorenzo_-_A_Galley_of_Malta_-_Google_Art_Project.jpg?width=1400
+galeras/galeres-roi.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Les_gal%C3%A8res_du_roi.jpg?width=1400
+galeras/galera-espanola.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Spanish_Galley.jpg
