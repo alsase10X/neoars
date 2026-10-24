@@ -1,0 +1,8 @@
+{
+ "nombre": "La fuente de las Galeras",
+ "lugar": "El Puerto de Santa María · en la calle",
+ "d": "Una fuente hecha para unas galeras que desaparecieron trece años después.",
+ "obras": [
+  "../obras/calle/fuente-galeras.json"
+ ]
+}

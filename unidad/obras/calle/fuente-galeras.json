@@ -1,0 +1,380 @@
+{
+ "titulo": "Fuente de las Galeras",
+ "autor": "Bartolomé Mendiola",
+ "fecha": "1735",
+ "pieza": "la fuente",
+ "img": "../../../img/calle/galeras/fuente-galeras.jpg",
+ "iw": 1400,
+ "ih": 935,
+ "fondo": "../../../img/calle/galeras/fuente-galeras-fondo.jpg",
+ "encuadre": [
+  0.32,
+  0.1,
+  0.36,
+  0.46
+ ],
+ "lugar": {
+  "lat": 36.5974711,
+  "lng": -6.2238283,
+  "dir": "Plaza de las Galeras Reales, junto al Guadalete"
+ },
+ "tema": "Una fuente hecha para unas galeras que desaparecieron trece años después, y que siguió dando agua a la ciudad dos siglos más.",
+ "zonas": {
+  "corona": {
+   "n": "La corona",
+   "poly": [
+    [
+     0.435,
+     0.125
+    ],
+    [
+     0.545,
+     0.125
+    ],
+    [
+     0.545,
+     0.245
+    ],
+    [
+     0.435,
+     0.245
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hay encima de la corona?",
+   "vista": "Arriba del todo, una corona real de piedra con una pequeña cruz encima."
+  },
+  "escudo": {
+   "n": "El escudo y los leones",
+   "poly": [
+    [
+     0.335,
+     0.245
+    ],
+    [
+     0.655,
+     0.245
+    ],
+    [
+     0.655,
+     0.53
+    ],
+    [
+     0.335,
+     0.53
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué animales hay a los lados del escudo?",
+   "vista": "Bajo la corona, el escudo real; a los lados, dos leones rampantes tallados entre roleos. En medio, una placa con una inscripción."
+  },
+  "grifos": {
+   "n": "Los grifos",
+   "poly": [
+    [
+     0.19,
+     0.74
+    ],
+    [
+     0.73,
+     0.74
+    ],
+    [
+     0.73,
+     0.815
+    ],
+    [
+     0.19,
+     0.815
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuántos grifos cuentas?",
+   "vista": "Una fila de grifos de cobre a lo largo del muro, sobre el pilón."
+  },
+  "cupula-izq": {
+   "n": "La cúpula de la izquierda",
+   "poly": [
+    [
+     0.125,
+     0.41
+    ],
+    [
+     0.205,
+     0.41
+    ],
+    [
+     0.205,
+     0.485
+    ],
+    [
+     0.125,
+     0.485
+    ]
+   ],
+   "rel": [
+    "cupula-der"
+   ],
+   "mira": "¿De qué están hechas las cúpulas?",
+   "vista": "Una cúpula pequeña de ladrillo en el extremo izquierdo."
+  },
+  "cupula-der": {
+   "n": "La cúpula de la derecha",
+   "poly": [
+    [
+     0.83,
+     0.375
+    ],
+    [
+     0.905,
+     0.375
+    ],
+    [
+     0.905,
+     0.445
+    ],
+    [
+     0.83,
+     0.445
+    ]
+   ],
+   "rel": [
+    "cupula-izq"
+   ],
+   "mira": "¿De qué están hechas las cúpulas?",
+   "vista": "Una cúpula pequeña de ladrillo en el extremo derecho."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.0,
+   "rate": 0.96,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Hispanopedia, «Fuente de las Galeras»",
+   "t": "Se construyó en 1735 para abastecer de agua a la flota y embellecer la ciudad, que había pasado a la Corona en 1729. La diseñó el maestro de obras Bartolomé Mendiola."
+  },
+  {
+   "id": "B2",
+   "f": "Hispanopedia, «Fuente de las Galeras»",
+   "t": "Las Galeras Reales invernaban en El Puerto de Santa María desde el siglo XVI."
+  },
+  {
+   "id": "B3",
+   "f": "Hispanopedia, «Fuente de las Galeras»",
+   "t": "Era el final de un largo acueducto subterráneo que traía el agua de los manantiales de Sidueña, en la sierra de San Cristóbal. Está junto al Guadalete, en la plaza de las Galeras."
+  },
+  {
+   "id": "B4",
+   "f": "Diario de Bahía de Cádiz, 1 de octubre de 2020",
+   "t": "La ciudad se abastecía desde 1588 de los manantiales de la Piedad, a unos 5 km, en la sierra de San Cristóbal. Por el deterioro de las cañerías se emprendió en el siglo XVIII, con Felipe V, la «Obra de la Fuente», cuyo principal exponente es esta fuente. Abasteció de agua a la ciudad hasta mediados del siglo XX."
+  },
+  {
+   "id": "B5",
+   "f": "Diario de Bahía de Cádiz, 1 de octubre de 2020",
+   "t": "Tiene una marquesina de piedra con el escudo real, flanqueado por dos leones rampantes y roleos, cuatro jarrones en las esquinas, una corona real y seis grifos de cobre."
+  },
+  {
+   "id": "B6",
+   "f": "Diario de Bahía de Cádiz, 1 de octubre de 2020",
+   "t": "En la restauración de 2019 y 2020 se quitaron la pintura blanca y los azulejos azules y blancos de las cúpulas, añadidos después, y las cúpulas volvieron al ladrillo, como eran al principio. Se repusieron un pináculo del escudo y una pequeña cruz sobre la corona, que faltaban. Aparecieron restos de un color burdeos documentado."
+  },
+  {
+   "id": "B7",
+   "f": "Hispanopedia, «Galera»",
+   "t": "En España, el Cuerpo General de Galeras fue disuelto por orden de 28 de noviembre de 1748."
+  },
+  {
+   "id": "B8",
+   "f": "Cátedra Naval, efemérides de septiembre",
+   "t": "La Escuadra de Galeras tuvo su base en El Puerto de Santa María y en Cartagena."
+  }
+ ],
+ "imagenes": {
+  "I1": {
+   "src": "../../../img/calle/galeras/wyngaerde-1567.jpg",
+   "muestra": "El Puerto de Santa María en 1567, dibujado por Anton van den Wyngaerde",
+   "relacion": "La fuente aún no existía",
+   "fecha": "1567",
+   "credito": "Anton van den Wyngaerde; reproducción de Menesteo, Wikimedia Commons",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:El_Puerto_de_Santa_Mar%C3%ADa_-_Anton_van_den_Wyngaerde_-_1567.jpg",
+   "ilustra": [
+    "B2"
+   ]
+  },
+  "I2": {
+   "src": "../../../img/calle/galeras/galera-malta.jpg",
+   "muestra": "Una galera de Malta, pintada por Lorenzo a Castro hacia 1680",
+   "relacion": "Así eran las galeras de la época; no es una de las de El Puerto",
+   "fecha": "hacia 1680",
+   "credito": "Lorenzo a Castro; Wikimedia Commons (Google Art Project)",
+   "licencia": "dominio público",
+   "url": "https://commons.wikimedia.org/wiki/File:A_Castro,_Lorenzo_-_A_Galley_of_Malta_-_Google_Art_Project.jpg",
+   "ilustra": [
+    "B2",
+    "B7"
+   ]
+  },
+  "I3": {
+   "src": "../../../img/calle/galeras/vista-1780.jpg",
+   "muestra": "Vista del Puerto de Santa María, óleo de Mariano Ramón Sánchez, 1781–1785",
+   "relacion": "Cuando se pintó, la fuente llevaba casi medio siglo dando agua",
+   "fecha": "1781–1785",
+   "credito": "Mariano Ramón Sánchez; Museo del Prado, en depósito en el Museo Naval; Wikimedia Commons",
+   "licencia": "dominio público",
+   "url": "https://commons.wikimedia.org/wiki/File:Museonavalpuertosantamar.jpg",
+   "ilustra": [
+    "B4"
+   ]
+  },
+  "I4": {
+   "src": "../../../img/calle/galeras/puerto-xix.jpg",
+   "muestra": "El Puerto de Santa María en un grabado del siglo XIX, con el muelle junto al Guadalete",
+   "relacion": "La fuente seguía dando agua a la ciudad",
+   "fecha": "siglo XIX",
+   "credito": "Grabado anónimo; Wikimedia Commons",
+   "licencia": "dominio público",
+   "url": "https://commons.wikimedia.org/wiki/File:PuertoantXIX.jpg",
+   "ilustra": [
+    "B3",
+    "B4"
+   ]
+  },
+  "I5": {
+   "src": "../../../img/calle/galeras/fuente-2015.jpg",
+   "muestra": "La fuente en 2015, antes de la restauración",
+   "relacion": "Pintada de blanco y con azulejos en las cúpulas, que se quitaron en 2020",
+   "fecha": "2015",
+   "credito": "Diego Delso, Wikimedia Commons",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fuente_de_las_Galeras,_El_Puerto_de_Santa_Mar%C3%ADa,_Espa%C3%B1a,_2015-12-08,_DD_10.JPG",
+   "ilustra": [
+    "B6"
+   ]
+  }
+ },
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia fuente",
+   "desc": "en primera persona",
+   "por": "la propia fuente",
+   "corto": "la fuente",
+   "ini": "F",
+   "acc": "#c9a46a",
+   "voz": "obra",
+   "intro": 1,
+   "placeholder": "Pregúntale a la fuente…",
+   "conversa": "Conversa con la fuente",
+   "te": "La fuente te pregunta",
+   "vts": "Dime: ¿qué es lo primero que ves en mí?",
+   "rol": "Eres la propia fuente de las Galeras, junto al Guadalete, en El Puerto de Santa María, y hablas en primera persona de ti y del lugar. Sabes lo que te ha pasado desde que te hicieron en 1735 y lo que se sabía entonces de la ciudad y de sus galeras; lo anterior lo cuentas como algo que te contaron.",
+   "relato": [
+    {
+     "z": "escudo",
+     "img": "I2",
+     "t": "Me hicieron en 1735 para dar agua a las galeras del rey, que pasaban el invierno aquí desde el siglo XVI. Llevo el escudo real, con dos leones a los lados y una corona encima. Trece años después, en 1748, el rey suprimió las galeras. Me quedé sin los barcos a los que tenía que dar de beber."
+    },
+    {
+     "z": "grifos",
+     "img": "I3",
+     "t": "Pero seguí dando agua a la ciudad doscientos años más, hasta mediados del siglo XX. El agua bajaba de los manantiales de la sierra de San Cristóbal por un acueducto bajo tierra, y salía aquí, por mis seis grifos de cobre. Esta orilla del Guadalete era el final de su camino."
+    },
+    {
+     "z": "cupula-izq",
+     "img": "I5",
+     "t": "En 2020 me quitaron la pintura blanca y los azulejos de las cúpulas, que me habían puesto después. Volví a la piedra y al ladrillo. Mira mis cúpulas: así me vieron las galeras."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué era una galera?",
+     "d": "fuera",
+     "z": null,
+     "img": "I2",
+     "ia": true,
+     "a": "Un barco de guerra largo y estrecho que avanzaba sobre todo a remo, con velas de apoyo. En la imagen se ven los remos en fila por el costado. Las del rey pasaban el invierno aquí."
+    },
+    {
+     "q": "¿Cómo era El Puerto antes de ti?",
+     "d": "fuera",
+     "z": null,
+     "img": "I1",
+     "a": "Así lo dibujó Anton van den Wyngaerde en 1567: la iglesia mayor, el castillo y muchos barcos en el río. Faltaban casi dos siglos para que me hicieran."
+    },
+    {
+     "q": "¿De dónde venía tu agua?",
+     "d": "obra",
+     "z": "grifos",
+     "img": "I4",
+     "a": "De los manantiales de la sierra de San Cristóbal, a unos cinco kilómetros, por un acueducto bajo tierra. La ciudad ya bebía de allí desde 1588; yo fui la obra principal cuando hubo que renovar las cañerías, con Felipe V. Mira mis grifos: ahí acababa el viaje."
+    },
+    {
+     "q": "¿Por qué antes eras blanca?",
+     "d": "mirar",
+     "z": "cupula-izq",
+     "img": "I5",
+     "a": "Me pintaron de blanco y me pusieron azulejos en las cúpulas después de hacerme. En 2020 me los quitaron y volví a la piedra, y debajo aparecieron restos de un color burdeos que está documentado. Mira las cúpulas: ahora son de ladrillo, como al principio."
+    },
+    {
+     "q": "¿Quién te diseñó?",
+     "d": "obra",
+     "z": "escudo",
+     "a": "El maestro de obras Bartolomé Mendiola, en 1735, cuando la ciudad acababa de pasar a la Corona. Mira el escudo real que llevo en el centro."
+    },
+    {
+     "q": "¿Qué pasó con las galeras?",
+     "d": "fuera",
+     "z": "corona",
+     "a": "En 1748 se disolvió el Cuerpo de Galeras. La escuadra había tenido su base aquí y en Cartagena. Yo seguí, pero ya para la ciudad. Mira mi corona: sigue ahí, aunque las galeras se fueran."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Fuente de las Galeras Reales"
+  ],
+  [
+   "Diseño",
+   "Bartolomé Mendiola, maestro de obras"
+  ],
+  [
+   "Fecha",
+   "1735"
+  ],
+  [
+   "Lugar",
+   "Plaza de las Galeras Reales, junto al Guadalete, El Puerto de Santa María"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://es.hispanopedia.com/wiki/Fuente_de_las_Galeras\" target=\"_blank\" rel=\"noopener\">Hispanopedia: Fuente de las Galeras</a> · <a href=\"https://www.diariobahiadecadiz.com/el-puerto/la-historica-fuente-de-las-galeras-recupera-su-imagen-original\" target=\"_blank\" rel=\"noopener\">Diario de Bahía de Cádiz, 2020</a> · <a href=\"https://es.hispanopedia.com/wiki/Galera\" target=\"_blank\" rel=\"noopener\">Hispanopedia: Galera</a> · <a href=\"https://catedranaval.com/wp-content/uploads/2014/09/septiembre.pdf\" target=\"_blank\" rel=\"noopener\">Cátedra Naval</a>"
+  ],
+  [
+   "Foto",
+   "Zarateman, 2025. <a href=\"https://commons.wikimedia.org/wiki/File:El_Puerto_de_Santa_Mar%C3%ADa_-_Fuente_de_las_Galeras_2.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, CC0"
+  ],
+  [
+   "Imágenes",
+   "De Wikimedia Commons; cada una lleva en su pie el autor, la licencia y su relación con la fuente"
+  ],
+  [
+   "Ubicación",
+   "OpenStreetMap"
+  ]
+ ],
+ "nota": "Maqueta. La voz de la fuente es una recreación en primera persona, escrita con los datos de las fuentes citadas y con lo que se ve en la foto. Las imágenes de contexto (vistas antiguas de El Puerto y una galera de la época) aparecen cuando el relato o una respuesta hablan de lo que ilustran."
+}

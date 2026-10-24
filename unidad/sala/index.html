@@ -144,6 +144,19 @@ blockquote{font-style:italic;font-weight:500;border-left:2px solid currentColor;
 .ep-lectura::before{transform:rotate(45deg) scale(.85)}
 .ep-general::before{border-style:dashed}
 .ep-testimonio::before{border-radius:50%;background:var(--fg)}
+/* Imágenes de contexto: lo que ya no está o lo que nombra la historia. El pie dice qué relación tienen con la pieza */
+.ctx{margin:0 0 14px;display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;align-items:start}
+.ctxB{display:block;padding:0;width:112px;height:84px;overflow:hidden;border:1px solid var(--hair);background:var(--panel)}
+.ctxB img{display:block;width:100%;height:100%;object-fit:cover}
+.ctx figcaption{font-size:.8rem;font-weight:500;font-style:normal;line-height:1.35;letter-spacing:0;color:color-mix(in srgb,var(--fg) 84%,transparent)}
+.ctx small{display:block;font-size:.8rem;color:var(--muted);margin-top:3px}
+/* La imagen grande, al tocarla: la voz sigue */
+.ctxV{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:56px 16px 24px}
+.ctxV figure{display:flex;flex-direction:column;gap:12px;max-width:100%}
+.ctxV img{display:block;max-width:100%;max-height:70vh;object-fit:contain}
+.ctxV figcaption{color:#F6F5F2;font-size:.9rem;line-height:1.4;max-width:46ch}
+.ctxV small{display:block;color:#A29E97;font-size:.8rem;margin-top:4px}
+.ctxV .ib{position:absolute;top:calc(env(safe-area-inset-top,0px) + 8px);right:8px;margin:0;color:#F6F5F2}
 .ans audio{width:100%;max-width:340px}
 /* Dejar una memoria del lugar */
 .campo{width:100%;box-sizing:border-box;font-family:inherit;font-size:1rem;line-height:1.4;padding:12px;border:1px solid var(--hair);background:transparent;color:var(--fg)}
@@ -423,6 +436,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <div class="foot"><button class="b1" id="memEnviar" type="button"><span>Enviar a revisión</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
   </div>
 </div>
+<div class="ctxV" id="ctxV" hidden><button class="ib" type="button" aria-label="Cerrar la imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><figure></figure></div>
 <div id="toast" role="status"></div>
 
 <script>
@@ -519,6 +533,7 @@ async function cargarSala(){
     const d = await fetch(url).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });
     d.id = ruta.split('/').pop().replace(/\.json$/, '');
     Object.values(d.mediadores || {}).forEach(m => { if(m.audio && m.audio.src) m.audio.src = abs(m.audio.src, url); });
+    Object.values(d.imagenes || {}).forEach(im => { im.src = abs(im.src, url); });
     if(d.iiif){
       // IIIF: el tamaño sale de su info.json; el sello usa una vista de 1.200 px como la unidad
       const base = abs(d.iiif, url).replace(/\/(info\.json)?$/, '');
@@ -739,7 +754,7 @@ function preparar(){
 $('empezar').onclick = () => {
   U.started = true; $('inicio').hidden = true; $('flujo').hidden = false; $('abajo').hidden = false;
   $('obraV').classList.toggle('sintexto', !G.texto);
-  requestAnimationFrame(() => selloCam(null, false));
+  requestAnimationFrame(() => selloCam(U.zona, false));   // la zona de la primera cápsula, si la tiene
   // v2: solo la presentación y después, la conversación. Empieza en la primera cápsula que no es una pausa para
   // mirar y ocupa las que diga el mediador («intro»; una, si no lo dice)
   if(V2){
@@ -760,11 +775,22 @@ function construir(){
     const segs = [{t:c.t}];
     if(c.c != null && OBRA.citas[c.c]){ const C = OBRA.citas[c.c]; segs.push({t:C.t, voz:C.voz, cita:String(c.c)}); }
     if(c.tras) segs.push({t:c.tras});
-    out.push({k:c.k || 'texto', z:c.z === undefined ? null : c.z, segs, au:grabada && c.au ? c.au : null});
+    out.push({k:c.k || 'texto', z:c.z === undefined ? null : c.z, segs, au:grabada && c.au ? c.au : null, img:c.img || null});
   });
   // El audio grabado solo vale si trae un tiempo por cada palabra del texto
   out.forEach(C => { C.palabras = C.segs.reduce((a, s) => a + s.t.trim().split(/\s+/).filter(Boolean).length, 0); if(C.au && (!C.au.w || C.au.w.length !== C.palabras)) C.au = null; });
   return out;
+}
+function figura(k, host){
+  const im = k && OBRA.imagenes && OBRA.imagenes[k]; if(!im || !host) return;
+  const f = document.createElement('figure'); f.className = 'ctx';
+  f.innerHTML = `<button class="ctxB" type="button" data-ctx="${esc(k)}" aria-label="Ver grande: ${esc(im.muestra)}"><img src="${esc(im.src)}" alt="" loading="lazy"></button>${pie(im, false)}`;   // el crédito, al verla grande
+  host.insertBefore(f, host.firstChild);   // primero la imagen: pone el contexto antes de que suene el texto
+}
+const pie = (im, credito = true) => `<figcaption>${esc(im.muestra)}${im.relacion ? '. ' + esc(im.relacion) + '.' : ''}${credito ? `<small>${esc([im.credito, im.licencia].filter(Boolean).join(' · '))}</small>` : ''}</figcaption>`;
+function verImagen(k){
+  const im = OBRA.imagenes && OBRA.imagenes[k]; if(!im) return;
+  $('ctxV').querySelector('figure').innerHTML = `<img src="${esc(im.src)}" alt="${esc(im.muestra)}">${pie(im)}`; $('ctxV').hidden = false;
 }
 const refHTML = C => { const t = esc(C.breve || C.ref || ''); return `<p class="ref">${C.url ? `<a href="${esc(C.url)}" target="_blank" rel="noopener">${t}</a>` : t}</p>`; };
 // Convierte trozos de texto en párrafos con una etiqueta por palabra, agrupadas en frases para la voz
@@ -790,7 +816,7 @@ function anadirCap(i){
   if(U.els[i]) return U.els[i];
   const C = U.caps[i]; apagarAnteriores();
   const el = document.createElement('div'); el.className = 'cap ahora' + (C.k === 'pregunta' ? ' preg' : '');
-  C.frases = trocear(C.segs, el);
+  C.frases = trocear(C.segs, el); figura(C.img, el);
   $('lineas').appendChild(el); U.els[i] = el; alTope(el);
   return el;
 }
@@ -924,6 +950,7 @@ function mostrarFin(){
 }
 $('lineas').addEventListener('click', e => {
   if(e.target.closest('a')) return;
+  const cx = e.target.closest('[data-ctx]'); if(cx){ verImagen(cx.dataset.ctx); return; }
   const k = e.target.closest('[data-k]'); if(k){ preguntaPreparada(M().qa[+k.dataset.k]); return; }
   if(e.target.closest('[data-entera]')){ $('lineas').querySelectorAll('.sug').forEach(s => s.remove()); play(); return; }
   const zb = e.target.closest('[data-zona]'); if(zb){ zonaTocada(zb.dataset.zona); return; }
@@ -1055,7 +1082,7 @@ function preguntaPreparada(x, eco){
     dots.remove();
     const partes = [{t:x.a, voz:M().voz}];
     if(x.c != null && OBRA.citas[x.c]) partes.push({t:OBRA.citas[x.c].t, voz:OBRA.citas[x.c].voz, cita:String(x.c)});
-    const frases = responder(partes, x.ia);
+    const frases = responder(partes, x.ia); figura(x.img, $('lineas').lastElementChild);
     if(x.ia) $('lineas').insertAdjacentHTML('beforeend', '<p class="ep ep-general"><b>Conocimiento general</b> · no sale de la base documental: verifícalo</p>');
     // Lo que el autor ya no vivió lo cuenta la guía
     const pasa = x.pasa && MED(x.pasa.a) ? `<button class="pasar" type="button" data-pasa="${esc(x.pasa.a)}" data-t="${esc(x.pasa.t)}">Preguntar a ${esc(MED(x.pasa.a).corto || MED(x.pasa.a).nombre)} →</button>` : '';
@@ -1178,7 +1205,7 @@ ${zonas}
 
 BASE DOCUMENTAL (lo único que puedes presentar como dato, con su identificador):
 ${BASE().map(b => `[${b.id}] ${b.f}: ${b.t}`).join('\n')}
-
+${imagenesPrompt()}
 VISITANTE
 - Visita que eligió: ${VIS().n}${VIS().d ? ' (' + VIS().d + ')' : ''}
 - Lugar de la obra que tiene señalado: ${U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno'}
@@ -1208,7 +1235,12 @@ El visitante está de pie delante de la obra real, en el museo, y te escucha con
 
 FORMATO
 Responde solo con un objeto JSON, sin texto antes ni después:
-{"partes":[{"t":"…","e":"fuente","f":"B1"},{"t":"…","e":"vista"}],"z":"identificador de zona o null"}`;
+{"partes":[{"t":"…","e":"fuente","f":"B1"},{"t":"…","e":"vista"}],"z":"identificador de zona o null"${OBRA.imagenes ? ',"imagen":"identificador de imagen o null"' : ''}}`;
+}
+// Las imágenes de contexto que el modelo puede enseñar: solo estas, y solo si ayudan a ver lo que cuenta
+function imagenesPrompt(){
+  const ims = Object.entries(OBRA.imagenes || {}); if(!ims.length) return '';
+  return `\nIMÁGENES DE CONTEXTO (puedes enseñar una con "imagen" si ayuda a ver lo que cuentas, sobre todo lo que ya no está; si no, null):\n${ims.map(([k, im]) => `- ${k}: ${im.muestra}.${im.relacion ? ' ' + im.relacion + '.' : ''}${im.ilustra ? ' Ilustra ' + im.ilustra.join(', ') + '.' : ''}`).join('\n')}\n`;
 }
 async function preguntarIA(q){
   q = q.replace(/\s+/g, ' ').trim().slice(0, 300); if(!q) return;
@@ -1248,6 +1280,7 @@ async function preguntarIA(q){
   // Responde siempre la guía: el autor solo habla con palabras suyas comprobadas
   const g = MED(MEDG());
   const frases = responder(partes.map(p => ({t:p.t, voz:g.voz, lab:etiqueta(p)})), false, MEDG() !== P.guia ? `<p class="qn">Te responde ${esc(g.por || g.nombre)}</p>` : '');
+  figura(typeof r.imagen === 'string' ? r.imagen : null, $('lineas').lastElementChild);   // solo si existe en la lista
   $('lineas').insertAdjacentHTML('beforeend', `<p class="src">Respuesta generada con IA (${esc(IA.nombre())}) a partir de la base documental de la obra</p>`);
   sugerencias(); estado(); hablar(frases);
 }
@@ -1516,7 +1549,8 @@ function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes) play(); }
 const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }, memS:cerrarDejar};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());
 ['ajS','fichaS','salaS','memS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
-addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('memS').hidden) cerrarDejar(); else if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
+$('ctxV').onclick = () => { $('ctxV').hidden = true; };
+addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('ctxV').hidden) $('ctxV').hidden = true; else if(!$('memS').hidden) cerrarDejar(); else if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
 
 /* ======================= Voz y música ======================= */
 let AC = null, MG = null, MSRC = null, MBUF = null;
