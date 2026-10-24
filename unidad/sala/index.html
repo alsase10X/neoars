@@ -169,6 +169,20 @@ textarea.campo{resize:vertical;min-height:84px}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:.88rem;line-height:1.4}
 .consent input{width:20px;height:20px;flex:none;margin:1px 0 0;accent-color:var(--fg)}
 .b2.rec{background:var(--fg);color:var(--tinta)}
+/* Memorias · formato «notas de voz»: todas a la vista, con quién, cuándo, de qué parte habla y lo que dura; se elige a quién escuchar */
+.memL{display:flex;flex-direction:column;gap:8px}
+.nota{border:1px solid var(--hair);background:color-mix(in srgb,var(--bg) 30%,transparent)}
+.notaB{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;align-items:center;width:100%;min-height:60px;padding:10px 12px;text-align:left}
+.notaI{width:40px;height:40px;border:1.5px solid var(--fg);display:grid;place-items:center}
+.notaI svg{width:16px;height:16px;fill:currentColor}
+.notaB .i-pausa,.notaB[aria-pressed=true] .i-play{display:none}
+.notaB[aria-pressed=true] .i-pausa{display:block}
+.notaB[aria-pressed=true] .notaI{background:var(--fg);color:var(--tinta)}
+.notaT b{display:block;font-size:1rem;font-weight:800;line-height:1.25}
+.notaT small{display:block;font-size:.85rem;color:var(--muted);margin-top:2px}
+.notaX{padding:0 12px 12px 64px;font-size:1.06rem;font-weight:600;line-height:1.4;display:flex;flex-direction:column;gap:8px}
+#lineas.hablando .notaX .w{opacity:.28}
+#lineas.hablando .notaX .w.on{opacity:1}
 .src{font-size:.85rem;color:var(--muted);line-height:1.4;margin-top:-8px}
 .dots{display:flex;gap:6px;height:24px;align-items:center}
 .dots i{width:7px;height:7px;background:var(--fg);opacity:.15;animation:dt 1.2s ease-in-out infinite}
@@ -400,6 +414,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
       <fieldset id="fsDis"><legend>Diseño · pruebas</legend><div class="seg" id="fBot"><button type="button" data-v="rectos">Rectos<small>Los de ahora</small></button><button type="button" data-v="redondeados">Redondeados<small>Esquinas suaves</small></button><button type="button" data-v="redondos">Redondos<small>Círculos</small></button></div></fieldset>
+      <fieldset id="fsMem" hidden><legend>Memorias · formato</legend><div class="seg" id="fMem"><button type="button" data-v="relato">En el relato<small>Una tras otra, como la visita</small></button><button type="button" data-v="notas">Notas de voz<small>Eliges a quién escuchar</small></button></div></fieldset>
       <div class="menu">
         <button class="fila-m" type="button" id="fichaB"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
         <button class="fila-m" type="button" id="deNuevoB"><span><b>Escucharla desde el principio</b><small id="deNuevoT"></small></span><span aria-hidden="true">→</span></button>
@@ -485,7 +500,7 @@ const MEDG = () => Object.keys(OBRA.mediadores)[0];
 const VIS = () => OBRA.visitas[P.perfil];
 const incl = c => (!c.p || tiene(c.p, P.perfil)) && !(c.x && tiene(c.x, P.perfil));
 // Pruebas de diseño para comparar plantillas; se recuerdan en este dispositivo
-const DIS = {botones:st.get('am.sala.botones', 'rectos')};
+const DIS = {botones:st.get('am.sala.botones', 'rectos'), memorias:st.get('am.sala.memorias', 'relato')};
 const aplicarDiseno = () => { document.documentElement.dataset.botones = DIS.botones; };
 aplicarDiseno();
 const G = {voz:st.get('am.sala.voz', '1') === '1', texto:st.get('am.sala.texto', '1') === '1', musica:st.get('am.sala.musica', '0') === '1'};
@@ -841,6 +856,7 @@ function estado(){
   let p;
   if(V.classList.contains('mirando')) p = `Levanta la vista y mira ${PIEZA()} <button class="lk" type="button" id="yaB">Ya he mirado →</button>`;
   else if(U.pensando) p = 'Pensando…';
+  else if(hablando && zona) p = `Búscalo en ${PIEZA()} · ${esc(zona)}`;
   else if(U.playing) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}` : 'Toca el sello para pausar';
   else if(V2 && U.conv && !U.fin && U.i <= U.introF) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}` : 'Pregunta con el micrófono o el teclado';
   else if(U.conv && !U.fin) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}. Toca el sello para seguir la visita` : 'Toca el sello para seguir la visita, o pregunta otra cosa';
@@ -968,7 +984,9 @@ $('lineas').addEventListener('click', e => {
   const v = e.target.closest('[data-voz]'); if(v){ P.guia = v.dataset.voz; store.set('guia', P.guia); preparar(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); $('empezar').click(); U.intro = false; return; }
   const p = e.target.closest('[data-pasa]'); if(p){ pasarALaGuia(p); return; }
   const en = e.target.closest('[data-entrar]'); if(en){ en.remove(); preguntarIA(en.dataset.entrar); return; }
+  if(e.target.closest('[data-memorias]')){ DIS.memorias === 'notas' ? notas() : oirMemoria(0); return; }
   const mm = e.target.closest('[data-mem]'); if(mm){ oirMemoria(+mm.dataset.mem); return; }
+  const nb = e.target.closest('[data-nota]'); if(nb){ nb.getAttribute('aria-pressed') === 'true' ? callarNota() : oirNota(+nb.dataset.nota); return; }
   if(e.target.closest('[data-dejar]')){ abrirDejar(); return; }
 });
 
@@ -992,7 +1010,7 @@ function todas(){
 function puertaMem(){
   if(!OBRA || !OBRA._mem || !OBRA._mem.activo) return '';
   const n = todas().length;
-  return n ? `<button class="q" type="button" data-mem="0">Memorias de este lugar · ${n}</button>` : `<button class="lk" type="button" data-dejar>Deja la primera memoria de este lugar</button>`;
+  return n ? `<button class="q" type="button" data-memorias>Memorias de este lugar · ${n}</button>` : `<button class="lk" type="button" data-dejar>Deja la primera memoria de este lugar</button>`;
 }
 function oirMemoria(k){
   const lista = todas(), m = lista[k]; if(!m) return;
@@ -1015,6 +1033,39 @@ function oirMemoria(k){
   box.innerHTML = (sig ? `<button class="q" type="button" data-mem="${k + 1}">Siguiente memoria · ${esc(sig.quien)}</button>` : '') + '<button class="lk" type="button" data-dejar>Deja la tuya</button>';
   $('lineas').appendChild(box); estado();
   if(frases.length && !url) hablar(frases); else alTope($('lineas').querySelector('.ans.ahora'));
+}
+// Formato «notas de voz»: todas las memorias a la vista y se elige a quién escuchar. La transcripción se abre debajo de la que suena
+const durMem = m => { if(!m.t) return ''; const s = Math.max(5, Math.round(m.t.split(/\s+/).length/2.5)); return `${Math.floor(s/60)}:${String(s%60).padStart(2, '0')}`; };
+const zonaMem = m => { const z = m.z && OBRA.zonas[m.z] ? OBRA.zonas[m.z].n : ''; return z ? z.charAt(0).toLowerCase() + z.slice(1) : ''; };
+const origenMem = m => m.mia ? 'tu memoria, pendiente de revisión: solo la ves tú' : m.origen === 'taller' ? 'recogida en un taller de memoria' : 'enviada por un vecino y revisada';
+function notas(){
+  if(MEM.sonando){ MEM.sonando.pause(); MEM.sonando = null; }
+  if(U.playing) pausa(); else parar();
+  U.conv = true; U.intro = false; $('obraV').classList.remove('mirando');
+  apagarAnteriores(); $('lineas').querySelectorAll('.sug, .memL').forEach(s => s.remove());
+  const ej = OBRA._mem && OBRA._mem.ejemplo, box = document.createElement('div'); box.className = 'memL';
+  box.innerHTML = `<p class="eyb">Memorias de este lugar</p>`
+    + (ej ? '<p class="ep ep-testimonio"><b>Testimonios</b> · de ejemplo, escritos para esta maqueta; en real suena la voz de quien lo cuenta</p>' : '')
+    + todas().map((m, k) => `<div class="nota"><button class="notaB" type="button" data-nota="${k}" aria-pressed="false"><span class="notaI" aria-hidden="true"><svg class="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg><svg class="i-pausa" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></span><span class="notaT"><b>${esc(m.quien)}</b><small>${esc([m.cuando, zonaMem(m), durMem(m)].filter(Boolean).join(' · '))}</small></span></button><div class="notaX" hidden></div></div>`).join('')
+    + '<button class="lk" type="button" data-dejar>Deja la tuya</button>';
+  $('lineas').appendChild(box); alTope(box); estado();
+}
+function callarNota(){
+  parar(); if(MEM.sonando){ MEM.sonando.pause(); MEM.sonando = null; }
+  $('lineas').querySelectorAll('.notaB').forEach(b => b.setAttribute('aria-pressed', 'false'));
+}
+function oirNota(k){
+  const m = todas()[k], L = $('lineas').querySelector('.memL'); if(!m || !L) return;
+  callarNota();
+  L.querySelectorAll('.notaX').forEach(x => { x.hidden = true; x.innerHTML = ''; });
+  const b = L.querySelector(`[data-nota="${k}"]`), x = b.nextElementSibling; b.setAttribute('aria-pressed', 'true'); x.hidden = false;
+  selloCam(m.z && OBRA.zonas[m.z] ? m.z : null);
+  const vk = 'mem:' + m.id; if(!OBRA.voces[vk]) OBRA.voces[vk] = {fem:!!m.fem, pitch:m.fem ? 1.02 : .95, rate:.94};
+  const frases = m.t ? trocear([{t:m.t, voz:vk}], x) : [];
+  x.insertAdjacentHTML('beforeend', `<p class="ep ep-testimonio"><b>Testimonio</b> · ${origenMem(m)}</p>`);
+  const url = m.mia && MEM.audios[m.id], fin = () => b.setAttribute('aria-pressed', 'false');
+  if(url){ const a = document.createElement('audio'); a.controls = true; a.src = url; x.insertBefore(a, x.firstChild); MEM.sonando = a; a.onended = fin; a.play().catch(() => {}); }
+  else if(frases.length) hablar(frases, fin); else fin();
 }
 function abrirDejar(){
   if(U.playing) pausa(); else parar();
@@ -1060,7 +1111,8 @@ $('memEnviar').onclick = () => {
   const mias = misMemorias(OBRA.id); mias.push(m); st.set('am.mem.' + OBRA.id, JSON.stringify(mias));
   if(MEM.url){ MEM.audios[m.id] = MEM.url; MEM.url = null; }   // la grabación, solo en esta sesión: en real se sube a revisión
   $('memS').hidden = true; toast('Enviada. Los demás la oirán cuando se revise.');
-  oirMemoria(todas().findIndex(x => x.id === m.id));
+  const k = todas().findIndex(x => x.id === m.id);
+  if(DIS.memorias === 'notas'){ notas(); oirNota(k); } else oirMemoria(k);
 };
 function cerrarDejar(){ limpiarGrabacion(); $('memS').hidden = true; }
 $('memF').onsubmit = e => e.preventDefault();
@@ -1105,12 +1157,12 @@ function pasarALaGuia(b){
   sugerencias(); estado(); hablar(frases);
 }
 let hablando = false;
-function hablar(frases){
-  const tok = ++U.tok, L = $('lineas'); L.classList.add('hablando'); let k = 0; contexto(); hablando = true; nivelMusica(); $('obraV').classList.remove('quieto');
+function hablar(frases, alAcabar){
+  const tok = ++U.tok, L = $('lineas'); L.classList.add('hablando'); let k = 0; contexto(); hablando = true; nivelMusica(); estado();
   const fin = () => { L.classList.remove('hablando'); hablando = false; nivelMusica(); estado(); mostrarOpciones(); };
   const next = () => {
     if(tok !== U.tok) return;
-    if(k >= frases.length) return fin();
+    if(k >= frases.length){ fin(); if(alAcabar) alAcabar(); return; }
     const f = frases[k];
     decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); k++; setTimeout(next, 160); });
   };
@@ -1456,7 +1508,8 @@ let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout
 /* ======================= Tu visita, ficha y sala ======================= */
 const Q = {};
 function abrirAjustes(){
-  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.botones = DIS.botones;
+  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.botones = DIS.botones; Q.memorias = DIS.memorias;
+  $('fsMem').hidden = !(OBRA._mem && OBRA._mem.activo);
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
   $('fPerfil').innerHTML = vis.map(k => `<button type="button" data-v="${k}"><span>${esc(OBRA.visitas[k].n)}<small>${esc(OBRA.visitas[k].d || '')}</small></span></button>`).join('');
@@ -1466,12 +1519,13 @@ function abrirAjustes(){
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
-function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
-[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
+function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
+[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
 $('menuB').onclick = abrirAjustes;
 function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
   if(Q.botones !== DIS.botones){ DIS.botones = Q.botones; st.set('am.sala.botones', DIS.botones); aplicarDiseno(); }
+  if(Q.memorias !== DIS.memorias){ DIS.memorias = Q.memorias; st.set('am.sala.memorias', DIS.memorias); toast(`Memorias: ${DIS.memorias === 'notas' ? 'notas de voz' : 'en el relato'}`); }
   // Cambio de modo: la misma obra, con la voz de ese modo y el enlace al día (?v=2 es la conversación)
   if((Q.modo === 'conversa') !== V2){
     const iba = U.started, voz = Q.guia !== P.guia ? Q.guia : null;

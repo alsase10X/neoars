@@ -1,0 +1,24 @@
+{
+ "ejemplo": true,
+ "nota": "Memorias de ejemplo, escritas para enseñar cómo funciona la puerta. No son de vecinos reales. En real, cada una sonaría con la voz grabada de quien la cuenta.",
+ "memorias": [
+  {
+   "id": "m1",
+   "quien": "Vecina de El Puerto",
+   "cuando": "años cuarenta",
+   "origen": "taller",
+   "z": "grifos",
+   "fem": true,
+   "t": "Mi madre me mandaba con el cántaro a la fuente de las Galeras. Había cola, y mientras esperábamos mirábamos los barcos del río. Yo contaba los grifos para saber cuál me iba a tocar."
+  },
+  {
+   "id": "m2",
+   "quien": "Vecino del barrio",
+   "cuando": "2020",
+   "origen": "abierta",
+   "z": "cupula-izq",
+   "fem": false,
+   "t": "Toda la vida la conocí blanca, con sus azulejos azules en las cúpulas. Cuando la limpiaron no la reconocía: me pareció otra fuente. Ahora creo que es la de verdad."
+  }
+ ]
+}
