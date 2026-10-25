@@ -359,7 +359,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 /* ---------- Índice en carrusel (prueba: ⋯ › Índice) ----------
    Una pieza cada vez: el sello grande con su encuadre, el fondo con su color, su frase (el tema) y un botón
    que entra en ella y empieza a sonar. Las vecinas asoman a los lados. Con mapa, un botón lleva a él */
-.carr{position:absolute;inset:0;z-index:1;background:var(--bg);--cs:min(62vw,300px,34vh);--cs:min(62vw,300px,34dvh);--paso:calc(var(--cs)*.88)}
+.carr{position:absolute;inset:0;z-index:1;background:var(--bg);--cs:min(70vw,330px,40vh);--cs:min(70vw,330px,40dvh);--paso:calc(var(--cs)*.88)}
 #salaV.enCarr .salaIn{visibility:hidden}
 .carrF{opacity:0;transition:opacity .7s}
 .carrF.on{opacity:1}
@@ -400,8 +400,8 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 .carrG{font-size:.9rem;line-height:1.4;min-height:1.4em}
 .carrG b{font-weight:800}
 /* La distancia es el enlace a «Cómo llegar» (la flecha lo dice); su alto se reserva aunque aún no se sepa */
-.carrG a{display:inline-flex;align-items:center;gap:6px;font-weight:800;text-decoration:none;padding:4px 0}
-.carrG a svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;flex:none}
+.carrG a{display:inline-flex;align-items:center;gap:4px;font-weight:800;text-decoration:none;padding:4px 0}
+.carrG a svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2.6;flex:none}
 .carrG:empty::before{content:"\00a0"}
 /* Mientras se desliza, el texto se apaga; al pararse cambia y vuelve */
 .carrT,.carrD,.carrG{transition:opacity .22s}
@@ -412,7 +412,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-botones=redondeados] .carrB{border-radius:14px}
 :root[data-botones=redondos] .carrB{border-radius:999px}
 :root[data-cta=recto] .carrB{border-radius:0}
-@media (max-height:720px){ .carr{--cs:min(56vw,250px,29vh);--cs:min(56vw,250px,29dvh)} .carrTw{font-size:clamp(1.6rem,7.4vw,2.2rem)} .carrD{-webkit-line-clamp:3;font-size:1rem} .carrPie{gap:5px} .carrCab{margin-top:2px} }
+@media (max-height:720px){ .carr{--cs:min(64vw,270px,33vh);--cs:min(64vw,270px,33dvh)} .carrTw{font-size:clamp(1.6rem,7.4vw,2.2rem)} .carrD{-webkit-line-clamp:3;font-size:1rem} .carrPie{gap:5px} .carrCab{margin-top:10px} }
 @media (max-height:640px){ :root{--sello:clamp(96px,26vw,124px)} .mandos{gap:16px} .sq{width:54px;height:54px} .sq.grande{width:64px;height:64px} }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important} .sv img,.w,.cap,.fondo,#flujo,.sico{transition:none!important} }
 
@@ -443,6 +443,13 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-plantilla] .ctxB,:root[data-plantilla] .campo,:root[data-plantilla] .avisoCita{border-radius:var(--r-campo)}
 :root[data-plantilla] .dots i{border-radius:50%}
 :root[data-plantilla] .ib:hover{background:color-mix(in srgb,var(--fg) 14%,transparent);color:var(--fg)}
+/* Los botones de arriba del índice: el ADN los descuelga hacia el borde (iconos sueltos); con fondo, a 12 px del borde y a 8 px entre ellos */
+:root[data-plantilla] .salaMenu,:root[data-plantilla] .salaAtras,:root[data-plantilla] .carrMapaB,:root[data-plantilla] .carrYoB{width:44px;height:44px;margin:0}
+:root[data-plantilla] .salaMenu{right:max(12px,env(safe-area-inset-right,0px))}
+:root[data-plantilla] .salaAtras{left:max(12px,env(safe-area-inset-left,0px))}
+:root[data-plantilla] .carrMapaB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 52px)}
+:root[data-plantilla] .carrYoB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 104px)}
+:root[data-plantilla] #salaV.conPortada .carrTop{padding-left:calc(max(12px,env(safe-area-inset-left,0px)) + 52px)}
 
 /* ---------- Expressive (Material 3 Expressive) ---------- */
 :root[data-plantilla=expressive]{
@@ -496,11 +503,6 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-plantilla=cristal] .pasar,:root[data-plantilla=cristal] .mcard .acc a,:root[data-plantilla=cristal] .mcard .acc button:not(.pri){
   background:var(--vidrio);border:1px solid var(--vidrio-borde);box-shadow:var(--vidrio-brillo),0 8px 24px rgba(0,0,0,.22);
   -webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%)}
-:root[data-plantilla=cristal] .salaMenu,:root[data-plantilla=cristal] .salaAtras,:root[data-plantilla=cristal] .carrMapaB,:root[data-plantilla=cristal] .carrYoB{width:44px;height:44px}
-:root[data-plantilla=cristal] .salaMenu{right:max(12px,env(safe-area-inset-right,0px))}
-:root[data-plantilla=cristal] .salaAtras{left:max(12px,env(safe-area-inset-left,0px))}
-:root[data-plantilla=cristal] .carrMapaB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 52px)}
-:root[data-plantilla=cristal] .carrYoB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 104px)}
 :root[data-plantilla=cristal] .q:hover{background:color-mix(in srgb,var(--fg) 18%,transparent)}
 /* Cristal tintado, más opaco, para lo que se lee encima: hojas, panel del altavoz, tarjeta del mapa y avisos */
 :root[data-plantilla=cristal] .sheet .pn,:root[data-plantilla=cristal] #panel,:root[data-plantilla=cristal] .mcard{background:var(--vidrio-hoja);border:1px solid var(--vidrio-borde);
@@ -839,6 +841,7 @@ function quienHabla(o){
   return `<small>Habla ${esc(n)}</small>`;
 }
 function pintarSala(){
+  document.title = SALA.nombre;
   // El título puede llevar una segunda línea en el color de acento
   $('salaT').innerHTML = esc(SALA.nombre) + (SALA.nombre2 ? `<span class="h1b">${esc(SALA.nombre2)}</span>` : ''); $('salaD').textContent = SALA.d;
   pintarLogo('salaLogo');
@@ -1012,7 +1015,7 @@ function datosCarrusel(){
   const d = o.lugar ? dist(o) : null;
   $('carrG').hidden = !o.lugar;
   $('carrG').innerHTML = d == null ? '' : estaJunto(o) ? '<b>Estás aquí</b>'
-    : `<a href="${comoLlegar(o)}" target="_blank" rel="noopener" aria-label="Cómo llegar: ${fmtDist(d).replace(' · ', ', ')} a pie">${fmtDist(d)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
+    : `<a href="${comoLlegar(o)}" target="_blank" rel="noopener" aria-label="Cómo llegar: ${fmtDist(d).replace(' · ', ', ')} a pie">${fmtDist(d)}<svg viewBox="6 6 12 12" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
   $('carrBT').textContent = V2 ? 'Iniciar conversación' : `Escuchar la visita · ${durTxt(escucha(o))}`;
   $('carrB').classList.toggle('conversa', V2);
   if(CAR.fondo !== o.fondo){
@@ -1110,6 +1113,7 @@ function verPortada(){
   $('portImg').src = o.img; $('portImg').style.objectPosition = encuadrePos({encuadre:P0.encuadre || o.encuadre}) || '50% 50%';
   pintarLogo('portLogo');
   $('portL').hidden = !SALA.lugar; $('portL').textContent = SALA.lugar || '';
+  document.title = SALA.nombre;
   $('portT').innerHTML = esc(SALA.nombre) + (SALA.nombre2 ? `<span class="h1b">${esc(SALA.nombre2)}</span>` : ''); $('portD').textContent = SALA.d;
   // Cuántas piezas, cuánto se camina (a unos 80 m por minuto) más lo que se escucha, y dónde empieza
   const n = SALA.obras.length, calle = conLugar(), seg = SALA.obras.reduce((a, x) => a + escucha(x), 0) + (SALA.km ? SALA.km*1000/80*60 : 0);
@@ -1137,6 +1141,7 @@ function abrir(id){
   if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
   U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false};
   $('oTit').textContent = OBRA.titulo; $('oSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
+  document.title = `${OBRA.titulo} · ${SALA.nombre}`;
   pintarLogo('iniLogo');
   // El segundo color de cada pieza, si la marca lo pide (el texto sobre él, claro u oscuro según su luz)
   const OV = $('obraV');
