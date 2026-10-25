@@ -249,6 +249,29 @@ textarea.campo{resize:vertical;min-height:84px}
   :root[data-cristal=transparente] .sq:not(.grande),:root[data-cristal=transparente] .q,:root[data-cristal=transparente] .nota,:root[data-cristal=transparente] #panel,:root[data-cristal=transparente] .sheet .pn,
   :root[data-cristal=tintado] .sq:not(.grande),:root[data-cristal=tintado] .q,:root[data-cristal=tintado] .nota,:root[data-cristal=tintado] #panel,:root[data-cristal=tintado] .sheet .pn{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}
 }
+/* Pruebas de diseño (Tu visita › Ideas de Google): lo aprovechable del experimento Dial-an-Artist de Google Arts & Culture */
+/* Estado en palabras bajo el sello: escuchando, hablando, en pausa */
+.estadoV{display:none;font-size:.9rem;font-weight:600;line-height:1.3;color:var(--muted);min-height:1.3em;margin:8px 0 -8px;text-align:center}
+:root.g-estado .estadoV{display:block}
+/* Halo al escuchar: mientras el micrófono está abierto, el sello se ilumina con el color de la obra (--halo, sale de la imagen) */
+:root.g-halo #obraV.oyendo .sv{border-color:var(--halo,var(--fg));box-shadow:0 0 0 2px var(--halo,var(--fg)),0 0 30px 8px color-mix(in srgb,var(--halo,var(--fg)) 55%,transparent),0 16px 46px rgba(0,0,0,.6);animation:halo 1.6s ease-in-out infinite}
+:root.g-halo #obraV.oyendo .sico{opacity:0}
+@keyframes halo{50%{box-shadow:0 0 0 2px var(--halo,var(--fg)),0 0 48px 16px color-mix(in srgb,var(--halo,var(--fg)) 75%,transparent),0 16px 46px rgba(0,0,0,.6)}}
+/* Subtítulos a mano: el interruptor de texto en pantalla, arriba y a un toque (sin mover el eje sello–micrófono); tachado cuando solo queda la voz */
+#subB,#avisoB{display:none}
+:root.g-subt #subB{display:grid}
+#subB{margin-right:0}
+/* Con un botón más arriba, el título y el autor no saltan de línea: se cortan con puntos suspensivos */
+:root.g-subt .who b,:root.g-subt .who small,:root.g-aviso .who b,:root.g-aviso .who small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Las cuatro ideas se encienden por separado: casillas, no opciones excluyentes */
+#fGoo button::before{border-radius:0}
+#subB .tachado{visibility:hidden}
+#subB[aria-checked=false]{color:var(--muted)}
+#subB[aria-checked=false] .tachado{visibility:visible}
+/* Avisar de un error: botón arriba, junto al menú, y una hoja con lo que estaba diciendo */
+:root.g-aviso #avisoB{display:grid}
+#avisoB{margin-right:0}
+.avisoCita{font-size:.95rem;line-height:1.45;padding:10px 12px;border:1px solid var(--hair);color:color-mix(in srgb,var(--fg) 86%,transparent)}
 .sq.rec{animation:inv 1s steps(2) infinite}
 @keyframes inv{50%{background:var(--bg);color:var(--fg)}}
 .firma{font-size:.8rem;color:var(--muted)}
@@ -378,6 +401,8 @@ dd a{text-decoration:underline;text-underline-offset:2px}
         <div class="col">
           <button class="ib atras" id="atras" type="button" aria-label="Todas las obras de la sala"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
           <div class="who"><b id="oTit"></b><small id="oSub"></small></div>
+          <button class="ib" id="subB" type="button" role="switch" aria-checked="true" aria-label="Texto en pantalla"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M10.4 10.3a2.2 2.2 0 1 0 0 3.4M16.9 10.3a2.2 2.2 0 1 0 0 3.4"/><path class="tachado" d="M3 3l18 18"/></svg></button>
+          <button class="ib" id="avisoB" type="button" aria-label="Avisar de un error"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z"/><path d="M12 7.5v4M12 13.6v.4"/></svg></button>
           <button class="ib" id="menuB" type="button" aria-label="Tu visita, ficha y otras obras de la sala"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg></button>
         </div>
       </header>
@@ -397,6 +422,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
           <svg class="sring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="48" class="sb"/><circle cx="50" cy="50" r="48" class="sf" id="sf"/></svg>
           <span class="sico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z"/></svg></span>
         </button>
+        <p class="estadoV" id="estadoV" aria-hidden="true"></p>
         <p class="pista col" id="pista" aria-live="polite"></p>
         <div class="mandos">
           <button class="sq" id="kb" type="button" aria-label="Escribir una pregunta"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12"/><path d="M7 10h1M11 10h1M15 10h2M7 14h10"/></svg></button>
@@ -427,6 +453,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
       <fieldset id="fsDis"><legend>Diseño · pruebas</legend><div class="seg" id="fBot"><button type="button" data-v="rectos">Rectos<small>Los de ahora</small></button><button type="button" data-v="redondeados">Redondeados<small>Esquinas suaves</small></button><button type="button" data-v="redondos">Redondos<small>Círculos</small></button></div></fieldset>
       <fieldset id="fsCri"><legend>Cristal · pruebas</legend><div class="seg" id="fCri"><button type="button" data-v="plano">Plano<small>El de ahora</small></button><button type="button" data-v="transparente">Transparente<small>Cristal claro</small></button><button type="button" data-v="tintado">Tintado<small>Más opaco</small></button></div></fieldset>
+      <fieldset id="fsGoo"><legend>Ideas de Google · pruebas</legend><div class="opts" id="fGoo"><button type="button" data-k="estado"><span>Estado en palabras<small>«Escuchando…» o «Hablando…» bajo el sello</small></span></button><button type="button" data-k="halo"><span>Halo al escuchar<small>El sello se ilumina con el color de la obra mientras te oye</small></span></button><button type="button" data-k="subt"><span>Subtítulos a mano<small>Botón de texto en pantalla, arriba y a un toque</small></span></button><button type="button" data-k="aviso"><span>Avisar de un error<small>Botón arriba para señalar algo que está mal</small></span></button></div></fieldset>
       <fieldset id="fsMem" hidden><legend>Memorias · formato</legend><div class="seg" id="fMem"><button type="button" data-v="relato">En el relato<small>Una tras otra, como la visita</small></button><button type="button" data-v="notas">Notas de voz<small>Eliges a quién escuchar</small></button></div></fieldset>
       <div class="menu">
         <button class="fila-m" type="button" id="fichaB"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
@@ -465,6 +492,18 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <label class="consent" for="memOk"><input type="checkbox" id="memOk"><span>Acepto que se revise y, si se aprueba, se publique con mi voz o mi texto y con lo que he puesto arriba. Puedo pedir que se retire cuando quiera.</span></label>
     </form>
     <div class="foot"><button class="b1" id="memEnviar" type="button"><span>Enviar a revisión</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
+  </div>
+</div>
+<div class="sheet" id="avisoS" hidden>
+  <div class="pn" role="dialog" aria-labelledby="avisoT">
+    <div class="hd"><b id="avisoT">Avisar de un error</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <form class="deep" id="avisoF" autocomplete="off">
+      <p class="note">Lo leerá el equipo del museo y, si hace falta, corregirá el texto.</p>
+      <fieldset><legend>Lo que estaba diciendo</legend><p class="avisoCita" id="avisoCita"></p></fieldset>
+      <fieldset><legend>¿Qué pasa?</legend><div class="opts" id="avisoTipo"><button type="button" data-v="dato"><span>Hay un dato mal<small>Una fecha, un nombre, un lugar</small></span></button><button type="button" data-v="obra"><span>Dice algo que no está en la obra</span></button><button type="button" data-v="voz"><span>No se oye o no se entiende</span></button><button type="button" data-v="otro"><span>Otra cosa</span></button></div></fieldset>
+      <label class="etq" for="avisoTxt">Cuéntalo, si quieres<textarea class="campo" id="avisoTxt" rows="3"></textarea></label>
+    </form>
+    <div class="foot"><button class="b1" id="avisoEnviar" type="button"><span>Enviar el aviso</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
   </div>
 </div>
 <div class="ctxV" id="ctxV" hidden><button class="ib" type="button" aria-label="Cerrar la imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><figure></figure></div>
@@ -514,7 +553,10 @@ const VIS = () => OBRA.visitas[P.perfil];
 const incl = c => (!c.p || tiene(c.p, P.perfil)) && !(c.x && tiene(c.x, P.perfil));
 // Pruebas de diseño para comparar plantillas; se recuerdan en este dispositivo
 const DIS = {botones:st.get('am.sala.botones', 'rectos'), memorias:st.get('am.sala.memorias', 'relato'), cristal:st.get('am.sala.cristal', 'plano')};
-const aplicarDiseno = () => { document.documentElement.dataset.botones = DIS.botones; document.documentElement.dataset.cristal = DIS.cristal; };
+// Ideas de Google (Dial-an-Artist): cuatro pruebas que se encienden por separado
+const GOO = ['estado', 'halo', 'subt', 'aviso'];
+DIS.g = Object.fromEntries(GOO.map(k => [k, st.get('am.sala.g.' + k, '0') === '1']));
+const aplicarDiseno = () => { const R = document.documentElement; R.dataset.botones = DIS.botones; R.dataset.cristal = DIS.cristal; GOO.forEach(k => R.classList.toggle('g-' + k, !!DIS.g[k])); };
 aplicarDiseno();
 const G = {voz:st.get('am.sala.voz', '1') === '1', texto:st.get('am.sala.texto', '1') === '1', musica:st.get('am.sala.musica', '0') === '1'};
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3400); }
@@ -877,6 +919,7 @@ function estado(){
   else p = 'Toca el sello para seguir, o pregunta con el micrófono o el teclado';
   $('pista').innerHTML = p;
   $('sello').setAttribute('aria-label', U.playing ? 'Pausar la visita' : U.fin ? 'Escucharla desde el principio' : 'Seguir la visita');
+  pintarEstado();
   nivelMusica();
 }
 $('sello').onclick = () => {
@@ -1480,8 +1523,8 @@ $('mic').onclick = () => {
   try{
     if(U.playing) pausa(); callar();
     rec = new SR(); rec.lang = 'es-ES'; rec.interimResults = false;
-    rec.onstart = () => { $('mic').classList.add('rec'); $('pista').textContent = 'Te escucho…'; };
-    rec.onend = () => { $('mic').classList.remove('rec'); rec = null; if($('pista').textContent === 'Te escucho…') estado(); };
+    rec.onstart = () => { $('mic').classList.add('rec'); $('obraV').classList.add('oyendo'); $('pista').textContent = escucho(); pintarEstado(); };
+    rec.onend = () => { $('mic').classList.remove('rec'); $('obraV').classList.remove('oyendo'); rec = null; if($('pista').textContent === escucho()) estado(); else pintarEstado(); };
     rec.onerror = ev => { if(['not-allowed','service-not-allowed','audio-capture'].includes(ev.error)) sinMicro(); else toast('No te he oído bien. Prueba otra vez o escribe la pregunta.'); };
     rec.onresult = ev => { const q = (ev.results[0][0].transcript || '').trim(); if(q) preguntar(q); };
     rec.start();
@@ -1490,12 +1533,76 @@ $('mic').onclick = () => {
 
 /* ======================= Panel del altavoz: voz, música y texto ======================= */
 function cerrarPanel(){ $('panel').hidden = true; $('alt').setAttribute('aria-expanded', 'false'); }
-function panelUI(){ $('pVoz').setAttribute('aria-pressed', G.voz); $('pMus').setAttribute('aria-pressed', G.musica); $('pTxt').setAttribute('aria-pressed', G.texto); $('pMusT').textContent = SALA && SALA.musica ? SALA.musica.titulo : ''; $('pMus').hidden = !(SALA && SALA.musica); }
+function panelUI(){ $('pVoz').setAttribute('aria-pressed', G.voz); $('pMus').setAttribute('aria-pressed', G.musica); $('pTxt').setAttribute('aria-pressed', G.texto); pintarSub(); $('pMusT').textContent = SALA && SALA.musica ? SALA.musica.titulo : ''; $('pMus').hidden = !(SALA && SALA.musica); }
 $('alt').onclick = e => { e.stopPropagation(); const abre = $('panel').hidden; $('panel').hidden = !abre; $('alt').setAttribute('aria-expanded', abre); panelUI(); };
 $('pVoz').onclick = () => { G.voz = !G.voz; st.set('am.sala.voz', G.voz ? '1' : '0'); panelUI(); if(U.playing){ parar(); sonar(); } else if(!G.voz) callar(); };
 $('pMus').onclick = () => { G.musica = !G.musica; st.set('am.sala.musica', G.musica ? '1' : '0'); panelUI(); contexto(); musica(G.musica); };
-$('pTxt').onclick = () => { G.texto = !G.texto; st.set('am.sala.texto', G.texto ? '1' : '0'); panelUI(); $('obraV').classList.toggle('sintexto', !G.texto); };
+function ponTexto(v){ G.texto = v; st.set('am.sala.texto', G.texto ? '1' : '0'); panelUI(); $('obraV').classList.toggle('sintexto', !G.texto); }
+$('pTxt').onclick = () => ponTexto(!G.texto);
 document.addEventListener('click', e => { if(!$('panel').hidden && !e.target.closest('#panel') && !e.target.closest('#alt')) cerrarPanel(); });
+
+/* ======================= Ideas de Google (pruebas): estado, halo, subtítulos y avisos ======================= */
+// Estado en palabras bajo el sello. «Pensando…» ya lo dice la pista, así que aquí no se repite
+function pintarEstado(){
+  const e = $('estadoV'); if(!e || !DIS.g.estado || !U) return;
+  const V = $('obraV'); let t = '';
+  if(V.classList.contains('oyendo')) t = 'Escuchando…';
+  else if(U.pensando) t = '';
+  else if(V.classList.contains('mirando')) t = 'Mirando la obra';
+  else if(hablando || U.playing) t = G.voz ? 'Hablando…' : 'Leyendo…';
+  else if(U.started && !U.fin) t = 'En pausa';
+  e.textContent = t;
+}
+// Con el estado en palabras, la pista no repite «Te escucho…»: da la instrucción
+function escucho(){ return DIS.g.estado ? 'Pregunta en voz alta, cerca del móvil' : 'Te escucho…'; }
+// El color del halo sale de la imagen del sello: la media de sus píxeles más saturados, con la luz subida para que brille.
+// Si la imagen es casi gris, o el navegador no deja leerla, el halo usa el color del texto
+function colorHalo(){
+  const im = $('selloImg'), V = $('obraV');
+  try{
+    if(!im.naturalWidth) return;
+    const c = document.createElement('canvas'); c.width = c.height = 24;
+    const x = c.getContext('2d', {willReadFrequently:true}); x.drawImage(im, 0, 0, 24, 24);
+    const d = x.getImageData(0, 0, 24, 24).data; let r = 0, g = 0, b = 0, w = 0;
+    for(let i = 0; i < d.length; i += 4){ const mx = Math.max(d[i], d[i+1], d[i+2]), mn = Math.min(d[i], d[i+1], d[i+2]), p = ((mx - mn)/255)**2 + .002; r += d[i]*p; g += d[i+1]*p; b += d[i+2]*p; w += p; }
+    const R = r/w/255, Gc = g/w/255, B = b/w/255, mx = Math.max(R, Gc, B), mn = Math.min(R, Gc, B), L = (mx + mn)/2, dd = mx - mn;
+    const s = dd ? dd/(1 - Math.abs(2*L - 1)) : 0;
+    if(s < .08){ V.style.removeProperty('--halo'); return; }
+    let h = mx === R ? ((Gc - B)/dd) % 6 : mx === Gc ? (B - R)/dd + 2 : (R - Gc)/dd + 4; h *= 60; if(h < 0) h += 360;
+    V.style.setProperty('--halo', `hsl(${Math.round(h)} ${Math.round(Math.max(.45, Math.min(.85, s))*100)}% 66%)`);
+  }catch(e){ V.style.removeProperty('--halo'); }
+}
+$('selloImg').addEventListener('load', colorHalo);
+// Subtítulos a mano: el mismo ajuste que «Texto en pantalla» del panel del altavoz, a un toque
+function pintarSub(){ $('subB').setAttribute('aria-checked', G.texto ? 'true' : 'false'); }
+$('subB').onclick = () => { cerrarPanel(); ponTexto(!G.texto); toast(G.texto ? 'Texto en pantalla' : 'Solo la voz'); };
+pintarSub();
+// Avisar de un error: recoge lo último que se estaba diciendo y qué pasa.
+// Prototipo: el aviso se guarda en este móvil; en real se envía al equipo del museo con la obra, el modo y la frase
+const AV = {tipo:null, cita:''};
+function abrirAviso(){
+  if(!U || !OBRA) return;
+  cerrarPanel();
+  const els = [...$('lineas').children].filter(el => el.textContent.trim());
+  const t = els.length ? els[els.length - 1].textContent.trim().replace(/\s+/g, ' ') : '';
+  AV.cita = t.length > 240 ? '…' + t.slice(-240) : t; AV.tipo = null;
+  $('avisoCita').textContent = AV.cita || 'Todavía no ha empezado a hablar.';
+  $('avisoTxt').value = ''; pintarAviso();
+  U.ajAntes = U.playing; if(U.playing) pausa();
+  $('avisoS').hidden = false;
+}
+function pintarAviso(){ document.querySelectorAll('#avisoTipo [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === AV.tipo)); }
+function cerrarAviso(){ $('avisoS').hidden = true; if(U && U.ajAntes) play(); }
+$('avisoTipo').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; AV.tipo = b.dataset.v; pintarAviso(); };
+$('avisoB').onclick = abrirAviso;
+$('avisoF').onsubmit = e => e.preventDefault();
+$('avisoEnviar').onclick = () => {
+  if(!AV.tipo){ toast('Elige qué pasa.'); return; }
+  let avisos = []; try{ avisos = JSON.parse(st.get('am.avisos', '[]')) || []; }catch(e){}
+  avisos.push({obra:OBRA.id, modo:V2 ? 'conversa' : 'guiada', tipo:AV.tipo, cita:AV.cita, texto:$('avisoTxt').value.trim(), fecha:new Date().toISOString()});
+  st.set('am.avisos', JSON.stringify(avisos.slice(-50)));
+  cerrarAviso(); toast('Gracias. Lo revisará el equipo del museo.');
+};
 
 /* ======================= El sello: se acerca al detalle que se nombra ======================= */
 function caja(k){
@@ -1521,7 +1628,7 @@ let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout
 /* ======================= Tu visita, ficha y sala ======================= */
 const Q = {};
 function abrirAjustes(){
-  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.botones = DIS.botones; Q.memorias = DIS.memorias; Q.cristal = DIS.cristal;
+  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.botones = DIS.botones; Q.memorias = DIS.memorias; Q.cristal = DIS.cristal; Q.g = {...DIS.g};
   $('fsMem').hidden = !(OBRA._mem && OBRA._mem.activo);
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
@@ -1532,13 +1639,15 @@ function abrirAjustes(){
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
-function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
+function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); document.querySelectorAll('#fGoo [data-k]').forEach(b => b.setAttribute('aria-pressed', !!(Q.g && Q.g[b.dataset.k]))); }
+$('fGoo').onclick = e => { const b = e.target.closest('[data-k]'); if(!b || !Q.g) return; Q.g[b.dataset.k] = !Q.g[b.dataset.k]; sync(); };
 [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
 $('menuB').onclick = abrirAjustes;
 function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
   if(Q.botones !== DIS.botones){ DIS.botones = Q.botones; st.set('am.sala.botones', DIS.botones); aplicarDiseno(); }
   if(Q.cristal !== DIS.cristal){ DIS.cristal = Q.cristal; st.set('am.sala.cristal', DIS.cristal); aplicarDiseno(); }
+  if(Q.g && GOO.some(k => Q.g[k] !== DIS.g[k])){ GOO.forEach(k => { DIS.g[k] = !!Q.g[k]; st.set('am.sala.g.' + k, DIS.g[k] ? '1' : '0'); }); aplicarDiseno(); pintarEstado(); if(U && U.started) estado(); }
   if(Q.memorias !== DIS.memorias){ DIS.memorias = Q.memorias; st.set('am.sala.memorias', DIS.memorias); toast(`Memorias: ${DIS.memorias === 'notas' ? 'notas de voz' : 'en el relato'}`); }
   // Cambio de modo: la misma obra, con la voz de ese modo y el enlace al día (?v=2 es la conversación)
   if((Q.modo === 'conversa') !== V2){
@@ -1623,11 +1732,11 @@ async function fichaViva(o){
   }catch(e){ const t = document.getElementById(id); if(t) t.nextElementSibling.textContent = 'No se ha podido cargar ahora.'; }
 }
 function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes) play(); }
-const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }, memS:cerrarDejar};
+const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }, memS:cerrarDejar, avisoS:cerrarAviso};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());
-['ajS','fichaS','salaS','memS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
+['ajS','fichaS','salaS','memS','avisoS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
 $('ctxV').onclick = () => { $('ctxV').hidden = true; };
-addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('ctxV').hidden) $('ctxV').hidden = true; else if(!$('memS').hidden) cerrarDejar(); else if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
+addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('ctxV').hidden) $('ctxV').hidden = true; else if(!$('avisoS').hidden) cerrarAviso(); else if(!$('memS').hidden) cerrarDejar(); else if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
 
 /* ======================= Voz y música ======================= */
 let AC = null, MG = null, MSRC = null, MBUF = null;
