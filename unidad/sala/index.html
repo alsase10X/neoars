@@ -359,14 +359,15 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 /* ---------- Índice en carrusel (prueba: ⋯ › Índice) ----------
    Una pieza cada vez: el sello grande con su encuadre, el fondo con su color, su frase (el tema) y un botón
    que entra en ella y empieza a sonar. Las vecinas asoman a los lados. Con mapa, un botón lleva a él */
-.carr{position:absolute;inset:0;z-index:1;background:var(--bg);--cs:min(62vw,300px,34vh);--cs:min(62vw,300px,34dvh);--paso:calc(var(--cs)*.84)}
+.carr{position:absolute;inset:0;z-index:1;background:var(--bg);--cs:min(62vw,300px,34vh);--cs:min(62vw,300px,34dvh);--paso:calc(var(--cs)*.88)}
 #salaV.enCarr .salaIn{visibility:hidden}
 .carrF{opacity:0;transition:opacity .7s}
 .carrF.on{opacity:1}
 .carrIn{position:relative;height:100%;display:flex;flex-direction:column;padding-top:calc(env(safe-area-inset-top,0px) + 12px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 14px)}
+/* Arriba, solo los botones (y el logo del cliente, si lo hay): el nombre del recorrido ya está en su portada */
 .carrTop{flex:none;height:44px;display:flex;align-items:center;min-width:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:calc(max(6px,env(safe-area-inset-right,0px)) + 96px)}
 #salaV.conPortada .carrTop{padding-left:calc(max(6px,env(safe-area-inset-left,0px)) + 46px)}
-.carrMarca{display:block;min-width:0;font-size:.9rem;font-weight:700;color:color-mix(in srgb,var(--fg) 80%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.carrMarca{display:block;min-width:0;color:var(--fg)}
 .carrMarca svg{height:24px;width:auto;display:block;max-width:100%}
 .carrMapaB{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(max(6px,env(safe-area-inset-right,0px)) + 46px);margin:0}
 .carrCab{flex:none;text-align:center;margin-top:clamp(6px,2.4vh,26px)}
@@ -376,19 +377,28 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 .carrPista{flex:1 1 auto;min-height:calc(var(--cs) + 34px);position:relative;display:flex;align-items:center;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;outline:none}
 .carrPista::-webkit-scrollbar{display:none}
 .carrPista::before,.carrPista::after{content:"";flex:0 0 calc(50% - var(--paso)/2)}
-.cs{flex:0 0 var(--paso);height:calc(var(--cs) + 30px);position:relative;scroll-snap-align:center;padding:0}
+/* Una pieza por gesto (snap-stop). Las vecinas se encogen y se apagan con CSS ligado al desplazamiento, en el mismo hilo que el dedo;
+   donde el navegador no lo sabe hacer, lo hace JavaScript */
+.cs{flex:0 0 var(--paso);height:calc(var(--cs) + 30px);position:relative;scroll-snap-align:center;scroll-snap-stop:always;padding:0;view-timeline:--cs inline}
 .csv{position:absolute;left:50%;top:50%;width:var(--cs);height:var(--cs);margin:calc(var(--cs)/-2) 0 0 calc(var(--cs)/-2);border-radius:50%;overflow:hidden;border:3px solid var(--fg);background:var(--panel);box-shadow:0 18px 50px rgba(0,0,0,.5);transform-origin:50% 50%;transition:box-shadow .4s}
 .csv img{position:absolute;max-width:none;display:block}
+@supports (animation-timeline:view()){
+  .csv{animation:csEsc linear both;animation-timeline:--cs;animation-range:cover calc(50% - var(--paso)) cover calc(50% + var(--paso))}
+  @keyframes csEsc{0%,100%{transform:scale(.73);opacity:.58}50%{transform:scale(1);opacity:1}}
+}
+@media (prefers-reduced-motion:reduce){ .cs{scroll-snap-stop:normal} }
 .cs.on .csv{box-shadow:0 0 0 10px color-mix(in srgb,var(--fg) 14%,transparent),0 24px 64px rgba(0,0,0,.55)}
 .cs:focus-visible{outline:none}
 .cs:focus-visible .csv{outline:3px solid var(--fg);outline-offset:5px}
 .carrPie{flex:none;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
 /* La frase: su alto se reserva con la más larga de la sala (hasta 4 líneas; 3 en pantallas bajas) para que el sello no salte */
 .carrD{font-size:1.04rem;line-height:1.4;color:color-mix(in srgb,var(--fg) 90%,transparent);max-width:34ch;min-height:4.2em;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.carrM{font-size:.88rem;line-height:1.4;color:var(--muted);max-width:40ch}
 .carrG{font-size:.9rem;line-height:1.4;min-height:1.4em}
 .carrG b{font-weight:800}
 .carrG .lk{font-size:.9rem;padding:0;display:inline}
+/* Mientras se desliza, el texto se apaga; al pararse cambia y vuelve */
+.carrT,.carrD,.carrG{transition:opacity .22s}
+.carr.moviendo .carrT,.carr.moviendo .carrD,.carr.moviendo .carrG{opacity:.18}
 .carrDots{display:flex;justify-content:center;align-items:center;min-height:24px;font-size:.85rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
 .carrDots button{width:22px;height:24px;display:grid;place-items:center;padding:0}
 .carrDots button::before{content:"";width:7px;height:7px;background:var(--fg);opacity:.28;transition:opacity .3s}
@@ -448,7 +458,6 @@ dd a{text-decoration:underline;text-underline-offset:2px}
         <div class="carrPista" id="carrPista" aria-label="Piezas: desliza para cambiar"></div>
         <div class="carrPie col">
           <p class="carrD" id="carrD"></p>
-          <p class="carrM" id="carrM"></p>
           <p class="carrG" id="carrG" hidden></p>
           <div class="carrDots" id="carrDots"></div>
           <button class="carrB" id="carrB" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg><span id="carrBT"></span></button>
@@ -846,10 +855,10 @@ function pintarCarrusel(){
     $('carrPista').innerHTML = SALA.obras.map((o, i) => `<button class="cs" type="button" data-i="${i}" aria-label="${esc(`${o.titulo}, ${i + 1} de ${n}`)}"><span class="csv"><img src="${esc(o.img)}" alt="" style="${recorteSello(o)}"${i > 2 ? ' loading="lazy"' : ''}></span></button>`).join('');
     $('carrDots').innerHTML = n < 2 || n > 12 ? '' : SALA.obras.map((o, i) => `<button type="button" data-i="${i}" aria-label="${esc(o.titulo)}"></button>`).join('');
   }
-  // Arriba, la marca del cliente si la hay; si no, el nombre del recorrido
+  // Arriba, solo el logo del cliente si lo hay
   const mk = $('carrMarca');
   if(MARCA && MARCA.logo){ mk.innerHTML = MARCA.logo; mk.setAttribute('role', 'img'); mk.setAttribute('aria-label', MARCA.nombre); }
-  else { mk.textContent = SALA.nombre; mk.removeAttribute('role'); mk.removeAttribute('aria-label'); }
+  else { mk.textContent = ''; mk.removeAttribute('role'); mk.removeAttribute('aria-label'); }
   $('carrL').textContent = SALA.lugar || '';
   $('carrMapaB').hidden = !conLugar();
   // La primera vez que llega el GPS, salta a la pieza más cercana (si el visitante no ha movido el carrusel)
@@ -860,7 +869,6 @@ function datosCarrusel(){
   const o = SALA && SALA.obras[CAR.i]; if(!o) return;
   $('carrT').textContent = o.titulo;
   $('carrD').textContent = o.tema || '';
-  $('carrM').textContent = [`${o.autor} · ${o.fecha}`, txt(quienHabla(o))].filter(Boolean).join(' · ');
   let g = '';
   if(o.lugar){
     const d = dist(o);
@@ -879,13 +887,16 @@ function datosCarrusel(){
     b.style.backgroundImage = `url("${o.fondo}")`; b.classList.add('on'); a.classList.remove('on'); CAR.capa = 1 - CAR.capa;
   }
 }
-// Las vecinas, más pequeñas y apagadas cuanto más lejos del centro
+// Las vecinas, más pequeñas y apagadas cuanto más lejos del centro. Si el navegador lo hace con CSS (animation-timeline), aquí solo
+// se marca la del centro; si no, JavaScript calcula el tamaño en cada fotograma
+const SDA = !!(window.CSS && CSS.supports('animation-timeline', 'view()'));
 function escalar(){
   const P = $('carrPista'), c = P.scrollLeft + P.clientWidth/2;
-  [...P.children].forEach(el => {
+  [...P.children].forEach((el, i) => {
+    if(SDA){ el.classList.toggle('on', i === CAR.i); return; }
     const d = Math.min(1, Math.abs(el.offsetLeft + el.offsetWidth/2 - c)/el.offsetWidth), v = el.firstElementChild;
     v.style.transform = `scale(${(1 - .27*d).toFixed(3)})`; v.style.opacity = (1 - .42*d).toFixed(3);
-    el.style.zIndex = d < .5 ? 2 : 1; el.classList.toggle('on', d < .5);
+    el.classList.toggle('on', d < .5);
   });
 }
 const centrada = () => { const P = $('carrPista'), c = P.scrollLeft + P.clientWidth/2; let k = 0, m = Infinity; [...P.children].forEach((el, i) => { const d = Math.abs(el.offsetLeft + el.offsetWidth/2 - c); if(d < m){ m = d; k = i; } }); return k; };
@@ -897,10 +908,17 @@ function irA(i, anim = true){
 // Entra en la pieza y empieza: en la visita guiada suena el relato; en la conversación, la presentación
 function entrar(){ const o = SALA.obras[CAR.i]; if(!o) return; CAR.tocado = true; abrir(o.id); $('empezar').click(); }
 $('carrB').onclick = entrar;
+// Al deslizar, el texto se apaga; cuando el carrusel se para (scrollend, o un momento sin moverse) cambia a la pieza del centro
+function parado(){
+  clearTimeout(CAR.para); $('carr').classList.remove('moviendo');
+  const k = centrada(); if(k !== CAR.i){ CAR.i = k; datosCarrusel(); } escalar();
+}
 $('carrPista').addEventListener('scroll', () => {
-  if(CAR.raf) return;
-  CAR.raf = requestAnimationFrame(() => { CAR.raf = 0; escalar(); const k = centrada(); if(k !== CAR.i){ CAR.i = k; datosCarrusel(); } });
+  $('carr').classList.add('moviendo'); clearTimeout(CAR.para); CAR.para = setTimeout(parado, 160);
+  if(SDA || CAR.raf) return;
+  CAR.raf = requestAnimationFrame(() => { CAR.raf = 0; escalar(); });
 }, {passive:true});
+$('carrPista').addEventListener('scrollend', parado);
 ['pointerdown', 'wheel', 'touchstart'].forEach(t => $('carrPista').addEventListener(t, () => { CAR.tocado = true; }, {passive:true}));
 // Tocar la del centro es entrar; tocar una vecina la trae al centro
 $('carrPista').onclick = e => { const b = e.target.closest('.cs'); if(!b) return; const i = +b.dataset.i; if(i === CAR.i) entrar(); else irA(i); };
