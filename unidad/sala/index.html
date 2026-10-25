@@ -369,11 +369,15 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 #salaV.conPortada .carrTop{padding-left:calc(max(6px,env(safe-area-inset-left,0px)) + 46px)}
 .carrMarca{display:block;min-width:0;color:var(--fg)}
 .carrMarca svg{height:24px;width:auto;display:block;max-width:100%}
-.carrMapaB{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(max(6px,env(safe-area-inset-right,0px)) + 46px);margin:0}
+.carrMapaB,.carrYoB{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);right:calc(max(6px,env(safe-area-inset-right,0px)) + 46px);margin:0}
+.carrYoB{right:calc(max(6px,env(safe-area-inset-right,0px)) + 92px)}
+/* Ubicación: hueca hasta saber dónde estás; parpadea mientras la busca; llena cuando el GPS la da */
+.carrYoB[aria-pressed=true] svg{fill:currentColor}
+.carrYoB.buscando svg{animation:yoBusca 1s ease-in-out infinite}
+@keyframes yoBusca{50%{opacity:.3}}
 .carrCab{flex:none;text-align:center;margin-top:clamp(6px,2.4vh,26px)}
 .carrTw{font-size:clamp(1.9rem,8.4vw,2.7rem);min-height:2.04em;display:flex;align-items:flex-end;justify-content:center}
 .carrT{font-size:1em;font-family:var(--fuente-titulos);font-weight:var(--peso-titulos);letter-spacing:var(--track-titulos);line-height:1.02;max-width:15ch;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.carrCab .eyb{min-height:1.2em}
 .carrPista{flex:1 1 auto;min-height:calc(var(--cs) + 34px);position:relative;display:flex;align-items:center;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;outline:none}
 .carrPista::-webkit-scrollbar{display:none}
 .carrPista::before,.carrPista::after{content:"";flex:0 0 calc(50% - var(--paso)/2)}
@@ -395,14 +399,13 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 .carrD{font-size:1.04rem;line-height:1.4;color:color-mix(in srgb,var(--fg) 90%,transparent);max-width:34ch;min-height:4.2em;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .carrG{font-size:.9rem;line-height:1.4;min-height:1.4em}
 .carrG b{font-weight:800}
-.carrG .lk{font-size:.9rem;padding:0;display:inline}
+/* La distancia es el enlace a «Cómo llegar» (la flecha lo dice); su alto se reserva aunque aún no se sepa */
+.carrG a{display:inline-flex;align-items:center;gap:6px;font-weight:800;text-decoration:none;padding:4px 0}
+.carrG a svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;flex:none}
+.carrG:empty::before{content:"\00a0"}
 /* Mientras se desliza, el texto se apaga; al pararse cambia y vuelve */
 .carrT,.carrD,.carrG{transition:opacity .22s}
 .carr.moviendo .carrT,.carr.moviendo .carrD,.carr.moviendo .carrG{opacity:.18}
-.carrDots{display:flex;justify-content:center;align-items:center;min-height:24px;font-size:.85rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
-.carrDots button{width:22px;height:24px;display:grid;place-items:center;padding:0}
-.carrDots button::before{content:"";width:7px;height:7px;background:var(--fg);opacity:.28;transition:opacity .3s}
-.carrDots button[aria-current=true]::before{opacity:1}
 .carrB{height:56px;width:min(100%,340px);padding:0 22px;background:var(--acento);color:var(--sobre-acento);font-size:1.02rem;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:2px}
 .carrB svg{width:16px;height:16px;fill:currentColor;flex:none}
 .carrB.conversa svg{display:none}
@@ -438,8 +441,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-plantilla] #panel{border-radius:20px;overflow:hidden}
 :root[data-plantilla] #toast{border-radius:14px}
 :root[data-plantilla] .ctxB,:root[data-plantilla] .campo,:root[data-plantilla] .avisoCita{border-radius:var(--r-campo)}
-:root[data-plantilla] .carrDots button::before,:root[data-plantilla] .dots i{border-radius:50%}
-:root[data-plantilla] .carrDots button::before{transition:opacity .3s,width .35s cubic-bezier(.2,.8,.2,1),border-radius .35s}
+:root[data-plantilla] .dots i{border-radius:50%}
 :root[data-plantilla] .ib:hover{background:color-mix(in srgb,var(--fg) 14%,transparent);color:var(--fg)}
 
 /* ---------- Expressive (Material 3 Expressive) ---------- */
@@ -476,10 +478,6 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-plantilla=expressive] .b1,:root[data-plantilla=expressive] #empezar,:root[data-plantilla=expressive] .carrB,:root[data-plantilla=expressive] .q,:root[data-plantilla=expressive] .sq{transition:transform .3s var(--muelle),border-radius .45s var(--muelle),background .2s}
 :root[data-plantilla=expressive] .b1:active,:root[data-plantilla=expressive] #empezar:active,:root[data-plantilla=expressive] .carrB:active,:root[data-plantilla=expressive] .q:active,:root[data-plantilla=expressive] .sq:active{transform:scale(.95)}
 :root[data-plantilla=expressive] .b1:active,:root[data-plantilla=expressive] #empezar:active,:root[data-plantilla=expressive] .carrB:active{border-radius:16px}
-/* Indicador de página: el punto activo se alarga */
-:root[data-plantilla=expressive] .carrDots button{width:auto;min-width:16px;padding:0 4px}
-:root[data-plantilla=expressive] .carrDots button::before{width:8px;height:8px;border-radius:4px}
-:root[data-plantilla=expressive] .carrDots button[aria-current=true]::before{width:24px}
 
 /* ---------- Cristal (cristal tintado, al estilo de Apple) ---------- */
 :root[data-plantilla=cristal]{
@@ -493,15 +491,16 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-plantilla=cristal] .ans{font-weight:500;letter-spacing:-.01em}
 :root[data-plantilla=cristal] .salaD,:root[data-plantilla=cristal] .carrD{letter-spacing:-.01em}
 /* Cristal claro: los botones que flotan, los mandos, las preguntas y los secundarios */
-:root[data-plantilla=cristal] .salaMenu,:root[data-plantilla=cristal] .salaAtras,:root[data-plantilla=cristal] .carrMapaB,
+:root[data-plantilla=cristal] .salaMenu,:root[data-plantilla=cristal] .salaAtras,:root[data-plantilla=cristal] .carrMapaB,:root[data-plantilla=cristal] .carrYoB,
 :root[data-plantilla=cristal] .sq:not(.grande),:root[data-plantilla=cristal] .q,:root[data-plantilla=cristal] .nota,:root[data-plantilla=cristal] .b2,:root[data-plantilla=cristal] .b3,
-:root[data-plantilla=cristal] .pasar,:root[data-plantilla=cristal] .mcard .acc a,:root[data-plantilla=cristal] .mcard .acc button:not(.pri),:root[data-plantilla=cristal] .carrDots{
+:root[data-plantilla=cristal] .pasar,:root[data-plantilla=cristal] .mcard .acc a,:root[data-plantilla=cristal] .mcard .acc button:not(.pri){
   background:var(--vidrio);border:1px solid var(--vidrio-borde);box-shadow:var(--vidrio-brillo),0 8px 24px rgba(0,0,0,.22);
   -webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%)}
-:root[data-plantilla=cristal] .salaMenu,:root[data-plantilla=cristal] .salaAtras,:root[data-plantilla=cristal] .carrMapaB{width:44px;height:44px}
+:root[data-plantilla=cristal] .salaMenu,:root[data-plantilla=cristal] .salaAtras,:root[data-plantilla=cristal] .carrMapaB,:root[data-plantilla=cristal] .carrYoB{width:44px;height:44px}
 :root[data-plantilla=cristal] .salaMenu{right:max(12px,env(safe-area-inset-right,0px))}
 :root[data-plantilla=cristal] .salaAtras{left:max(12px,env(safe-area-inset-left,0px))}
 :root[data-plantilla=cristal] .carrMapaB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 52px)}
+:root[data-plantilla=cristal] .carrYoB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 104px)}
 :root[data-plantilla=cristal] .q:hover{background:color-mix(in srgb,var(--fg) 18%,transparent)}
 /* Cristal tintado, más opaco, para lo que se lee encima: hojas, panel del altavoz, tarjeta del mapa y avisos */
 :root[data-plantilla=cristal] .sheet .pn,:root[data-plantilla=cristal] #panel,:root[data-plantilla=cristal] .mcard{background:var(--vidrio-hoja);border:1px solid var(--vidrio-borde);
@@ -515,8 +514,6 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-plantilla=cristal] .seg{background:var(--vidrio);border:1px solid var(--vidrio-borde);padding:3px;gap:3px}
 :root[data-plantilla=cristal] .seg button{border-left:0;border-radius:var(--r-boton)}
 :root[data-plantilla=cristal] .seg button[aria-pressed=true]{background:color-mix(in srgb,var(--fg) 26%,transparent);color:var(--fg);box-shadow:var(--vidrio-brillo)}
-:root[data-plantilla=cristal] .carrDots{border-radius:var(--r-boton);padding:0 8px;align-self:center}
-:root[data-plantilla=cristal] .carrDots:empty{visibility:hidden}
 :root[data-plantilla=cristal] .b1:active,:root[data-plantilla=cristal] #empezar:active,:root[data-plantilla=cristal] .carrB:active,:root[data-plantilla=cristal] .sq:active{transform:scale(.96)}
 :root[data-plantilla=cristal] .b1,:root[data-plantilla=cristal] #empezar,:root[data-plantilla=cristal] .carrB,:root[data-plantilla=cristal] .sq{transition:transform .25s cubic-bezier(.2,.8,.2,1),background .2s}
 @media (prefers-reduced-transparency:reduce){
@@ -560,17 +557,16 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <div class="carr" id="carr" hidden>
       <div class="fondo carrF" id="carrF0" aria-hidden="true"></div><div class="fondo carrF" id="carrF1" aria-hidden="true"></div>
       <button class="ib carrMapaB" id="carrMapaB" type="button" aria-label="Ver en el mapa" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg></button>
+      <button class="ib carrYoB" id="carrYoB" type="button" aria-label="Usar mi ubicación" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8z"/></svg></button>
       <div class="carrIn">
         <div class="carrTop"><span class="carrMarca" id="carrMarca"></span></div>
         <div class="carrCab col">
-          <p class="eyb" id="carrL"></p>
           <div class="carrTw"><h2 class="carrT" id="carrT" aria-live="polite"></h2></div>
         </div>
         <div class="carrPista" id="carrPista" aria-label="Piezas: desliza para cambiar"></div>
         <div class="carrPie col">
           <p class="carrD" id="carrD"></p>
           <p class="carrG" id="carrG" hidden></p>
-          <div class="carrDots" id="carrDots"></div>
           <button class="carrB" id="carrB" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg><span id="carrBT"></span></button>
           <p class="firma">Con tecnología de <b>artmedium</b></p>
         </div>
@@ -993,14 +989,17 @@ function pintarCarrusel(){
   if(CAR.hecho !== SALA){
     CAR.hecho = SALA; CAR.i = Math.min(CAR.i, n - 1);
     $('carrPista').innerHTML = SALA.obras.map((o, i) => `<button class="cs" type="button" data-i="${i}" aria-label="${esc(`${o.titulo}, ${i + 1} de ${n}`)}"><span class="csv"><img src="${esc(o.img)}" alt="" style="${recorteSello(o)}"${i > 2 ? ' loading="lazy"' : ''}></span></button>`).join('');
-    $('carrDots').innerHTML = n < 2 || n > 12 ? '' : SALA.obras.map((o, i) => `<button type="button" data-i="${i}" aria-label="${esc(o.titulo)}"></button>`).join('');
+    // Si este navegador ya dio permiso de ubicación, el GPS arranca solo; si no, se pide con el icono de arriba (nunca por sorpresa)
+    if(conLugar() && GEO.watch == null && !GEO.pos && navigator.permissions) navigator.permissions.query({name:'geolocation'}).then(r => { if(r.state === 'granted' && GEO.watch == null && !GEO.pos) pedirUbicacion(); }).catch(() => {});
   }
   // Arriba, solo el logo del cliente si lo hay
   const mk = $('carrMarca');
   if(MARCA && MARCA.logo){ mk.innerHTML = MARCA.logo; mk.setAttribute('role', 'img'); mk.setAttribute('aria-label', MARCA.nombre); }
   else { mk.textContent = ''; mk.removeAttribute('role'); mk.removeAttribute('aria-label'); }
-  $('carrL').textContent = SALA.lugar || '';
   $('carrMapaB').hidden = !conLugar();
+  const yo = $('carrYoB'), gps = !!(GEO.pos && !GEO.desde);
+  yo.hidden = !conLugar(); yo.classList.toggle('buscando', GEO.watch != null && !GEO.pos);
+  yo.setAttribute('aria-pressed', gps); yo.setAttribute('aria-label', gps ? 'Ir a la pieza más cercana' : 'Usar mi ubicación');
   // La primera vez que llega el GPS, salta a la pieza más cercana (si el visitante no ha movido el carrusel)
   if(GEO.pos && !GEO.desde && !CAR.gps){ CAR.gps = true; if(!CAR.tocado){ const k = cercana(); if(k !== CAR.i){ irA(k); return; } } }
   datosCarrusel();
@@ -1009,17 +1008,11 @@ function datosCarrusel(){
   const o = SALA && SALA.obras[CAR.i]; if(!o) return;
   $('carrT').textContent = o.titulo;
   $('carrD').textContent = o.tema || '';
-  let g = '';
-  if(o.lugar){
-    const d = dist(o);
-    const varias = SALA.obras.filter(x => x.lugar).length > 1;
-    g = d == null ? (GEO.watch != null ? 'Buscando dónde estás…' : `<button class="lk" type="button" data-cerca>${varias ? '¿Cuál me queda más cerca?' : '¿A qué distancia estoy?'}</button>`)
-      : estaJunto(o) ? '<b>Estás aquí</b>' : `<b>${fmtDist(d)}</b> · <a class="lk" href="${comoLlegar(o)}" target="_blank" rel="noopener">Cómo llegar</a>`;
-  }
-  $('carrG').innerHTML = g; $('carrG').hidden = !g;
-  const n = SALA.obras.length;
-  if(n > 12) $('carrDots').textContent = `${CAR.i + 1} / ${n}`;
-  else $('carrDots').querySelectorAll('[data-i]').forEach(b => b.setAttribute('aria-current', +b.dataset.i === CAR.i));
+  // Solo la distancia, que lleva a «Cómo llegar»; junto a la pieza, «Estás aquí». Sin ubicación, nada (el hueco se guarda)
+  const d = o.lugar ? dist(o) : null;
+  $('carrG').hidden = !o.lugar;
+  $('carrG').innerHTML = d == null ? '' : estaJunto(o) ? '<b>Estás aquí</b>'
+    : `<a href="${comoLlegar(o)}" target="_blank" rel="noopener" aria-label="Cómo llegar: ${fmtDist(d).replace(' · ', ', ')} a pie">${fmtDist(d)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
   $('carrBT').textContent = V2 ? 'Iniciar conversación' : `Escuchar la visita · ${durTxt(escucha(o))}`;
   $('carrB').classList.toggle('conversa', V2);
   if(CAR.fondo !== o.fondo){
@@ -1063,8 +1056,8 @@ $('carrPista').addEventListener('scrollend', parado);
 // Tocar la del centro es entrar; tocar una vecina la trae al centro
 $('carrPista').onclick = e => { const b = e.target.closest('.cs'); if(!b) return; const i = +b.dataset.i; if(i === CAR.i) entrar(); else irA(i); };
 $('carrPista').addEventListener('keydown', e => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if(!d) return; e.preventDefault(); CAR.tocado = true; const k = Math.max(0, Math.min(SALA.obras.length - 1, CAR.i + d)); irA(k); const b = $('carrPista').children[k]; if(b) b.focus({preventScroll:true}); });
-$('carrDots').onclick = e => { const b = e.target.closest('[data-i]'); if(b){ CAR.tocado = true; irA(+b.dataset.i); } };
-$('carrG').onclick = e => { if(e.target.closest('[data-cerca]')){ CAR.tocado = false; CAR.gps = false; pedirUbicacion(); } };
+// El icono de ubicación: la primera vez pide el permiso; con el GPS ya activo, lleva a la pieza más cercana
+$('carrYoB').onclick = () => { CAR.tocado = false; CAR.gps = false; if(GEO.watch == null || GEO.desde) pedirUbicacion(); else pintarCarrusel(); };
 // Del carrusel al mapa, con la pieza del centro señalada; al volver, el carrusel se centra en la que se eligió en el mapa
 $('carrMapaB').onclick = () => { GEO.sel = SALA.obras[CAR.i].id; verVista('mapa'); };
 // Al aparecer (o al girar el móvil) se recoloca en su pieza; solo cuando cambia el ancho, para no saltar a mitad de un gesto
