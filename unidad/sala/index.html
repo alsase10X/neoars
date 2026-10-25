@@ -533,6 +533,43 @@ dd a{text-decoration:underline;text-underline-offset:2px}
   :root[data-plantilla=cristal] *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
   :root[data-plantilla=cristal] .sheet .pn,:root[data-plantilla=cristal] #panel,:root[data-plantilla=cristal] .mcard{background:var(--panel)}
 }
+
+/* ==========================================================================================================
+   Disposición (prueba: ⋯ › Disposición). La misma pantalla de la pieza con otro orden:
+   · Sello abajo: la de ahora (reproductor: el sello junto al pulgar, la voz manda). Sin atributo; nada de lo de abajo le afecta.
+   · Sello arriba: como una llamada (quién te habla arriba, lo que dice en medio, tú abajo). Sin el nombre de la pieza en la
+     cabecera (ya lo dicen el índice, la portada y la primera frase), texto a tamaño de lectura en peso normal.
+   · Entre filetes: igual, con el texto en una franja entre dos rayas finas (el texto se difumina dentro, sin tocarlas).
+   ========================================================================================================== */
+:root[data-disp]{--sello:clamp(124px,38vw,172px)}
+@media (max-height:640px){ :root[data-disp]{--sello:clamp(100px,28vw,128px)} }
+:root[data-disp] .top{border-bottom-color:transparent}
+:root[data-disp] .top .col{min-height:56px}
+:root[data-disp] .who{display:none}
+:root[data-disp] .top .ib.atras{margin-right:auto}
+/* El sello sube a la cabeza del texto (lo mueve el script); en la portada de la pieza no se ve, porque ya está el grande */
+:root[data-disp] .o-in > .sello{position:relative;left:auto;top:auto;transform:none;flex:none;margin:0 auto 4px;z-index:2}
+#inicio:not([hidden]) ~ .sello{display:none}
+:root[data-disp] .abajo{padding-top:12px}
+:root[data-disp] #lineas{padding-bottom:40px}
+:root[data-disp] #flujo{-webkit-mask-image:linear-gradient(transparent,#000 20px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(transparent,#000 20px,#000 calc(100% - 36px),transparent)}
+:root[data-disp] #obraV.quieto #flujo{-webkit-mask-image:linear-gradient(transparent,#000 20px,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(transparent,#000 20px,#000 calc(100% - 20px),transparent)}
+/* Texto a tamaño de lectura, en peso normal: lo que suena en blanco, lo demás en gris */
+:root[data-disp] .cap,:root[data-disp] .ans{font-size:1.125rem;font-weight:400;line-height:1.5;letter-spacing:0;max-width:38ch}
+:root[data-disp] .cap.preg{font-size:1.3rem;font-weight:600;line-height:1.3;letter-spacing:-.01em}
+:root[data-disp] .cap blockquote,:root[data-disp] .ans blockquote{font-weight:400}
+:root[data-disp] #lineas{gap:18px}
+:root[data-disp] #porvenir{gap:18px;padding-top:18px}
+:root[data-disp] #obraV.sonando .cap.ahora .w,:root[data-disp] #lineas.hablando .ans.ahora .w{opacity:.5}
+:root[data-disp] #obraV.sonando .cap.ahora .w.on,:root[data-disp] #lineas.hablando .ans.ahora .w.on{opacity:1}
+/* Entre filetes: el texto en una franja entre dos rayas, al ancho de la columna y sin difuminado (las rayas hacen de borde) */
+:root[data-disp=filetes]{--ancho-col:min(calc(100vw - 2*max(16px,env(safe-area-inset-left,0px))),var(--col))}
+:root[data-disp=filetes] .o-in > .sello{margin-bottom:16px}
+:root[data-disp=filetes] .o-in > .sello::after,:root[data-disp=filetes] .abajo::before{content:"";position:absolute;left:50%;width:var(--ancho-col);height:1px;background:var(--hair);transform:translateX(-50%);pointer-events:none}
+:root[data-disp=filetes] .o-in > .sello::after{bottom:-12px}
+:root[data-disp=filetes] .abajo::before{top:0}
+:root[data-disp=filetes] .abajo{padding-top:16px}
+:root[data-disp=filetes] #obraV.escribiendo .abajo::before{display:none}
 </style>
 
 <div id="app">
@@ -644,6 +681,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <fieldset id="fsModo"><legend>Modo</legend><div class="seg" id="fModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset>
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
+      <fieldset id="fsDisp"><legend>Disposición · pruebas</legend><div class="seg" id="fDisp"><button type="button" data-v="abajo">Sello abajo<small>La de ahora</small></button><button type="button" data-v="arriba">Sello arriba<small>Como una llamada</small></button><button type="button" data-v="filetes">Entre filetes<small>Arriba, con rayas</small></button></div></fieldset>
       <fieldset id="fsPlant"><legend>Plantilla · pruebas</legend><div class="seg" id="fPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset>
       <fieldset id="fsDis"><legend>Diseño · pruebas</legend><div class="seg" id="fBot"><button type="button" data-v="rectos">Rectos<small>Los de ahora</small></button><button type="button" data-v="redondeados">Redondeados<small>Esquinas suaves</small></button><button type="button" data-v="redondos">Redondos<small>Círculos</small></button></div></fieldset>
       <fieldset id="fsCri"><legend>Cristal · pruebas</legend><div class="seg" id="fCri"><button type="button" data-v="plano">Plano<small>El de ahora</small></button><button type="button" data-v="transparente">Transparente<small>Cristal claro</small></button><button type="button" data-v="tintado">Tintado<small>Más opaco</small></button></div></fieldset>
@@ -662,7 +700,8 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <div class="hd"><b>Tu visita</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="deep"><fieldset><legend>Modo</legend><div class="seg" id="sModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset>
       <fieldset><legend>Índice · pruebas</legend><div class="seg" id="sIndice"><button type="button" data-v="lista">Lista<small>La de ahora</small></button><button type="button" data-v="carrusel">Carrusel<small>Una pieza cada vez</small></button></div></fieldset>
-      <fieldset><legend>Plantilla · pruebas</legend><div class="seg" id="sPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset></div>
+      <fieldset><legend>Plantilla · pruebas</legend><div class="seg" id="sPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset>
+      <fieldset><legend>Disposición de la pieza · pruebas</legend><div class="seg" id="sDisp"><button type="button" data-v="abajo">Sello abajo<small>La de ahora</small></button><button type="button" data-v="arriba">Sello arriba<small>Como una llamada</small></button><button type="button" data-v="filetes">Entre filetes<small>Arriba, con rayas</small></button></div></fieldset></div>
     <div class="foot"><button class="b1" id="sAplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
   </div>
 </div>
@@ -781,6 +820,25 @@ DIS.g = Object.fromEntries(GOO.map(k => [k, st.get('am.sala.g.' + k, '0') === '1
 const aplicarDiseno = () => { const R = document.documentElement, adn = PLANT === 'adn'; R.dataset.botones = adn ? DIS.botones : 'plantilla'; R.dataset.cristal = adn ? DIS.cristal : 'plano'; GOO.forEach(k => R.classList.toggle('g-' + k, !!DIS.g[k])); };
 aplicarPlantilla();
 if(PLANT !== 'adn') cambiarPlantilla(PLANT);
+// Disposición de la pieza (prueba): el sello abajo (la de ahora), arriba, o arriba con el texto entre filetes.
+// Va en el enlace (?disp=arriba|filetes) y se recuerda en el dispositivo
+const DISPS = ['abajo', 'arriba', 'filetes'], NOMBRE_D = {abajo:'sello abajo', arriba:'sello arriba', filetes:'sello arriba, texto entre filetes'};
+let DISP = (() => { try{ const v = new URLSearchParams(location.search).get('disp'); if(DISPS.includes(v)) return v; }catch(e){} const s = st.get('am.sala.disp', 'abajo'); return DISPS.includes(s) ? s : 'abajo'; })();
+function aplicarDisp(){
+  const R = document.documentElement, s = $('sello'), ab = $('abajo');
+  if(DISP === 'abajo') delete R.dataset.disp; else R.dataset.disp = DISP;
+  // El sello cambia de sitio: abajo, el primero de los mandos; arriba, justo encima del texto
+  if(DISP === 'abajo'){ if(s.parentNode !== ab) ab.insertBefore(s, ab.firstChild); }
+  else if(s.nextElementSibling !== $('flujo')) $('flujo').before(s);
+  if(U && U.started) requestAnimationFrame(() => { selloCam(U.zona, false); const el = U.els && U.els[U.i]; if(el) alTope(el); });
+}
+function cambiarDisp(v){
+  DISP = v; st.set('am.sala.disp', v);
+  try{ const u = new URL(location.href); if(v === 'abajo') u.searchParams.delete('disp'); else u.searchParams.set('disp', v); history.replaceState(null, '', u); }catch(e){}
+  aplicarDisp();
+}
+aplicarDisp();
+if(DISP !== 'abajo') cambiarDisp(DISP);
 const G = {voz:st.get('am.sala.voz', '1') === '1', texto:st.get('am.sala.texto', '1') === '1', musica:st.get('am.sala.musica', '0') === '1'};
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3400); }
 
@@ -1087,20 +1145,22 @@ function reservarFrase(){
   datosCarrusel();
 }
 
-let QS = 'guiada', QI = INDICE, QP = PLANT;
-const syncS = () => { [['sModo', QS], ['sIndice', QI], ['sPlant', QP]].forEach(([id, v]) => document.querySelectorAll(`#${id} [data-v]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v))); };
-$('salaMenu').onclick = () => { QS = V2 ? 'conversa' : 'guiada'; QI = INDICE; QP = PLANT; syncS(); $('salaS').hidden = false; };
+let QS = 'guiada', QI = INDICE, QP = PLANT, QD = DISP;
+const syncS = () => { [['sModo', QS], ['sIndice', QI], ['sPlant', QP], ['sDisp', QD]].forEach(([id, v]) => document.querySelectorAll(`#${id} [data-v]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v))); };
+$('salaMenu').onclick = () => { QS = V2 ? 'conversa' : 'guiada'; QI = INDICE; QP = PLANT; QD = DISP; syncS(); $('salaS').hidden = false; };
 $('sPlant').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; QP = b.dataset.v; syncS(); };
+$('sDisp').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; QD = b.dataset.v; syncS(); };
 $('sModo').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; QS = b.dataset.v; syncS(); };
 $('sIndice').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; QI = b.dataset.v; syncS(); };
 $('sAplicar').onclick = () => {
-  const conv = QS === 'conversa', mM = conv !== V2, mI = QI !== INDICE, mP = QP !== PLANT; $('salaS').hidden = true;
-  if(!mM && !mI && !mP) return;
+  const conv = QS === 'conversa', mM = conv !== V2, mI = QI !== INDICE, mP = QP !== PLANT, mD = QD !== DISP; $('salaS').hidden = true;
+  if(!mM && !mI && !mP && !mD) return;
   if(mM) cambiarModo(conv);
   if(mI) cambiarIndice(QI);
   if(mP) cambiarPlantilla(QP);
+  if(mD) cambiarDisp(QD);
   pintarSala();
-  toast([mI ? (INDICE === 'carrusel' ? 'Carrusel: una pieza cada vez' : 'Lista: todas las piezas a la vista') : '', mM ? (conv ? 'Conversación: pregúntale a cada obra' : 'Visita guiada: como una audioguía') : '', mP ? 'Plantilla: ' + NOMBRE_P[PLANT] : ''].filter(Boolean).join(' · '));
+  toast([mI ? (INDICE === 'carrusel' ? 'Carrusel: una pieza cada vez' : 'Lista: todas las piezas a la vista') : '', mM ? (conv ? 'Conversación: pregúntale a cada obra' : 'Visita guiada: como una audioguía') : '', mP ? 'Plantilla: ' + NOMBRE_P[PLANT] : '', mD ? 'Pieza: ' + NOMBRE_D[DISP] : ''].filter(Boolean).join(' · '));
 };
 $('obras').onclick = e => { const b = e.target.closest('[data-id]'); if(b) abrir(b.dataset.id); };
 function volverSala(){
@@ -2102,7 +2162,7 @@ let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout
 /* ======================= Tu visita, ficha y sala ======================= */
 const Q = {};
 function abrirAjustes(){
-  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.plantilla = PLANT; Q.botones = DIS.botones; Q.memorias = DIS.memorias; Q.cristal = DIS.cristal; Q.g = {...DIS.g};
+  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.plantilla = PLANT; Q.disp = DISP; Q.botones = DIS.botones; Q.memorias = DIS.memorias; Q.cristal = DIS.cristal; Q.g = {...DIS.g};
   $('fsMem').hidden = !(OBRA._mem && OBRA._mem.activo);
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
@@ -2113,13 +2173,14 @@ function abrirAjustes(){
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
-function sync(){ $('fsDis').hidden = $('fsCri').hidden = Q.plantilla !== 'adn'; [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); document.querySelectorAll('#fGoo [data-k]').forEach(b => b.setAttribute('aria-pressed', !!(Q.g && Q.g[b.dataset.k]))); }
+function sync(){ $('fsDis').hidden = $('fsCri').hidden = Q.plantilla !== 'adn'; [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fDisp','disp'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); document.querySelectorAll('#fGoo [data-k]').forEach(b => b.setAttribute('aria-pressed', !!(Q.g && Q.g[b.dataset.k]))); }
 $('fGoo').onclick = e => { const b = e.target.closest('[data-k]'); if(!b || !Q.g) return; Q.g[b.dataset.k] = !Q.g[b.dataset.k]; sync(); };
-[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
+[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fDisp','disp'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
 $('menuB').onclick = abrirAjustes;
 function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
   if(Q.plantilla !== PLANT){ cambiarPlantilla(Q.plantilla); toast('Plantilla: ' + NOMBRE_P[PLANT]); }
+  if(Q.disp !== DISP){ cambiarDisp(Q.disp); toast('Pieza: ' + NOMBRE_D[DISP]); }
   if(Q.botones !== DIS.botones){ DIS.botones = Q.botones; st.set('am.sala.botones', DIS.botones); aplicarDiseno(); }
   if(Q.cristal !== DIS.cristal){ DIS.cristal = Q.cristal; st.set('am.sala.cristal', DIS.cristal); aplicarDiseno(); }
   if(Q.g && GOO.some(k => Q.g[k] !== DIS.g[k])){ GOO.forEach(k => { DIS.g[k] = !!Q.g[k]; st.set('am.sala.g.' + k, DIS.g[k] ? '1' : '0'); }); aplicarDiseno(); pintarEstado(); if(U && U.started) estado(); }
