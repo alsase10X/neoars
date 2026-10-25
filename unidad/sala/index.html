@@ -199,7 +199,18 @@ textarea.campo{resize:vertical;min-height:84px}
 .lk{font-size:.92rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:6px 0;text-align:left;align-self:flex-start}
 .pasar{align-self:flex-start;height:44px;padding:0 14px;border:1px solid var(--fg);font-size:.95rem;font-weight:700}
 .pasar:hover{background:var(--fg);color:var(--tinta)}
-#obraV.sintexto #lineas{visibility:hidden}
+#obraV.sintexto #lineas,#obraV.sintexto #porvenir{visibility:hidden}
+/* Moverse por el relato (como en la unidad): lo que falta espera debajo, muy apagado. Mientras suena, arrastrar el texto para la voz
+   y al soltar sigue desde la cápsula que queda en la línea de lectura; tocar una cápsula la escucha desde su principio */
+#porvenir{display:flex;flex-direction:column;gap:22px;padding-top:22px;padding-bottom:max(calc(var(--sello)*.55 + 70px),42vh)}
+#flujo.conFuturo #lineas{padding-bottom:0}
+.cap.futura{opacity:.2}
+#lineas .cap,#porvenir .cap{cursor:pointer}
+.cap.apunta{opacity:1}
+#flujo.moviendo .cap.ahora:not(.apunta){opacity:.5}
+#obraV.mirando #porvenir{opacity:.08}
+/* El sello se desliza a los lados (siguiente o anterior): el gesto es suyo, no del navegador */
+.sello{touch-action:none}
 /* v2 · detalles del cuadro dentro de la respuesta: apagados hasta que la voz llega a ellos */
 .imgs{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;min-width:0;max-width:100%}
 .imgs::-webkit-scrollbar{display:none}
@@ -596,7 +607,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
         <button id="empezar" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg><span id="empT">Empezar</span></button>
       </div>
 
-      <div id="flujo" hidden><div class="col" id="lineas" aria-live="polite"></div></div>
+      <div id="flujo" hidden><div class="col" id="lineas" aria-live="polite"></div><div class="col" id="porvenir" aria-hidden="true" hidden></div></div>
 
       <div class="abajo" id="abajo" hidden>
         <button class="sello" id="sello" type="button" aria-label="Pausar o seguir la visita">
@@ -1161,6 +1172,7 @@ function preparar(){
   parar(); U.voz = M().voz; U.caps = construir(); U.els = []; U.i = 0; U.si = 0; U.fin = false; U.started = false; U.playing = false; U.conv = false; U.intro = false; U.introI = 0; U.introF = 0;
   U.segundos = Math.round(U.caps.reduce((a, C) => a + (C.au ? C.au.a - C.au.de : C.palabras/2.5), 0) + U.caps.length*1.2 + U.caps.filter(C => C.k === 'pregunta').length*espPregunta()/1000);
   $('lineas').innerHTML = ''; $('lineas').classList.remove('hablando');
+  U.fut = {}; U.entera = false; U.dedo = false; U.reanudar = false; $('porvenir').innerHTML = ''; $('porvenir').hidden = true; $('flujo').classList.remove('conFuturo', 'moviendo');
   $('iniQ').textContent = V2 ? `Pregúntale lo que quieras ${alA(M().corto || M().nombre)}, con la voz o escribiendo. Mejor con auriculares.`
     : `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando ${PIEZA()}.`;
   // El botón dice lo que va a pasar: conversar, o escuchar la visita y cuánto dura
@@ -1239,12 +1251,17 @@ function alTope(el){ if(!el) return; const F = $('flujo'); F.scrollTo({top:Math.
 function anadirCap(i){
   if(U.els[i]) return U.els[i];
   const C = U.caps[i]; apagarAnteriores();
-  const el = document.createElement('div'); el.className = 'cap ahora' + (C.k === 'pregunta' ? ' preg' : '');
-  C.frases = trocear(C.segs, el);
-  $('lineas').appendChild(el); U.els[i] = el; alTope(el);
-  return el;
+  // Si ya esperaba debajo (apagada), sube al relato tal cual; si no, se crea
+  if(U.fut && U.fut[i]) promover(i);
+  else {
+    const el = document.createElement('div'); el.className = 'cap ahora' + (C.k === 'pregunta' ? ' preg' : ''); el.dataset.i = i;
+    C.frases = trocear(C.segs, el); $('lineas').appendChild(el); U.els[i] = el;
+  }
+  alTope(U.els[i]); pintarFuturas();
+  return U.els[i];
 }
-function seguir(w){ if(!w) return; const F = $('flujo'), r = w.getBoundingClientRect(), t = F.getBoundingClientRect(); if(r.bottom > t.top + t.height*.58) F.scrollBy({top:r.bottom - (t.top + t.height*.42), behavior:RM ? 'auto' : 'smooth'}); }
+// Mientras el visitante arrastra el texto, la voz no se lo lleva
+function seguir(w){ if(!w || (U && U.dedo)) return; const F = $('flujo'), r = w.getBoundingClientRect(), t = F.getBoundingClientRect(); if(r.bottom > t.top + t.height*.58) F.scrollBy({top:r.bottom - (t.top + t.height*.42), behavior:RM ? 'auto' : 'smooth'}); }
 
 /* ======================= Reproducción: la voz manda ======================= */
 function duracion(){ const s = U.segundos; return s < 90 ? `${Math.max(30, Math.round(s/15)*15)} s` : `${(Math.round(s/60*2)/2).toString().replace('.', ',')} min`; }
@@ -1268,7 +1285,7 @@ function estado(){
   nivelMusica();
 }
 $('sello').onclick = () => {
-  if(!U.started) return;
+  if(!U.started || Date.now() - SW.hecho < 500) return;
   cerrarPanel();
   if(U.playing) return pausa();
   if(U.fin){ reiniciar(); return play(); }
@@ -1276,16 +1293,19 @@ $('sello').onclick = () => {
 };
 $('pista').addEventListener('click', e => { if(e.target.closest('#yaB')) siguiente(); });
 function play(){
+  // v2: pasada la presentación, sonar es oír la visita entera (y entonces se ve lo que falta)
+  if(V2 && !U.intro) U.entera = true;
   // Tras una pregunta, la visita sigue debajo de la respuesta: la cápsula que sonaba empieza de nuevo
   // (o la siguiente, si ya había terminado)
   if(U.conv){
     U.conv = false; const C = U.caps[U.i];
     if(C && C.frases && U.si >= C.frases.length && U.i < U.caps.length - 1) U.i++;
-    U.si = 0; U.els[U.i] = null;
+    // Lo que quedaba por oír se vuelve a contar debajo de la respuesta (las copias de arriba se quedan como ya dichas)
+    U.si = 0; for(let k = U.i; k < U.caps.length; k++) U.els[k] = null;
   }
   U.playing = true;
   contexto(); if(G.musica) musica(true); wake(true);
-  estado(); sonar();
+  pintarFuturas(); estado(); sonar();
 }
 function pausa(){ U.playing = false; parar(); $('obraV').classList.remove('mirando'); estado(); }
 function parar(){
@@ -1293,7 +1313,7 @@ function parar(){
   const c = $('sf'), cur = getComputedStyle(c).strokeDashoffset; c.style.transition = 'none'; c.style.strokeDashoffset = cur;
   if(hablando){ hablando = false; $('lineas').classList.remove('hablando'); }
 }
-function reiniciar(){ parar(); U.i = 0; U.si = 0; U.fin = false; U.els = []; $('lineas').innerHTML = ''; anillo(0, 0); }
+function reiniciar(){ parar(); U.i = 0; U.si = 0; U.fin = false; U.els = []; $('lineas').innerHTML = ''; U.fut = {}; $('porvenir').innerHTML = ''; anillo(0, 0); }
 function siguiente(){
   parar(); $('obraV').classList.remove('mirando');
   if(V2 && U.intro && U.i >= U.introF){ U.intro = false; return invitar(); }
@@ -1328,7 +1348,7 @@ function sonar(){
   decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); U.si++; anillo((U.i + U.si/C.frases.length)/n); U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 180); });
 }
 function terminar(){
-  parar(); U.playing = false; U.fin = true; apagarAnteriores();
+  parar(); U.playing = false; U.fin = true; apagarAnteriores(); pintarFuturas();
   $('obraV').classList.remove('mirando'); selloCam(null); anillo(1);
   mostrarFin(); estado(); wake(false);
 }
@@ -1336,6 +1356,113 @@ function anillo(p, ms = 600){
   const c = $('sf'), v = 301.6*(1 - Math.max(0, Math.min(1, p)));
   c.style.transition = ms && !RM ? `stroke-dashoffset ${ms}ms linear` : 'none'; c.style.strokeDashoffset = String(v);
 }
+
+/* ======================= Moverse por el relato: arrastrar, tocar o deslizar el sello ======================= */
+// Como en la unidad. Lo que falta espera debajo, muy apagado, en #porvenir (fuera de #lineas: la conversación, que va
+// metiendo respuestas en #lineas, no se entera). Mientras suena, arrastrar el texto para la voz y al soltar sigue desde la
+// cápsula que queda en la línea de lectura. En pausa, arrastrar solo es leer. Tocar una cápsula la escucha desde su principio.
+// Deslizar el sello a los lados (o las flechas del teclado): la siguiente o la anterior, también con el texto quitado
+function pintarFuturas(){
+  if(!U) return;
+  // En la conversación (v2), mientras dura la presentación solo se ve lo que queda de ella; la visita entera, al pedirla
+  const tope = !V2 || U.entera ? U.caps.length - 1 : U.introF;
+  const PV = $('porvenir'), faltan = U.started && !U.fin ? U.caps.map((C, k) => k).filter(k => k > U.i && k <= tope && !U.els[k]) : [];
+  U.fut = U.fut || {};
+  Object.keys(U.fut).forEach(k => { if(!faltan.includes(+k)){ U.fut[k].remove(); delete U.fut[k]; } });
+  faltan.forEach(k => {
+    if(U.fut[k]) return;
+    const C = U.caps[k], el = document.createElement('div'); el.className = 'cap futura' + (C.k === 'pregunta' ? ' preg' : ''); el.dataset.i = k;
+    C.frases = trocear(C.segs, el); U.fut[k] = el;
+    PV.insertBefore(el, [...PV.children].find(x => +x.dataset.i > k) || null);
+  });
+  PV.hidden = !faltan.length; $('flujo').classList.toggle('conFuturo', !!faltan.length);
+}
+// Las que esperaban hasta n suben al relato: las saltadas, como ya dichas; n, como la que suena
+function promover(n){
+  Object.keys(U.fut || {}).map(Number).sort((a, b) => a - b).forEach(k => {
+    if(k > n) return;
+    const el = U.fut[k]; delete U.fut[k];
+    el.classList.remove('futura', 'apunta'); el.classList.add(k === n ? 'ahora' : 'ya');
+    $('lineas').appendChild(el); U.els[k] = el;
+  });
+}
+// Ir a la cápsula n (y sonar, si se pide). Con la conversación abierta, la visita sigue desde ahí.
+// En la v2, ir más allá de la presentación es pedir la visita entera
+function ir(n, sonarYa){
+  if(!U || !U.started || !U.caps.length) return;
+  n = Math.max(0, Math.min(U.caps.length - 1, n));
+  parar(); $('obraV').classList.remove('mirando');
+  if(V2){ if(n > U.introF) U.entera = true; U.intro = !U.entera; }
+  if(U.entera) $('lineas').querySelectorAll('[data-entera]').forEach(b => b.remove());
+  U.conv = false; U.fin = false; U.i = n; U.si = 0;
+  const el = U.els[n];
+  if(el){ apagarAnteriores(); el.classList.remove('ya', 'apunta'); el.classList.add('ahora'); alTope(el); pintarFuturas(); }
+  else anadirCap(n);
+  const C = U.caps[n]; limpiar(C); selloCam(C.z); anillo(n/U.caps.length, 300);
+  if(sonarYa){
+    U.playing = true; contexto(); if(G.musica) musica(true); wake(true); estado();
+    const tok = U.tok; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 350);
+  } else { U.playing = false; estado(); }
+}
+function tocarCap(n, el){
+  if(!U || !U.started) return;
+  if(n === U.i && el === U.els[n] && el.classList.contains('ahora') && !U.fin && !U.conv){ U.playing ? pausa() : play(); return; }
+  ir(n, true);
+}
+function saltar(d){
+  if(!U || !U.started) return;
+  if(U.i + d > U.caps.length - 1){ parar(); return terminar(); }
+  ir(U.i + d, true);
+}
+$('porvenir').addEventListener('click', e => { const c = e.target.closest('.cap[data-i]'); if(c) tocarCap(+c.dataset.i, c); });
+// Arrastrar: la voz para mientras el dedo se mueve; la cápsula que pasa por la línea de lectura se enciende y el sello va a su zona
+let asentarT = 0, apuntada = null, apuntaT = 0;
+function capEnLinea(){
+  const F = $('flujo'), PV = $('porvenir'), y = F.scrollTop + F.clientHeight*.22; let mejor = null, d = 1e9;
+  [...$('lineas').children, ...(PV.hidden ? [] : PV.children)].forEach(el => { const top = el.offsetTop, bot = top + el.offsetHeight, dd = y < top ? top - y : y > bot ? y - bot : 0; if(dd < d){ d = dd; mejor = el; } });
+  return mejor && mejor.classList.contains('cap') && mejor.dataset.i != null ? mejor : null;
+}
+function apuntar(el){
+  if(el === apuntada) return;
+  if(apuntada) apuntada.classList.remove('apunta'); apuntada = el;
+  clearTimeout(apuntaT); if(!el) return;
+  el.classList.add('apunta');
+  apuntaT = setTimeout(() => { const C = U.caps[+el.dataset.i]; if(C && (C.z || null) !== U.zona) selloCam(C.z); }, 160);
+}
+const armar = () => { if(!U || !U.dedo) return; clearTimeout(asentarT); asentarT = setTimeout(asentar, 420); };
+function empiezaDedo(){
+  if(!U || !U.started || U.dedo) return;
+  U.dedo = true; U.reanudar = U.playing && !hablando && !U.pensando;
+  if(U.reanudar){ parar(); $('flujo').classList.add('moviendo'); }
+}
+['touchmove', 'wheel'].forEach(ev => $('flujo').addEventListener(ev, () => { empiezaDedo(); armar(); }, {passive:true}));
+$('flujo').addEventListener('touchend', armar, {passive:true});
+$('flujo').addEventListener('scroll', () => { if(!U || !U.dedo) return; if(U.reanudar) apuntar(capEnLinea()); armar(); }, {passive:true});
+function asentar(){
+  clearTimeout(asentarT); if(!U || !U.dedo) return;
+  const seguia = U.reanudar, el = seguia ? capEnLinea() : null;
+  U.dedo = false; U.reanudar = false; $('flujo').classList.remove('moviendo'); apuntar(null);
+  if(!seguia) return;
+  if(el && el !== U.els[U.i]) return ir(+el.dataset.i, true);
+  // Se ha soltado en la misma cápsula (o fuera del relato): sigue donde iba
+  selloCam(U.caps[U.i].z);
+  const tok = U.tok; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 300);
+}
+// Deslizar el sello: a la izquierda, la siguiente; a la derecha, la anterior
+const SW = {x:0, y:0, on:false, hecho:0};
+$('sello').addEventListener('pointerdown', e => { SW.on = true; SW.x = e.clientX; SW.y = e.clientY; });
+$('sello').addEventListener('pointercancel', () => { SW.on = false; });
+$('sello').addEventListener('pointerup', e => {
+  if(!SW.on) return; SW.on = false;
+  const dx = e.clientX - SW.x, dy = e.clientY - SW.y;
+  if(Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)*1.4) return;
+  SW.hecho = Date.now(); saltar(dx < 0 ? 1 : -1);
+});
+addEventListener('keydown', e => {
+  if((e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') || $('obraV').hidden || !U || !U.started) return;
+  if(e.target.closest && e.target.closest('input,textarea,select,[contenteditable]') || document.querySelector('.sheet:not([hidden])')) return;
+  e.preventDefault(); saltar(e.key === 'ArrowRight' ? 1 : -1);
+});
 
 /* ======================= Final: sugerencias y la siguiente obra de la sala ======================= */
 function elegir(){
@@ -1389,6 +1516,8 @@ $('lineas').addEventListener('click', e => {
   const mm = e.target.closest('[data-mem]'); if(mm){ oirMemoria(+mm.dataset.mem); return; }
   const nb = e.target.closest('[data-nota]'); if(nb){ nb.getAttribute('aria-pressed') === 'true' ? callarNota() : oirNota(+nb.dataset.nota); return; }
   if(e.target.closest('[data-dejar]')){ abrirDejar(); return; }
+  // Una cápsula del relato: escucharla desde su principio (la que suena: pausa o sigue)
+  const c = e.target.closest('.cap[data-i]'); if(c && !String(getSelection && getSelection()).trim()) tocarCap(+c.dataset.i, c);
 });
 
 /* ======================= Memorias del lugar ======================= */
