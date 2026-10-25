@@ -237,6 +237,18 @@ textarea.campo{resize:vertical;min-height:84px}
 :root[data-botones=redondos] #empezar{border-radius:999px;padding-inline:32px}
 .sq.grande svg{width:28px;height:28px}
 .sq[aria-pressed=true]:not(.grande),.sq[aria-expanded=true]{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+/* Pruebas de diseño (Tu visita › Cristal): cristal en los mandos, las preguntas, las memorias, el panel del altavoz y las hojas.
+   Plano es el ADN de ahora. Transparente imita el cristal de Apple; Tintado, su ajuste «Tintado»: más opacidad y más contraste,
+   teñido con el fondo, que sale de la obra. El botón grande no cambia. Las esquinas las sigue decidiendo la prueba de botones. */
+:root[data-cristal=transparente] .sq:not(.grande),:root[data-cristal=transparente] .q,:root[data-cristal=transparente] .nota,:root[data-cristal=transparente] #panel,:root[data-cristal=transparente] .sheet .pn{background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.06));-webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);border-color:rgba(255,255,255,.34);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 28px rgba(0,0,0,.28)}
+:root[data-cristal=tintado] .sq:not(.grande),:root[data-cristal=tintado] .q,:root[data-cristal=tintado] .nota,:root[data-cristal=tintado] #panel,:root[data-cristal=tintado] .sheet .pn{background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(28px) saturate(140%);backdrop-filter:blur(28px) saturate(140%);border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 10px 28px rgba(0,0,0,.32)}
+:root[data-tema=claro][data-cristal=tintado] .sq:not(.grande),:root[data-tema=claro][data-cristal=tintado] .q,:root[data-tema=claro][data-cristal=tintado] .nota,:root[data-tema=claro][data-cristal=tintado] #panel,:root[data-tema=claro][data-cristal=tintado] .sheet .pn{border-color:var(--hair);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 10px 28px rgba(0,0,0,.14)}
+:root[data-cristal] .q:hover{border-color:var(--fg)}
+:root[data-cristal] .sq[aria-pressed=true]:not(.grande),:root[data-cristal] .sq[aria-expanded=true]{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+@media (prefers-reduced-transparency:reduce){
+  :root[data-cristal=transparente] .sq:not(.grande),:root[data-cristal=transparente] .q,:root[data-cristal=transparente] .nota,:root[data-cristal=transparente] #panel,:root[data-cristal=transparente] .sheet .pn,
+  :root[data-cristal=tintado] .sq:not(.grande),:root[data-cristal=tintado] .q,:root[data-cristal=tintado] .nota,:root[data-cristal=tintado] #panel,:root[data-cristal=tintado] .sheet .pn{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--panel)}
+}
 .sq.rec{animation:inv 1s steps(2) infinite}
 @keyframes inv{50%{background:var(--bg);color:var(--fg)}}
 .firma{font-size:.8rem;color:var(--muted)}
@@ -414,6 +426,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
       <fieldset id="fsDis"><legend>Diseño · pruebas</legend><div class="seg" id="fBot"><button type="button" data-v="rectos">Rectos<small>Los de ahora</small></button><button type="button" data-v="redondeados">Redondeados<small>Esquinas suaves</small></button><button type="button" data-v="redondos">Redondos<small>Círculos</small></button></div></fieldset>
+      <fieldset id="fsCri"><legend>Cristal · pruebas</legend><div class="seg" id="fCri"><button type="button" data-v="plano">Plano<small>El de ahora</small></button><button type="button" data-v="transparente">Transparente<small>Cristal claro</small></button><button type="button" data-v="tintado">Tintado<small>Más opaco</small></button></div></fieldset>
       <fieldset id="fsMem" hidden><legend>Memorias · formato</legend><div class="seg" id="fMem"><button type="button" data-v="relato">En el relato<small>Una tras otra, como la visita</small></button><button type="button" data-v="notas">Notas de voz<small>Eliges a quién escuchar</small></button></div></fieldset>
       <div class="menu">
         <button class="fila-m" type="button" id="fichaB"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
@@ -500,8 +513,8 @@ const MEDG = () => Object.keys(OBRA.mediadores)[0];
 const VIS = () => OBRA.visitas[P.perfil];
 const incl = c => (!c.p || tiene(c.p, P.perfil)) && !(c.x && tiene(c.x, P.perfil));
 // Pruebas de diseño para comparar plantillas; se recuerdan en este dispositivo
-const DIS = {botones:st.get('am.sala.botones', 'rectos'), memorias:st.get('am.sala.memorias', 'relato')};
-const aplicarDiseno = () => { document.documentElement.dataset.botones = DIS.botones; };
+const DIS = {botones:st.get('am.sala.botones', 'rectos'), memorias:st.get('am.sala.memorias', 'relato'), cristal:st.get('am.sala.cristal', 'plano')};
+const aplicarDiseno = () => { document.documentElement.dataset.botones = DIS.botones; document.documentElement.dataset.cristal = DIS.cristal; };
 aplicarDiseno();
 const G = {voz:st.get('am.sala.voz', '1') === '1', texto:st.get('am.sala.texto', '1') === '1', musica:st.get('am.sala.musica', '0') === '1'};
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3400); }
@@ -1508,7 +1521,7 @@ let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout
 /* ======================= Tu visita, ficha y sala ======================= */
 const Q = {};
 function abrirAjustes(){
-  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.botones = DIS.botones; Q.memorias = DIS.memorias;
+  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.botones = DIS.botones; Q.memorias = DIS.memorias; Q.cristal = DIS.cristal;
   $('fsMem').hidden = !(OBRA._mem && OBRA._mem.activo);
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
@@ -1519,12 +1532,13 @@ function abrirAjustes(){
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
-function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
-[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
+function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); }
+[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
 $('menuB').onclick = abrirAjustes;
 function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
   if(Q.botones !== DIS.botones){ DIS.botones = Q.botones; st.set('am.sala.botones', DIS.botones); aplicarDiseno(); }
+  if(Q.cristal !== DIS.cristal){ DIS.cristal = Q.cristal; st.set('am.sala.cristal', DIS.cristal); aplicarDiseno(); }
   if(Q.memorias !== DIS.memorias){ DIS.memorias = Q.memorias; st.set('am.sala.memorias', DIS.memorias); toast(`Memorias: ${DIS.memorias === 'notas' ? 'notas de voz' : 'en el relato'}`); }
   // Cambio de modo: la misma obra, con la voz de ese modo y el enlace al día (?v=2 es la conversación)
   if((Q.modo === 'conversa') !== V2){
