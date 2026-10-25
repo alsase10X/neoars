@@ -190,6 +190,15 @@ textarea.campo{resize:vertical;min-height:84px}
 .dots i:nth-child(3){animation-delay:.4s}
 @keyframes dt{40%{opacity:1}}
 .sug{display:flex;flex-direction:column;gap:6px;animation:entra .6s cubic-bezier(.2,.8,.2,1)}
+/* Las memorias del lugar no son una pregunta más: otra puerta, separada de las sugerencias, con su icono y lo que hay dentro */
+.puertaM{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;text-align:left;margin-top:14px;padding:16px 0 4px;border-top:1px solid var(--hair)}
+.puertaI{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--fg);display:grid;place-items:center}
+.puertaI svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.puertaT b{display:block;font-size:1.05rem;font-weight:800;line-height:1.25}
+.puertaT small{display:block;font-size:.85rem;color:var(--muted);margin-top:3px;line-height:1.35}
+.puertaM>span:last-child{font-weight:700;color:var(--muted)}
+.puertaM:hover .puertaI{background:var(--fg);color:var(--tinta)}
+:root[data-plantilla] .puertaI{border:0;background:color-mix(in srgb,var(--fg) 14%,transparent)}
 .sug .eyb{margin-bottom:4px}
 .q{text-align:left;border:1px solid var(--hair);padding:12px 14px;font-size:1.02rem;font-weight:600;line-height:1.3;min-height:50px;background:color-mix(in srgb,var(--bg) 30%,transparent)}
 .q.ia{border-style:dashed}
@@ -488,11 +497,11 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-plantilla=expressive] .seg{border-color:color-mix(in srgb,var(--fg) 30%,transparent)}
 :root[data-plantilla=expressive] .seg button[aria-pressed=true]{background:var(--tonal-2);color:var(--fg);font-weight:700}
 :root[data-plantilla=expressive] .seg button[aria-pressed=true]::before{content:"✓ "}
-/* El micrófono, como el botón flotante de Material: cuadrado redondeado que se vuelve círculo al pulsarlo o mientras escucha,
-   con el color de la obra si lo hay */
-:root[data-plantilla=expressive] .sq.grande{border-radius:30%;transition:border-radius .45s var(--muelle),transform .3s var(--muelle)}
+/* El micrófono, redondo como los otros dos y con el color de la obra si lo hay; mientras escucha cambia de forma
+   (el cambio de forma de Material 3 Expressive): se vuelve un cuadrado redondeado */
+:root[data-plantilla=expressive] .sq.grande{border-radius:50%;transition:border-radius .45s var(--muelle),transform .3s var(--muelle)}
 :root[data-plantilla=expressive]:not([data-tema=claro]) .sq.grande{background:var(--halo,var(--acento));border-color:var(--halo,var(--acento));color:#111}
-:root[data-plantilla=expressive] .sq.grande:active,:root[data-plantilla=expressive] .sq.grande.rec,:root[data-plantilla=expressive] #obraV.oyendo .sq.grande{border-radius:50%}
+:root[data-plantilla=expressive] .sq.grande.rec,:root[data-plantilla=expressive] #obraV.oyendo .sq.grande{border-radius:30%}
 :root[data-plantilla=expressive] .b1,:root[data-plantilla=expressive] #empezar,:root[data-plantilla=expressive] .carrB,:root[data-plantilla=expressive] .q,:root[data-plantilla=expressive] .sq{transition:transform .3s var(--muelle),border-radius .45s var(--muelle),background .2s}
 :root[data-plantilla=expressive] .b1:active,:root[data-plantilla=expressive] #empezar:active,:root[data-plantilla=expressive] .carrB:active,:root[data-plantilla=expressive] .q:active,:root[data-plantilla=expressive] .sq:active{transform:scale(.95)}
 :root[data-plantilla=expressive] .b1:active,:root[data-plantilla=expressive] #empezar:active,:root[data-plantilla=expressive] .carrB:active{border-radius:16px}
@@ -1374,10 +1383,16 @@ function estado(){
 $('sello').onclick = () => {
   if(!U.started || Date.now() - SW.hecho < 500) return;
   cerrarPanel();
-  if(U.playing) return pausa();
+  if(U.playing) return pausaConOpciones();
   if(U.fin){ reiniciar(); return play(); }
   play();
 };
+// Pausar a mano (el sello o la cápsula que suena) es pedir otra cosa: aparecen las sugerencias debajo de lo que sonaba
+function pausaConOpciones(){
+  pausa();
+  if(!U.started || U.fin || U.conv || hablando) return;
+  sugerencias(); setTimeout(mostrarOpciones, 250);
+}
 $('pista').addEventListener('click', e => { if(e.target.closest('#yaB')) siguiente(); });
 function play(){
   // v2: pasada la presentación, sonar es oír la visita entera (y entonces se ve lo que falta)
@@ -1391,6 +1406,10 @@ function play(){
     U.si = 0; for(let k = U.i; k < U.caps.length; k++) U.els[k] = null;
   }
   U.playing = true;
+  // Al seguir, las sugerencias que había se van: la voz vuelve a mandar
+  $('lineas').querySelectorAll('.sug').forEach(x => x.remove());
+  // Si se sigue a mitad de una cápsula, vuelve a la vista (las sugerencias la habían subido)
+  if(U.si > 0 && U.els[U.i]) alTope(U.els[U.i]);
   contexto(); if(G.musica) musica(true); wake(true);
   pintarFuturas(); estado(); sonar();
 }
@@ -1487,13 +1506,14 @@ function ir(n, sonarYa){
   else anadirCap(n);
   const C = U.caps[n]; limpiar(C); selloCam(C.z); anillo(n/U.caps.length, 300);
   if(sonarYa){
+    $('lineas').querySelectorAll('.sug').forEach(x => x.remove());
     U.playing = true; contexto(); if(G.musica) musica(true); wake(true); estado();
     const tok = U.tok; U.timer = setTimeout(() => { if(tok === U.tok && U.playing) sonar(); }, 350);
   } else { U.playing = false; estado(); }
 }
 function tocarCap(n, el){
   if(!U || !U.started) return;
-  if(n === U.i && el === U.els[n] && el.classList.contains('ahora') && !U.fin && !U.conv){ U.playing ? pausa() : play(); return; }
+  if(n === U.i && el === U.els[n] && el.classList.contains('ahora') && !U.fin && !U.conv){ U.playing ? pausaConOpciones() : play(); return; }
   ir(n, true);
 }
 function saltar(d){
@@ -1564,7 +1584,7 @@ function sugerencias(extra = '', ks = null){
   $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
   const s = ks && ks.length ? ks : elegir();
   // v2: mientras solo ha oído la presentación, la visita entera es una sugerencia más
-  const ent = V2 && U.started && !U.fin && U.i <= U.introF ? `<button class="q" type="button" data-entera>Cuéntamela entera · ${duracion()}</button>` : '';
+  const ent = V2 && U.started && !U.fin && U.i <= U.introF && U.introF < U.caps.length - 1 ? `<button class="q" type="button" data-entera>Cuéntamela entera · ${duracion()}</button>` : '';
   // v2: cuando ya no queda relato, las otras voces de la obra (la visita guiada, contada por la guía)
   if(V2 && U.fin && !extra.includes('data-voz')) extra += otrasVoces();
   const mem = puertaMem();
@@ -1581,11 +1601,10 @@ function invitar(){
   sugerencias(); estado();
   setTimeout(mostrarOpciones, 300);
 }
+// Al acabar: sugerencias, memorias y las otras voces. A otra pieza se pasa desde el índice o el carrusel (la flecha de arriba)
 function mostrarFin(){
-  const n = SALA.obras.indexOf(OBRA), sig = SALA.obras.length > 1 ? SALA.obras[(n + 1) % SALA.obras.length] : null;
   const otros = Object.keys(OBRA.mediadores).filter(k => k !== P.guia);
-  sugerencias((sig ? `<button class="b1" type="button" data-sig="${sig.id}"><span>Siguiente en la sala: ${esc(sig.titulo)}</span><span aria-hidden="true">→</span></button>` : '') +
-    otros.map(k => `<button class="lk" type="button" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join(''));
+  sugerencias(otros.map(k => `<button class="lk" type="button" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join(''));
   setTimeout(mostrarOpciones, 400);
 }
 $('lineas').addEventListener('click', e => {
@@ -1627,7 +1646,9 @@ function todas(){
 function puertaMem(){
   if(!OBRA || !OBRA._mem || !OBRA._mem.activo) return '';
   const n = todas().length;
-  return n ? `<button class="q" type="button" data-memorias>Memorias de este lugar · ${n}</button>` : `<button class="lk" type="button" data-dejar>Deja la primera memoria de este lugar</button>`;
+  if(!n) return `<button class="lk" type="button" data-dejar>Deja la primera memoria de este lugar</button>`;
+  return `<button class="puertaM" type="button" data-memorias><span class="puertaI" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg></span>`
+    + `<span class="puertaT"><b>Memorias del lugar</b><small>${n} ${n === 1 ? 'recuerdo contado' : 'recuerdos contados'} por quien lo vivió, con su voz</small></span><span aria-hidden="true">→</span></button>`;
 }
 function oirMemoria(k){
   const lista = todas(), m = lista[k]; if(!m) return;
