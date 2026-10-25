@@ -19,9 +19,12 @@ function encaje(o, b, W, H){
 const caraDe = o => o.encuadre || (() => { const m = Math.min(o.iw, o.ih); return [(o.iw - m)/2/o.iw, (o.ih - m)/2/o.ih, m/o.iw, m/o.ih]; })();
 
 /* ======================= Diseño · pruebas y canal ======================= */
-let DIS = {tema:'personaje', fondo:'retrato', botones:'redondeados', canal:'voz'};
+let DIS = {tema:'personaje', fondo:'retrato', botones:'redondeados', canal:'voz', version:'ilustrada'};
 try{ DIS = Object.assign(DIS, JSON.parse(st.get('am.iman.dis5') || '{}')); }catch(e){}
 location.hash.slice(1).split('.').forEach(t => { if(t === 'texto' || t === 'voz') DIS.canal = t; });
+// Versión: «ilustrada» (la de ahora) o «autorretrato» (su cara es un cuadro suyo y la obra va primero). ?d=… la abre directamente
+const versionDe = v => { DIS.version = v; DIS.tema = v === 'autorretrato' ? 'oscuro' : 'personaje'; DIS.fondo = v === 'autorretrato' ? 'cuadro' : 'retrato'; };
+{ const d = new URLSearchParams(location.search).get('d'); if(d === 'autorretrato' || d === 'ilustrada') versionDe(d); }
 const NOTA_CANAL = {
   texto:'Pensado para el imán, en casa. Lo preparado no cuesta nada; las preguntas libres pasarían por un modelo de texto, la API más barata.',
   voz:'Pensado para la sala y la calle. Lo preparado lleva su audio grabado de antemano; las preguntas libres pasarían por voz encadenada o en tiempo real, que es lo más caro.'
@@ -31,22 +34,26 @@ function aplicarDiseno(){
   const r = document.documentElement;
   if(DIS.tema !== 'oscuro') r.dataset.tema = DIS.tema; else delete r.dataset.tema;
   r.dataset.botones = DIS.botones; $('app').dataset.canal = DIS.canal;
-  $('app').dataset.fondo = (DIS.fondo === 'retrato' && !ARTE.linea) || (DIS.fondo === 'patron' && !ARTE.patron) ? (ARTE.linea ? 'retrato' : ARTE.patron ? 'patron' : 'liso') : DIS.fondo;
-  [['fTema','tema'],['fFondo','fondo'],['fBot','botones'],['fCanal','canal']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === DIS[k])));
+  const fondo = DIS.fondo === 'cuadro' && !VR ? 'retrato' : DIS.fondo;
+  $('app').dataset.fondo = (fondo === 'retrato' && !ARTE.linea) || (fondo === 'patron' && !ARTE.patron) ? (ARTE.linea ? 'retrato' : ARTE.patron ? 'patron' : 'liso') : fondo;
+  [['fTema','tema'],['fFondo','fondo'],['fBot','botones'],['fCanal','canal'],['fVer','version']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === DIS[k])));
   $('canalN').textContent = NOTA_CANAL[DIS.canal];
   $('iniN').textContent = texto() ? 'Para leer y escribir, sin sonido' : 'Con voz · sube el volumen · toca el imán para oírle';
   $('oPlay').setAttribute('aria-label', texto() ? 'Leer' : 'Escuchar');
   if(texto()){ $('askF').hidden = !U.empezada; $('app').classList.remove('escribiendo'); cerrarPanel(); }
   else if(!$('app').classList.contains('escribiendo')) $('askF').hidden = true;
   st.set('am.iman.dis5', JSON.stringify(DIS));
+  pintarVersion();
   if(U.obra) selloA(U.obra);
   estado();
 }
-[['fTema','tema'],['fFondo','fondo'],['fBot','botones'],['fCanal','canal']].forEach(([id, k]) => $(id).addEventListener('click', e => {
+[['fTema','tema'],['fFondo','fondo'],['fBot','botones'],['fCanal','canal'],['fVer','version']].forEach(([id, k]) => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-v]'); if(!b || DIS[k] === b.dataset.v) return;
   if(k === 'canal') callar();
-  DIS[k] = b.dataset.v; aplicarDiseno();
+  if(k === 'version') versionDe(b.dataset.v); else DIS[k] = b.dataset.v;
+  aplicarDiseno();
   if(k === 'canal') toast(texto() ? 'Canal de texto: escribes y lees, sin sonido' : 'Canal de voz: hablas y escuchas');
+  if(k === 'version') toast(enRetrato() ? 'Su autorretrato: la obra primero' : 'Ilustrada: la versión de ahora');
 }));
 
 /* ======================= Estado ======================= */
@@ -426,9 +433,11 @@ function arrancarChat(){
 function empezar(){
   arrancarChat(); selloA(null);
   const box = document.createElement('div'); box.className = 'cap ahora firmada'; box.innerHTML = `<span class="cav">${imanSVG(true)}</span>`;
-  const frases = PERSONAJE.intro.flatMap(t => trocear(t, box, 'autor'));
+  // En la versión del autorretrato, la entrada y las primeras preguntas van sobre lo que pinta, no sobre su vida
+  const I = enRetrato() ? VR : PERSONAJE;
+  const frases = I.intro.flatMap(t => trocear(t, box, 'autor'));
   $('lineas').appendChild(box);
-  const primeras = PERSONAJE.primeras.map(id => QI[id]);
+  const primeras = I.primeras.map(id => QI[id]).filter(Boolean);
   box.insertAdjacentHTML('beforeend', `<p class="qin-t">Por ejemplo, pregúntame:</p><div class="qin">${primeras.map(x => `<button class="q" type="button" data-q="${x.id}">${esc(x.q)}</button>`).join('')}</div>`);
   hablar(frases, 'autor');
 }
@@ -621,7 +630,7 @@ $('deNuevoB').onclick = () => {
   $('ajS').hidden = true; cerrarObra();
   U.asked.clear(); U.vistas.clear(); U.obra = null; U.empezada = false; M.saludado = false; M.filtro = 'empezar'; M.epoca = -1;
   $('lineas').innerHTML = ''; $('app').classList.remove('escribiendo'); $('askF').hidden = true; selloA(null);
-  irA('inicio'); $('iniS').innerHTML = imanSVG(); $('iniP').textContent = PERSONAJE.pregunta;
+  irA('inicio'); pintarPortada();
 };
 let rz = 0;
 addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => {
@@ -630,4 +639,70 @@ addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => {
   if(U.obra && !U.hablando) selloA(U.obra);
 }, 120); });
 document.addEventListener('keydown', e => { if(e.key === 'Escape'){ document.querySelectorAll('.sheet').forEach(s => s.hidden = true); if(O.k) cerrarObra(); } });
+
+/* ======================= Versión «Su autorretrato»: su cara es un cuadro suyo y la obra va primero ======================= */
+// Solo si la ficha la prepara (Vincent): qué obra es su cara, la frase de la portada, la entrada de Hablar y el marco visible
+const VR = PERSONAJE.autorretrato && OBRAS[PERSONAJE.autorretrato.obra] ? PERSONAJE.autorretrato : null;
+function enRetrato(){ return !!VR && DIS.version === 'autorretrato'; }
+// Su cara: el cuadro entero en la portada (el anverso del imán) y, en los sellos, la cara recortada del propio cuadro (su encuadre)
+const imanIlustrado = imanSVG;
+imanSVG = function(cerca){
+  if(!enRetrato()) return imanIlustrado(cerca);
+  const o = OBRAS[VR.obra], al = esc(`${o.titulo} (${o.fecha}), de ${PERSONAJE.nombre}`);
+  if(!cerca) return `<span class="iman iman-entera" role="img" aria-label="${al}"><img src="${o.img}" alt=""></span>`;
+  const b = o.encuadre || caraDe(o), px = b[2] < 1 ? b[0]/(1 - b[2])*100 : 50, py = b[3] < 1 ? b[1]/(1 - b[3])*100 : 50;
+  return `<span class="iman cerca" role="img" aria-label="${al}"><span class="iman-o" style="background-image:url('${o.img}');background-size:${(100/b[2]).toFixed(2)}% auto;background-position:${px.toFixed(2)}% ${py.toFixed(2)}%"></span></span>`;
+};
+function pintarCaras(){ ['selloC', 'mini', 'bSello', 'oSello', 'havC'].forEach(id => { $(id).innerHTML = imanSVG(true); }); }
+function pintarPortada(){
+  $('iniS').innerHTML = imanSVG();
+  $('iniP').textContent = enRetrato() ? VR.gancho : PERSONAJE.pregunta;
+  $('iniS').setAttribute('aria-label', enRetrato() ? `Mirar su ${OBRAS[VR.obra].titulo.toLowerCase()}` : 'Escuchar a ' + PERSONAJE.corto);
+  if(enRetrato()) $('iniN').textContent = texto() ? 'Para leer y escribir, sin sonido · toca el cuadro para mirarlo con él' : 'Con voz · sube el volumen · toca el cuadro para mirarlo con él';
+}
+function pintarVersion(){
+  const on = enRetrato();
+  $('app').classList.toggle('v-retrato', on);
+  $('fsVer').hidden = $('fondoCuadro').hidden = !VR;
+  ['mirameB', 'avisoB', 'oAvisoB', 'marcoH', 'marcoO'].forEach(id => { $(id).hidden = !on; });
+  if(VR){
+    $('mirameB').textContent = VR.boton; $('marcoH').textContent = $('marcoO').textContent = VR.marco;
+    document.documentElement.style.setProperty('--fondo-obra', `url(${new URL(OBRAS[VR.obra].img, document.baseURI).href})`);
+  }
+  pintarCaras(); pintarPortada();
+}
+// Mirarle es lo primero: el imán de la portada, el botón principal y su cara (en la cabecera y en el sello) abren el autorretrato
+const iniNarrar = $('iniS').onclick;
+$('iniS').onclick = () => enRetrato() ? abrirObra(VR.obra, {play:true}) : iniNarrar();
+$('mirameB').onclick = () => { if(VR) abrirObra(VR.obra, {play:true}); };
+$('hav').onclick = () => { if(U.hablando) callar(); else if(U.obra) abrirObra(U.obra, {play:false}); else if(enRetrato()) abrirObra(VR.obra, {play:false}); };
+$('sello').onclick = () => { if(U.hablando) callar(); else if(U.obra) abrirObra(U.obra, {play:false}); else if(enRetrato()) abrirObra(VR.obra, {play:false}); else toast(texto() ? 'Escríbele abajo.' : 'Pregúntale con el micrófono o escribe.'); };
+// Avisar de un error: lo último que ha dicho (en la obra o en la conversación) y qué pasa.
+// Prototipo: se guarda en este móvil; en real se envía a quien prepara al personaje
+const AV = {tipo:null, cita:''};
+function abrirAviso(){
+  callar();
+  let t = '';
+  if(!$('obraV').hidden) t = $('oSubt').textContent;
+  else {
+    const els = [...$('lineas').querySelectorAll('.ans,.cap')];
+    if(els.length){ const el = els[els.length - 1].cloneNode(true); el.querySelectorAll('.qin,.qin-t,.cav').forEach(x => x.remove()); el.querySelectorAll('p,blockquote').forEach(x => x.append(' ')); t = el.textContent; }
+  }
+  t = t.trim().replace(/\s+/g, ' ');
+  AV.cita = t.length > 240 ? '…' + t.slice(-240) : t; AV.tipo = null;
+  $('avisoCita').textContent = AV.cita || 'Todavía no ha dicho nada.';
+  $('avisoTxt').value = ''; pintarAviso(); $('avisoS').hidden = false;
+}
+function pintarAviso(){ document.querySelectorAll('#avisoTipo [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === AV.tipo)); }
+$('avisoTipo').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if(b){ AV.tipo = b.dataset.v; pintarAviso(); } });
+$('avisoB').onclick = abrirAviso;
+$('oAvisoB').onclick = abrirAviso;
+$('avisoF').onsubmit = e => e.preventDefault();
+$('avisoEnviar').onclick = () => {
+  if(!AV.tipo){ toast('Elige qué pasa.'); return; }
+  let avisos = []; try{ avisos = JSON.parse(st.get('am.iman.avisos') || '[]') || []; }catch(e){}
+  avisos.push({personaje:PID, obra:O.k || U.obra || null, tipo:AV.tipo, cita:AV.cita, texto:$('avisoTxt').value.trim(), fecha:new Date().toISOString()});
+  st.set('am.iman.avisos', JSON.stringify(avisos.slice(-50)));
+  $('avisoS').hidden = true; toast(`Gracias. Lo revisará quien prepara a ${PERSONAJE.corto}.`);
+};
 aplicarDiseno();

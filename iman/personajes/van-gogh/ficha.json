@@ -27,6 +27,21 @@
   "G6",
   "V1"
  ],
+ "autorretrato": {
+  "obra": "autorretrato",
+  "gancho": "Así me veía en París, con los colores nuevos.",
+  "boton": "Mírame de cerca",
+  "intro": [
+   "Hola, soy Vincent. Ya me has visto la cara: ahora pregúntame por lo que pinto.",
+   "Por qué me pintaba tanto, qué veo de noche, por qué las paredes de mi cuarto se ven azules. Y si prefieres mirar, mis cuadros están en «Sus obras»."
+  ],
+  "primeras": [
+   "A2",
+   "G2",
+   "D3"
+  ],
+  "marco": "Voz recreada de Vincent a partir de sus cartas y de los textos de los museos."
+ },
  "guia": {
   "nombre": "La guía del museo"
  },

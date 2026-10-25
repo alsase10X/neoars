@@ -545,3 +545,32 @@ pre.inst{white-space:pre-wrap;overflow-wrap:anywhere;font:.82rem/1.55 ui-monospa
 :root[data-tema=personaje] .otro{border-color:var(--vidrio-borde);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 #expoM .otro{width:100%;border-radius:0;border:0;border-bottom:1px solid var(--hair);background:none;padding:10px 0;min-height:62px}
 .verla.otro{gap:10px}
+
+/* ---------- Versión «Su autorretrato»: su cara es un cuadro suyo y la obra va primero ---------- */
+/* El anverso del imán es el cuadro entero; en los sellos, su cara recortada del propio cuadro */
+.iman-o{position:absolute;inset:0;background-repeat:no-repeat}
+#app.v-retrato .ini-s{width:min(58vw,250px);aspect-ratio:auto;border-radius:0;border:0;overflow:visible;box-shadow:none;background:none}
+.iman-entera{position:relative;display:block;height:auto;background:none;overflow:visible}
+.iman-entera img{display:block;width:100%;height:auto;border:6px solid #F4F1E8;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+/* La puerta principal es mirarle; «Ver mis cuadros» y «Hablar conmigo» pasan a segunda fila */
+.mirame{width:min(100%,440px)}
+#app.v-retrato .puertas .puerta.pri{background:color-mix(in srgb,var(--bg) 30%,transparent);color:var(--fg);border-color:var(--fg)}
+/* El fondo: el mismo autorretrato, desenfocado y oscurecido, como en la sala (y sin la línea ilustrada) */
+#capaO{opacity:0}
+#app[data-fondo=cuadro] #capaO{opacity:1}
+#app[data-fondo=cuadro] #capaR,#app[data-fondo=cuadro] #capaP{opacity:0!important}
+.fondoO{position:absolute;inset:-60px;background:var(--fondo-obra) center/cover no-repeat;filter:blur(34px) brightness(.32) saturate(1.15)}
+:root[data-tema=claro] .fondoO{filter:blur(40px) saturate(.85) brightness(1.15);opacity:.34}
+/* Marco visible: siempre se dice que es una voz recreada */
+.marco{font-size:.8rem;line-height:1.35;color:var(--muted);text-align:center;max-width:40ch;margin:0 auto}
+#obraV .marco{color:color-mix(in srgb,var(--visor-fg) 62%,transparent)}
+/* Avisar de un error: arriba, junto al menú, y también en la obra */
+.avisoB{margin-right:0}
+#obraV .avisoB{margin-left:auto;margin-right:-10px;color:var(--visor-fg)}
+#avisoS{z-index:50}
+.avisoCita{font-size:.95rem;line-height:1.45;padding:10px 12px;border:1px solid var(--hair);color:color-mix(in srgb,var(--fg) 86%,transparent)}
+#avisoTipo{display:flex;flex-direction:column;gap:6px}
+#avisoTipo .q[aria-pressed=true]{background:var(--fg);color:var(--tinta);border-color:var(--fg)}
+.campo{width:100%;font:inherit;font-size:1rem;line-height:1.4;padding:12px;border:1px solid var(--hair);background:transparent;color:var(--fg);resize:vertical;min-height:84px}
+.campo:focus{outline:none;border-color:var(--fg)}
+#avisoEnviar{width:100%}

@@ -1,12 +1,14 @@
 <div id="app" data-fondo="retrato" data-canal="voz" data-vista="inicio">
   <div class="capa" id="capaP" aria-hidden="true"></div>
   <div class="capa" id="capaR" aria-hidden="true"></div>
+  <div class="capa" id="capaO" aria-hidden="true"><span class="fondoO"></span></div>
 
   <div class="o-in">
     <header class="top">
       <div class="col">
         <button class="hav" id="hav" type="button" aria-label="El personaje"><span class="cara" id="havC"></span><span class="lien"><img id="havImg" alt=""></span></button>
         <div class="who"><b id="nom"></b><small id="sub"></small></div>
+        <button class="ib avisoB" id="avisoB" type="button" aria-label="Avisar de un error" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z"/><path d="M12 7.5v4M12 13.6v.4"/></svg></button>
         <button class="ib" id="menuB" type="button" aria-label="Tu visita: canal, ficha y diseño"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.6" fill="currentColor" stroke="none"/></svg></button>
       </div>
       <nav class="col tabs" id="tabs" role="tablist" aria-label="Sus obras o hablar con él" hidden>
@@ -20,6 +22,7 @@
       <p class="eyb">Desde tu imán</p>
       <button class="ini-s" id="iniS" type="button" aria-label="Escuchar"></button>
       <div class="ini-t"><p class="ini-q" id="iniQ"></p><div class="ini-p" id="iniP"></div></div>
+      <button class="puerta pri mirame" id="mirameB" type="button" hidden></button>
       <div class="puertas"><button class="puerta pri" id="verB" type="button">Ver mis cuadros</button><button class="puerta" id="hablarB" type="button">Hablar conmigo</button></div>
       <p class="ini-n" id="iniN"></p>
       <div class="otros" id="otros" hidden></div>
@@ -60,6 +63,7 @@
         <div class="esc-b"><button type="button" class="lk" id="cancelar">Cancelar</button><button class="b2" type="submit" aria-label="Enviar"><span class="bt">Enviar</span> <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
       </form>
       <p class="firma">Con tecnología de <b>artmedium</b></p>
+      <p class="marco" id="marcoH" hidden></p>
     </div>
   </div>
 </div>
@@ -69,6 +73,7 @@
   <div class="ohd">
     <button class="ib atras" id="oAtras" type="button" aria-label="Volver"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
     <div class="who"><b id="oTit"></b><small id="oSub"></small></div>
+    <button class="ib avisoB" id="oAvisoB" type="button" aria-label="Avisar de un error" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H9l-5 4z"/><path d="M12 7.5v4M12 13.6v.4"/></svg></button>
   </div>
   <div class="ocu" id="oCu"><img id="oImg" alt=""></div>
   <div class="opie">
@@ -84,6 +89,7 @@
       <button class="oenv" type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       <button class="lk" id="oAskC" type="button">Cancelar</button>
     </form>
+    <p class="marco" id="marcoO" hidden></p>
   </div>
 </div>
 
@@ -100,8 +106,9 @@
       </div>
       <div class="grupo">
         <p class="eyb">Diseño · pruebas</p>
+        <fieldset id="fsVer" hidden><legend>Versión</legend><div class="seg" id="fVer"><button type="button" data-v="ilustrada">Ilustrada<small>La de ahora</small></button><button type="button" data-v="autorretrato">Su autorretrato<small>La obra primero</small></button></div></fieldset>
         <fieldset><legend>Tema</legend><div class="seg" id="fTema"><button type="button" data-v="personaje">Su color<small>Sale del retrato</small></button><button type="button" data-v="oscuro">Oscuro<small>Inmersivo</small></button><button type="button" data-v="claro">Claro<small>A pleno sol</small></button></div></fieldset>
-        <fieldset><legend>Fondo de la conversación</legend><div class="seg" id="fFondo"><button type="button" data-v="retrato">Retrato<small>Su línea</small></button><button type="button" data-v="patron">Patrón<small>Su mundo</small></button><button type="button" data-v="liso">Liso<small>Sin nada</small></button></div></fieldset>
+        <fieldset><legend>Fondo de la conversación</legend><div class="seg" id="fFondo"><button type="button" data-v="retrato">Retrato<small>Su línea</small></button><button type="button" data-v="patron">Patrón<small>Su mundo</small></button><button type="button" data-v="liso">Liso<small>Sin nada</small></button><button type="button" data-v="cuadro" id="fondoCuadro" hidden>Cuadro<small>Su autorretrato</small></button></div></fieldset>
         <fieldset><legend>Mandos</legend><div class="seg" id="fBot"><button type="button" data-v="rectos">Rectos</button><button type="button" data-v="redondeados">Redondeados</button><button type="button" data-v="redondos">Redondos</button></div></fieldset>
       </div>
     </div>
@@ -121,6 +128,18 @@
   <div class="pn" role="dialog" aria-label="Ficha y fuentes">
     <div class="hd"><b>Ficha y fuentes</b><button class="ib" data-close type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="deep"><dl id="fDl"></dl><p class="note" id="fNota"></p></div>
+  </div>
+</div>
+<div class="sheet" id="avisoS" hidden>
+  <div class="pn" role="dialog" aria-labelledby="avisoT">
+    <div class="hd"><b id="avisoT">Avisar de un error</b><button class="ib" data-close type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <form class="deep" id="avisoF" autocomplete="off">
+      <p class="note">Lo leerá quien prepara al personaje y, si hace falta, corregirá el texto.</p>
+      <fieldset><legend>Lo que estaba diciendo</legend><p class="avisoCita" id="avisoCita"></p></fieldset>
+      <fieldset><legend>¿Qué pasa?</legend><div id="avisoTipo"><button class="q" type="button" data-v="dato">Hay un dato mal</button><button class="q" type="button" data-v="obra">Dice algo que no está en el cuadro</button><button class="q" type="button" data-v="voz">No se oye o no se entiende</button><button class="q" type="button" data-v="otro">Otra cosa</button></div></fieldset>
+      <fieldset><legend><label for="avisoTxt">Cuéntalo, si quieres</label></legend><textarea class="campo" id="avisoTxt" rows="3"></textarea></fieldset>
+      <button class="puerta pri" id="avisoEnviar" type="button">Enviar el aviso</button>
+    </form>
   </div>
 </div>
 <div id="toast" role="status"></div>
