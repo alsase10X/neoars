@@ -540,23 +540,29 @@ dd a{text-decoration:underline;text-underline-offset:2px}
    · Sello arriba: como una llamada (quién te habla arriba, lo que dice en medio, tú abajo). Sin el nombre de la pieza en la
      cabecera (ya lo dicen el índice, la portada y la primera frase), texto a tamaño de lectura en peso normal.
    · Entre filetes: igual, con el texto en una franja entre dos rayas finas (el texto se difumina dentro, sin tocarlas).
+   La pantalla se parte en tres: la zona del sello y la de los mandos miden lo mismo (el script copia la altura de la de abajo)
+   y el texto ocupa el medio. La cabecera flota encima de la zona del sello.
    ========================================================================================================== */
-:root[data-disp]{--sello:clamp(124px,38vw,172px)}
-@media (max-height:640px){ :root[data-disp]{--sello:clamp(100px,28vw,128px)} }
-:root[data-disp] .top{border-bottom-color:transparent}
+:root[data-disp] .top{position:absolute;left:0;right:0;top:0;border-bottom-color:transparent}
 :root[data-disp] .top .col{min-height:56px}
 :root[data-disp] .who{display:none}
 :root[data-disp] .top .ib.atras{margin-right:auto}
-/* El sello sube a la cabeza del texto (lo mueve el script); en la portada de la pieza no se ve, porque ya está el grande */
-:root[data-disp] .o-in > .sello{position:relative;left:auto;top:auto;transform:none;flex:none;margin:0 auto 4px;z-index:2}
-#inicio:not([hidden]) ~ .sello{display:none}
-:root[data-disp] .abajo{padding-top:12px}
+/* La zona del sello (la crea el script): el sello, centrado en ella y tan grande como cabe; en la portada de la pieza
+   y al escribir no se ve */
+#zonaSello{flex:none;position:relative;height:var(--zona,200px);display:grid;place-items:center;--sello:min(calc(var(--zona,200px) - 36px),48vw,210px)}
+#zonaSello > .sello{position:relative;left:auto;top:auto;transform:none;margin:0;z-index:2}
+#inicio:not([hidden]) ~ #zonaSello,#obraV.escribiendo #zonaSello{display:none}
+:root[data-disp] .abajo{padding-top:14px}
 :root[data-disp] #lineas{padding-bottom:40px}
 :root[data-disp] #flujo{-webkit-mask-image:linear-gradient(transparent,#000 20px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(transparent,#000 20px,#000 calc(100% - 36px),transparent)}
 :root[data-disp] #obraV.quieto #flujo{-webkit-mask-image:linear-gradient(transparent,#000 20px,#000 calc(100% - 20px),transparent);mask-image:linear-gradient(transparent,#000 20px,#000 calc(100% - 20px),transparent)}
-/* Texto a tamaño de lectura, en peso normal: lo que suena en blanco, lo demás en gris */
-:root[data-disp] .cap,:root[data-disp] .ans{font-size:1.125rem;font-weight:400;line-height:1.5;letter-spacing:0;max-width:38ch}
-:root[data-disp] .cap.preg{font-size:1.3rem;font-weight:600;line-height:1.3;letter-spacing:-.01em}
+/* Texto de lectura, en peso normal y algo más grande, con la variante estrecha de la letra de cada plantilla:
+   ADN, Archivo semiestrecha; Cristal, Inter Tight; Expressive, Google Sans Flex estrecha. La marca del cliente, si trae letra, manda */
+:root[data-disp]{--fuente-lectura:"Archivo",var(--font);--ancho-lectura:88%}
+:root[data-disp][data-plantilla=cristal]{--fuente-lectura:"Inter Tight","Inter",var(--font);--ancho-lectura:normal}
+:root[data-disp][data-plantilla=expressive]{--fuente-lectura:"Google Sans Flex",var(--font);--ancho-lectura:90%}
+:root[data-disp] .cap,:root[data-disp] .ans{font-family:var(--fuente-lectura);font-stretch:var(--ancho-lectura);font-size:1.25rem;font-weight:400;line-height:1.45;letter-spacing:0;max-width:36ch}
+:root[data-disp] .cap.preg{font-size:1.4rem;font-weight:600;line-height:1.28;letter-spacing:-.01em}
 :root[data-disp] .cap blockquote,:root[data-disp] .ans blockquote{font-weight:400}
 :root[data-disp] #lineas{gap:18px}
 :root[data-disp] #porvenir{gap:18px;padding-top:18px}
@@ -564,11 +570,9 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-disp] #obraV.sonando .cap.ahora .w.on,:root[data-disp] #lineas.hablando .ans.ahora .w.on{opacity:1}
 /* Entre filetes: el texto en una franja entre dos rayas, al ancho de la columna y sin difuminado (las rayas hacen de borde) */
 :root[data-disp=filetes]{--ancho-col:min(calc(100vw - 2*max(16px,env(safe-area-inset-left,0px))),var(--col))}
-:root[data-disp=filetes] .o-in > .sello{margin-bottom:16px}
-:root[data-disp=filetes] .o-in > .sello::after,:root[data-disp=filetes] .abajo::before{content:"";position:absolute;left:50%;width:var(--ancho-col);height:1px;background:var(--hair);transform:translateX(-50%);pointer-events:none}
-:root[data-disp=filetes] .o-in > .sello::after{bottom:-12px}
+:root[data-disp=filetes] #zonaSello::after,:root[data-disp=filetes] .abajo::before{content:"";position:absolute;left:50%;width:var(--ancho-col);height:1px;background:var(--hair);transform:translateX(-50%);pointer-events:none}
+:root[data-disp=filetes] #zonaSello::after{bottom:0}
 :root[data-disp=filetes] .abajo::before{top:0}
-:root[data-disp=filetes] .abajo{padding-top:16px}
 :root[data-disp=filetes] #obraV.escribiendo .abajo::before{display:none}
 </style>
 
@@ -807,7 +811,7 @@ function aplicarPlantilla(){
   l = document.createElement('link'); l.rel = 'stylesheet'; l.href = f.css; l.dataset.fuente = PLANT; l.onload = cargar; document.head.appendChild(l);
 }
 function cambiarPlantilla(v){
-  PLANT = v; st.set('am.sala.plantilla', v);
+  PLANT = v; st.set('am.sala.plantilla', v); cargarLectura();
   try{ const u = new URL(location.href); if(v === 'adn') u.searchParams.delete('plantilla'); else u.searchParams.set('plantilla', v); history.replaceState(null, '', u); }catch(e){}
   aplicarPlantilla();
 }
@@ -827,10 +831,32 @@ let DISP = (() => { try{ const v = new URLSearchParams(location.search).get('dis
 function aplicarDisp(){
   const R = document.documentElement, s = $('sello'), ab = $('abajo');
   if(DISP === 'abajo') delete R.dataset.disp; else R.dataset.disp = DISP;
-  // El sello cambia de sitio: abajo, el primero de los mandos; arriba, justo encima del texto
-  if(DISP === 'abajo'){ if(s.parentNode !== ab) ab.insertBefore(s, ab.firstChild); }
-  else if(s.nextElementSibling !== $('flujo')) $('flujo').before(s);
+  // El sello cambia de sitio: abajo, el primero de los mandos; arriba, en su propia zona encima del texto
+  let Z = $('zonaSello');
+  if(DISP === 'abajo'){ if(s.parentNode !== ab) ab.insertBefore(s, ab.firstChild); if(Z) Z.remove(); }
+  else {
+    if(!Z){ Z = document.createElement('div'); Z.id = 'zonaSello'; }
+    if(Z.nextElementSibling !== $('flujo')) $('flujo').before(Z);
+    if(s.parentNode !== Z) Z.appendChild(s);
+  }
+  cargarLectura(); medirZona();
   if(U && U.started) requestAnimationFrame(() => { selloCam(U.zona, false); const el = U.els && U.els[U.i]; if(el) alTope(el); });
+}
+// Arriba y abajo, simétricas: la zona del sello copia la altura de la de los mandos (cambia con la pista o el estado)
+function medirZona(){
+  const Z = $('zonaSello'), h = $('abajo').offsetHeight; if(!Z || !h || +Z.dataset.h === h) return;
+  Z.dataset.h = h; Z.style.setProperty('--zona', h + 'px');
+  if(U && U.started) requestAnimationFrame(() => selloCam(U.zona, false));
+}
+if(window.ResizeObserver) new ResizeObserver(medirZona).observe($('abajo'));
+// La letra de lectura de cada plantilla, solo si se usa una disposición con el sello arriba (Expressive ya la trae)
+const LECTURA = {adn:'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap', cristal:'https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&display=swap'};
+// (al arrancar, la plantilla se aplica antes de que exista la disposición: entonces no hace nada y lo hace aplicarDisp)
+function cargarLectura(){
+  try{
+    const url = LECTURA[PLANT]; if(DISP === 'abajo' || !url || document.querySelector(`link[data-lectura="${PLANT}"]`)) return;
+    const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = url; l.dataset.lectura = PLANT; document.head.appendChild(l);
+  }catch(e){}
 }
 function cambiarDisp(v){
   DISP = v; st.set('am.sala.disp', v);
@@ -862,6 +888,7 @@ async function aplicarMarca(url){
     if(m.texto && m.texto.familia){
       if(m.texto.css){ const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = m.texto.css; document.head.appendChild(l); }
       pon('--fuente', `"${m.texto.familia}", Arial, Helvetica, sans-serif`);
+      pon('--fuente-lectura', `"${m.texto.familia}", Arial, Helvetica, sans-serif`); pon('--ancho-lectura', 'normal');
     }
     if(m.titulos && m.titulos.tracking != null) pon('--track-titulos', m.titulos.tracking);
     if(m.mayusculas === false) R.dataset.mayus = 'no';
