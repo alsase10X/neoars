@@ -412,6 +412,117 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 @media (max-height:720px){ .carr{--cs:min(56vw,250px,29vh);--cs:min(56vw,250px,29dvh)} .carrTw{font-size:clamp(1.6rem,7.4vw,2.2rem)} .carrD{-webkit-line-clamp:3;font-size:1rem} .carrPie{gap:5px} .carrCab{margin-top:2px} }
 @media (max-height:640px){ :root{--sello:clamp(96px,26vw,124px)} .mandos{gap:16px} .sq{width:54px;height:54px} .sq.grande{width:64px;height:64px} }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important} .sv img,.w,.cap,.fondo,#flujo,.sico{transition:none!important} }
+
+/* ==========================================================================================================
+   Plantillas de tokens (prueba: ⋯ › Plantilla). La misma mediación con tres pieles:
+   · ADN: la de ahora (Archivo, esquinas rectas, plano). Sin atributo; nada de lo de abajo le afecta.
+   · Cristal: cristal tintado al estilo de Apple. Inter, la libre más parecida a la letra de Apple; cápsulas y cristal sobre el color de la obra.
+   · Expressive: Material 3 Expressive de Google. Google Sans Flex (libre en Google Fonts desde 2025) con su eje de redondez en los títulos;
+     botones en píldora, superficies tonales teñidas con el color de la obra y formas que cambian al pulsar.
+   La marca del cliente, si la hay, sigue mandando en tipografía y colores (va en línea, por encima de esto).
+   ========================================================================================================== */
+:root[data-plantilla]{--r-boton:999px;--r-hoja:28px;--r-tarjeta:24px;--r-pieza:16px;--r-campo:12px}
+/* Lo común a las dos: cápsulas, círculos, hojas redondeadas y el rótulo sin mayúsculas */
+:root[data-plantilla] .eyb{text-transform:none;letter-spacing:.005em;font-weight:600;font-size:.9rem}
+:root[data-plantilla] .b1,:root[data-plantilla] #empezar,:root[data-plantilla] .carrB,:root[data-plantilla] .b2,:root[data-plantilla] .b3,:root[data-plantilla] .pasar,
+:root[data-plantilla] .mcard .acc a,:root[data-plantilla] .mcard .acc button{border-radius:var(--r-boton)}
+:root[data-plantilla] .b1{padding-inline:24px}
+:root[data-plantilla] .ib,:root[data-plantilla] .sq,:root[data-plantilla] .notaI{border-radius:50%}
+:root[data-plantilla] .seg{border-radius:var(--r-boton);overflow:hidden}
+:root[data-plantilla] .sheet .pn{border-radius:var(--r-hoja) var(--r-hoja) 0 0;border-top:0;overflow:hidden;position:relative}
+:root[data-plantilla] .sheet .pn::before{content:"";position:absolute;top:8px;left:50%;width:32px;height:4px;margin-left:-16px;border-radius:2px;background:color-mix(in srgb,var(--fg) 40%,transparent)}
+:root[data-plantilla] .sheet .hd{padding-top:18px;border-bottom:0}
+:root[data-plantilla] .mcard{border-radius:var(--r-tarjeta)}
+:root[data-plantilla] .mcard .acc{gap:8px}
+:root[data-plantilla] .q,:root[data-plantilla] .nota,:root[data-plantilla] .im{border-radius:var(--r-pieza)}
+:root[data-plantilla] #panel{border-radius:20px;overflow:hidden}
+:root[data-plantilla] #toast{border-radius:14px}
+:root[data-plantilla] .ctxB,:root[data-plantilla] .campo,:root[data-plantilla] .avisoCita{border-radius:var(--r-campo)}
+:root[data-plantilla] .carrDots button::before,:root[data-plantilla] .dots i{border-radius:50%}
+:root[data-plantilla] .carrDots button::before{transition:opacity .3s,width .35s cubic-bezier(.2,.8,.2,1),border-radius .35s}
+:root[data-plantilla] .ib:hover{background:color-mix(in srgb,var(--fg) 14%,transparent);color:var(--fg)}
+
+/* ---------- Expressive (Material 3 Expressive) ---------- */
+:root[data-plantilla=expressive]{
+  --fuente:"Google Sans Flex","Google Sans",Roboto,system-ui,sans-serif;
+  --peso-titulos:640; --peso-titulos-2:580; --track-titulos:-.018em;
+  /* Superficie tonal: el color de la obra (--halo, en la pieza) o el del texto, mezclado con el fondo */
+  --tonal:color-mix(in srgb,var(--halo,var(--fg)) 14%,var(--bg)); --tonal-2:color-mix(in srgb,var(--halo,var(--fg)) 22%,var(--bg));
+  --muelle:cubic-bezier(.34,1.45,.64,1);
+}
+/* Títulos redondeados (eje ROND) y con tamaño óptico; el texto de lectura, sin redondear */
+:root[data-plantilla=expressive] h1,:root[data-plantilla=expressive] .carrT,:root[data-plantilla=expressive] .who b,:root[data-plantilla=expressive] .obt b,
+:root[data-plantilla=expressive] .mcard b,:root[data-plantilla=expressive] .num,:root[data-plantilla=expressive] .cap.preg{font-variation-settings:"ROND" 100}
+:root[data-plantilla=expressive] .cap{font-weight:500;letter-spacing:-.008em}
+:root[data-plantilla=expressive] .cap.preg{font-weight:620}
+:root[data-plantilla=expressive] .ans{font-weight:420}
+:root[data-plantilla=expressive] .num{font-weight:600}
+:root[data-plantilla=expressive] .b1,:root[data-plantilla=expressive] #empezar,:root[data-plantilla=expressive] .carrB{font-weight:600;letter-spacing:.005em}
+/* Botones tonales en lugar de con filete */
+:root[data-plantilla=expressive] .b2,:root[data-plantilla=expressive] .b3,:root[data-plantilla=expressive] .pasar,:root[data-plantilla=expressive] .mcard .acc a,
+:root[data-plantilla=expressive] .mcard .acc button:not(.pri),:root[data-plantilla=expressive] .q,:root[data-plantilla=expressive] .nota{background:var(--tonal);border-color:transparent}
+:root[data-plantilla=expressive] .q:hover{background:var(--tonal-2);border-color:transparent}
+:root[data-plantilla=expressive] .q{font-weight:500}
+:root[data-plantilla=expressive] .sq:not(.grande){background:var(--tonal);border-color:transparent}
+:root[data-plantilla=expressive] #panel,:root[data-plantilla=expressive] .sheet .pn,:root[data-plantilla=expressive] .mcard{background:color-mix(in srgb,var(--fg) 7%,var(--panel));border-color:transparent}
+:root[data-plantilla=expressive] .seg{border-color:color-mix(in srgb,var(--fg) 30%,transparent)}
+:root[data-plantilla=expressive] .seg button[aria-pressed=true]{background:var(--tonal-2);color:var(--fg);font-weight:700}
+:root[data-plantilla=expressive] .seg button[aria-pressed=true]::before{content:"✓ "}
+/* El micrófono, como el botón flotante de Material: cuadrado redondeado que se vuelve círculo al pulsarlo o mientras escucha,
+   con el color de la obra si lo hay */
+:root[data-plantilla=expressive] .sq.grande{border-radius:30%;transition:border-radius .45s var(--muelle),transform .3s var(--muelle)}
+:root[data-plantilla=expressive]:not([data-tema=claro]) .sq.grande{background:var(--halo,var(--acento));border-color:var(--halo,var(--acento));color:#111}
+:root[data-plantilla=expressive] .sq.grande:active,:root[data-plantilla=expressive] .sq.grande.rec,:root[data-plantilla=expressive] #obraV.oyendo .sq.grande{border-radius:50%}
+:root[data-plantilla=expressive] .b1,:root[data-plantilla=expressive] #empezar,:root[data-plantilla=expressive] .carrB,:root[data-plantilla=expressive] .q,:root[data-plantilla=expressive] .sq{transition:transform .3s var(--muelle),border-radius .45s var(--muelle),background .2s}
+:root[data-plantilla=expressive] .b1:active,:root[data-plantilla=expressive] #empezar:active,:root[data-plantilla=expressive] .carrB:active,:root[data-plantilla=expressive] .q:active,:root[data-plantilla=expressive] .sq:active{transform:scale(.95)}
+:root[data-plantilla=expressive] .b1:active,:root[data-plantilla=expressive] #empezar:active,:root[data-plantilla=expressive] .carrB:active{border-radius:16px}
+/* Indicador de página: el punto activo se alarga */
+:root[data-plantilla=expressive] .carrDots button{width:auto;min-width:16px;padding:0 4px}
+:root[data-plantilla=expressive] .carrDots button::before{width:8px;height:8px;border-radius:4px}
+:root[data-plantilla=expressive] .carrDots button[aria-current=true]::before{width:24px}
+
+/* ---------- Cristal (cristal tintado, al estilo de Apple) ---------- */
+:root[data-plantilla=cristal]{
+  --fuente:"Inter",-apple-system,system-ui,sans-serif;
+  --peso-titulos:700; --peso-titulos-2:650; --track-titulos:-.03em;
+  --vidrio:color-mix(in srgb,var(--fg) 12%,transparent); --vidrio-borde:color-mix(in srgb,var(--fg) 26%,transparent);
+  --vidrio-brillo:inset 0 1px 0 color-mix(in srgb,var(--fg) 38%,transparent);
+  --vidrio-hoja:color-mix(in srgb,var(--bg) 70%,transparent);
+}
+:root[data-plantilla=cristal] .cap{font-weight:600;letter-spacing:-.018em}
+:root[data-plantilla=cristal] .ans{font-weight:500;letter-spacing:-.01em}
+:root[data-plantilla=cristal] .salaD,:root[data-plantilla=cristal] .carrD{letter-spacing:-.01em}
+/* Cristal claro: los botones que flotan, los mandos, las preguntas y los secundarios */
+:root[data-plantilla=cristal] .salaMenu,:root[data-plantilla=cristal] .salaAtras,:root[data-plantilla=cristal] .carrMapaB,
+:root[data-plantilla=cristal] .sq:not(.grande),:root[data-plantilla=cristal] .q,:root[data-plantilla=cristal] .nota,:root[data-plantilla=cristal] .b2,:root[data-plantilla=cristal] .b3,
+:root[data-plantilla=cristal] .pasar,:root[data-plantilla=cristal] .mcard .acc a,:root[data-plantilla=cristal] .mcard .acc button:not(.pri),:root[data-plantilla=cristal] .carrDots{
+  background:var(--vidrio);border:1px solid var(--vidrio-borde);box-shadow:var(--vidrio-brillo),0 8px 24px rgba(0,0,0,.22);
+  -webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%)}
+:root[data-plantilla=cristal] .salaMenu,:root[data-plantilla=cristal] .salaAtras,:root[data-plantilla=cristal] .carrMapaB{width:44px;height:44px}
+:root[data-plantilla=cristal] .salaMenu{right:max(12px,env(safe-area-inset-right,0px))}
+:root[data-plantilla=cristal] .salaAtras{left:max(12px,env(safe-area-inset-left,0px))}
+:root[data-plantilla=cristal] .carrMapaB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 52px)}
+:root[data-plantilla=cristal] .q:hover{background:color-mix(in srgb,var(--fg) 18%,transparent)}
+/* Cristal tintado, más opaco, para lo que se lee encima: hojas, panel del altavoz, tarjeta del mapa y avisos */
+:root[data-plantilla=cristal] .sheet .pn,:root[data-plantilla=cristal] #panel,:root[data-plantilla=cristal] .mcard{background:var(--vidrio-hoja);border:1px solid var(--vidrio-borde);
+  box-shadow:var(--vidrio-brillo),0 18px 50px rgba(0,0,0,.4);-webkit-backdrop-filter:blur(32px) saturate(150%);backdrop-filter:blur(32px) saturate(150%)}
+:root[data-plantilla=cristal] .sheet .pn{border-bottom:0}
+:root[data-plantilla=cristal] #toast{background:color-mix(in srgb,var(--fg) 88%,transparent);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+/* El botón principal, de cristal tintado con más cuerpo (como el del concepto); el micrófono, macizo, porque es el mando principal */
+:root[data-plantilla=cristal] .b1,:root[data-plantilla=cristal] #empezar,:root[data-plantilla=cristal] .carrB,:root[data-plantilla=cristal] .mcard .acc .pri{
+  background:color-mix(in srgb,var(--fg) 22%,transparent);color:var(--fg);border:1px solid color-mix(in srgb,var(--fg) 46%,transparent);
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--fg) 55%,transparent),0 12px 30px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);font-weight:650}
+:root[data-plantilla=cristal] .seg{background:var(--vidrio);border:1px solid var(--vidrio-borde);padding:3px;gap:3px}
+:root[data-plantilla=cristal] .seg button{border-left:0;border-radius:var(--r-boton)}
+:root[data-plantilla=cristal] .seg button[aria-pressed=true]{background:color-mix(in srgb,var(--fg) 26%,transparent);color:var(--fg);box-shadow:var(--vidrio-brillo)}
+:root[data-plantilla=cristal] .carrDots{border-radius:var(--r-boton);padding:0 8px;align-self:center}
+:root[data-plantilla=cristal] .carrDots:empty{visibility:hidden}
+:root[data-plantilla=cristal] .b1:active,:root[data-plantilla=cristal] #empezar:active,:root[data-plantilla=cristal] .carrB:active,:root[data-plantilla=cristal] .sq:active{transform:scale(.96)}
+:root[data-plantilla=cristal] .b1,:root[data-plantilla=cristal] #empezar,:root[data-plantilla=cristal] .carrB,:root[data-plantilla=cristal] .sq{transition:transform .25s cubic-bezier(.2,.8,.2,1),background .2s}
+@media (prefers-reduced-transparency:reduce){
+  :root[data-plantilla=cristal] *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  :root[data-plantilla=cristal] .sheet .pn,:root[data-plantilla=cristal] #panel,:root[data-plantilla=cristal] .mcard{background:var(--panel)}
+}
 </style>
 
 <div id="app">
@@ -524,6 +635,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <fieldset id="fsModo"><legend>Modo</legend><div class="seg" id="fModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset>
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
+      <fieldset id="fsPlant"><legend>Plantilla · pruebas</legend><div class="seg" id="fPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset>
       <fieldset id="fsDis"><legend>Diseño · pruebas</legend><div class="seg" id="fBot"><button type="button" data-v="rectos">Rectos<small>Los de ahora</small></button><button type="button" data-v="redondeados">Redondeados<small>Esquinas suaves</small></button><button type="button" data-v="redondos">Redondos<small>Círculos</small></button></div></fieldset>
       <fieldset id="fsCri"><legend>Cristal · pruebas</legend><div class="seg" id="fCri"><button type="button" data-v="plano">Plano<small>El de ahora</small></button><button type="button" data-v="transparente">Transparente<small>Cristal claro</small></button><button type="button" data-v="tintado">Tintado<small>Más opaco</small></button></div></fieldset>
       <fieldset id="fsGoo"><legend>Ideas de Google · pruebas</legend><div class="opts" id="fGoo"><button type="button" data-k="estado"><span>Estado en palabras<small>«Escuchando…» o «Hablando…» bajo el sello</small></span></button><button type="button" data-k="halo"><span>Halo al escuchar<small>El sello se ilumina con el color de la obra mientras te oye</small></span></button><button type="button" data-k="subt"><span>Subtítulos a mano<small>Botón de texto en pantalla, arriba y a un toque</small></span></button><button type="button" data-k="aviso"><span>Avisar de un error<small>Botón arriba para señalar algo que está mal</small></span></button></div></fieldset>
@@ -540,7 +652,8 @@ dd a{text-decoration:underline;text-underline-offset:2px}
   <div class="pn" role="dialog" aria-label="Modo de la visita">
     <div class="hd"><b>Tu visita</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="deep"><fieldset><legend>Modo</legend><div class="seg" id="sModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset>
-      <fieldset><legend>Índice · pruebas</legend><div class="seg" id="sIndice"><button type="button" data-v="lista">Lista<small>La de ahora</small></button><button type="button" data-v="carrusel">Carrusel<small>Una pieza cada vez</small></button></div></fieldset></div>
+      <fieldset><legend>Índice · pruebas</legend><div class="seg" id="sIndice"><button type="button" data-v="lista">Lista<small>La de ahora</small></button><button type="button" data-v="carrusel">Carrusel<small>Una pieza cada vez</small></button></div></fieldset>
+      <fieldset><legend>Plantilla · pruebas</legend><div class="seg" id="sPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset></div>
     <div class="foot"><button class="b1" id="sAplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
   </div>
 </div>
@@ -625,13 +738,40 @@ const MED = k => OBRA.mediadores[k];
 const MEDG = () => Object.keys(OBRA.mediadores)[0];
 const VIS = () => OBRA.visitas[P.perfil];
 const incl = c => (!c.p || tiene(c.p, P.perfil)) && !(c.x && tiene(c.x, P.perfil));
+// Plantillas de tokens (prueba): ADN, Cristal o Expressive. Van en el enlace (?plantilla=) y se recuerdan en el dispositivo.
+// Cada una trae su letra de Google Fonts, que solo se carga al elegirla
+const PLANTILLAS = ['adn', 'cristal', 'expressive'], NOMBRE_P = {adn:'ADN', cristal:'Cristal tintado', expressive:'Material 3 Expressive'};
+const FUENTES = {
+  cristal:{fam:'Inter', css:'https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap'},
+  expressive:{fam:'Google Sans Flex', css:'https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wdth,wght,GRAD,ROND@6..144,25..151,1..1000,0..100,0..100&display=swap'}
+};
+let PLANT = (() => { try{ const v = new URLSearchParams(location.search).get('plantilla'); if(PLANTILLAS.includes(v)) return v; }catch(e){} const s = st.get('am.sala.plantilla', 'adn'); return PLANTILLAS.includes(s) ? s : 'adn'; })();
+function aplicarPlantilla(){
+  const R = document.documentElement, f = FUENTES[PLANT];
+  if(PLANT === 'adn') delete R.dataset.plantilla; else R.dataset.plantilla = PLANT;
+  aplicarDiseno();
+  // Con otra letra cambian las medidas: cuando carga, el carrusel vuelve a reservar el alto de la frase y a centrarse
+  const rehacer = () => { try{ if(SALA && !$('carr').hidden){ reservarFrase(); irA(CAR.i, false); } }catch(e){} };
+  if(!f) return rehacer();
+  let l = document.querySelector(`link[data-fuente="${PLANT}"]`);
+  const cargar = () => document.fonts ? document.fonts.load(`600 1em "${f.fam}"`).then(rehacer, rehacer) : rehacer();
+  if(l){ cargar(); return; }
+  l = document.createElement('link'); l.rel = 'stylesheet'; l.href = f.css; l.dataset.fuente = PLANT; l.onload = cargar; document.head.appendChild(l);
+}
+function cambiarPlantilla(v){
+  PLANT = v; st.set('am.sala.plantilla', v);
+  try{ const u = new URL(location.href); if(v === 'adn') u.searchParams.delete('plantilla'); else u.searchParams.set('plantilla', v); history.replaceState(null, '', u); }catch(e){}
+  aplicarPlantilla();
+}
 // Pruebas de diseño para comparar plantillas; se recuerdan en este dispositivo
 const DIS = {botones:st.get('am.sala.botones', 'rectos'), memorias:st.get('am.sala.memorias', 'relato'), cristal:st.get('am.sala.cristal', 'plano')};
 // Ideas de Google (Dial-an-Artist): cuatro pruebas que se encienden por separado
 const GOO = ['estado', 'halo', 'subt', 'aviso'];
 DIS.g = Object.fromEntries(GOO.map(k => [k, st.get('am.sala.g.' + k, '0') === '1']));
-const aplicarDiseno = () => { const R = document.documentElement; R.dataset.botones = DIS.botones; R.dataset.cristal = DIS.cristal; GOO.forEach(k => R.classList.toggle('g-' + k, !!DIS.g[k])); };
-aplicarDiseno();
+// Con una plantilla que no es el ADN, las pruebas de botones y de cristal se apartan: la forma la pone la plantilla
+const aplicarDiseno = () => { const R = document.documentElement, adn = PLANT === 'adn'; R.dataset.botones = adn ? DIS.botones : 'plantilla'; R.dataset.cristal = adn ? DIS.cristal : 'plano'; GOO.forEach(k => R.classList.toggle('g-' + k, !!DIS.g[k])); };
+aplicarPlantilla();
+if(PLANT !== 'adn') cambiarPlantilla(PLANT);
 const G = {voz:st.get('am.sala.voz', '1') === '1', texto:st.get('am.sala.texto', '1') === '1', musica:st.get('am.sala.musica', '0') === '1'};
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3400); }
 
@@ -889,7 +1029,7 @@ function datosCarrusel(){
 }
 // Las vecinas, más pequeñas y apagadas cuanto más lejos del centro. Si el navegador lo hace con CSS (animation-timeline), aquí solo
 // se marca la del centro; si no, JavaScript calcula el tamaño en cada fotograma
-const SDA = !!(window.CSS && CSS.supports('animation-timeline', 'view()'));
+const SDA = !RM && !!(window.CSS && CSS.supports('animation-timeline', 'view()'));
 function escalar(){
   const P = $('carrPista'), c = P.scrollLeft + P.clientWidth/2;
   [...P.children].forEach((el, i) => {
@@ -940,18 +1080,20 @@ function reservarFrase(){
   datosCarrusel();
 }
 
-let QS = 'guiada', QI = INDICE;
-const syncS = () => { document.querySelectorAll('#sModo [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === QS)); document.querySelectorAll('#sIndice [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === QI)); };
-$('salaMenu').onclick = () => { QS = V2 ? 'conversa' : 'guiada'; QI = INDICE; syncS(); $('salaS').hidden = false; };
+let QS = 'guiada', QI = INDICE, QP = PLANT;
+const syncS = () => { [['sModo', QS], ['sIndice', QI], ['sPlant', QP]].forEach(([id, v]) => document.querySelectorAll(`#${id} [data-v]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v))); };
+$('salaMenu').onclick = () => { QS = V2 ? 'conversa' : 'guiada'; QI = INDICE; QP = PLANT; syncS(); $('salaS').hidden = false; };
+$('sPlant').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; QP = b.dataset.v; syncS(); };
 $('sModo').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; QS = b.dataset.v; syncS(); };
 $('sIndice').onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; QI = b.dataset.v; syncS(); };
 $('sAplicar').onclick = () => {
-  const conv = QS === 'conversa', mM = conv !== V2, mI = QI !== INDICE; $('salaS').hidden = true;
-  if(!mM && !mI) return;
+  const conv = QS === 'conversa', mM = conv !== V2, mI = QI !== INDICE, mP = QP !== PLANT; $('salaS').hidden = true;
+  if(!mM && !mI && !mP) return;
   if(mM) cambiarModo(conv);
   if(mI) cambiarIndice(QI);
+  if(mP) cambiarPlantilla(QP);
   pintarSala();
-  toast([mI ? (INDICE === 'carrusel' ? 'Carrusel: una pieza cada vez' : 'Lista: todas las piezas a la vista') : '', mM ? (conv ? 'Conversación: pregúntale a cada obra' : 'Visita guiada: como una audioguía') : ''].filter(Boolean).join(' · '));
+  toast([mI ? (INDICE === 'carrusel' ? 'Carrusel: una pieza cada vez' : 'Lista: todas las piezas a la vista') : '', mM ? (conv ? 'Conversación: pregúntale a cada obra' : 'Visita guiada: como una audioguía') : '', mP ? 'Plantilla: ' + NOMBRE_P[PLANT] : ''].filter(Boolean).join(' · '));
 };
 $('obras').onclick = e => { const b = e.target.closest('[data-id]'); if(b) abrir(b.dataset.id); };
 function volverSala(){
@@ -1833,7 +1975,7 @@ let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout
 /* ======================= Tu visita, ficha y sala ======================= */
 const Q = {};
 function abrirAjustes(){
-  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.botones = DIS.botones; Q.memorias = DIS.memorias; Q.cristal = DIS.cristal; Q.g = {...DIS.g};
+  Object.assign(Q, P); Q.modo = V2 ? 'conversa' : 'guiada'; Q.plantilla = PLANT; Q.botones = DIS.botones; Q.memorias = DIS.memorias; Q.cristal = DIS.cristal; Q.g = {...DIS.g};
   $('fsMem').hidden = !(OBRA._mem && OBRA._mem.activo);
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
@@ -1844,12 +1986,13 @@ function abrirAjustes(){
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
-function sync(){ [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); document.querySelectorAll('#fGoo [data-k]').forEach(b => b.setAttribute('aria-pressed', !!(Q.g && Q.g[b.dataset.k]))); }
+function sync(){ $('fsDis').hidden = $('fsCri').hidden = Q.plantilla !== 'adn'; [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); document.querySelectorAll('#fGoo [data-k]').forEach(b => b.setAttribute('aria-pressed', !!(Q.g && Q.g[b.dataset.k]))); }
 $('fGoo').onclick = e => { const b = e.target.closest('[data-k]'); if(!b || !Q.g) return; Q.g[b.dataset.k] = !Q.g[b.dataset.k]; sync(); };
-[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
+[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
 $('menuB').onclick = abrirAjustes;
 function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
+  if(Q.plantilla !== PLANT){ cambiarPlantilla(Q.plantilla); toast('Plantilla: ' + NOMBRE_P[PLANT]); }
   if(Q.botones !== DIS.botones){ DIS.botones = Q.botones; st.set('am.sala.botones', DIS.botones); aplicarDiseno(); }
   if(Q.cristal !== DIS.cristal){ DIS.cristal = Q.cristal; st.set('am.sala.cristal', DIS.cristal); aplicarDiseno(); }
   if(Q.g && GOO.some(k => Q.g[k] !== DIS.g[k])){ GOO.forEach(k => { DIS.g[k] = !!Q.g[k]; st.set('am.sala.g.' + k, DIS.g[k] ? '1' : '0'); }); aplicarDiseno(); pintarEstado(); if(U && U.started) estado(); }
