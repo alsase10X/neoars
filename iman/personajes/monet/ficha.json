@@ -69,7 +69,20 @@
   "fg": "#3A3270",
   "trazo": "#7F88C2",
   "vidrio": "rgba(176,184,228,.34)",
-  "pColor": "#C9CEE8"
+  "pColor": "#C9CEE8",
+  "oscuro": {
+   "_": "Material 3 (TonalSpot, spec 2025), esquema oscuro con fg como semilla: surface, onSurface, onSurfaceVariant, outlineVariant, surfaceContainerHigh, primary, onPrimary, primaryContainer, secondaryContainer, onSecondaryContainer",
+   "bg": "#0E0E12",
+   "fg": "#E8E3F0",
+   "muted": "#ADA9B5",
+   "hair": "#494750",
+   "panel": "#201F26",
+   "acento": "#C8C1ED",
+   "sobreAcento": "#403C60",
+   "pColor": "#534E73",
+   "tonal": "#3C394D",
+   "sobreTonal": "#C1BCD5"
+  }
  },
  "arte": {
   "completo": "arte/avatar.jpg"

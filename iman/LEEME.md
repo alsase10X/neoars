@@ -30,4 +30,6 @@ El QR del reverso de un imán abre esta página: el personaje del imán, que hab
 - **Vincent:** 21 obras; tres preparadas a fondo (La noche estrellada, El dormitorio, Autorretrato) y trece con visita en su voz. Retrato provisional (el suyo, recoloreado con la paleta de «Su color»).
 - **Monet:** 28 obras, once con visita en su voz, ninguna preparada a fondo todavía. Retrato provisional: la foto de Nadar de 1899 en duotono. Falta su ilustración, su línea y su patrón.
 - **Sin modelo de IA:** las preguntas libres se comparan con el banco; las instrucciones para el modelo ya se componen (menú ⋯ › «Sus instrucciones»).
+- **Diseño guardado:** el canal, los mandos y la interfaz valen para todos los personajes; la versión, el tema y el fondo, para cada uno (así la versión del autorretrato de Vincent no pasa a Monet).
+- **Interfaz de Hablar** (menú ⋯ › Diseño · pruebas): «Nueva», basada en Material 3, es la de por defecto; «Anterior» queda para comparar. La nueva tiene una sola cara a la vista, el texto a tamaño de lectura (sin karaoke en el canal de texto), las sugerencias como chips junto a la caja, un micrófono para dictar que pasa a enviar al escribir, y el tema oscuro sacado del color del personaje (`paleta.oscuro` en la ficha: esquema oscuro de Material, TonalSpot 2025, con `fg` como semilla).
 - Textos pendientes de revisión.

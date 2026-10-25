@@ -19,12 +19,30 @@ function encaje(o, b, W, H){
 const caraDe = o => o.encuadre || (() => { const m = Math.min(o.iw, o.ih); return [(o.iw - m)/2/o.iw, (o.ih - m)/2/o.ih, m/o.iw, m/o.ih]; })();
 
 /* ======================= Diseño · pruebas y canal ======================= */
-let DIS = {tema:'personaje', fondo:'retrato', botones:'redondeados', canal:'voz', version:'ilustrada'};
-try{ DIS = Object.assign(DIS, JSON.parse(st.get('am.iman.dis5') || '{}')); }catch(e){}
-location.hash.slice(1).split('.').forEach(t => { if(t === 'texto' || t === 'voz') DIS.canal = t; });
+// Versión «Su autorretrato»: solo si la ficha la prepara (Vincent): qué obra es su cara, la frase de la portada, la entrada de Hablar y el marco visible
+const VR = PERSONAJE.autorretrato && OBRAS[PERSONAJE.autorretrato.obra] ? PERSONAJE.autorretrato : null;
+// Lo común a todos los personajes (canal, mandos, interfaz) se guarda una vez; la versión, el tema y el fondo, en cada personaje,
+// para que la versión de uno (el autorretrato de Vincent, con su tema oscuro) no pase a otro que no la tiene
+const COMUN = ['botones', 'canal', 'interfaz'], SUYO = ['version', 'tema', 'fondo'];
+const K_COMUN = 'am.iman.dis6', K_SUYO = 'am.iman.dis6.' + PID;
+let DIS = {tema:'personaje', fondo:'retrato', botones:'redondeados', canal:'voz', version:'ilustrada', interfaz:'nueva'};
 // Versión: «ilustrada» (la de ahora) o «autorretrato» (su cara es un cuadro suyo y la obra va primero). ?d=… la abre directamente
 const versionDe = v => { DIS.version = v; DIS.tema = v === 'autorretrato' ? 'oscuro' : 'personaje'; DIS.fondo = v === 'autorretrato' ? 'cuadro' : 'retrato'; };
-{ const d = new URLSearchParams(location.search).get('d'); if(d === 'autorretrato' || d === 'ilustrada') versionDe(d); }
+{
+  const lee = k => { try{ return JSON.parse(st.get(k) || 'null') || null; }catch(e){ return null; } };
+  const antes = lee('am.iman.dis5') || {}, comun = lee(K_COMUN), suyo = lee(K_SUYO);
+  COMUN.forEach(k => { const v = (comun || antes)[k]; if(v) DIS[k] = v; });
+  // Antes todo era común: lo de la versión del autorretrato solo se recupera en quien la tiene
+  const base = suyo || (antes.version === 'autorretrato' && !VR ? {} : antes);
+  SUYO.forEach(k => { if(base[k]) DIS[k] = base[k]; });
+  if(DIS.version === 'autorretrato' && !VR) versionDe('ilustrada');
+}
+location.hash.slice(1).split('.').forEach(t => { if(t === 'texto' || t === 'voz') DIS.canal = t; });
+{ const d = new URLSearchParams(location.search).get('d'); if(d === 'ilustrada' || (d === 'autorretrato' && VR)) versionDe(d); }
+function guardarDiseno(){
+  const parte = ks => JSON.stringify(Object.fromEntries(ks.map(k => [k, DIS[k]])));
+  st.set(K_COMUN, parte(COMUN)); st.set(K_SUYO, parte(SUYO));
+}
 const NOTA_CANAL = {
   texto:'Pensado para el imán, en casa. Lo preparado no cuesta nada; las preguntas libres pasarían por un modelo de texto, la API más barata.',
   voz:'Pensado para la sala y la calle. Lo preparado lleva su audio grabado de antemano; las preguntas libres pasarían por voz encadenada o en tiempo real, que es lo más caro.'
@@ -33,27 +51,30 @@ const texto = () => DIS.canal === 'texto';
 function aplicarDiseno(){
   const r = document.documentElement;
   if(DIS.tema !== 'oscuro') r.dataset.tema = DIS.tema; else delete r.dataset.tema;
-  r.dataset.botones = DIS.botones; $('app').dataset.canal = DIS.canal;
+  r.dataset.botones = DIS.botones; r.dataset.interfaz = DIS.interfaz; $('app').dataset.canal = DIS.canal;
   const fondo = DIS.fondo === 'cuadro' && !VR ? 'retrato' : DIS.fondo;
   $('app').dataset.fondo = (fondo === 'retrato' && !ARTE.linea) || (fondo === 'patron' && !ARTE.patron) ? (ARTE.linea ? 'retrato' : ARTE.patron ? 'patron' : 'liso') : fondo;
-  [['fTema','tema'],['fFondo','fondo'],['fBot','botones'],['fCanal','canal'],['fVer','version']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === DIS[k])));
+  MANDOS_DIS.forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === DIS[k])));
   $('canalN').textContent = NOTA_CANAL[DIS.canal];
   $('iniN').textContent = texto() ? 'Para leer y escribir, sin sonido' : 'Con voz · sube el volumen · toca el imán para oírle';
   $('oPlay').setAttribute('aria-label', texto() ? 'Leer' : 'Escuchar');
   if(texto()){ $('askF').hidden = !U.empezada; $('app').classList.remove('escribiendo'); cerrarPanel(); }
   else if(!$('app').classList.contains('escribiendo')) $('askF').hidden = true;
-  st.set('am.iman.dis5', JSON.stringify(DIS));
+  guardarDiseno();
   pintarVersion();
   if(U.obra) selloA(U.obra);
   estado();
+  vigilarCara();
 }
-[['fTema','tema'],['fFondo','fondo'],['fBot','botones'],['fCanal','canal'],['fVer','version']].forEach(([id, k]) => $(id).addEventListener('click', e => {
+const MANDOS_DIS = [['fInt','interfaz'],['fTema','tema'],['fFondo','fondo'],['fBot','botones'],['fCanal','canal'],['fVer','version']];
+MANDOS_DIS.forEach(([id, k]) => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-v]'); if(!b || DIS[k] === b.dataset.v) return;
   if(k === 'canal') callar();
   if(k === 'version') versionDe(b.dataset.v); else DIS[k] = b.dataset.v;
   aplicarDiseno();
   if(k === 'canal') toast(texto() ? 'Canal de texto: escribes y lees, sin sonido' : 'Canal de voz: hablas y escuchas');
   if(k === 'version') toast(enRetrato() ? 'Su autorretrato: la obra primero' : 'Ilustrada: la versión de ahora');
+  if(k === 'interfaz') toast(DIS.interfaz === 'nueva' ? 'Interfaz nueva: una cara, texto de lectura y sugerencias junto a la caja' : 'Interfaz anterior');
 }));
 
 /* ======================= Estado ======================= */
@@ -436,10 +457,24 @@ function empezar(){
   // En la versión del autorretrato, la entrada y las primeras preguntas van sobre lo que pinta, no sobre su vida
   const I = enRetrato() ? VR : PERSONAJE;
   const frases = I.intro.flatMap(t => trocear(t, box, 'autor'));
+  saludo(frases);
   $('lineas').appendChild(box);
   const primeras = I.primeras.map(id => QI[id]).filter(Boolean);
   box.insertAdjacentHTML('beforeend', `<p class="qin-t">Por ejemplo, pregúntame:</p><div class="qin">${primeras.map(x => `<button class="q" type="button" data-q="${x.id}">${esc(x.q)}</button>`).join('')}</div>`);
-  hablar(frases, 'autor');
+  vigilarCara();
+  // Al acabar de presentarse, que sus primeras preguntas queden a la vista (y no debajo del sello)
+  hablar(frases, 'autor', () => { const q = box.querySelector('.qin'); if(q && U.vista === 'hablar') q.scrollIntoView({block:'nearest', behavior:RM ? 'auto' : 'smooth'}); });
+}
+// La primera frase de una presentación es el saludo: en la interfaz nueva, en negrita y del mismo tamaño
+function saludo(frases){ if(frases[0]) frases[0].w.forEach(w => w.classList.add('t1')); }
+// Una sola cara: en texto, la de la cabecera solo aparece cuando la grande de la presentación sale de la vista
+const IO = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => $('app').classList.toggle('caraVista', e.isIntersecting)), {root:$('flujo')}) : null;
+function vigilarCara(){
+  if(!IO) return; IO.disconnect();
+  const cs = $('lineas').querySelectorAll('.cav');
+  // Mientras el observador no responde, se da por vista (así la pequeña no asoma un instante al empezar)
+  if(cs.length && texto()){ $('app').classList.add('caraVista'); IO.observe(cs[cs.length - 1]); }
+  else $('app').classList.remove('caraVista');
 }
 // Se llega a Hablar desde una obra: la conversación empieza (o sigue) sobre ella
 function sobreObra(k){
@@ -450,8 +485,8 @@ function sobreObra(k){
   $('lineas').insertAdjacentHTML('beforeend', `<p class="qn">Sobre ${esc(o.titulo)}</p>`);
   const box = document.createElement('div'); box.className = 'cap ahora firmada'; box.innerHTML = `<span class="cav">${imanSVG(true)}</span>`;
   const frases = trocear(`Hablemos de ${o.titulo}. Pregúntame lo que quieras de este cuadro.`, box, 'autor');
-  frases.forEach(f => { f.obra = k; });
-  $('lineas').appendChild(box); alTope(box);
+  frases.forEach(f => { f.obra = k; }); saludo(frases);
+  $('lineas').appendChild(box); alTope(box); vigilarCara();
   sugerencias(null, true);
   hablar(frases, 'autor', () => sugerencias());
 }
@@ -588,9 +623,27 @@ function abrirEscribir(){ cerrarPanel(); $('app').classList.add('escribiendo'); 
 function cerrarEscribir(){ if(texto()) return; $('app').classList.remove('escribiendo'); $('askF').hidden = true; $('askI').blur(); }
 $('kb').onclick = abrirEscribir;
 $('cancelar').onclick = cerrarEscribir;
-$('askF').onsubmit = e => { e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; if(texto()) $('askI').blur(); cerrarEscribir(); preguntar(q); };
+$('askF').onsubmit = e => { e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; lleno(); if(texto()) $('askI').blur(); cerrarEscribir(); preguntar(q); };
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let rec = null;
+// Interfaz nueva, canal de texto: con la caja vacía, el botón es un micrófono (dictar la pregunta, la respuesta sigue en texto); al escribir, pasa a enviar
+function lleno(){ $('askF').classList.toggle('lleno', !!$('askI').value.trim()); }
+$('askI').addEventListener('input', lleno);
+const PH = $('askI').placeholder;
+function noOigo(){ toast('El micrófono no funciona en esta vista. Escribe tu pregunta.'); $('askI').focus(); }
+$('dictar').onclick = () => {
+  if(rec){ try{ rec.stop(); }catch(e){} return; }
+  if(!SR) return noOigo();
+  try{
+    callar();
+    rec = new SR(); rec.lang = 'es-ES'; rec.interimResults = false;
+    rec.onstart = () => { $('dictar').classList.add('rec'); $('askI').placeholder = 'Te escucho…'; };
+    rec.onend = () => { $('dictar').classList.remove('rec'); $('askI').placeholder = PH; rec = null; };
+    rec.onerror = ev => { if(['not-allowed','service-not-allowed','audio-capture','network'].includes(ev.error)) noOigo(); else toast('No te he oído bien. Prueba otra vez o escríbela.'); };
+    rec.onresult = ev => { const q = (ev.results[0][0].transcript || '').trim(); if(q) preguntar(q); };
+    rec.start();
+  }catch(e){ rec = null; noOigo(); }
+};
 function sinMicro(){ toast('El micrófono no funciona en esta vista. Escribe tu pregunta.'); abrirEscribir(); }
 $('mic').onclick = () => {
   cerrarPanel();
@@ -641,8 +694,7 @@ addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => {
 document.addEventListener('keydown', e => { if(e.key === 'Escape'){ document.querySelectorAll('.sheet').forEach(s => s.hidden = true); if(O.k) cerrarObra(); } });
 
 /* ======================= Versión «Su autorretrato»: su cara es un cuadro suyo y la obra va primero ======================= */
-// Solo si la ficha la prepara (Vincent): qué obra es su cara, la frase de la portada, la entrada de Hablar y el marco visible
-const VR = PERSONAJE.autorretrato && OBRAS[PERSONAJE.autorretrato.obra] ? PERSONAJE.autorretrato : null;
+// (VR, la versión que prepara la ficha, se lee arriba, con el diseño)
 function enRetrato(){ return !!VR && DIS.version === 'autorretrato'; }
 // Su cara: el cuadro entero en la portada (el anverso del imán) y, en los sellos, la cara recortada del propio cuadro (su encuadre)
 const imanIlustrado = imanSVG;

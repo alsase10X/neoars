@@ -574,3 +574,47 @@ pre.inst{white-space:pre-wrap;overflow-wrap:anywhere;font:.82rem/1.55 ui-monospa
 .campo{width:100%;font:inherit;font-size:1rem;line-height:1.4;padding:12px;border:1px solid var(--hair);background:transparent;color:var(--fg);resize:vertical;min-height:84px}
 .campo:focus{outline:none;border-color:var(--fg)}
 #avisoEnviar{width:100%}
+
+/* ---------- v14 · Interfaz nueva de Hablar (Material 3): una sola cara, texto a tamaño de lectura, sugerencias en chips junto a la caja,
+   micrófono que pasa a enviar y el oscuro sacado del color del personaje. Se compara con la anterior en Tu visita › Interfaz de Hablar ---------- */
+:root{--tonal:color-mix(in srgb,var(--fg) 12%,var(--bg)); --sobre-tonal:var(--fg)}
+/* Arreglos para las dos: el sello no tapa lo que se le sugiere (lo que se trae a la vista se para encima del sello)
+   y, en «Su color», lo que pasa por debajo del sello se desvanece */
+#app[data-canal=voz] #flujo{scroll-padding-bottom:calc(var(--sello)*.36 + 20px)}
+:root[data-tema=personaje] #app[data-canal=voz] .abajo::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:calc(var(--sello)*.36 + 28px);pointer-events:none;
+  background:linear-gradient(to top,color-mix(in srgb,var(--bg) 82%,transparent),transparent)}
+.dictar{display:none}
+
+/* La conversación se apoya abajo: si cabe, la presentación y sus preguntas quedan junto a la caja, al alcance del pulgar */
+:root[data-interfaz=nueva] #lineas{min-height:100%;justify-content:flex-end}
+/* El texto, a tamaño de lectura: ni negrita ni titular; solo el saludo en negrita */
+:root[data-interfaz=nueva] .cap,:root[data-interfaz=nueva] .ans{font-size:1.125rem;font-weight:400;line-height:1.5;letter-spacing:0;max-width:none;text-align:left}
+:root[data-interfaz=nueva] .cap .t1{font-weight:700}
+:root[data-interfaz=nueva] .ans blockquote{font-weight:400}
+/* En texto no hay voz que seguir: sale entero. En voz, lo que aún no ha dicho se lee (antes casi no se veía) */
+:root[data-interfaz=nueva] #app[data-canal=texto] #lineas.hablando .ahora .w{opacity:1}
+:root[data-interfaz=nueva] #app[data-canal=voz] #lineas.hablando .ahora .w:not(.on){opacity:.5}
+/* Sugerencias: chips de Material (esquinas de 8 px, a la izquierda, en fila si caben), sin el rótulo «Por ejemplo» */
+:root[data-interfaz=nueva] .qin-t,:root[data-interfaz=nueva] .sug .eyb{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:root[data-interfaz=nueva] .qin,:root[data-interfaz=nueva] .sug{flex-direction:row;flex-wrap:wrap;gap:8px}
+:root[data-interfaz=nueva] .qin{margin-top:14px}
+:root[data-interfaz=nueva] .qin .q,:root[data-interfaz=nueva] .sug .q{min-height:40px;padding:8px 16px;border-radius:min(8px,var(--radio));font-size:.94rem;font-weight:500;line-height:1.3;text-align:left;max-width:100%}
+:root[data-interfaz=nueva] .pasar{border-radius:min(8px,var(--radio))}
+/* Pestañas: la marca de la activa en el color del personaje */
+:root[data-interfaz=nueva] .tabs button[aria-selected=true]{border-bottom-color:var(--acento)}
+/* Una sola cara: la pequeña de la cabecera se recoge mientras se ve la grande de la presentación (salvo si muestra un cuadro) */
+:root[data-interfaz=nueva] #app[data-canal=texto][data-vista=hablar] .hav{transition:width .35s,opacity .35s,margin .35s,border-width .35s}
+:root[data-interfaz=nueva] #app.caraVista .hav:not(.enObra){width:0;opacity:0;margin-right:-12px;border-width:0}
+/* La caja de escribir: vacía, un micrófono tonal; con texto, la flecha de enviar */
+:root[data-interfaz=nueva] #app[data-canal=texto] .dictar{display:grid;place-items:center;width:50px;height:50px;flex:none;background:var(--tonal);color:var(--sobre-tonal);border-radius:14px}
+:root[data-interfaz=nueva] #app[data-canal=texto] .dictar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2}
+:root[data-interfaz=nueva] #app[data-canal=texto] .dictar.rec{animation:inv 1s steps(2) infinite}
+:root[data-interfaz=nueva] #app[data-canal=texto] #askF:not(.lleno) .b2{display:none}
+:root[data-interfaz=nueva] #app[data-canal=texto] #askF.lleno .dictar{display:none}
+:root[data-botones=rectos][data-interfaz=nueva] #app[data-canal=texto] .dictar{border-radius:0}
+:root[data-botones=redondos][data-interfaz=nueva] #app[data-canal=texto] .dictar,:root[data-tema=personaje][data-interfaz=nueva] #app[data-canal=texto] .dictar{border-radius:50%}
+:root[data-tema=personaje][data-interfaz=nueva] #app[data-canal=texto] .dictar{background:var(--vidrio);border:1px solid var(--vidrio-borde);color:var(--fg)}
+/* Con la conversación apoyada abajo, el desvanecido de abajo (canal de texto) se queda en el margen y no apaga la última sugerencia */
+:root[data-interfaz=nueva] #app[data-canal=texto] #flujo{-webkit-mask-image:linear-gradient(transparent,#000 22px,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(transparent,#000 22px,#000 calc(100% - 26px),transparent)}
+:root[data-interfaz=nueva][data-tema=personaje] #app[data-canal=texto] #flujo{-webkit-mask-image:none;mask-image:none}
+#app[data-canal=texto] #flujo{scroll-padding-bottom:28px}

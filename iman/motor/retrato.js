@@ -11,6 +11,10 @@ const ARTE = (() => { const A = PERSONAJE.arte || {}; return {patron:RUTA_P(A.pa
   if(p.vidrio) css += `--vidrio:${p.vidrio};`;
   if(p.pColor) css += `--p-color:${p.pColor};`;
   css += '}';
+  // Interfaz nueva: el tema oscuro sale del mismo color que «Su color» (esquema oscuro de Material 3), no de un negro genérico
+  const o = p.oscuro;
+  if(o) css += `:root[data-interfaz=nueva]:not([data-tema]){--bg:${o.bg};--fg:${o.fg};--muted:${o.muted};--hair:${o.hair};--panel:${o.panel};--tinta:${o.bg};`
+    + `--acento:${o.acento};--sobre-acento:${o.sobreAcento};--trazo:${o.acento};--p-color:${o.pColor};--tonal:${o.tonal};--sobre-tonal:${o.sobreTonal}}`;
   css += `.fondoL{aspect-ratio:${e.ratio || '1/1'}}`;
   css += `:root[data-tema=personaje] .fondoL{width:${e.ancho || 'min(230vw,1000px)'};top:${e.arriba || '84px'};transform:translateX(${e.x || '-47%'});opacity:${e.opacidad || '.72'}}`;
   document.head.insertAdjacentHTML('beforeend', `<style id="paleta">${css}</style>`);
