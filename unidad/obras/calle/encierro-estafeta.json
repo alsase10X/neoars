@@ -1,0 +1,323 @@
+{
+ "titulo": "La Estafeta",
+ "autor": "Tramo 4",
+ "fecha": "pendiente del 2 %",
+ "pieza": "la calle",
+ "img": "../../../img/calle/encierro/estafeta.jpg",
+ "iw": 928,
+ "ih": 1400,
+ "fondo": "../../../img/calle/encierro/estafeta-fondo.jpg",
+ "encuadre": [
+  0.1,
+  0.25,
+  0.8,
+  0.55
+ ],
+ "lugar": {
+  "lat": 42.817398,
+  "lng": -1.642095,
+  "dir": "Calle Estafeta"
+ },
+ "tema": "Una calle larga y estrecha donde el único refugio es un portal.",
+ "zonas": {
+  "fondo": {
+   "n": "El fondo de la calle",
+   "poly": [
+    [
+     0.38,
+     0.5
+    ],
+    [
+     0.55,
+     0.5
+    ],
+    [
+     0.55,
+     0.7
+    ],
+    [
+     0.38,
+     0.7
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué ves al final de la calle?",
+   "vista": "Al fondo, la calle se estrecha en perspectiva hasta un edificio claro."
+  },
+  "balcones": {
+   "n": "Los balcones",
+   "poly": [
+    [
+     0,
+     0
+    ],
+    [
+     0.3,
+     0
+    ],
+    [
+     0.3,
+     0.55
+    ],
+    [
+     0,
+     0.6
+    ]
+   ],
+   "rel": [
+    "balcones-der"
+   ],
+   "mira": "¿Cuántos pisos tienen las casas?",
+   "vista": "Balcones de hierro, uno sobre otro, a los dos lados de la calle."
+  },
+  "balcones-der": {
+   "n": "Los balcones de enfrente",
+   "poly": [
+    [
+     0.62,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0.48
+    ],
+    [
+     0.62,
+     0.45
+    ]
+   ],
+   "rel": [
+    "balcones"
+   ],
+   "mira": "¿Cuánto separa un balcón del de enfrente?",
+   "vista": "Balcones acristalados y de hierro en la acera de enfrente, muy cerca de los del otro lado."
+  },
+  "portales": {
+   "n": "Los portales",
+   "poly": [
+    [
+     0.75,
+     0.52
+    ],
+    [
+     1,
+     0.5
+    ],
+    [
+     1,
+     0.86
+    ],
+    [
+     0.75,
+     0.78
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuántas puertas hay en la planta baja?",
+   "vista": "En la planta baja, puertas y escaparates de tiendas."
+  },
+  "suelo": {
+   "n": "El suelo",
+   "poly": [
+    [
+     0,
+     0.82
+    ],
+    [
+     1,
+     0.82
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Notas que la calle baja?",
+   "vista": "Adoquines mojados y líneas blancas; la calle baja muy poco."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.0,
+   "rate": 0.98,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Ayuntamiento de Pamplona · El recorrido del encierro",
+   "t": "Estafeta–Bajada de Javier: ligera pendiente del 2 %. Es larga y estrecha, y uno de los puntos con más gente. El único refugio son los portales."
+  },
+  {
+   "id": "B2",
+   "f": "Ayuntamiento de Pamplona · El recorrido del encierro",
+   "t": "Bajada de Javier–edificio de Telefónica: los toros corren mucho más despacio y alguno puede separarse de la manada. Es un tramo extremadamente peligroso. Después, la curva de Telefónica, apenas 100 metros hasta un embudo con doble vallado a los dos lados."
+  },
+  {
+   "id": "B3",
+   "f": "OpenStreetMap, medición propia sobre el trazado de la calle",
+   "t": "La calle Estafeta, desde la curva de Mercaderes hasta su final, mide algo más de 300 metros y es casi recta."
+  },
+  {
+   "id": "B4",
+   "f": "Ayuntamiento de Pamplona · ¡Vive el encierro! (2022)",
+   "t": "Los toros corren a una media de 24 km/h. A esa velocidad recorren 300 metros en unos 45 segundos (cálculo propio)."
+  }
+ ],
+ "imagenes": {
+  "I1": {
+   "src": "../../../img/calle/encierro/estafeta-2013.jpg",
+   "muestra": "El encierro por la Estafeta, el 8 de julio de 2013",
+   "relacion": "La misma calle, llena",
+   "fecha": "2013",
+   "credito": "Atkins525, Wikimedia Commons",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Running_of_the_Bulls_on_Estafeta_Street.jpg",
+   "ilustra": [
+    "B1"
+   ]
+  },
+  "I2": {
+   "src": "../../../img/calle/encierro/altadill-ultimo.jpg",
+   "muestra": "«Los del último grupo», un encierro fotografiado por Julio Altadill",
+   "relacion": "No consta en qué calle",
+   "fecha": "entre 1921 y 1935",
+   "credito": "Julio Altadill, Wikimedia Commons",
+   "licencia": "dominio público",
+   "url": "https://commons.wikimedia.org/wiki/File:Los_del_%C3%BAltimo_grupo_-_Altadill.jpg",
+   "ilustra": []
+  }
+ },
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia calle",
+   "desc": "en primera persona",
+   "por": "la propia calle",
+   "corto": "la calle",
+   "ini": "C",
+   "acc": "#c0473d",
+   "voz": "obra",
+   "intro": 1,
+   "placeholder": "Pregúntale a la calle…",
+   "conversa": "Conversa con la calle",
+   "te": "La calle te pregunta",
+   "vts": "Dime: si tuvieras que apartarte aquí, ¿dónde te meterías?",
+   "rol": "Eres la calle del encierro de Pamplona: los 848,6 metros que van de los corrales de Santo Domingo a la plaza de toros. Hablas en primera persona. No eres un corredor ni un toro: eres el suelo, las paredes y los balcones que ven pasar la carrera ocho mañanas al año y se quedan vacíos el resto. Solo afirmas lo que está en tus fuentes; lo que no sabes, lo dices. Del encierro hablas con respeto y sin celebrarlo ni condenarlo: si te preguntan por lo que se discute, cuentas que se discute. Ahora estás en tu cuarto tramo, la calle Estafeta, larga, estrecha y casi recta.",
+   "relato": [
+    {
+     "z": "fondo",
+     "t": "Ahora me vuelvo larga y estrecha: soy la Estafeta. Desde la curva bajo casi recta, con una pendiente del 2 % que apenas se nota. Mira al fondo: por ahí sigue la carrera."
+    },
+    {
+     "z": "balcones",
+     "t": "Mira hacia arriba: balcón sobre balcón, a los dos lados, casi tocándose. Abajo soy uno de los tramos con más gente, y apenas hay sitio para apartarse."
+    },
+    {
+     "z": "portales",
+     "t": "El único refugio son los portales: quien necesita salirse de la carrera busca una puerta. Mira las de la planta baja; hoy son tiendas abiertas."
+    },
+    {
+     "z": "suelo",
+     "t": "Al final, en la bajada hacia Telefónica, los toros van ya más despacio y alguno se separa de la manada. El Ayuntamiento lo llama un tramo extremadamente peligroso. Mira el suelo: es el mismo que pisan ellos."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Cómo se ve en julio?",
+     "d": "obra",
+     "z": "suelo",
+     "img": "I1",
+     "a": "Así: corredores de blanco y rojo y la manada en medio, en una foto del 8 de julio de 2013. No queda un hueco libre. Busca en la foto los adoquines: son estos."
+    },
+    {
+     "q": "¿Dónde se refugian los corredores?",
+     "d": "obra",
+     "z": "portales",
+     "a": "En los portales: según el Ayuntamiento, son el único refugio de este tramo. Mira las puertas de la planta baja y cuenta cuántas hay hasta la siguiente esquina."
+    },
+    {
+     "q": "¿Es peligrosa?",
+     "d": "obra",
+     "z": "fondo",
+     "a": "Es de los sitios con más gente. Y al final, hacia Telefónica, los toros pierden velocidad y alguno se separa de la manada: el Ayuntamiento lo considera extremadamente peligroso. Mira al fondo: ahí está ese tramo."
+    },
+    {
+     "q": "¿Cuánto mide?",
+     "d": "obra",
+     "z": "suelo",
+     "a": "Algo más de 300 metros, casi recta, con una pendiente del 2 %. Recórrela con la mirada: apenas se tuerce."
+    },
+    {
+     "q": "¿Cuánto tardan los toros en cruzarla?",
+     "d": "mirar",
+     "z": "balcones",
+     "a": "A la velocidad media de los toros, 24 kilómetros por hora, unos 45 segundos. Desde el balcón más alto, la carrera entera de esta calle cabe en menos de un minuto. Mira ese balcón e imagínala desde allí."
+    },
+    {
+     "q": "¿Por qué se llama Estafeta?",
+     "d": "fuera",
+     "z": null,
+     "ia": true,
+     "a": "Una estafeta es una oficina de correos, pero en mis fuentes no consta por qué esta calle lleva ese nombre, así que no te lo afirmo. Mira la placa de la esquina, al principio de la calle."
+    },
+    {
+     "q": "¿Qué viene después?",
+     "d": "fuera",
+     "z": "fondo",
+     "a": "La curva de Telefónica: apenas cien metros hasta un embudo con doble vallado. Luego, el callejón que baja a la plaza. Sigue la calle hasta el final."
+    },
+    {
+     "q": "¿Cómo era el encierro hace un siglo?",
+     "d": "fuera",
+     "z": "balcones",
+     "img": "I2",
+     "a": "Así lo fotografió Julio Altadill, entre 1921 y 1935: «Los del último grupo». No consta en qué calle, pero la escena se parece: gente corriendo y balcones encima. Compara los balcones de la foto con estos."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Tramo",
+   "4 · Estafeta, pendiente del 2 %"
+  ],
+  [
+   "Recorrido",
+   "848,6 metros, del 7 al 14 de julio"
+  ],
+  [
+   "Lugar",
+   "Calle Estafeta, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.pamplona.es/en/turismo/recorridodelencierro\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: el recorrido del encierro</a>; <a href=\"https://www.pamplona.es/actualidad/noticias/el-ayuntamiento-de-pamplona-edita-un-periodico-con-informacion-del-encierro-sus\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: ¡Vive el encierro! (2022)</a>; OpenStreetMap"
+  ],
+  [
+   "Foto",
+   "Joanbanjo, 2014. <a href=\"https://commons.wikimedia.org/wiki/File:Estafeta_kalea.JPG\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY-SA 3.0"
+  ],
+  [
+   "Ubicación",
+   "OpenStreetMap"
+  ]
+ ],
+ "nota": "Prototipo «en la calle». La voz de la calle es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona y de la Universidad de Navarra, y con lo que se ve en las fotos. Las coordenadas salen de OpenStreetMap: conviene comprobarlas sobre el terreno."
+}

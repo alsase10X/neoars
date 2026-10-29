@@ -1,0 +1,307 @@
+{
+ "titulo": "La curva de Mercaderes",
+ "autor": "Tramo 3",
+ "fecha": "un giro de 90 grados",
+ "pieza": "la curva",
+ "img": "../../../img/calle/encierro/curva.jpg",
+ "iw": 1400,
+ "ih": 1050,
+ "fondo": "../../../img/calle/encierro/curva-fondo.jpg",
+ "encuadre": [
+  0.08,
+  0.12,
+  0.84,
+  0.86
+ ],
+ "lugar": {
+  "lat": 42.81849,
+  "lng": -1.643011,
+  "dir": "Esquina de Mercaderes con Estafeta"
+ },
+ "tema": "Una esquina de noventa grados donde los toros resbalan, y que la ciudad trata cada año para que no resbalen.",
+ "zonas": {
+  "placa-mercaderes": {
+   "n": "La placa de Mercaderes",
+   "poly": [
+    [
+     0.13,
+     0.31
+    ],
+    [
+     0.38,
+     0.2
+    ],
+    [
+     0.385,
+     0.51
+    ],
+    [
+     0.13,
+     0.61
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué nombre tuvo antes esta calle?",
+   "vista": "Placa blanca: «Calle de los Mercaderes · Mercaderes kalea», con el escudo de la ciudad y, debajo, en pequeño, «antigua del Mentidero»."
+  },
+  "placa-estafeta": {
+   "n": "La placa de la Estafeta",
+   "poly": [
+    [
+     0.6,
+     0.19
+    ],
+    [
+     0.88,
+     0.28
+    ],
+    [
+     0.88,
+     0.585
+    ],
+    [
+     0.61,
+     0.52
+    ]
+   ],
+   "rel": [],
+   "mira": "¿En qué dos idiomas está escrita?",
+   "vista": "Placa blanca: «Calle de la Estafeta · Estafeta kalea», con el escudo de la ciudad."
+  },
+  "esquina": {
+   "n": "La esquina",
+   "poly": [
+    [
+     0.47,
+     0.0
+    ],
+    [
+     0.53,
+     0.0
+    ],
+    [
+     0.53,
+     0.7
+    ],
+    [
+     0.47,
+     0.7
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué ángulo forman las dos paredes?",
+   "vista": "La arista donde se juntan las dos fachadas, en ángulo recto."
+  },
+  "senal": {
+   "n": "La señal del encierro",
+   "poly": [
+    [
+     0.63,
+     0.8
+    ],
+    [
+     0.855,
+     0.83
+    ],
+    [
+     0.855,
+     0.96
+    ],
+    [
+     0.63,
+     0.92
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde apunta la flecha?",
+   "vista": "Un cartel rojo con la silueta de un toro, la palabra «Encierro» y una flecha hacia la derecha."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.0,
+   "rate": 0.98,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Ayuntamiento de Pamplona · El recorrido del encierro",
+   "t": "La Estafeta empieza con un giro a la derecha de 90 grados. Los toros resbalan, derrapan y acaban contra el vallado exterior. Los corredores deben tomar la curva por el lado contrario, por el lado corto, para no quedar atrapados."
+  },
+  {
+   "id": "B2",
+   "f": "Ayuntamiento de Pamplona · La aplicación de antideslizante cumple veinte años (1 de julio de 2026)",
+   "t": "El antideslizante se aplica desde 2006 entre la plaza Consistorial y unos metros pasada la curva de Mercaderes, ya en la Estafeta. Es un compuesto químico que libera los poros del pavimento, tapados por la suciedad o pulidos por las máquinas de limpieza, y crea un efecto de succión que mejora el agarre de las pezuñas, sobre todo con el suelo mojado. Lo extienden a mano unas diez personas con regaderas y escobones."
+  },
+  {
+   "id": "B3",
+   "f": "Ayuntamiento de Pamplona · Mesa del Encierro (4 de abril de 2025)",
+   "t": "En la curva de Mercaderes, el vallado lleva chapas ancladas."
+  },
+  {
+   "id": "B4",
+   "f": "Ayuntamiento de Pamplona · ¡Vive el encierro! (2022)",
+   "t": "Corren unas 2.000 personas al día, casi el doble en fin de semana, con una edad media estimada de 28 años; cada una recorre unos 100 metros."
+  },
+  {
+   "id": "B5",
+   "f": "Placas de la esquina, transcritas de la foto",
+   "t": "«Calle de los Mercaderes · Mercaderes kalea (antigua del Mentidero)» y «Calle de la Estafeta · Estafeta kalea». Debajo, un cartel rojo con un toro: «Encierro», con una flecha."
+  }
+ ],
+ "imagenes": {
+  "I1": {
+   "src": "../../../img/calle/encierro/curva-altadill.jpg",
+   "muestra": "La manada llegando a la curva de Mercaderes, fotografiada por Julio Altadill",
+   "relacion": "La misma esquina, hace un siglo",
+   "fecha": "entre 1921 y 1935",
+   "credito": "Julio Altadill, Wikimedia Commons",
+   "licencia": "dominio público",
+   "url": "https://commons.wikimedia.org/wiki/File:Llegada_de_la_manada_a_la_curva_de_Mercaderes_-_Altadill.jpg",
+   "ilustra": [
+    "B1"
+   ]
+  },
+  "I2": {
+   "src": "../../../img/calle/encierro/mercaderes-2012.jpg",
+   "muestra": "La calle Mercaderes al amanecer, en 2012",
+   "relacion": "Por aquí llegan los toros desde la plaza",
+   "fecha": "2012",
+   "credito": "Davidh820, Wikimedia Commons",
+   "licencia": "CC BY-SA 3.0 es",
+   "url": "https://commons.wikimedia.org/wiki/File:Calle_de_los_Mercaderes_-_Pamplona.JPG",
+   "ilustra": [
+    "B1"
+   ]
+  }
+ },
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia calle",
+   "desc": "en primera persona",
+   "por": "la propia calle",
+   "corto": "la calle",
+   "ini": "C",
+   "acc": "#c0473d",
+   "voz": "obra",
+   "intro": 1,
+   "placeholder": "Pregúntale a la calle…",
+   "conversa": "Conversa con la calle",
+   "te": "La calle te pregunta",
+   "vts": "Dime: si vinieras corriendo, ¿por dónde tomarías esta esquina?",
+   "rol": "Eres la calle del encierro de Pamplona: los 848,6 metros que van de los corrales de Santo Domingo a la plaza de toros. Hablas en primera persona. No eres un corredor ni un toro: eres el suelo, las paredes y los balcones que ven pasar la carrera ocho mañanas al año y se quedan vacíos el resto. Solo afirmas lo que está en tus fuentes; lo que no sabes, lo dices. Del encierro hablas con respeto y sin celebrarlo ni condenarlo: si te preguntan por lo que se discute, cuentas que se discute. Ahora estás en tu tercer tramo, la curva de Mercaderes, la esquina donde la calle Mercaderes gira hacia la Estafeta.",
+   "relato": [
+    {
+     "z": "esquina",
+     "t": "Aquí giro en seco: noventa grados a la derecha, de Mercaderes a la Estafeta. Los toros llegan lanzados desde la plaza, resbalan y derrapan, y acaban contra el vallado de fuera."
+    },
+    {
+     "z": "senal",
+     "t": "Mira la señal roja: «Encierro», con una flecha. Es de lo poco que, fuera de julio, dice lo que soy. Apunta a la Estafeta, por donde sigue la carrera."
+    },
+    {
+     "z": null,
+     "t": "Para que resbalen menos, desde 2006 tratan el suelo con antideslizante desde la plaza hasta unos metros más allá de esta esquina. Y en julio, el vallado de esta curva lleva chapas ancladas a las tablas."
+    },
+    {
+     "z": "placa-estafeta",
+     "t": "Quien corre la toma por dentro, por el lado corto, para que el toro no le atrape contra las tablas. Mira las dos placas: al pasar de una a otra, cambias de calle y de tramo."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Por qué resbalan los toros?",
+     "d": "obra",
+     "z": "esquina",
+     "img": "I1",
+     "a": "Porque llegan rápido y el giro es de noventa grados: derrapan y acaban contra el vallado de fuera. En la foto de Julio Altadill, de entre 1921 y 1935, la manada llega a esta misma curva. Mira la esquina y busca el ángulo."
+    },
+    {
+     "q": "¿Qué es el antideslizante?",
+     "d": "obra",
+     "z": null,
+     "a": "Un compuesto químico que se extiende a mano, con regaderas y escobones. Abre los poros del suelo, que la suciedad tapa y las máquinas de limpieza pulen, y las pezuñas agarran mejor, sobre todo si está mojado. Se aplica desde 2006. Mira el adoquín junto a la esquina."
+    },
+    {
+     "q": "¿Cómo se corre la curva?",
+     "d": "obra",
+     "z": "esquina",
+     "a": "Por dentro, por el lado corto: así lo aconseja el Ayuntamiento, porque el toro se va hacia fuera, contra las tablas. Mira la arista de la esquina: ese es el lado corto."
+    },
+    {
+     "q": "¿Qué dice la placa pequeña?",
+     "d": "mirar",
+     "z": "placa-mercaderes",
+     "a": "Que esta calle fue «antigua del Mentidero»: lo pone ahí mismo, debajo del nombre. Acércate y léelo."
+    },
+    {
+     "q": "¿Qué llevan las tablas de la curva?",
+     "d": "obra",
+     "z": null,
+     "a": "En julio, el vallado de esta curva lleva chapas ancladas, según cuenta el Ayuntamiento. Hoy no está: el vallado pasa el año guardado. Mira la señal roja, que sí se queda."
+    },
+    {
+     "q": "¿Hacia dónde sigue la carrera?",
+     "d": "mirar",
+     "z": "senal",
+     "a": "Hacia la Estafeta, a la derecha: lo dice la flecha. Desde aquí la calle es larga, estrecha y casi recta. Sigue la flecha con la mirada."
+    },
+    {
+     "q": "¿Es el tramo más peligroso?",
+     "d": "fuera",
+     "z": "esquina",
+     "a": "El Ayuntamiento señala como muy peligrosos otros: la cuesta de Santo Domingo, la bajada hacia Telefónica y el callejón. Lo que pasa aquí es que los toros resbalan y se van contra las tablas de fuera. Mira la esquina."
+    },
+    {
+     "q": "¿Cuánta gente corre?",
+     "d": "fuera",
+     "z": null,
+     "a": "Unas 2.000 personas al día, casi el doble en fin de semana, con una edad media de 28 años. Según el Ayuntamiento, cada una recorre unos 100 metros. Mira hacia la plaza: cien metros te llevarían casi hasta allí."
+    },
+    {
+     "q": "¿De dónde vienen los toros?",
+     "d": "mirar",
+     "z": "placa-mercaderes",
+     "img": "I2",
+     "a": "De la plaza, por Mercaderes. En la foto, la calle al amanecer, vacía, en 2012. Mira la placa de Mercaderes: de esa calle llegan."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Tramo",
+   "3 · Curva de Mercaderes, un giro de 90 grados"
+  ],
+  [
+   "Recorrido",
+   "848,6 metros, del 7 al 14 de julio"
+  ],
+  [
+   "Lugar",
+   "Esquina de Mercaderes con Estafeta, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.pamplona.es/en/turismo/recorridodelencierro\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: el recorrido del encierro</a>; <a href=\"https://www.pamplona.es/en/node/78543\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: antideslizante (2026)</a>; <a href=\"https://www.pamplona.es/en/node/71353\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: Mesa del Encierro (2025)</a>; <a href=\"https://www.pamplona.es/actualidad/noticias/el-ayuntamiento-de-pamplona-edita-un-periodico-con-informacion-del-encierro-sus\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: ¡Vive el encierro! (2022)</a>; las placas de la esquina"
+  ],
+  [
+   "Foto",
+   "Joanbanjo, 2014. <a href=\"https://commons.wikimedia.org/wiki/File:Mercaderes_-_Estafeta_%28cropped%29.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY 3.0"
+  ],
+  [
+   "Ubicación",
+   "OpenStreetMap"
+  ]
+ ],
+ "nota": "Prototipo «en la calle». La voz de la calle es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona y de la Universidad de Navarra, y con lo que se ve en las fotos. Las coordenadas salen de OpenStreetMap: conviene comprobarlas sobre el terreno."
+}

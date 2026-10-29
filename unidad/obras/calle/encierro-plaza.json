@@ -1,0 +1,437 @@
+{
+ "titulo": "La plaza del Ayuntamiento",
+ "autor": "Tramo 2",
+ "fecha": "unos 100 metros con Mercaderes",
+ "pieza": "la plaza",
+ "img": "../../../img/calle/encierro/plaza.jpg",
+ "iw": 895,
+ "ih": 1400,
+ "fondo": "../../../img/calle/encierro/plaza-fondo.jpg",
+ "encuadre": [
+  0.15,
+  0.03,
+  0.8,
+  0.67
+ ],
+ "lugar": {
+  "lat": 42.81815,
+  "lng": -1.64403,
+  "dir": "Plaza Consistorial"
+ },
+ "tema": "La plaza que abre y cierra la fiesta ve pasar la carrera en medio.",
+ "zonas": {
+  "fama": {
+   "n": "La Fama y los escudos",
+   "poly": [
+    [
+     0.42,
+     0.057
+    ],
+    [
+     0.72,
+     0.057
+    ],
+    [
+     0.72,
+     0.142
+    ],
+    [
+     0.42,
+     0.142
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hace la figura más alta?",
+   "vista": "En lo más alto, una figura que toca una trompeta, entre dos escudos sostenidos por leones."
+  },
+  "reloj": {
+   "n": "El reloj",
+   "poly": [
+    [
+     0.53,
+     0.148
+    ],
+    [
+     0.6,
+     0.148
+    ],
+    [
+     0.6,
+     0.188
+    ],
+    [
+     0.53,
+     0.188
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hora marca ahora?",
+   "vista": "Un reloj redondo de esfera blanca en el frontón, bajo la figura de la trompeta."
+  },
+  "hercules": {
+   "n": "Los dos Hércules",
+   "poly": [
+    [
+     0.3,
+     0.148
+    ],
+    [
+     0.37,
+     0.148
+    ],
+    [
+     0.37,
+     0.205
+    ],
+    [
+     0.3,
+     0.205
+    ]
+   ],
+   "rel": [
+    "hercules-der"
+   ],
+   "mira": "¿Qué levantan las dos figuras de los lados?",
+   "vista": "Dos estatuas de piedra a los lados del remate, una a cada extremo de la fachada."
+  },
+  "hercules-der": {
+   "n": "Hércules",
+   "poly": [
+    [
+     0.8,
+     0.102
+    ],
+    [
+     0.88,
+     0.102
+    ],
+    [
+     0.88,
+     0.182
+    ],
+    [
+     0.8,
+     0.182
+    ]
+   ],
+   "rel": [
+    "hercules"
+   ],
+   "mira": "¿Se parece a la del otro lado?",
+   "vista": "La estatua del extremo derecho del remate."
+  },
+  "balcon": {
+   "n": "El balcón corrido",
+   "poly": [
+    [
+     0.19,
+     0.472
+    ],
+    [
+     0.92,
+     0.472
+    ],
+    [
+     0.92,
+     0.517
+    ],
+    [
+     0.19,
+     0.517
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cuántas personas cabrían en ese balcón?",
+   "vista": "En el primer piso, un balcón de hierro que recorre toda la fachada, con escudos en la barandilla."
+  },
+  "portal": {
+   "n": "La puerta y sus estatuas",
+   "poly": [
+    [
+     0.36,
+     0.557
+    ],
+    [
+     0.67,
+     0.557
+    ],
+    [
+     0.67,
+     0.682
+    ],
+    [
+     0.36,
+     0.682
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Quiénes guardan la puerta?",
+   "vista": "La puerta en arco, con una reja, entre dos estatuas de piedra."
+  },
+  "suelo": {
+   "n": "El suelo de la plaza",
+   "poly": [
+    [
+     0,
+     0.727
+    ],
+    [
+     1,
+     0.727
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cómo es el suelo que pisas?",
+   "vista": "Adoquines grises cruzados por líneas blancas."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.0,
+   "rate": 0.98,
+   "fem": true
+  }
+ },
+ "citas": {
+  "placa": {
+   "t": "A los fallecidos en el Encierro.",
+   "breve": "Placa del vallado de la plaza",
+   "ref": "Placa del tramo de vallado junto a la oficina de turismo, transcrita de la foto de JLVwiki (Wikimedia Commons, 2026)",
+   "url": "https://commons.wikimedia.org/wiki/File:Vallado_del_encierro_en_la_plaza_Consistorial_1.jpg",
+   "voz": "obra"
+  }
+ },
+ "base": [
+  {
+   "id": "B1",
+   "f": "Universidad de Navarra, Cátedra de Patrimonio · Ayuntamientos navarros: Pamplona",
+   "t": "La Casa Consistorial se construyó en siete años, entre 1753 y 1759, con trazas de Juan Miguel de Goyeneta, salvo la fachada, diseñada por José Zay Lorda; el remate lo terminó el maestro Juan Lorenzo Catalán. Sustituyó a la antigua Casa de la Jurería. Es rococó. En el primer piso tiene un balcón corrido y en el segundo, tres balcones; las rejerías son de gusto francés. En el ático, dos Hércules aluden a las virtudes cívicas y una alegoría de la Fama va entre los escudos de Pamplona y de Navarra, sostenidos por leones. A los lados de la puerta, la Prudencia y la Justicia, alegorías del buen gobierno. Del edificio solo se conserva la fachada."
+  },
+  {
+   "id": "B2",
+   "f": "Ayuntamiento de Pamplona · El Chupinazo y el Pobre de mí",
+   "t": "El chupinazo se lanza el 6 de julio a las 12:00 desde el balcón del Ayuntamiento y abre las fiestas. Desde el balcón, desde 1941; antes, las fiestas se anunciaban desde la plaza del Castillo. Las noticias más antiguas son de 1931: Juan Etxepare, estanquero de la calle Mayor, fue el primero en pedir permiso para lanzar cohetes al mediodía del 6 de julio. Tradicionalmente lo lanzaban alcaldes, concejales o alguien designado por el Ayuntamiento; desde 2016 se elige por votación popular entre candidatos que proponen las asociaciones de la ciudad. La plaza mide 2.502 metros cuadrados y se llena de gente de blanco y rojo. Tres minutos antes de las doce, los clarines anuncian a quien lo lanza, que saluda en euskera y en castellano («Viva San Fermín, Gora San Fermín») antes de encender la mecha. El Pobre de mí cierra las fiestas el 14 de julio: miles de personas, con el pañuelo anudado y velas, se reúnen ante el Ayuntamiento y el alcalde sale al balcón a despedir la fiesta."
+  },
+  {
+   "id": "B3",
+   "f": "Ayuntamiento de Pamplona · El recorrido del encierro",
+   "t": "Plaza Consistorial–Mercaderes: 100 metros. Técnicamente complicado por una doble curva, pero de los menos peligrosos: hay mucho sitio para correr y varios lugares donde refugiarse."
+  },
+  {
+   "id": "B4",
+   "f": "Ayuntamiento de Pamplona · La aplicación de antideslizante cumple veinte años (1 de julio de 2026)",
+   "t": "Desde 2006 (tras una prueba en 2005) se aplica antideslizante antes de los Sanfermines, salvo en 2020 y 2021. En 2026, unos 1.500 litros sobre unos 1.875 metros cuadrados, entre la plaza Consistorial y unos metros pasada la curva de Mercaderes, y en la salida de los corrales. Se aplica de noche, desde las 23:00; lo extiende a mano un equipo de unas diez personas con regaderas y escobones. Libera los poros del pavimento, que tapan la suciedad y las máquinas de limpieza, y mejora el agarre de las pezuñas, sobre todo con el suelo mojado."
+  },
+  {
+   "id": "B5",
+   "f": "Ayuntamiento de Pamplona · ¡Vive el encierro! (2022)",
+   "t": "Algunos tramos del vallado, como los del entorno del Ayuntamiento y de Telefónica, se quitan y se vuelven a poner cada día."
+  },
+  {
+   "id": "B6",
+   "f": "Placa del vallado junto a la oficina de turismo, transcrita de la foto (JLVwiki, Wikimedia Commons, 23 de octubre de 2026)",
+   "t": "Un tramo de vallado de madera con una placa de bronce en cuatro idiomas y en braille: «A los fallecidos en el Encierro», «Entzierroetan hildakoei», «À la douce mémoire de ceux qui sont morts à l'Encierro», «To those who have died in the running of the bulls»."
+  }
+ ],
+ "imagenes": {
+  "I1": {
+   "src": "../../../img/calle/encierro/chupinazo-2018.jpg",
+   "muestra": "El chupinazo del 6 de julio de 2018",
+   "relacion": "La plaza llena, con el balcón al fondo",
+   "fecha": "2018",
+   "credito": "San Fermin Pamplona Navarra, Wikimedia Commons",
+   "licencia": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chupinazo_de_San_Ferm%C3%ADn_%2843123923644%29.jpg",
+   "ilustra": [
+    "B2"
+   ]
+  },
+  "I2": {
+   "src": "../../../img/calle/encierro/vallado-memoria.jpg",
+   "muestra": "El tramo de vallado con la placa, junto a la oficina de turismo, en octubre de 2026",
+   "relacion": "Está ahí fuera de fiestas",
+   "fecha": "2026",
+   "credito": "JLVwiki, Wikimedia Commons",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vallado_del_encierro_en_la_plaza_Consistorial_2.jpg",
+   "ilustra": [
+    "B6"
+   ]
+  },
+  "I3": {
+   "src": "../../../img/calle/encierro/plaza-2005.jpg",
+   "muestra": "El encierro del 7 de julio de 2005 a su paso por la plaza",
+   "relacion": "Corredores y vallado delante del Ayuntamiento",
+   "fecha": "2005",
+   "credito": "Johnbojaen, Wikimedia Commons",
+   "licencia": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Encierro_7_de_julio_de_2005.jpg",
+   "ilustra": [
+    "B3",
+    "B5"
+   ]
+  },
+  "I4": {
+   "src": "../../../img/calle/encierro/pobre-2012.jpg",
+   "muestra": "El Pobre de mí, la noche del 14 de julio de 2012",
+   "relacion": "Pañuelos y velas delante del balcón",
+   "fecha": "2012",
+   "credito": "Iaramburu, Wikimedia Commons",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pobre_de_m%C3%AD_2012_1.jpg",
+   "ilustra": [
+    "B2"
+   ]
+  },
+  "I5": {
+   "src": "../../../img/calle/encierro/ayuntamiento-1900.jpg",
+   "muestra": "La Casa Consistorial fotografiada por Julio Altadill",
+   "relacion": "La misma fachada, hace más de un siglo",
+   "fecha": "entre 1892 y 1909",
+   "credito": "Julio Altadill, Wikimedia Commons",
+   "licencia": "dominio público",
+   "url": "https://commons.wikimedia.org/wiki/File:Pamplona_-_Altadill.jpg",
+   "ilustra": [
+    "B1"
+   ]
+  }
+ },
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia calle",
+   "desc": "en primera persona",
+   "por": "la propia calle",
+   "corto": "la calle",
+   "ini": "C",
+   "acc": "#c0473d",
+   "voz": "obra",
+   "intro": 1,
+   "placeholder": "Pregúntale a la calle…",
+   "conversa": "Conversa con la calle",
+   "te": "La calle te pregunta",
+   "vts": "Dime: ¿qué parte de esta fachada mira a la plaza como si fuera un escenario?",
+   "rol": "Eres la calle del encierro de Pamplona: los 848,6 metros que van de los corrales de Santo Domingo a la plaza de toros. Hablas en primera persona. No eres un corredor ni un toro: eres el suelo, las paredes y los balcones que ven pasar la carrera ocho mañanas al año y se quedan vacíos el resto. Solo afirmas lo que está en tus fuentes; lo que no sabes, lo dices. Del encierro hablas con respeto y sin celebrarlo ni condenarlo: si te preguntan por lo que se discute, cuentas que se discute. Ahora estás en tu segundo tramo, la plaza Consistorial, delante del Ayuntamiento, de cuyo balcón sale el chupinazo.",
+   "relato": [
+    {
+     "z": "suelo",
+     "t": "Aquí la cuesta desemboca en la plaza del Ayuntamiento. Con Mercaderes son unos cien metros, con una doble curva, pero con sitio para correr y donde refugiarse. Es de mis tramos menos peligrosos."
+    },
+    {
+     "z": "balcon",
+     "t": "Mira el balcón. Desde él se lanza el chupinazo, a las doce del 6 de julio, desde 1941. Antes, las fiestas se anunciaban en la plaza del Castillo."
+    },
+    {
+     "z": "fama",
+     "t": "La fachada es de mediados del siglo XVIII. Arriba, la Fama con su trompeta, entre los escudos de Pamplona y de Navarra, y a los lados dos Hércules. Del edificio de entonces solo queda esta fachada."
+    },
+    {
+     "z": "suelo",
+     "t": "Desde 2006, una noche de principios de julio, riegan este suelo con antideslizante para que no resbalen toros ni corredores. Y la noche del 14, esta misma plaza cierra la fiesta con el Pobre de mí."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Cómo es el chupinazo?",
+     "d": "obra",
+     "z": "balcon",
+     "img": "I1",
+     "a": "La plaza, de 2.502 metros cuadrados, se llena de gente de blanco y rojo. Tres minutos antes de las doce, los clarines anuncian a quien lo lanza, que saluda con «Viva San Fermín, Gora San Fermín» y enciende la mecha. Mira el balcón: la foto es de 2018."
+    },
+    {
+     "q": "¿Quién lanza el cohete?",
+     "d": "fuera",
+     "z": "balcon",
+     "a": "Antes, alcaldes, concejales o alguien a quien designaba el Ayuntamiento. Desde 2016 lo elige la gente en una votación entre los candidatos que proponen las asociaciones de la ciudad. Mira el balcón: cada año sale alguien distinto."
+    },
+    {
+     "q": "¿Desde cuándo hay chupinazo?",
+     "d": "fuera",
+     "z": "balcon",
+     "a": "Desde el balcón, desde 1941. Las noticias más antiguas son de 1931: Juan Etxepare, un estanquero de la calle Mayor, pidió permiso para lanzar cohetes en la calle al mediodía del 6 de julio. Vuelve a mirar el balcón."
+    },
+    {
+     "q": "¿Queda algo del vallado el resto del año?",
+     "d": "mirar",
+     "z": null,
+     "img": "I2",
+     "c": "placa",
+     "a": "A unos pasos, junto a la oficina de turismo, hay un tramo de vallado de madera con una placa en cuatro idiomas y en braille. Su primera línea dice:"
+    },
+    {
+     "q": "¿Pasan los toros por aquí?",
+     "d": "obra",
+     "z": "suelo",
+     "img": "I3",
+     "a": "Sí: entran desde la cuesta, cruzan la plaza y siguen por Mercaderes. Hay sitio para correr y lugares donde ponerse a salvo, y parte del vallado de esta zona se pone y se quita cada día. Mira el suelo: por ahí pasan."
+    },
+    {
+     "q": "¿Por qué riegan el suelo?",
+     "d": "obra",
+     "z": "suelo",
+     "a": "Para que no resbalen. Desde 2006, una noche de principios de julio, unas diez personas extienden a mano unos 1.500 litros de antideslizante con regaderas y escobones, desde esta plaza hasta pasada la curva. Abre los poros del adoquín y las pezuñas agarran mejor. Mira un adoquín de cerca."
+    },
+    {
+     "q": "¿Quién hizo la fachada?",
+     "d": "obra",
+     "z": "portal",
+     "a": "El edificio se levantó entre 1753 y 1759; la fachada la diseñó José Zay Lorda y el remate lo terminó el maestro Juan Lorenzo Catalán. A los lados de la puerta, la Prudencia y la Justicia, dos virtudes del buen gobierno. Míralas."
+    },
+    {
+     "q": "¿Qué es el Pobre de mí?",
+     "d": "fuera",
+     "z": "balcon",
+     "img": "I4",
+     "a": "Es el final de las fiestas, la noche del 14 de julio. Miles de personas se juntan delante del Ayuntamiento, con el pañuelo al cuello y velas encendidas, y el alcalde sale al balcón a despedir la fiesta. Mira el balcón."
+    },
+    {
+     "q": "¿Cómo era la plaza hace un siglo?",
+     "d": "fuera",
+     "z": "fama",
+     "img": "I5",
+     "a": "Así la fotografió Julio Altadill entre 1892 y 1909: la misma fachada que tienes delante. Compara el remate: la Fama sigue arriba."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Tramo",
+   "2 · Plaza Consistorial y Mercaderes, unos 100 metros"
+  ],
+  [
+   "Recorrido",
+   "848,6 metros, del 7 al 14 de julio"
+  ],
+  [
+   "Lugar",
+   "Plaza Consistorial, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.unav.edu/web/catedra-patrimonio/itinerarios-visitas/ayuntamientos-navarros/pamplona\" target=\"_blank\" rel=\"noopener\">Universidad de Navarra: Casa Consistorial</a>; <a href=\"https://www.pamplona.es/en/turismo/sanfermin/chupinazo\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: Chupinazo y Pobre de mí</a>; <a href=\"https://www.pamplona.es/en/turismo/recorridodelencierro\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: el recorrido del encierro</a>; <a href=\"https://www.pamplona.es/en/node/78543\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: antideslizante (2026)</a>; <a href=\"https://www.pamplona.es/actualidad/noticias/el-ayuntamiento-de-pamplona-edita-un-periodico-con-informacion-del-encierro-sus\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: ¡Vive el encierro! (2022)</a>; la placa del vallado"
+  ],
+  [
+   "Foto",
+   "Txo, 2022. <a href=\"https://commons.wikimedia.org/wiki/File:Pamplona_casa_consistorial.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY-SA 4.0 (recortada)"
+  ],
+  [
+   "Ubicación",
+   "OpenStreetMap"
+  ]
+ ],
+ "nota": "Prototipo «en la calle». La voz de la calle es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona y de la Universidad de Navarra, y con lo que se ve en las fotos. Las coordenadas salen de OpenStreetMap: conviene comprobarlas sobre el terreno."
+}

@@ -1,0 +1,24 @@
+{
+ "nombre": "La calle del encierro",
+ "lugar": "Pamplona · en la calle",
+ "d": "Ocho mañanas al año, 848,6 metros de calle se convierten en una carrera de unos cuatro minutos. El resto del año no hay toros, pero la calle se acuerda, y aquí habla ella.",
+ "portada": {
+  "obra": 3,
+  "encuadre": [
+   0.1,
+   0.25,
+   0.8,
+   0.55
+  ]
+ },
+ "km": 0.9,
+ "obras": [
+  "../obras/calle/encierro-cuesta.json",
+  "../obras/calle/encierro-plaza.json",
+  "../obras/calle/encierro-curva.json",
+  "../obras/calle/encierro-estafeta.json",
+  "../obras/calle/encierro-callejon.json",
+  "../obras/calle/hemingway.json",
+  "../obras/calle/encierro.json"
+ ]
+}

@@ -189,6 +189,11 @@
    "id": "B2",
    "f": "Ayuntamiento de Pamplona · Plaza de toros y monumento al encierro",
    "t": "Escultura de bronce fundido de Rafael Huerta que congela un único instante del encierro."
+  },
+  {
+   "id": "B3",
+   "f": "Ayuntamiento de Pamplona · El Monumento al Encierro acoge los nombres de las dieciséis personas fallecidas (26 de junio de 2025)",
+   "t": "Desde el 26 de junio de 2025, el pedestal de granito del monumento lleva, en placas de bronce de acabado negro y junto al escudo de la ciudad, los nombres de las dieciséis personas que han muerto en el encierro desde 1910, la última en 2009: nombre, apellidos y año de la muerte, con una estrella junto a cada nombre. Se colocaron en un lateral para no restar protagonismo a la escultura."
   }
  ],
  "visitas": {
@@ -281,6 +286,12 @@
      "d": "mirar",
      "z": "pastores",
      "a": "Detrás de la manada: son los que la guían. Míralos y después mira hacia dónde corre todo lo demás."
+    },
+    {
+     "q": "¿Qué nombres llevas en la base?",
+     "d": "obra",
+     "z": "base",
+     "a": "Los de las dieciséis personas que han muerto en el encierro desde 1910; la última, en 2009. Están desde el 26 de junio de 2025 en placas de bronce de mi pedestal, junto al escudo de la ciudad, cada uno con una estrella. Búscalos en el lateral de mi base."
     }
    ]
   }
@@ -312,7 +323,7 @@
   ],
   [
    "Fuentes",
-   "<a href=\"https://www.unav.edu/web/catedra-patrimonio/itinerarios-visitas/monumento-pamplona/monumento-al-encierro\" target=\"_blank\" rel=\"noopener\">Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra</a>; <a href=\"https://www.pamplona.es/en/turismo/plazadetoros\" target=\"_blank\" rel=\"noopener\">Ayuntamiento de Pamplona</a>"
+   "<a href=\"https://www.unav.edu/web/catedra-patrimonio/itinerarios-visitas/monumento-pamplona/monumento-al-encierro\" target=\"_blank\" rel=\"noopener\">Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra</a>; <a href=\"https://www.pamplona.es/en/turismo/plazadetoros\" target=\"_blank\" rel=\"noopener\">Ayuntamiento de Pamplona</a>; <a href=\"https://www.pamplona.es/en/node/72890\" target=\"_blank\" rel=\"noopener\">Ayuntamiento de Pamplona: los nombres en el Monumento al Encierro (2025)</a>"
   ],
   [
    "Foto",
