@@ -9,7 +9,12 @@
    0.25,
    0.8,
    0.55
-  ]
+  ],
+  "objeto": {
+   "img": "../../img/calle/encierro/portada-postal.jpg",
+   "pie": "«Suena el cohete». Postal de Julio Altadill, entre 1921 y 1935.",
+   "alt": "Postal antigua: una manada de toros corre por una calle estrecha, entre gente asomada y un vallado de madera."
+  }
  },
  "km": 0.9,
  "obras": [

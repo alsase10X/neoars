@@ -88,6 +88,15 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-family:var(--fuente-titulos);font-wei
 .p-cuerpo{position:relative;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 28px)}
 .p-datos{font-size:.9rem;line-height:1.45;color:var(--muted);margin-top:14px}
 #portV .b1{width:100%;max-width:340px;margin-top:22px}
+/* Portada como objeto («portada.objeto»): una pieza de la base documental —una postal, una entrada, un cartel—
+   entera sobre el fondo, como algo que se tiene en la mano, en lugar de la foto a sangre */
+#portV.objeto{justify-content:flex-start;overflow-y:auto}
+#portV.objeto>img{position:static;width:auto;height:auto;max-width:min(74vw,320px);max-height:max(170px,calc(100svh - 470px));object-fit:contain;margin:calc(env(safe-area-inset-top,0px) + 28px) auto 0;flex:none;transform:rotate(-2deg);border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.35),0 22px 44px rgba(0,0,0,.45)}
+#portV.objeto .p-velo{display:none}
+.p-pie{display:none}
+#portV.objeto .p-pie:not([hidden]){display:block;max-width:min(78vw,340px);margin:12px auto 0;font-size:.8rem;line-height:1.4;color:var(--muted);text-align:center}
+#portV.objeto .p-cuerpo{margin-top:auto;padding-top:12px}
+#portV.objeto .b1{margin-top:16px}
 .salaAtras{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 12px);left:max(6px,env(safe-area-inset-left,0px));margin:0}
 #salaV.conPortada .salaIn{padding-top:64px}
 .pie b,.firma b{color:var(--fg);font-weight:900;letter-spacing:-.01em}
@@ -588,6 +597,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 <div id="app">
   <section id="portV" class="vista" aria-label="Portada del recorrido" hidden>
     <img id="portImg" alt="">
+    <p class="p-pie" id="portPie" hidden></p>
     <div class="p-velo" aria-hidden="true"></div>
     <div class="col p-cuerpo">
       <span class="marcaLogo" id="portLogo" role="img" hidden></span>
@@ -937,6 +947,9 @@ async function cargarSala(){
   const obras = res.filter(r => r.status === 'fulfilled' && r.value.iw).map(r => r.value);
   if(!obras.length) throw new Error('sin obras');
   SALA = {...DEF, musica:DEF.musica ? {...DEF.musica, src:new URL(DEF.musica.src, base).href} : null, obras};
+  // La portada como objeto trae su propia imagen, con la ruta relativa al archivo de la sala
+  const OB = DEF.portada && DEF.portada.objeto;
+  if(OB && OB.img) SALA.portada = {...DEF.portada, objeto:{...OB, img:new URL(OB.img, base).href}};
 }
 // En la conversación, el gancho de cada obra: quién te habla, si no es la guía («Habla Vincent», «Habla el propio cuadro»)
 function quienHabla(o){
@@ -1217,7 +1230,10 @@ function escucha(o){
 }
 function verPortada(){
   const P0 = SALA.portada, o = SALA.obras[Math.min(P0.obra || 0, SALA.obras.length - 1)], ini = SALA.obras[0];
-  $('portImg').src = o.img; $('portImg').style.objectPosition = encuadrePos({encuadre:P0.encuadre || o.encuadre}) || '50% 50%';
+  const OB = P0.objeto && P0.objeto.img ? P0.objeto : null; $('portV').classList.toggle('objeto', !!OB);
+  $('portPie').textContent = OB && OB.pie || ''; $('portPie').hidden = !(OB && OB.pie);
+  if(OB){ $('portImg').src = OB.img; $('portImg').alt = OB.alt || OB.pie || ''; $('portImg').style.objectPosition = ''; }
+  else { $('portImg').src = o.img; $('portImg').alt = ''; $('portImg').style.objectPosition = encuadrePos({encuadre:P0.encuadre || o.encuadre}) || '50% 50%'; }
   pintarLogo('portLogo');
   $('portL').hidden = !SALA.lugar; $('portL').textContent = SALA.lugar || '';
   document.title = SALA.nombre;
