@@ -1,0 +1,52 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-29T19:06:40Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 13939162863,
+  "lat": 42.8192978,
+  "lon": -1.6458367,
+  "tags": {
+    "denomination": "catholic",
+    "historic": "wayside_shrine",
+    "religion": "christian",
+    "subject:wikidata": "Q468206",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "way",
+  "id": 173934419,
+  "center": {
+    "lat": 42.8201874,
+    "lon": -1.6500415
+  },
+  "tags": {
+    "landuse": "farmyard",
+    "name": "Corralillos del Gas",
+    "name:es": "Corralillos del Gas",
+    "name:eu": "Gasaren Eskortak"
+  }
+},
+{
+  "type": "way",
+  "id": 1431564871,
+  "center": {
+    "lat": 42.8202877,
+    "lon": -1.6460397
+  },
+  "tags": {
+    "area": "yes",
+    "name": "Corrales de Santo Domingo",
+    "tourism": "attraction"
+  }
+}
+
+  ]
+}
