@@ -1,0 +1,287 @@
+{
+ "titulo": "Telefónica, el callejón y la plaza",
+ "autor": "Tramos 5 a 7 · foto de BigSus",
+ "fecha": "8 de julio de 2009",
+ "pieza": "la foto",
+ "img": "../../../img/calle/encierro/casa-plaza-toros.jpg",
+ "iw": 1400,
+ "ih": 1050,
+ "fondo": "../../../img/calle/encierro/casa-plaza-toros-fondo.jpg",
+ "siguiente": {
+  "titulo": "Monumento a Hemingway",
+  "obra": "../calle/hemingway.json"
+ },
+ "salir": "../../sala/?sala=encierro",
+ "tema": "Todo el recorrido existe por esta puerta: la plaza nueva se hizo a unos pasos de la vieja para no cambiarlo.",
+ "zonas": {
+  "gradas": {
+   "n": "Las gradas",
+   "poly": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     1,
+     0.32
+    ],
+    [
+     0,
+     0.32
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Queda algún asiento libre?",
+   "vista": "Arriba, las gradas llenas de gente de blanco y rojo."
+  },
+  "barrera": {
+   "n": "La barrera",
+   "poly": [
+    [
+     0,
+     0.32
+    ],
+    [
+     1,
+     0.32
+    ],
+    [
+     1,
+     0.37
+    ],
+    [
+     0,
+     0.37
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué separa las gradas de la arena?",
+   "vista": "Una barrera roja rodea la arena, al pie de las gradas."
+  },
+  "arena": {
+   "n": "La arena",
+   "poly": [
+    [
+     0,
+     0.37
+    ],
+    [
+     1,
+     0.37
+    ],
+    [
+     1,
+     0.6
+    ],
+    [
+     0,
+     0.6
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Se ve la arena?",
+   "vista": "La arena, tapada por cientos de personas de blanco."
+  },
+  "pantalla": {
+   "n": "La pantalla",
+   "poly": [
+    [
+     0.93,
+     0.17
+    ],
+    [
+     1,
+     0.17
+    ],
+    [
+     1,
+     0.25
+    ],
+    [
+     0.93,
+     0.25
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué crees que se ve en la pantalla?",
+   "vista": "Arriba a la derecha, una pantalla grande sobre las gradas."
+  },
+  "cerca": {
+   "n": "Los de delante",
+   "poly": [
+    [
+     0,
+     0.62
+    ],
+    [
+     1,
+     0.62
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde miran los de delante?",
+   "vista": "En primer plano, gente de espaldas, uno con sombrero de paja, mirando a la arena."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.0,
+   "rate": 0.98,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Ayuntamiento de Pamplona · El recorrido del encierro",
+   "t": "Edificio de Telefónica: apenas 100 metros que llevan a un embudo con doble vallado a ambos lados. Los toros, cansados, se separan de la manada con más facilidad. Es el sitio preferido de los divinos, los corredores expertos, y de muchos sin experiencia. Callejón: la bajada a la plaza de toros, que se estrecha hasta formar un embudo; muy temido por el riesgo de montones. Plaza: se despeja el centro para que pasen los toros, guiados por los cabestros y los dobladores; el número creciente de corredores sin experiencia que buscan llamar la atención lo ha vuelto peligroso."
+  },
+  {
+   "id": "B2",
+   "f": "Ayuntamiento de Pamplona · El Palacio del Condestable y las plazas de toros (10 de junio de 2022)",
+   "t": "La plaza vieja estaba a unos 120 metros de la actual y ardió el 12 de agosto de 1921. La nueva se construyó cerca para no tener que modificar el recorrido del encierro, salvo en una curva. Se inauguró el 7 de julio de 1922, en un solar de 11.443 metros cuadrados, con proyecto del arquitecto Francisco Urcola."
+  },
+  {
+   "id": "B3",
+   "f": "Ayuntamiento de Pamplona · Plaza de toros",
+   "t": "En los años sesenta, Rafael Moneo diseñó la ampliación del graderío. El monumento a Hemingway está junto al callejón que lleva a la plaza. La plaza solo se visita en grupo y con reserva, en una visita guiada de cinco paradas: el encierro, el toro, la fiesta, el patio de cuadrillas y el ruedo."
+  },
+  {
+   "id": "B4",
+   "f": "Ayuntamiento de Pamplona · Comienza la colocación del vallado (1 de junio de 2026)",
+   "t": "El montaje del vallado empieza por la zona del callejón de la plaza y sigue durante varias semanas por otros puntos. Lo instala desde 1992 la carpintería Hermanos Aldaz Remiro, por encargo de la Casa de Misericordia, que gestiona la plaza y el encierro. Tiene 80 puertas para que entren rápido los servicios de emergencia y seguridad."
+  },
+  {
+   "id": "B5",
+   "f": "Ayuntamiento de Pamplona · Pamplona recordará a los 16 fallecidos (27 de diciembre de 2023) y El Monumento al Encierro acoge sus nombres (26 de junio de 2025)",
+   "t": "Dieciséis personas han muerto en el encierro desde 1910; la última, en 2009. Murieron en la cuesta de Santo Domingo, en Mercaderes, en la Estafeta, en el tramo de Telefónica, en el callejón y en la plaza. Desde el 26 de junio de 2025 sus nombres están en placas de bronce en el pedestal del Monumento al Encierro, junto al escudo de la ciudad."
+  },
+  {
+   "id": "B6",
+   "f": "Descripción de la foto en Wikimedia Commons (BigSus, 2009)",
+   "t": "La plaza de toros de Pamplona después del encierro, esperando a que se suelten las vaquillas."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia calle",
+   "desc": "en primera persona",
+   "por": "la propia calle",
+   "corto": "la calle",
+   "ini": "C",
+   "acc": "#c0473d",
+   "voz": "obra",
+   "placeholder": "Pregúntale a la calle…",
+   "conversa": "Conversa con la calle",
+   "te": "La calle te pregunta",
+   "vts": "Dime: ¿qué esperan todas estas personas?",
+   "rol": "Eres la calle del encierro de Pamplona: los 848,6 metros que van de los corrales de Santo Domingo a la plaza de toros. Hablas en primera persona. No eres un corredor ni un toro: eres el suelo, las paredes y los balcones que ven pasar la carrera ocho mañanas al año. Quien te escucha está en casa, mirando una foto de julio: le cuentas lo que ve y le das ganas de venir a verte. Solo afirmas lo que está en tus fuentes; lo que no sabes, lo dices. Del encierro hablas con respeto, sin celebrarlo ni condenarlo. Ahora hablas de tus últimos tramos: la curva de Telefónica, el callejón y la plaza de toros. La foto es la plaza llena el 8 de julio de 2009, después del encierro.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Así acaba todo: la plaza de toros llena, el 8 de julio de 2009, después del encierro. Para llegar aquí, tras la Estafeta, la manada pasa por la curva de Telefónica y baja por el callejón."
+    },
+    {
+     "z": null,
+     "t": "Telefónica son apenas cien metros que acaban en un embudo con doble vallado. Luego, el callejón se estrecha y se teme por los montones: corredores que caen unos sobre otros."
+    },
+    {
+     "z": "arena",
+     "t": "Dentro, se abre hueco en el centro de la arena para que pasen los toros, guiados por los cabestros y los dobladores. Cada vez más corredores sin experiencia buscan ahí llamar la atención, y eso lo ha vuelto peligroso."
+    },
+    {
+     "z": "gradas",
+     "t": "La plaza se inauguró el 7 de julio de 1922, con proyecto de Francisco Urcola, y Rafael Moneo diseñó su ampliación en los años sesenta. La vieja estaba a unos 120 metros y ardió en 1921; la nueva se hizo cerca para no cambiar el recorrido, salvo una curva."
+    },
+    {
+     "z": "cerca",
+     "t": "Desde 1910, dieciséis personas han muerto en el encierro; la última, en 2009. Sus nombres están desde 2025 en el pedestal del Monumento al Encierro, cerca de esta plaza."
+    },
+    {
+     "z": null,
+     "t": "Si vienes a Pamplona, el recorrido te espera vacío casi todo el año. Empieza en la cuesta de Santo Domingo y termina aquí, junto al busto de Hemingway."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Por qué se llama Telefónica?",
+     "d": "fuera",
+     "z": null,
+     "a": "Por el edificio de Telefónica que hay en esa curva: así nombra el Ayuntamiento el tramo. Es el sitio preferido de los divinos, los corredores con más experiencia. Mira la foto: aquí es donde llegan."
+    },
+    {
+     "q": "¿Qué es un montón?",
+     "d": "obra",
+     "z": "arena",
+     "a": "Corredores que caen unos sobre otros y taponan el paso. El callejón se teme por eso, porque se estrecha como un embudo antes de entrar en la arena. Mira cuánta gente cabe aquí dentro y piensa en ese embudo."
+    },
+    {
+     "q": "¿Dónde estaba la plaza vieja?",
+     "d": "fuera",
+     "z": "gradas",
+     "a": "A unos 120 metros de esta, y ardió el 12 de agosto de 1921. La nueva se inauguró el 7 de julio de 1922, en un solar de 11.443 metros cuadrados. Mira las gradas: son las de la plaza nueva."
+    },
+    {
+     "q": "¿Qué esperan todos?",
+     "d": "mirar",
+     "z": "cerca",
+     "a": "Según quien hizo la foto, esperaban a que soltaran las vaquillas, después del encierro. Mira a los de delante: todos miran a la arena."
+    },
+    {
+     "q": "¿Cuándo se monta el vallado?",
+     "d": "obra",
+     "z": "barrera",
+     "a": "A principios de junio, y se empieza por la zona del callejón de esta plaza. Lo montan desde 1992 los Hermanos Aldaz Remiro, con 80 puertas para que entren rápido los servicios de emergencia. Mira la barrera roja: esa no es el vallado del encierro, es la de la plaza."
+    },
+    {
+     "q": "¿Se puede visitar la plaza?",
+     "d": "fuera",
+     "z": "gradas",
+     "a": "Sí, en grupo y con reserva: una visita guiada de cinco paradas, del encierro al ruedo. Mira las gradas: un día cualquiera están vacías."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Tramo",
+   "5, 6 y 7 · Curva de Telefónica, callejón y plaza de toros"
+  ],
+  [
+   "Recorrido",
+   "848,6 metros, del 7 al 14 de julio"
+  ],
+  [
+   "Lugar",
+   "Final de la Estafeta y callejón de la plaza de toros, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.pamplona.es/en/turismo/recorridodelencierro\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: el recorrido del encierro</a>; <a href=\"https://www.pamplona.es/en/node/56285\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: las plazas de toros de Pamplona (2022)</a>; <a href=\"https://www.pamplona.es/en/turismo/plazadetoros\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: plaza de toros</a>; <a href=\"https://www.pamplona.es/en/node/78217\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: el vallado (2026)</a>; <a href=\"https://www.pamplona.es/en/node/72890\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: los nombres en el Monumento al Encierro (2025)</a>"
+  ],
+  [
+   "Foto",
+   "BigSus, 2009. <a href=\"https://commons.wikimedia.org/wiki/File:Plaza_de_toros_de_Pamplona_tras_encierro.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY 2.5"
+  ]
+ ],
+ "nota": "Versión «en casa» del recorrido «La calle del encierro». La voz de la calle es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona y de la Universidad de Navarra, y con lo que se ve en las fotos."
+}

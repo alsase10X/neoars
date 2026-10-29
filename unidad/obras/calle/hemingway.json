@@ -335,5 +335,10 @@
    "OpenStreetMap"
   ]
  ],
- "nota": "Prototipo «en la calle». La voz del busto es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona, la placa del monumento y lo que se ve en la foto. De Hemingway solo se citan palabras documentadas."
+ "nota": "Prototipo «en la calle». La voz del busto es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona, la placa del monumento y lo que se ve en la foto. De Hemingway solo se citan palabras documentadas.",
+ "siguiente": {
+  "titulo": "Monumento al Encierro",
+  "obra": "encierro.json"
+ },
+ "salir": "../../sala/?sala=encierro"
 }

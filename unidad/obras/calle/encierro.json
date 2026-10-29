@@ -334,5 +334,10 @@
    "OpenStreetMap"
   ]
  ],
- "nota": "Prototipo «en la calle». La voz del monumento es una recreación en primera persona escrita solo con los datos de la Universidad de Navarra y del Ayuntamiento de Pamplona, y con lo que se ve en la foto."
+ "nota": "Prototipo «en la calle». La voz del monumento es una recreación en primera persona escrita solo con los datos de la Universidad de Navarra y del Ayuntamiento de Pamplona, y con lo que se ve en la foto.",
+ "siguiente": {
+  "titulo": "Vuelve al principio: la cuesta de Santo Domingo",
+  "obra": "../encierro/cuesta.json"
+ },
+ "salir": "../../sala/?sala=encierro"
 }

@@ -1,0 +1,280 @@
+{
+ "titulo": "La cuesta de Santo Domingo",
+ "autor": "Tramo 1 · hornacina de San Fermín",
+ "fecha": "1981",
+ "pieza": "la hornacina",
+ "img": "../../../img/calle/encierro/cuesta.jpg",
+ "iw": 788,
+ "ih": 1400,
+ "fondo": "../../../img/calle/encierro/cuesta-fondo.jpg",
+ "siguiente": {
+  "titulo": "La plaza del Ayuntamiento",
+  "obra": "plaza.json"
+ },
+ "salir": "../../sala/?sala=encierro",
+ "tema": "Antes de correr, la cuesta canta: tres veces cada mañana, ante un santo que el resto del año no es el mismo.",
+ "zonas": {
+  "figura": {
+   "n": "San Fermín",
+   "poly": [
+    [
+     0.36,
+     0.205
+    ],
+    [
+     0.47,
+     0.2
+    ],
+    [
+     0.54,
+     0.29
+    ],
+    [
+     0.54,
+     0.37
+    ],
+    [
+     0.33,
+     0.37
+    ],
+    [
+     0.33,
+     0.29
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué lleva el santo en la mano?",
+   "vista": "Una imagen pequeña de San Fermín vestido de obispo, con capa roja, mitra y báculo, detrás de un cristal."
+  },
+  "puerta": {
+   "n": "La puerta de cristal",
+   "poly": [
+    [
+     0.3,
+     0.15
+    ],
+    [
+     0.36,
+     0.11
+    ],
+    [
+     0.44,
+     0.1
+    ],
+    [
+     0.52,
+     0.11
+    ],
+    [
+     0.57,
+     0.15
+    ],
+    [
+     0.59,
+     0.375
+    ],
+    [
+     0.29,
+     0.375
+    ]
+   ],
+   "rel": [
+    "figura"
+   ],
+   "mira": "¿Cómo se abre esa puerta?",
+   "vista": "Una puerta de cristal rematada en arco, con un cierre a la derecha, que tapa el hueco de la hornacina."
+  },
+  "repisa": {
+   "n": "La repisa",
+   "poly": [
+    [
+     0.24,
+     0.37
+    ],
+    [
+     0.65,
+     0.37
+    ],
+    [
+     0.65,
+     0.42
+    ],
+    [
+     0.24,
+     0.42
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cabría algo más delante del santo?",
+   "vista": "Una repisa de piedra, estrecha, bajo la hornacina."
+  },
+  "muralla": {
+   "n": "La muralla",
+   "poly": [
+    [
+     0,
+     0.46
+    ],
+    [
+     1,
+     0.46
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     0,
+     1
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué te dicen estas piedras?",
+   "vista": "Grandes sillares de piedra gastada, con manchas de musgo: el lienzo de la muralla."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.0,
+   "rate": 0.98,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Ayuntamiento de Pamplona · San Fermín vuelve a la cuesta de Santo Domingo (15 de julio de 2026)",
+   "t": "La hornacina es un hueco en el lienzo de la muralla que el Ayuntamiento habilitó en 1981; la cierra una puerta de cristal. El resto del año la preside una imagen municipal de San Fermín. Antes de las fiestas se vacía (en 2026, el 3 de julio) para dejar paso a los encierros, y la imagen municipal vuelve el 15 de julio. En fiestas, la imagen de las peñas, de 1978, se coloca y se retira todos los días, con pañuelos de las peñas, candelabros, velas y flores; después de las fiestas se guarda en una casa particular. En los años setenta, la primera imagen estuvo en una ventana del antiguo Hospital Militar."
+  },
+  {
+   "id": "B2",
+   "f": "Ayuntamiento de Pamplona · San Fermín vuelve a la cuesta de Santo Domingo (2026) y ¡Vive el encierro! (2023)",
+   "t": "Antes de cada encierro, del 7 al 14 de julio, mozos y mozas se encomiendan a la imagen con tres cánticos, a las 7:55, a las 7:57 y a las 7:59, en castellano y en euskera."
+  },
+  {
+   "id": "B3",
+   "f": "Ayuntamiento de Pamplona · El recorrido del encierro",
+   "t": "Santo Domingo: 280 metros desde los corrales hasta la plaza del Ayuntamiento, en cuesta pronunciada. Los toros tienden a ir agrupados. Es uno de los tramos más peligrosos, sobre todo donde la manada entra en la plaza."
+  },
+  {
+   "id": "B4",
+   "f": "Ayuntamiento de Pamplona · Comienza la colocación del vallado (1 de junio de 2026)",
+   "t": "El vallado también recorre la cuesta de Santo Domingo y une los corrales del Gas, en la Rochapea, con los corralillos de Santo Domingo. Lo forman 900 postes, 2.700 tablones y 80 puertas. Entre una edición y otra se guarda en los corrales del Gas, y cada año se renueva en torno al 2 % de la madera."
+  },
+  {
+   "id": "B5",
+   "f": "Ayuntamiento de Pamplona · ¡Vive el encierro! (2022 y 2023)",
+   "t": "El recorrido mide 848,6 metros y tiene siete tramos: cuesta de Santo Domingo, plaza Consistorial y Mercaderes, curva de Mercaderes, Estafeta, curva de Telefónica, callejón y plaza de toros. El encierro dura de media 3 minutos y 55 segundos, y los toros corren a unos 24 km/h. El más largo duró 30 minutos, el 11 de julio de 1959, con toros de Miura."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia calle",
+   "desc": "en primera persona",
+   "por": "la propia calle",
+   "corto": "la calle",
+   "ini": "C",
+   "acc": "#c0473d",
+   "voz": "obra",
+   "placeholder": "Pregúntale a la calle…",
+   "conversa": "Conversa con la calle",
+   "te": "La calle te pregunta",
+   "vts": "Dime: ¿qué te dice que este santo es importante para alguien?",
+   "rol": "Eres la calle del encierro de Pamplona: los 848,6 metros que van de los corrales de Santo Domingo a la plaza de toros. Hablas en primera persona. No eres un corredor ni un toro: eres el suelo, las paredes y los balcones que ven pasar la carrera ocho mañanas al año. Quien te escucha está en casa, mirando una foto de julio: le cuentas lo que ve y le das ganas de venir a verte. Solo afirmas lo que está en tus fuentes; lo que no sabes, lo dices. Del encierro hablas con respeto, sin celebrarlo ni condenarlo. Ahora hablas de tu primer tramo, la cuesta de Santo Domingo, y la foto muestra la hornacina de San Fermín abierta en la muralla.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Soy la calle del encierro de Pamplona: 848 metros y medio, de los corrales de Santo Domingo a la plaza de toros. Del 7 al 14 de julio, cada mañana, me cruza una manada en unos cuatro minutos."
+    },
+    {
+     "z": "muralla",
+     "t": "Empiezo en una cuesta de 280 metros, pegada a la muralla. Los toros salen de los corralillos y suben agrupados, y por eso es uno de mis tramos más peligrosos."
+    },
+    {
+     "z": "figura",
+     "t": "En la muralla hay una hornacina con San Fermín. Casi todo el año la preside esta imagen, la del Ayuntamiento, detrás de un cristal."
+    },
+    {
+     "z": "puerta",
+     "t": "Antes de las fiestas quitan la imagen y el cristal. Cada mañana de encierro colocan otra, la de las peñas, que es de 1978 y el resto del año se guarda en una casa particular."
+    },
+    {
+     "z": "repisa",
+     "t": "A las 7:55, a las 7:57 y a las 7:59, los corredores se encomiendan a ella con tres cánticos, en castellano y en euskera. A su lado dejan pañuelos, velas y flores."
+    },
+    {
+     "z": null,
+     "t": "Si vienes fuera de julio, encontrarás la cuesta vacía y el santo detrás de su cristal. Es la primera parada del recorrido."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué le cantan al santo?",
+     "d": "obra",
+     "z": "figura",
+     "a": "Se encomiendan a él antes de correr, con tres cánticos cada mañana, en castellano y en euskera. La letra no está en mis fuentes, así que no te la invento. Mira la cara del santo: es a quien miran ellos."
+    },
+    {
+     "q": "¿De dónde salen los toros?",
+     "d": "obra",
+     "z": "muralla",
+     "a": "De los corralillos de Santo Domingo, al pie de esta cuesta. El vallado los une también con los corrales del Gas, en la Rochapea. Mira la muralla: los corralillos quedan debajo."
+    },
+    {
+     "q": "¿Cuánto dura el encierro?",
+     "d": "fuera",
+     "z": null,
+     "a": "De media, 3 minutos y 55 segundos, con los toros a unos 24 kilómetros por hora. El más largo duró media hora, el 11 de julio de 1959, con toros de Miura. Vuelve a mirar la hornacina: los cánticos empiezan cinco minutos antes."
+    },
+    {
+     "q": "¿Desde cuándo está la hornacina?",
+     "d": "fuera",
+     "z": "puerta",
+     "a": "Desde 1981, cuando el Ayuntamiento la abrió en la muralla. Antes, en los años setenta, la imagen estuvo en una ventana del antiguo Hospital Militar. Mira el marco de piedra del hueco."
+    },
+    {
+     "q": "¿Dónde está el vallado el resto del año?",
+     "d": "fuera",
+     "z": null,
+     "a": "Guardado en los corrales del Gas: 900 postes, 2.700 tablones y 80 puertas. Cada año se cambia en torno al 2 % de la madera. Mira la foto: aquí no queda ni una tabla."
+    },
+    {
+     "q": "¿Por qué es tan peligrosa?",
+     "d": "obra",
+     "z": "muralla",
+     "a": "Porque es cuesta arriba y los toros van juntos. El Ayuntamiento la cuenta entre los tramos más peligrosos, sobre todo donde la manada entra en la plaza. Mira las piedras: es el primer muro que ven."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Tramo",
+   "1 · Cuesta de Santo Domingo, 280 metros"
+  ],
+  [
+   "Recorrido",
+   "848,6 metros, del 7 al 14 de julio"
+  ],
+  [
+   "Lugar",
+   "Cuesta de Santo Domingo, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.pamplona.es/en/node/78647\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: San Fermín vuelve a la cuesta (2026)</a>; <a href=\"https://www.pamplona.es/actualidad/noticias/la-figura-de-san-fermin-municipal-que-preside-la-cuesta-de-santo-domingo\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: la figura de San Fermín municipal (2024)</a>; <a href=\"https://www.pamplona.es/en/turismo/recorridodelencierro\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: el recorrido del encierro</a>; <a href=\"https://www.pamplona.es/en/node/78217\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: el vallado (2026)</a>; <a href=\"https://www.pamplona.es/actualidad/noticias/el-ayuntamiento-de-pamplona-reedita-vive-el-encierro-un-periodico-con\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: ¡Vive el encierro! (2023)</a>"
+  ],
+  [
+   "Foto",
+   "Josi, 2025. <a href=\"https://commons.wikimedia.org/wiki/File:Hornacina_de_San_Ferm%C3%ADn_en_la_Cuesta_de_Santo_Domingo_%28Pamplona%29.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY-SA 4.0"
+  ]
+ ],
+ "nota": "Versión «en casa» del recorrido «La calle del encierro». La voz de la calle es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona y de la Universidad de Navarra, y con lo que se ve en las fotos."
+}

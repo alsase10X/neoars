@@ -1,0 +1,284 @@
+{
+ "titulo": "La Estafeta",
+ "autor": "Tramo 4 · foto de Atkins525",
+ "fecha": "8 de julio de 2013",
+ "pieza": "la foto",
+ "img": "../../../img/calle/encierro/casa-estafeta.jpg",
+ "iw": 1400,
+ "ih": 934,
+ "fondo": "../../../img/calle/encierro/casa-estafeta-fondo.jpg",
+ "siguiente": {
+  "titulo": "Telefónica, el callejón y la plaza",
+  "obra": "plaza-de-toros.json"
+ },
+ "salir": "../../sala/?sala=encierro",
+ "tema": "Una calle larga y estrecha donde el único refugio es un portal.",
+ "zonas": {
+  "toros": {
+   "n": "La manada",
+   "poly": [
+    [
+     0.41,
+     0.35
+    ],
+    [
+     0.71,
+     0.3
+    ],
+    [
+     0.71,
+     0.58
+    ],
+    [
+     0.57,
+     0.8
+    ],
+    [
+     0.41,
+     0.68
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde corren?",
+   "vista": "En el centro, la manada: toros negros con los cuernos claros, muy juntos."
+  },
+  "claros": {
+   "n": "Los animales claros",
+   "poly": [
+    [
+     0.52,
+     0.29
+    ],
+    [
+     0.71,
+     0.29
+    ],
+    [
+     0.71,
+     0.55
+    ],
+    [
+     0.55,
+     0.55
+    ]
+   ],
+   "rel": [
+    "toros"
+   ],
+   "mira": "¿Son todos iguales?",
+   "vista": "Entre los toros negros van otros animales de color claro, blanco y castaño."
+  },
+  "corredores": {
+   "n": "Los corredores",
+   "poly": [
+    [
+     0,
+     0.4
+    ],
+    [
+     0.3,
+     0.38
+    ],
+    [
+     0.33,
+     0.95
+    ],
+    [
+     0,
+     0.95
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué llevan todos al cuello?",
+   "vista": "A la izquierda, corredores de blanco con pañuelo y faja rojos, mirando hacia atrás."
+  },
+  "portal": {
+   "n": "El portal",
+   "poly": [
+    [
+     0.15,
+     0.25
+    ],
+    [
+     0.26,
+     0.24
+    ],
+    [
+     0.26,
+     0.42
+    ],
+    [
+     0.15,
+     0.43
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Está abierta esa puerta?",
+   "vista": "En la pared de la izquierda, el hueco de una puerta."
+  },
+  "caido": {
+   "n": "El que está en el suelo",
+   "poly": [
+    [
+     0.74,
+     0.49
+    ],
+    [
+     0.85,
+     0.49
+    ],
+    [
+     0.85,
+     0.58
+    ],
+    [
+     0.74,
+     0.58
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué hace el que está en el suelo?",
+   "vista": "A la derecha de la manada, un corredor tumbado en el suelo."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.0,
+   "rate": 0.98,
+   "fem": true
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B1",
+   "f": "Ayuntamiento de Pamplona · El recorrido del encierro",
+   "t": "Estafeta–Bajada de Javier: ligera pendiente del 2 %. Es larga y estrecha, y uno de los puntos con más gente. El único refugio son los portales."
+  },
+  {
+   "id": "B2",
+   "f": "Ayuntamiento de Pamplona · El recorrido del encierro",
+   "t": "Bajada de Javier–edificio de Telefónica: los toros corren mucho más despacio y alguno puede separarse de la manada. Es un tramo extremadamente peligroso. Después, la curva de Telefónica, apenas 100 metros hasta un embudo con doble vallado a los dos lados."
+  },
+  {
+   "id": "B3",
+   "f": "OpenStreetMap, medición propia sobre el trazado de la calle",
+   "t": "La calle Estafeta, desde la curva de Mercaderes hasta su final, mide algo más de 300 metros y es casi recta."
+  },
+  {
+   "id": "B4",
+   "f": "Ayuntamiento de Pamplona · ¡Vive el encierro! (2022)",
+   "t": "Los toros corren a una media de 24 km/h. A esa velocidad recorren 300 metros en unos 45 segundos (cálculo propio)."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia calle",
+   "desc": "en primera persona",
+   "por": "la propia calle",
+   "corto": "la calle",
+   "ini": "C",
+   "acc": "#c0473d",
+   "voz": "obra",
+   "placeholder": "Pregúntale a la calle…",
+   "conversa": "Conversa con la calle",
+   "te": "La calle te pregunta",
+   "vts": "Dime: si estuvieras en esta foto, ¿adónde irías?",
+   "rol": "Eres la calle del encierro de Pamplona: los 848,6 metros que van de los corrales de Santo Domingo a la plaza de toros. Hablas en primera persona. No eres un corredor ni un toro: eres el suelo, las paredes y los balcones que ven pasar la carrera ocho mañanas al año. Quien te escucha está en casa, mirando una foto de julio: le cuentas lo que ve y le das ganas de venir a verte. Solo afirmas lo que está en tus fuentes; lo que no sabes, lo dices. Del encierro hablas con respeto, sin celebrarlo ni condenarlo. Ahora hablas de tu cuarto tramo, la calle Estafeta. La foto es del encierro del 8 de julio de 2013, vista desde arriba.",
+   "relato": [
+    {
+     "z": null,
+     "t": "Esta es la Estafeta el 8 de julio de 2013, vista desde arriba. Es un tramo largo y estrecho: algo más de 300 metros casi rectos, con una pendiente del 2 %."
+    },
+    {
+     "z": "toros",
+     "t": "En medio, la manada. A su velocidad media, 24 kilómetros por hora, cruza esta calle en unos 45 segundos."
+    },
+    {
+     "z": "claros",
+     "t": "Mira bien: no todos los animales son iguales. Entre los toros negros van otros más claros. ¿Los distingues?"
+    },
+    {
+     "z": "corredores",
+     "t": "Alrededor, corredores de blanco y rojo. Es uno de los puntos con más gente del recorrido, y casi no queda hueco para apartarse."
+    },
+    {
+     "z": "portal",
+     "t": "El único refugio son los portales. Mira esa puerta a la izquierda: en este tramo, es lo único que te saca de la carrera."
+    },
+    {
+     "z": "caido",
+     "t": "Y alguno acaba en el suelo. Al final de la calle, hacia Telefónica, los toros van más despacio y alguno se separa de la manada: el Ayuntamiento lo llama un tramo extremadamente peligroso."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Qué son los animales claros?",
+     "d": "mirar",
+     "z": "claros",
+     "a": "En mis fuentes no consta qué animal es cada uno en esta foto, así que no te lo afirmo. Sí sé que en la plaza la manada entra guiada por los cabestros. Compara el color y los cuernos de unos y otros."
+    },
+    {
+     "q": "¿Dónde se refugian los corredores?",
+     "d": "obra",
+     "z": "portal",
+     "a": "En los portales: según el Ayuntamiento, son el único refugio de este tramo. Busca en la foto otra puerta además de esta."
+    },
+    {
+     "q": "¿Cuánto mide la calle?",
+     "d": "obra",
+     "z": null,
+     "a": "Algo más de 300 metros, casi recta, con una pendiente del 2 %. En la foto solo ves un trozo: imagina todo eso lleno."
+    },
+    {
+     "q": "¿Es peligrosa?",
+     "d": "obra",
+     "z": "caido",
+     "a": "Es de los sitios con más gente. Y al final, hacia Telefónica, los toros pierden velocidad y alguno se separa de la manada: el Ayuntamiento lo considera extremadamente peligroso. Mira al que está en el suelo."
+    },
+    {
+     "q": "¿Por qué se llama Estafeta?",
+     "d": "fuera",
+     "z": null,
+     "ia": true,
+     "a": "Una estafeta es una oficina de correos, pero en mis fuentes no consta por qué esta calle lleva ese nombre, así que no te lo afirmo. Mira la foto: hoy la calle es otra cosa."
+    },
+    {
+     "q": "¿Cómo es la calle sin toros?",
+     "d": "fuera",
+     "z": "portal",
+     "a": "Tranquila, con tiendas en la planta baja y balcón sobre balcón. Si vienes, busca este mismo portal: los portales siguen ahí todo el año."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Tramo",
+   "4 · Estafeta, pendiente del 2 %"
+  ],
+  [
+   "Recorrido",
+   "848,6 metros, del 7 al 14 de julio"
+  ],
+  [
+   "Lugar",
+   "Calle Estafeta, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.pamplona.es/en/turismo/recorridodelencierro\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: el recorrido del encierro</a>; <a href=\"https://www.pamplona.es/actualidad/noticias/el-ayuntamiento-de-pamplona-edita-un-periodico-con-informacion-del-encierro-sus\" target=\"_blank\" rel=\"noopener\">Ayuntamiento: ¡Vive el encierro! (2022)</a>; OpenStreetMap"
+  ],
+  [
+   "Foto",
+   "Atkins525, 2013. <a href=\"https://commons.wikimedia.org/wiki/File:Running_of_the_Bulls_on_Estafeta_Street.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY-SA 4.0"
+  ]
+ ],
+ "nota": "Versión «en casa» del recorrido «La calle del encierro». La voz de la calle es una recreación en primera persona escrita solo con los datos del Ayuntamiento de Pamplona y de la Universidad de Navarra, y con lo que se ve en las fotos."
+}
