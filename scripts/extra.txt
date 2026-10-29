@@ -176,3 +176,20 @@ encierro/toros-piden-paso.jpg  https://commons.wikimedia.org/wiki/Special:FilePa
 encierro/encierro-1968.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Pamplona_July_1968.jpg
 encierro/carrera-2011.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Carrera_%285930476078%29.jpg?width=1600
 encierro/meta-epocas.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=extmetadata%7Csize&titles=File%3AVallado+del+encierro+en+la+plaza+Consistorial+1.jpg%7CFile%3AVallado+del+encierro+en+la+plaza+Consistorial+2.jpg%7CFile%3ASuena+el+cohete.+La+calle+se+estrecha+ante+las+astas+-+Altadill.jpg%7CFile%3AMozos+y+toros+ruedan+por+el+suelo+-+Altadill.jpg%7CFile%3ALos+del+%C3%BAltimo+grupo+-+Altadill.jpg%7CFile%3AMont%C3%B3n+%285929919123%29+%282%29.jpg%7CFile%3ALos+toros+piden+paso+%285929918083%29.jpg%7CFile%3APamplona+July+1968.jpg%7CFile%3ACarrera+%285930476078%29.jpg
+# El encierro: más candidatas (corrales, cuesta por dentro, Telefónica, plaza Consistorial)
+encierro/sd-hacia-ayto.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Calle_Santo_Domingo%2C_Pamplona_%28cuesta_hacia_ayuntamiento%29.jpg?width=1600
+encierro/sd-10.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Calle_Santo_DOmingo-10.jpg?width=1600
+encierro/sd-11.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Calle_Santo_DOmingo-11.jpg?width=1600
+encierro/sd-12.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Calle_Santo_DOmingo-12.jpg?width=1600
+encierro/corrales-01.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Corrales_de_Santo_Domingo_%28Pamplona%29_01.jpg?width=1600
+encierro/corrales-02.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Corrales_de_Santo_Domingo_%28Pamplona%29_02.jpg
+encierro/corrales-03.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Corrales_de_Santo_Domingo_%28Pamplona%29_03.jpg?width=1600
+encierro/corrales-millars.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Corrales_de_Santo_Domingo%2C_Pamplona.jpg?width=1600
+encierro/telefonica-2019.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Wiki_Takes_Pamplona_060.jpg?width=1600
+encierro/telefonica-2014.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Sanferminak_2014_0002.jpg
+encierro/consistorial-zarateman.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Pamplona_-_Plaza_Consistorial.jpg
+encierro/consistorial-plaza.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Pla%C3%A7a_consistorial%2C_Pamplona.JPG?width=1600
+encierro/consistorial-udaletxe.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Udaletxe_plaza%2C_pla%C3%A7a_consistorial_de_Pamplona.JPG?width=1600
+encierro/encierro-2005-consistorial.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Encierro_7_de_julio_de_2005.jpg
+encierro/pobre-2012.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Pobre_de_m%C3%AD_2012_1.jpg?width=1600
+encierro/meta-mas.json  https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=extmetadata%7Csize&titles=File%3ACalle+Santo+Domingo%2C+Pamplona+%28cuesta+hacia+ayuntamiento%29.jpg%7CFile%3ACalle+Santo+DOmingo-10.jpg%7CFile%3ACalle+Santo+DOmingo-11.jpg%7CFile%3ACalle+Santo+DOmingo-12.jpg%7CFile%3ACorrales+de+Santo+Domingo+%28Pamplona%29+01.jpg%7CFile%3ACorrales+de+Santo+Domingo+%28Pamplona%29+02.jpg%7CFile%3ACorrales+de+Santo+Domingo+%28Pamplona%29+03.jpg%7CFile%3ACorrales+de+Santo+Domingo%2C+Pamplona.jpg%7CFile%3AWiki+Takes+Pamplona+060.jpg%7CFile%3ASanferminak+2014+0002.jpg%7CFile%3APamplona+-+Plaza+Consistorial.jpg%7CFile%3APla%C3%A7a+consistorial%2C+Pamplona.JPG%7CFile%3AUdaletxe+plaza%2C+pla%C3%A7a+consistorial+de+Pamplona.JPG%7CFile%3AEncierro+7+de+julio+de+2005.jpg%7CFile%3APobre+de+m%C3%AD+2012+1.jpg
