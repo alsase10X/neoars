@@ -244,7 +244,7 @@
     },
     {
      "z": "repisa",
-     "t": "A las 7:55, a las 7:57 y a las 7:59, los corredores le cantan aquí, en castellano y en euskera. A su lado ponen pañuelos, velas y flores. Hoy no hay nada."
+     "t": "A las 7:55, a las 7:57 y a las 7:59, los corredores le cantan aquí, en castellano y en euskera. A su lado ponen pañuelos, velas y flores. Fuera de fiestas, la repisa está vacía."
     },
     {
      "z": "muralla",
@@ -293,14 +293,14 @@
      "q": "¿Dónde está el vallado?",
      "d": "mirar",
      "z": null,
-     "a": "Ahora no está: sus 900 postes, 2.700 tablones y 80 puertas pasan el año guardados en los corrales del Gas, y cada año se cambia en torno al 2 % de la madera. Mira la calle vacía e imagínala cerrada por tablas."
+     "a": "Fuera de las fiestas no está: sus 900 postes, 2.700 tablones y 80 puertas pasan el año guardados en los corrales del Gas, y cada año se cambia en torno al 2 % de la madera. Mira la calle e imagínala cerrada por tablas."
     },
     {
      "q": "¿Por dónde sube la cuesta?",
      "d": "mirar",
      "z": null,
      "img": "I2",
-     "a": "Por la calle Santo Domingo, hacia el Ayuntamiento, entre casas altas. En la foto la ves vacía, como hoy. Sigue la calle con la mirada: al final está la plaza."
+     "a": "Por la calle Santo Domingo, hacia el Ayuntamiento, entre casas altas. En la foto la ves vacía. Sigue la calle con la mirada: al final está la plaza."
     },
     {
      "q": "¿Cómo era esta calle antes?",
