@@ -1,0 +1,74 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-31T16:18:21Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 1650859236,
+  "lat": 50.8453475,
+  "lon": 4.3503210,
+  "tags": {
+    "artist_name": "Hergé",
+    "artwork_type": "mural",
+    "mapillary": "840073659915204",
+    "name": "Tintin - Kuifje",
+    "name:fr": "Tintin",
+    "name:nl": "Kuifje",
+    "tourism": "artwork",
+    "website": "https://www.parcoursbd.brussels/fresques/les-aventures-de-tintin/",
+    "wikimedia_commons": "File:A wall paint in Brussels, featuring Tintin.jpg"
+  }
+},
+{
+  "type": "node",
+  "id": 4693881193,
+  "lat": 50.8446402,
+  "lon": 4.3501857,
+  "tags": {
+    "artist_name": "Dany;Greg",
+    "artwork_type": "mural",
+    "name": "Olivier Rameau - Roze Bottel",
+    "name:fr": "Olivier Rameau",
+    "name:nl": "Roze Bottel",
+    "tourism": "artwork",
+    "website": "https://www.parcoursbd.brussels/fresques/olivier-rameau/"
+  }
+},
+{
+  "type": "node",
+  "id": 8150090686,
+  "lat": 50.8450121,
+  "lon": 4.3499734,
+  "tags": {
+    "artist:wikidata": "Q1671666",
+    "artist_name": "Invader",
+    "artwork_subject": "street_art",
+    "artwork_type": "mosaic",
+    "ref": "BXL_05",
+    "start_date": "2012",
+    "support": "wall",
+    "tourism": "artwork",
+    "url": "https://www.space-invaders.com/world/bruxelles/"
+  }
+},
+{
+  "type": "way",
+  "id": 586397520,
+  "center": {
+    "lat": 50.8449861,
+    "lon": 4.3499793
+  },
+  "tags": {
+    "amenity": "fountain",
+    "mapillary": "304939744415858",
+    "natural": "water"
+  }
+}
+
+  ]
+}

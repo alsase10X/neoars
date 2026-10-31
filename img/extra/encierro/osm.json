@@ -1,0 +1,686 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-31T16:18:21Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 4853570169,
+  "lat": 42.8163910,
+  "lon": -1.6483717,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "obelisk",
+    "name": "Monumento a la Inmaculada Concepción",
+    "website": "https://esculturas.pamplona.es/escultura/inmaculada-concepcion-de-maria"
+  }
+},
+{
+  "type": "node",
+  "id": 11461241661,
+  "lat": 42.8207690,
+  "lon": -1.6386985,
+  "tags": {
+    "historic": "wayside_cross"
+  }
+},
+{
+  "type": "node",
+  "id": 11467349218,
+  "lat": 42.8188068,
+  "lon": -1.6441212,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "plaque",
+    "name": "Plano de los Burgos de Pamplona"
+  }
+},
+{
+  "type": "node",
+  "id": 12463935599,
+  "lat": 42.8189607,
+  "lon": -1.6450237,
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "3",
+    "addr:postcode": "31001",
+    "addr:street": "Calle del Mercado",
+    "amenity": "place_of_worship",
+    "denomination": "roman_catholic",
+    "email": "villava.es@dominicos.org",
+    "name": "Iglesia de Santo Domingo",
+    "phone": "+34 948 22 63 03",
+    "religion": "christian"
+  }
+},
+{
+  "type": "node",
+  "id": 13171951474,
+  "lat": 42.8204509,
+  "lon": -1.6432175,
+  "tags": {
+    "historic": "memorial",
+    "memorial": "stolperstein",
+    "panoramax": "e92fe61c-9641-4415-8e74-0bf36e3b4d3d"
+  }
+},
+{
+  "type": "node",
+  "id": 13929785719,
+  "lat": 42.8153790,
+  "lon": -1.6466314,
+  "tags": {
+    "historic": "memorial",
+    "inscription": "Aquí vivía / Lorenzo / Yoldi Lacima / 19-11-1911 / Hemen Bizi Zen / Asasinado / Erailda / 1936-11-16",
+    "memorial": "stolperstein",
+    "person:date_of_birth": "1911-11-19",
+    "person:date_of_death": "1936-11-16",
+    "person:name": "Yoldi Lacima"
+  }
+},
+{
+  "type": "node",
+  "id": 13939162863,
+  "lat": 42.8192978,
+  "lon": -1.6458367,
+  "tags": {
+    "denomination": "catholic",
+    "historic": "wayside_shrine",
+    "religion": "christian",
+    "subject:wikidata": "Q468206",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "node",
+  "id": 13939196201,
+  "lat": 42.8199968,
+  "lon": -1.6446128,
+  "tags": {
+    "historic": "memorial",
+    "material": "stone",
+    "name": "Reconocimiento al Reino de Navarra - Nafarroako Erreinuaren Omenez",
+    "name:es": "Reconocimiento al Reino de Navarra",
+    "name:eu": "Nafarroako Erreinuaren Omenez",
+    "start_date": "2012-12-03",
+    "subject:wikidata": "Q200262"
+  }
+},
+{
+  "type": "way",
+  "id": 23178340,
+  "center": {
+    "lat": 42.8196844,
+    "lon": -1.6459780
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "no",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 23192764,
+  "center": {
+    "lat": 42.8201345,
+    "lon": -1.6455561
+  },
+  "tags": {
+    "access": "yes",
+    "amenity": "parking",
+    "fee": "yes",
+    "name": "Huerta Santo Domingo",
+    "name:es": "Huerta Santo Domingo",
+    "name:eu": "Santo Domingoko baratzea",
+    "parking": "surface",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 30764144,
+  "center": {
+    "lat": 42.8172364,
+    "lon": -1.6420606
+  },
+  "tags": {
+    "highway": "living_street",
+    "lit": "yes",
+    "name": "Estafeta kalea",
+    "name:es": "Calle Estafeta",
+    "name:eu": "Estafeta kalea",
+    "oneway": "yes",
+    "oneway:bicycle": "no",
+    "parking:both": "no",
+    "smoothness": "good",
+    "surface": "sett"
+  }
+},
+{
+  "type": "way",
+  "id": 32673364,
+  "center": {
+    "lat": 42.8159083,
+    "lon": -1.6409738
+  },
+  "tags": {
+    "cycleway:both": "no",
+    "highway": "residential",
+    "lane_markings": "no",
+    "lit": "yes",
+    "name": "Ahumadako dukearen kalea",
+    "name:es": "Calle Duque de Ahumada",
+    "name:eu": "Ahumadako dukearen kalea",
+    "official_name": "Ahumadako dukearen kalea / Calle Duque de Ahumada",
+    "oneway": "yes",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "sidewalk:both:surface": "paving_stones",
+    "smoothness": "excellent",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 32673370,
+  "center": {
+    "lat": 42.8171646,
+    "lon": -1.6390267
+  },
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:postcode": "31001",
+    "addr:street": "Calle Juan de Labrit",
+    "building": "sports_centre",
+    "leisure": "stadium",
+    "name": "Frontón Labrit Pilotalekua",
+    "name:es": "Frontón Labrit",
+    "name:etymology:wikidata": "Q4895127",
+    "name:eu": "Labrit Pilotalekua",
+    "nohousenumber": "yes",
+    "sport": "pelota",
+    "wikidata": "Q4895127"
+  }
+},
+{
+  "type": "way",
+  "id": 32673372,
+  "center": {
+    "lat": 42.8186499,
+    "lon": -1.6428439
+  },
+  "tags": {
+    "alt_name:eu": "Merkatarien kalea",
+    "highway": "living_street",
+    "lit": "yes",
+    "name": "Calle Mercaderes kalea",
+    "name:es": "Calle Mercaderes",
+    "name:eu": "Mercaderes kalea",
+    "oneway": "yes",
+    "oneway:bicycle": "no",
+    "parking:both": "no",
+    "surface": "sett",
+    "wikidata": "Q16518355",
+    "wikipedia": "eu:Mercaderes kalea (Iruñea)"
+  }
+},
+{
+  "type": "way",
+  "id": 32673379,
+  "center": {
+    "lat": 42.8195780,
+    "lon": -1.6484778
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "cycleway:both": "no",
+    "highway": "residential",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "no",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "sidewalk:both:surface": "paving_stones",
+    "smoothness": "excellent",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 33168219,
+  "center": {
+    "lat": 42.8132106,
+    "lon": -1.6360700
+  },
+  "tags": {
+    "amenity": "place_of_worship",
+    "building": "church",
+    "denomination": "catholic",
+    "name": "San Francisco Javier",
+    "religion": "christian",
+    "source": "PNOA",
+    "wikidata": "Q22343020"
+  }
+},
+{
+  "type": "way",
+  "id": 166892217,
+  "center": {
+    "lat": 42.8160175,
+    "lon": -1.6414298
+  },
+  "tags": {
+    "highway": "living_street",
+    "lit": "yes",
+    "name": "Ahumadako dukearen kalea",
+    "name:es": "Calle Duque de Ahumada",
+    "name:eu": "Ahumadako dukearen kalea",
+    "official_name": "Ahumadako dukearen kalea / Calle Duque de Ahumada",
+    "oneway": "yes",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 170121654,
+  "center": {
+    "lat": 42.8190327,
+    "lon": -1.6455654
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "pedestrian",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 171763070,
+  "center": {
+    "lat": 42.8190491,
+    "lon": -1.6442846
+  },
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:postcode": "31001",
+    "addr:street": "Calle del Mercado",
+    "amenity": "marketplace",
+    "building": "commercial",
+    "name": "Mercado de Santo Domingo",
+    "name:es": "Mercado de Santo Domingo",
+    "name:eu": "Santo Domingoko merkatua",
+    "nohousenumber": "yes",
+    "opening_hours": "Mo-Sa 08:00-14:00; Fr 08:00-14:00,16:30-20:00",
+    "source": "PNOA",
+    "source:opening_hours": "http://www.mercadosantodomingo.es/portada.htm",
+    "tourism": "attraction",
+    "wheelchair": "yes",
+    "wikidata": "Q12267038"
+  }
+},
+{
+  "type": "way",
+  "id": 360009553,
+  "center": {
+    "lat": 42.8183765,
+    "lon": -1.6434286
+  },
+  "tags": {
+    "alt_name:eu": "Merkatarien kalea",
+    "highway": "living_street",
+    "lit": "yes",
+    "name": "Mercaderes kalea",
+    "name:es": "Calle Mercaderes",
+    "name:eu": "Mercaderes kalea",
+    "oneway": "no",
+    "oneway:bicycle": "no",
+    "parking:both": "no",
+    "surface": "sett",
+    "wikidata": "Q16518355",
+    "wikipedia": "eu:Mercaderes kalea (Iruñea)"
+  }
+},
+{
+  "type": "way",
+  "id": 360741802,
+  "center": {
+    "lat": 42.8185114,
+    "lon": -1.6445599
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "parking:both": "no",
+    "smoothness": "good",
+    "surface": "paving_stones"
+  }
+},
+{
+  "type": "way",
+  "id": 360747031,
+  "center": {
+    "lat": 42.8199887,
+    "lon": -1.6460945
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "no",
+    "parking:both": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 360747033,
+  "center": {
+    "lat": 42.8191821,
+    "lon": -1.6457957
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "no",
+    "oneway:bicycle": "no",
+    "parking:both": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 554069490,
+  "center": {
+    "lat": 42.8188222,
+    "lon": -1.6451689
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "yes",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 816492967,
+  "center": {
+    "lat": 42.8193985,
+    "lon": -1.6458676
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "yes",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1083768874,
+  "center": {
+    "lat": 42.8159463,
+    "lon": -1.6420036
+  },
+  "tags": {
+    "highway": "living_street",
+    "lit": "yes",
+    "name": "Ahumadako dukearen kalea",
+    "name:es": "Calle Duque de Ahumada",
+    "name:eu": "Ahumadako dukearen kalea",
+    "official_name": "Ahumadako dukearen kalea / Calle Duque de Ahumada",
+    "oneway": "yes",
+    "parking:both": "no",
+    "smoothness": "excellent",
+    "surface": "asphalt",
+    "width": "10"
+  }
+},
+{
+  "type": "way",
+  "id": 1254215186,
+  "center": {
+    "lat": 42.8159768,
+    "lon": -1.6410848
+  },
+  "tags": {
+    "cycleway:both": "no",
+    "highway": "residential",
+    "lit": "yes",
+    "name": "Ahumadako dukearen kalea",
+    "name:es": "Calle Duque de Ahumada",
+    "name:eu": "Ahumadako dukearen kalea",
+    "official_name": "Ahumadako dukearen kalea / Calle Duque de Ahumada",
+    "oneway": "yes",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "smoothness": "excellent",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1300945718,
+  "center": {
+    "lat": 42.8183715,
+    "lon": -1.6432771
+  },
+  "tags": {
+    "area": "yes",
+    "highway": "pedestrian",
+    "lit": "yes",
+    "name": "Mercaderes kalea",
+    "name:es": "Calle Mercaderes",
+    "name:eu": "Mercaderes kalea",
+    "smoothness": "intermediate",
+    "surface": "sett"
+  }
+},
+{
+  "type": "way",
+  "id": 1311630809,
+  "center": {
+    "lat": 42.8190732,
+    "lon": -1.6450191
+  },
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "3",
+    "addr:postcode": "31001",
+    "addr:street": "Merkatu kalea",
+    "alt_name": "Iglesia de Santo Domingo",
+    "building": "church",
+    "name": "Santo Domingo komentua",
+    "name:es": "Convento de Santo Domingo",
+    "name:eu": "Santo Domingo komentua",
+    "official_name": "Santo Domingo komentua / Convento de Santo Domingo",
+    "phone": "+34 948 22 63 03",
+    "wikidata": "Q16518877"
+  }
+},
+{
+  "type": "way",
+  "id": 1314649755,
+  "center": {
+    "lat": 42.8191426,
+    "lon": -1.6456382
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lanes": "1",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "yes",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1314649756,
+  "center": {
+    "lat": 42.8193259,
+    "lon": -1.6460213
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "no",
+    "oneway:bicycle": "no",
+    "parking:both": "no",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1320744408,
+  "center": {
+    "lat": 42.8198547,
+    "lon": -1.6472575
+  },
+  "tags": {
+    "alt_name:es": "Cuesta de Santo Domingo",
+    "highway": "living_street",
+    "lanes": "2",
+    "lit": "yes",
+    "name": "Santo Domingo kalea",
+    "name:es": "Calle de Santo Domingo",
+    "name:eu": "Santo Domingo kalea",
+    "official_name": "Santo Domingo kalea / Calle de Santo Domingo",
+    "oneway": "no",
+    "parking:both": "no",
+    "sidewalk": "both",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1431564871,
+  "center": {
+    "lat": 42.8202877,
+    "lon": -1.6460397
+  },
+  "tags": {
+    "area": "yes",
+    "name": "Corrales de Santo Domingo",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "relation",
+  "id": 106146,
+  "center": {
+    "lat": 42.8179292,
+    "lon": -1.6429544
+  },
+  "tags": {
+    "description": "Recorrido del encierro tradicional de San Fermin, en el que se corre delante de 6 toros. The San Fermin's typical Running of The Bulls",
+    "distance": "0.825",
+    "name": "Encierros de San Fermín",
+    "name:en": "Running of the bulls",
+    "name:es": "Encierros de San Fermín",
+    "opening_hours": "Jul 07-Jul 14: 08:00-08:05",
+    "route": "folk",
+    "type": "route"
+  }
+},
+{
+  "type": "relation",
+  "id": 3962100,
+  "center": {
+    "lat": 42.8158994,
+    "lon": -1.6394724
+  },
+  "tags": {
+    "addr:city": "Pamplona / Iruña",
+    "addr:housenumber": "1",
+    "addr:postcode": "31002",
+    "addr:street": "Calle Amaya",
+    "building": "yes",
+    "historic": "yes",
+    "leisure": "stadium",
+    "name": "Plaza de Toros de Pamplona",
+    "name:en": "Bullring of Pamplona",
+    "name:es": "Plaza de Toros de Pamplona",
+    "name:etymology:wikidata": "Q2033759",
+    "name:eu": "Iruñeko zezen plaza",
+    "operator": "Casa de Misericordia",
+    "sport": "bullfighting",
+    "tourism": "attraction",
+    "type": "multipolygon",
+    "website": "https://feriadeltoro.com/",
+    "wikidata": "Q2033759",
+    "wikimedia_commons": "File:Plaza de Toros de Pamplona Pamplona Spain 2022.jpg",
+    "wikipedia": "es:Plaza de toros Monumental de Pamplona"
+  }
+}
+
+  ]
+}
