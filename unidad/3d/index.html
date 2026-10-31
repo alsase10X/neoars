@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0B">
+<title>artmedium · 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<style>
+/* Maqueta offsite en 3D: la pieza manda arriba, el relato debajo como las letras de una canción,
+   y cada cápsula lleva la cámara a su zona. Mismo sistema neutro que la unidad: el color lo pone la obra */
+:root{
+  color-scheme:dark;
+  --bg:#0A0A0B; --fg:#F6F5F2; --muted:#A29E97; --hair:rgba(246,245,242,.2); --panel:#0D0D0E;
+  --font:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif; --col:560px;
+}
+*{box-sizing:border-box;margin:0;padding:0;border-radius:0}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--fg);font-family:var(--font);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+.app{height:100svh;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.top{display:flex;align-items:flex-start;gap:12px;padding:14px 20px 12px;max-width:var(--col);width:100%;margin:0 auto}
+.top .tt{flex:1;min-width:0}
+.top h1{font-size:clamp(1.3rem,5.4vw,1.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.top p{color:var(--muted);font-size:.95rem;margin-top:4px}
+.ib{width:44px;height:44px;display:grid;place-items:center;flex:none;margin:-6px -10px 0 0}
+.ib svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.ib .dots{fill:currentColor;stroke:none}
+.visor{position:relative;flex:0 0 auto;height:min(50svh,520px);background:#000;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.visor iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.visor .msg{position:absolute;inset:0;display:grid;place-items:center;padding:24px;text-align:center;color:var(--muted)}
+.zona{position:absolute;left:12px;bottom:12px;background:rgba(10,10,11,.72);padding:6px 10px;font-size:.85rem;font-weight:600;pointer-events:none;transition:opacity .4s}
+.encuadre{position:absolute;right:12px;bottom:12px;background:rgba(10,10,11,.72);padding:8px 12px;font-size:.85rem;font-weight:600}
+.flujo{position:relative;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.lineas{max-width:var(--col);margin:0 auto;padding:22px 20px 40vh}
+.cap{font-size:clamp(1.2rem,5vw,1.45rem);font-weight:700;letter-spacing:-.015em;line-height:1.32;color:rgba(246,245,242,.34);margin-bottom:22px;cursor:pointer;transition:color .3s}
+.cap.ya{color:rgba(246,245,242,.55)}
+.cap .w.on{color:var(--fg)}
+.cap.ahora{color:rgba(246,245,242,.4)}
+.inicio{display:flex;flex-direction:column;align-items:flex-start;gap:14px;margin-bottom:26px}
+.inicio p{color:var(--muted);font-size:1rem;line-height:1.45}
+.b1{display:inline-flex;align-items:center;gap:12px;background:var(--fg);color:#000;font-weight:700;font-size:1.05rem;padding:15px 22px}
+.b1 svg{width:18px;height:18px;fill:currentColor}
+.barra{border-top:1px solid var(--hair);background:var(--bg)}
+.barra .in{max-width:var(--col);margin:0 auto;display:flex;align-items:center;gap:16px;padding:12px 20px}
+.estado{flex:1;color:var(--muted);font-size:.95rem;line-height:1.3}
+.sq{width:56px;height:56px;display:grid;place-items:center;background:var(--fg);color:#000;flex:none}
+.sq svg{width:22px;height:22px;fill:currentColor}
+.cred{max-width:var(--col);margin:0 auto;padding:0 20px 10px;color:var(--muted);font-size:.75rem}
+.cred a{color:var(--muted)}
+/* Hojas: ficha y vistas */
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;z-index:10}
+.pn{background:var(--panel);width:100%;max-width:var(--col);max-height:86svh;overflow:auto;border-top:1px solid var(--hair);padding:18px 20px calc(22px + env(safe-area-inset-bottom,0px))}
+.pn .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.pn .hd b{font-size:1.15rem}
+.menu button{display:flex;justify-content:space-between;width:100%;text-align:left;padding:14px 0;border-bottom:1px solid var(--hair)}
+.menu small{display:block;color:var(--muted);font-size:.85rem;margin-top:3px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:.95rem;line-height:1.4}
+dt{color:var(--muted)}
+.note{color:var(--muted);font-size:.9rem;line-height:1.45;margin-top:14px}
+.fila{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--hair)}
+.fila span{flex:1}
+.fila .ok{color:var(--muted);font-size:.85rem}
+.b2{border:1px solid var(--fg);padding:9px 14px;font-weight:600;font-size:.9rem}
+textarea{width:100%;min-height:120px;margin-top:14px;background:#000;color:var(--fg);border:1px solid var(--hair);padding:10px;font:500 .8rem/1.4 ui-monospace,Menlo,monospace}
+#toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:var(--fg);color:#000;padding:10px 14px;font-weight:600;font-size:.9rem;opacity:0;transition:opacity .3s;pointer-events:none;z-index:20}
+#toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.flujo{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="tt"><h1 id="tit">…</h1><p id="sub"></p></div>
+    <button class="ib" id="menuB" type="button" aria-label="Más opciones"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dots" cx="12" cy="5" r="1.8"/><circle class="dots" cx="12" cy="12" r="1.8"/><circle class="dots" cx="12" cy="19" r="1.8"/></svg></button>
+  </header>
+  <div class="visor" id="visor">
+    <div class="msg" id="msg">Cargando el modelo 3D…</div>
+    <iframe id="ifr" title="Modelo 3D" allow="autoplay; fullscreen; xr-spatial-tracking" allowfullscreen hidden></iframe>
+    <div class="zona" id="zona" hidden></div>
+    <button class="encuadre" id="encuadre" type="button" hidden>Volver al encuadre</button>
+  </div>
+  <div class="flujo" id="flujo">
+    <div class="lineas" id="lineas">
+      <div class="inicio" id="inicio">
+        <p>Gíralo con el dedo cuando quieras. Mientras te habla, la cámara te lleva a lo que nombra.</p>
+        <button class="b1" id="empezar" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg><span id="empezarT">Escuchar</span></button>
+      </div>
+    </div>
+  </div>
+  <div class="barra">
+    <div class="in">
+      <p class="estado" id="estado">Toca «Escuchar» para empezar</p>
+      <button class="sq" id="play" type="button" aria-label="Reproducir" hidden><svg viewBox="0 0 24 24" aria-hidden="true" id="playI"><path d="M7 4l13 8-13 8z"/></svg></button>
+    </div>
+    <p class="cred" id="cred"></p>
+  </div>
+</div>
+
+<div class="sheet" id="menuS" hidden>
+  <div class="pn" role="dialog" aria-label="Opciones">
+    <div class="hd"><b>Opciones</b><button class="ib" data-close type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="menu">
+      <button type="button" id="fichaB"><span><b>Ficha y fuentes</b><small>Datos de la pieza, del modelo 3D y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
+      <button type="button" id="vistasB"><span><b>Fijar las vistas</b><small>Para la maqueta: el ángulo de la cámara en cada zona</small></span><span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+</div>
+<div class="sheet" id="fichaS" hidden>
+  <div class="pn" role="dialog" aria-label="Ficha">
+    <div class="hd"><b id="fTit"></b><button class="ib" data-close type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <dl id="fDl"></dl><p class="note" id="fNota"></p>
+  </div>
+</div>
+<div class="sheet" id="vistasS" hidden>
+  <div class="pn" role="dialog" aria-label="Fijar las vistas">
+    <div class="hd"><b>Fijar las vistas</b><button class="ib" data-close type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <p class="note" style="margin-top:0">Cierra esta hoja, gira el modelo hasta el mejor ángulo de una zona, vuelve aquí y toca «Fijar». Se guarda en este móvil y se usa al momento. Al acabar, copia el texto y pásamelo.</p>
+    <div id="vLista"></div>
+    <textarea id="vTxt" readonly aria-label="Vistas fijadas"></textarea>
+    <p style="margin-top:12px;display:flex;gap:10px"><button class="b2" id="vCopiar" type="button">Copiar</button><button class="b2" id="vBorrar" type="button">Borrar las fijadas</button></p>
+  </div>
+</div>
+<div id="toast" role="status"></div>
+
+<script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+const st = {get(k, d){ try{ const v = localStorage.getItem(k); return v == null ? d : v; }catch(e){ return d; } }, set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }};
+function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2600); }
+
+const ID = (new URLSearchParams(location.search).get('obra') || 'zinneke').replace(/[^a-z0-9-]/g, '');
+const CLAVE = 'am3d.vistas.' + ID;
+let OBRA = null, API = null, INICIO = null, VISTAS = {};
+const U = {i:-1, playing:false, caps:[], tok:0, auto:false};
+
+/* ---------- Datos ---------- */
+async function cargar(){
+  OBRA = await fetch(`../obras/3d/${ID}.json`).then(r => { if(!r.ok) throw new Error('obra'); return r.json(); });
+  try{ VISTAS = JSON.parse(st.get(CLAVE, '{}')) || {}; }catch(e){ VISTAS = {}; }
+  document.title = `${OBRA.titulo} · 3D`;
+  $('tit').textContent = OBRA.titulo;
+  $('sub').textContent = [OBRA.autor, OBRA.fecha].filter(Boolean).join(' · ');
+  $('cred').innerHTML = `Modelo 3D: <a href="${esc(OBRA.modelo.pagina)}" target="_blank" rel="noopener">Sketchfab</a> · ${esc(OBRA.modelo.licencia)}`;
+  pintarRelato(); $('empezarT').textContent = `Escuchar · ${duracion()}`;
+  iniciarVisor(); creditoModelo();
+}
+// El autor del modelo, desde la API de Sketchfab; si no responde, queda el enlace a su página
+function creditoModelo(){
+  fetch(`https://api.sketchfab.com/v3/models/${OBRA.sketchfab}`).then(r => r.json()).then(m => {
+    const a = m && m.user ? m.user.displayName || m.user.username : '', l = m && m.license ? m.license.label : OBRA.modelo.licencia;
+    if(a) $('cred').innerHTML = `Modelo 3D: ${esc(a)}, <a href="${esc(OBRA.modelo.pagina)}" target="_blank" rel="noopener">Sketchfab</a> · ${esc(l)}`;
+    OBRA._autorModelo = a; OBRA._licModelo = l;
+  }).catch(() => {});
+}
+const vista = z => z ? (VISTAS[z] || (OBRA.zonas[z] && OBRA.zonas[z].vista) || null) : INICIO;
+
+/* ---------- Visor ---------- */
+function iniciarVisor(){
+  if(!window.Sketchfab){ $('msg').textContent = 'No se ha podido cargar el visor 3D. El relato funciona igual.'; return; }
+  const ifr = $('ifr'); ifr.hidden = false;
+  const c = new Sketchfab(ifr);
+  c.init(OBRA.sketchfab, {
+    success(api){
+      API = api; api.start();
+      api.addEventListener('viewerready', () => {
+        $('msg').hidden = true;
+        api.getCameraLookAt((e, cam) => { if(!e && cam) INICIO = {pos:cam.position, obj:cam.target}; });
+      });
+      // Si el visitante gira el modelo, aparece el botón para volver a lo que se nombra
+      api.addEventListener('camerastart', () => { if(!U.auto) $('encuadre').hidden = false; });
+    },
+    error(){ $('msg').textContent = 'No se ha podido cargar el modelo 3D. El relato funciona igual.'; ifr.hidden = true; },
+    autostart:1, preload:1, camera:0, ui_infos:0, ui_controls:0, ui_inspector:0, ui_stop:0, ui_watermark:0, ui_watermark_link:0,
+    ui_hint:0, ui_help:0, ui_settings:0, ui_vr:0, ui_ar:0, ui_fullscreen:0, ui_annotations:0, ui_animations:0, ui_theme:'dark'
+  });
+}
+function mirar(z){
+  const v = vista(z), n = z && OBRA.zonas[z] ? OBRA.zonas[z].n : '';
+  $('zona').textContent = n; $('zona').hidden = !n; $('encuadre').hidden = true;
+  if(!API || !v) return;
+  U.auto = true; API.setCameraLookAt(v.pos, v.obj, RM ? 0 : 1.6, () => {});
+  clearTimeout(mirar.t); mirar.t = setTimeout(() => { U.auto = false; }, RM ? 100 : 1800);
+}
+$('encuadre').addEventListener('click', () => { const C = U.caps[U.i]; mirar(C ? C.z : null); });
+
+/* ---------- Relato ---------- */
+function pintarRelato(){
+  const L = $('lineas');
+  U.caps = OBRA.relato.map((c, i) => {
+    const p = document.createElement('p'); p.className = 'cap'; p.dataset.i = i;
+    const ws = []; let pos = 0;
+    c.t.split(/(\s+)/).forEach(tr => {
+      if(/^\s+$/.test(tr) || !tr){ p.appendChild(document.createTextNode(tr)); pos += tr.length; return; }
+      const s = document.createElement('span'); s.className = 'w'; s.textContent = tr; p.appendChild(s);
+      ws.push({el:s, ini:pos}); pos += tr.length;
+    });
+    L.appendChild(p); return {...c, el:p, ws};
+  });
+}
+function duracion(){ const s = OBRA.relato.reduce((a, c) => a + c.t.length, 0)*0.066/(OBRA.voz && OBRA.voz.rate || 1); return s < 90 ? `${Math.max(30, Math.round(s/15)*15)} s` : `${(Math.round(s/60*2)/2).toString().replace('.', ',')} min`; }
+let VOZ = null;
+function elegirVoz(){ const vs = (window.speechSynthesis && speechSynthesis.getVoices()) || []; VOZ = vs.find(v => /^es(-|_)ES/i.test(v.lang)) || vs.find(v => /^es/i.test(v.lang)) || null; }
+if(window.speechSynthesis){ elegirVoz(); speechSynthesis.onvoiceschanged = elegirVoz; }
+
+function ir(i){
+  const tok = ++U.tok; parar(false);
+  if(i >= U.caps.length){ U.playing = false; U.i = U.caps.length; pintarEstado(); mirar(null); return; }
+  U.i = i; U.playing = true;
+  U.caps.forEach((C, k) => { C.el.classList.toggle('ya', k < i); C.el.classList.toggle('ahora', k === i); C.ws.forEach(w => w.el.classList.toggle('on', k < i)); });
+  const C = U.caps[i]; mirar(C.z); pintarEstado();
+  const F = $('flujo'); F.scrollTo({top:Math.max(0, C.el.offsetTop - F.clientHeight*.12), behavior:RM ? 'auto' : 'smooth'});
+  decir(C, tok, () => { if(tok === U.tok) setTimeout(() => { if(tok === U.tok) ir(i + 1); }, 450); });
+}
+// La voz del navegador; las palabras se encienden con ella. Si el navegador no avisa de cada palabra, se estima
+function decir(C, tok, alAcabar){
+  let hecho = false, estimando = false, fallo = false, avisa = false; const t0 = Date.now();
+  const fin = () => { if(!hecho){ hecho = true; alAcabar(); } };
+  const encender = n => C.ws.forEach((w, k) => w.el.classList.toggle('on', k < n));
+  // Sin aviso por palabra, o sin voz que funcione: se estima el ritmo. Si la voz falla, el ritmo estimado decide cuándo seguir
+  const estimado = () => { if(estimando) return; estimando = true; const ms = C.t.length*66/(OBRA.voz && OBRA.voz.rate || 1), paso = ms/C.ws.length; let n = 0;
+    U.reloj = setInterval(() => { if(tok !== U.tok) return clearInterval(U.reloj); encender(++n); if(n >= C.ws.length){ clearInterval(U.reloj); if(fallo) fin(); } }, paso); };
+  if(!window.speechSynthesis){ fallo = true; estimado(); return; }
+  const u = new SpeechSynthesisUtterance(C.t); u.lang = VOZ ? VOZ.lang : 'es-ES'; if(VOZ) u.voice = VOZ;
+  u.rate = OBRA.voz && OBRA.voz.rate || 1; u.pitch = OBRA.voz && OBRA.voz.pitch || 1;
+  u.onboundary = e => { if(tok !== U.tok || e.name === 'sentence') return; if(!avisa){ avisa = true; if(!fallo){ clearInterval(U.reloj); estimando = false; } } encender(C.ws.filter(w => w.ini <= e.charIndex).length); };
+  u.onend = () => { if(tok !== U.tok) return; if(Date.now() - t0 < 400){ fallo = true; estimado(); return; } clearInterval(U.reloj); encender(C.ws.length); fin(); };
+  u.onerror = () => { if(tok !== U.tok) return; fallo = true; estimado(); };
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+  setTimeout(() => { if(!avisa && tok === U.tok) estimado(); }, 900);
+}
+function parar(soloVoz = true){ clearInterval(U.reloj); if(window.speechSynthesis) speechSynthesis.cancel(); if(soloVoz) U.playing = false; }
+function pintarEstado(){
+  const C = U.caps[U.i], fin = U.i >= U.caps.length;
+  $('play').hidden = U.i < 0;
+  $('play').setAttribute('aria-label', U.playing ? 'Pausa' : (fin ? 'Escuchar de nuevo' : 'Seguir'));
+  $('playI').innerHTML = U.playing ? '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>' : '<path d="M7 4l13 8-13 8z"/>';
+  $('estado').textContent = fin ? 'Gíralo con el dedo y míralo por todos lados' : U.playing ? 'Gíralo con el dedo cuando quieras' : 'En pausa · toca una frase para ir a ella';
+}
+$('empezar').addEventListener('click', () => { $('inicio').remove(); ir(0); });
+$('play').addEventListener('click', () => {
+  if(U.playing){ U.tok++; parar(); pintarEstado(); return; }
+  ir(U.i >= U.caps.length || U.i < 0 ? 0 : U.i);
+});
+$('lineas').addEventListener('click', e => { const c = e.target.closest('.cap'); if(c){ const i = +c.dataset.i; if($('inicio')) $('inicio').remove(); ir(i); } });
+document.addEventListener('visibilitychange', () => { if(document.hidden && U.playing){ U.tok++; parar(); pintarEstado(); } });
+
+/* ---------- Hojas ---------- */
+const abrirH = id => { document.querySelectorAll('.sheet').forEach(s => s.hidden = true); $(id).hidden = false; };
+document.querySelectorAll('.sheet').forEach(s => s.addEventListener('click', e => { if(e.target === s || e.target.closest('[data-close]')) s.hidden = true; }));
+$('menuB').addEventListener('click', () => abrirH('menuS'));
+$('fichaB').addEventListener('click', () => {
+  $('fTit').textContent = OBRA.titulo;
+  const modelo = `${OBRA._autorModelo ? esc(OBRA._autorModelo) + ', ' : ''}<a href="${esc(OBRA.modelo.pagina)}" target="_blank" rel="noopener">Sketchfab</a>, ${esc(OBRA._licModelo || OBRA.modelo.licencia)}`;
+  const filas = [['Pieza', esc(OBRA.titulo)], ['Autor', esc(OBRA.autor)], ['Fecha', esc(OBRA.fecha)], ['Lugar', esc(OBRA.lugar)],
+    ['Fuentes', OBRA.fuentes.map(f => `<a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.t)}</a>`).join(' · ')], ['Modelo 3D', modelo]];
+  $('fDl').innerHTML = filas.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('');
+  $('fNota').textContent = OBRA.nota || ''; abrirH('fichaS');
+});
+function pintarVistas(){
+  $('vLista').innerHTML = Object.entries(OBRA.zonas).map(([k, z]) => `<div class="fila"><span>${esc(z.n)}</span><span class="ok">${vista(k) ? 'fijada' : ''}</span><button class="b2" type="button" data-fijar="${esc(k)}">Fijar</button></div>`).join('');
+  $('vTxt').value = JSON.stringify(VISTAS, (k, v) => typeof v === 'number' ? Math.round(v*1000)/1000 : v);
+}
+$('vistasB').addEventListener('click', () => { pintarVistas(); abrirH('vistasS'); });
+$('vLista').addEventListener('click', e => {
+  const b = e.target.closest('[data-fijar]'); if(!b) return;
+  if(!API){ toast('El modelo 3D aún no está cargado'); return; }
+  API.getCameraLookAt((err, cam) => { if(err || !cam) return toast('No he podido leer la cámara');
+    VISTAS[b.dataset.fijar] = {pos:cam.position, obj:cam.target}; st.set(CLAVE, JSON.stringify(VISTAS)); pintarVistas(); toast('Vista fijada'); });
+});
+$('vCopiar').addEventListener('click', () => { const t = $('vTxt').value; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('Copiado'), () => { $('vTxt').select(); toast('Selecciona el texto y cópialo'); }); });
+$('vBorrar').addEventListener('click', () => { VISTAS = {}; st.set(CLAVE, '{}'); pintarVistas(); toast('Vistas borradas'); });
+
+cargar().catch(() => { $('tit').textContent = 'No se ha encontrado la pieza'; $('msg').textContent = ''; });
+</script>
+</body>
+</html>

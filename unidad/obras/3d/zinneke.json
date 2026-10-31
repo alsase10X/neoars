@@ -1,0 +1,33 @@
+{
+ "titulo": "Het Zinneke",
+ "autor": "Tom Frantzen",
+ "fecha": "finales de los noventa",
+ "pieza": "el perro",
+ "lugar": "Esquina de la rue des Chartreux y la rue du Vieux-Marché-aux-Grains, Bruselas",
+ "sketchfab": "08ccdc44ab40447ab2e9bccabcec2881",
+ "modelo": {
+  "pagina": "https://sketchfab.com/3d-models/het-zinneke-statue-brussels-08ccdc44ab40447ab2e9bccabcec2881",
+  "licencia": "CC BY"
+ },
+ "tema": "Un chucho de bronce que la ciudad adoptó como suyo, igual que adopta a quien llega de fuera.",
+ "voz": {"pitch": 0.95, "rate": 0.98},
+ "zonas": {
+  "pata": {"n": "La pata levantada"},
+  "cabeza": {"n": "La cabeza"},
+  "patas": {"n": "Las patas"},
+  "bolardo": {"n": "El bolardo"}
+ },
+ "relato": [
+  {"z": null, "t": "No soy un perro: soy su estatua de bronce. Me hizo Tom Frantzen a finales de los noventa, y vivo en una esquina de Bruselas."},
+  {"z": "pata", "t": "Mira lo que hago: levanto la pata contra un bolardo. Es una broma de la ciudad con sus estatuas que hacen pis, como el Manneken. Pero yo no soy fuente: de mí no sale agua."},
+  {"z": "cabeza", "t": "Me llamo Zinneke, que en el habla de Bruselas quiere decir chucho. Así llamaban a los perros callejeros que rondaban el pequeño Senne, un canal que rodeó la ciudad hasta finales del siglo XIX."},
+  {"z": "cabeza", "t": "Hoy también llaman zinneke a quien vive en Bruselas sin haber nacido aquí. A quien nace aquí lo llaman ketje."},
+  {"z": "patas", "t": "En 2015 un coche me atropelló y me rompió las dos patas. Mi escultor me arregló, y en septiembre volví a mi esquina."},
+  {"z": "bolardo", "t": "En 2007 unos vándalos intentaron arrancarme. Me dieron por robado, pero eran mis vecinos, que me habían llevado a reparar: dicen que el perro es suyo."},
+  {"z": null, "t": "Ahora gírame con el dedo y mírame por todos lados."}
+ ],
+ "fuentes": [
+  {"t": "Wikipedia (inglés): Het Zinneke", "url": "https://en.wikipedia.org/wiki/Het_Zinneke"}
+ ],
+ "nota": "Maqueta offsite en 3D. La voz del perro es una recreación en primera persona escrita con las fuentes de la ficha: habla como objeto. Textos preparados con IA y pendientes de validar. Las fuentes no coinciden en el año (1998 o 1999), por eso dice «a finales de los noventa»."
+}
