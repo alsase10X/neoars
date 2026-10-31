@@ -197,3 +197,12 @@ encierro/meta-mas.json  https://commons.wikimedia.org/w/api.php?action=query&for
 encierro/osm-puntos.json  https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3B%28nwr%5B%22historic%22%3D%22wayside_shrine%22%5D%2842.817%2C-1.650%2C42.822%2C-1.642%29%3Bnwr%5B%22name%22~%22Corral%7Ccorral%22%5D%2842.817%2C-1.650%2C42.822%2C-1.642%29%3Bnwr%5B%22name%22~%22Telef%22%5D%2842.813%2C-1.645%2C42.819%2C-1.638%29%3Bnwr%5B%22name%22~%22allej%22%5D%2842.813%2C-1.645%2C42.819%2C-1.638%29%3B%29%3Bout%20center%20tags%3B
 encierro/nominatim-hornacina.json  https://nominatim.openstreetmap.org/search?q=Corrales+de+Santo+Domingo%2C+Pamplona&format=jsonv2&limit=5
 encierro/nominatim-telefonica.json  https://nominatim.openstreetmap.org/search?q=Telef%C3%B3nica%2C+Calle+Estafeta%2C+Pamplona&format=jsonv2&limit=5
+
+# Muestra onsite «Bruselas en la calle»: el Manneken Pis (fotos de Wikimedia Commons, para elegir la de la pieza)
+bruselas-manneken.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Bruxelles_Manneken_Pis.jpg?width=1600
+bruselas-manneken-2.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Manneken_Pis%2C_Brussels_%28DSCF4466-crop%29.jpg?width=1600
+bruselas-manneken-3.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Mannekin_Pis_%288293232485%29.jpg?width=1600
+bruselas-manneken-original.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Manneken_Pis_Original.jpg?width=1200
+bruselas-grabado-1697.jpg  https://commons.wikimedia.org/wiki/Special:FilePath/Gravure_Manneken-Pis.jpg?width=1400
+bruselas-imagenes.json  https://commons.wikimedia.org/w/api.php?action=query&prop=imageinfo&iiprop=extmetadata%7Csize&format=json&titles=File%3ABruxelles_Manneken_Pis.jpg%7CFile%3AManneken_Pis%2C_Brussels_%28DSCF4466-crop%29.jpg%7CFile%3AMannekin_Pis_%288293232485%29.jpg%7CFile%3AManneken_Pis_Original.jpg%7CFile%3AGravure_Manneken-Pis.jpg
+bruselas-osm.json  https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3Bnwr%28around%3A60%2C50.84497%2C4.34995%29%5B~%22%5E%28tourism%7Chistoric%7Camenity%29%24%22~%22artwork%7Cmonument%7Cmemorial%7Cfountain%22%5D%3Bout%20center%20tags%3B
