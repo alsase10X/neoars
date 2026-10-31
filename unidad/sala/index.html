@@ -117,6 +117,9 @@ h1{font-size:clamp(2.1rem,9vw,3.1rem);font-family:var(--fuente-titulos);font-wei
 #inicio{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding-block:20px;text-align:center}
 .ini-s{width:min(62vw,260px);aspect-ratio:1;max-width:100%;border-radius:50%;overflow:hidden;border:3px solid var(--fg);box-shadow:0 24px 70px rgba(0,0,0,.55)}
 .ini-s img{width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+.ini-ia{font-size:.82rem;color:var(--muted);margin-top:-8px}
+.ini-ia .lk{font-size:inherit;font-weight:600;color:var(--muted);padding:0;display:inline}
+.como li{margin:0 0 10px 18px}
 .ini-q{font-size:.95rem;color:color-mix(in srgb,var(--fg) 82%,transparent);line-height:1.4;max-width:30ch}
 #empezar{height:56px;padding:0 26px;background:var(--acento);color:var(--sobre-acento);font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:10px}
 #empezar svg{width:16px;height:16px;fill:currentColor}
@@ -665,6 +668,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
         <div class="ini-s"><img id="iniImg" alt=""></div>
         <p class="ini-q" id="iniQ"></p>
         <button id="empezar" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg><span id="empT">Empezar</span></button>
+        <p class="ini-ia">Recreación hecha con IA · <button class="lk" id="comoB" type="button">Cómo funciona</button></p>
       </div>
 
       <div id="flujo" hidden><div class="col" id="lineas" aria-live="polite"></div><div class="col" id="porvenir" aria-hidden="true" hidden></div></div>
@@ -726,6 +730,17 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <fieldset><legend>Plantilla · pruebas</legend><div class="seg" id="sPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset>
       <fieldset><legend>Disposición de la pieza · pruebas</legend><div class="seg" id="sDisp"><button type="button" data-v="abajo">Sello abajo<small>La de ahora</small></button><button type="button" data-v="arriba">Sello arriba<small>Como una llamada</small></button><button type="button" data-v="filetes">Entre filetes<small>Arriba, con rayas</small></button></div></fieldset></div>
     <div class="foot"><button class="b1" id="sAplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
+  </div>
+</div>
+<div class="sheet" id="comoS" hidden>
+  <div class="pn" role="dialog" aria-labelledby="comoT">
+    <div class="hd"><b id="comoT">Cómo funciona</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="deep"><ul class="note como">
+      <li>Te habla la propia pieza. Es una recreación: sus palabras están escritas con ayuda de IA a partir de las fuentes de su ficha.</li>
+      <li>Cuando preguntas, busca primero entre las respuestas preparadas para esta pieza.</li>
+      <li>Si no hay ninguna y pides que conteste la IA, tu pregunta se envía al servicio que la responde. Usa las fuentes de la pieza, pero puede equivocarse.</li>
+      <li>Esta web no guarda tus preguntas.</li>
+    </ul></div>
   </div>
 </div>
 <div class="sheet" id="fichaS" hidden>
@@ -2334,11 +2349,12 @@ async function fichaViva(o){
   }catch(e){ const t = document.getElementById(id); if(t) t.nextElementSibling.textContent = 'No se ha podido cargar ahora.'; }
 }
 function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes) play(); }
-const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }, memS:cerrarDejar, avisoS:cerrarAviso};
+const cierres = {comoS:() => { $('comoS').hidden = true; }, ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }, memS:cerrarDejar, avisoS:cerrarAviso};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());
-['ajS','fichaS','salaS','memS','avisoS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
+$('comoB').onclick = () => { $('comoS').hidden = false; };
+['comoS','ajS','fichaS','salaS','memS','avisoS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
 $('ctxV').onclick = () => { $('ctxV').hidden = true; };
-addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('ctxV').hidden) $('ctxV').hidden = true; else if(!$('avisoS').hidden) cerrarAviso(); else if(!$('memS').hidden) cerrarDejar(); else if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
+addEventListener('keydown', e => { if(e.key === 'Escape'){ if(!$('comoS').hidden) $('comoS').hidden = true; else if(!$('ctxV').hidden) $('ctxV').hidden = true; else if(!$('avisoS').hidden) cerrarAviso(); else if(!$('memS').hidden) cerrarDejar(); else if(!$('salaS').hidden) cierres.salaS(); else if(!$('fichaS').hidden) cerrarFicha(); else if(!$('ajS').hidden) cerrarAjustes(); else if(!$('askF').hidden) cerrarEscribir(); else cerrarPanel(); } });
 
 /* ======================= Voz y música ======================= */
 let AC = null, MG = null, MSRC = null, MBUF = null;

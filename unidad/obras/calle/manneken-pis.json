@@ -64,29 +64,33 @@
    "n": "El chorro",
    "poly": [
     [
-     0.08,
-     0.42
+     0.3,
+     0.3
     ],
     [
-     0.48,
-     0.33
+     0.5,
+     0.27
     ],
     [
-     0.52,
-     0.36
+     0.64,
+     0.29
+    ],
+    [
+     0.64,
+     0.37
     ],
     [
      0.5,
      0.4
     ],
     [
-     0.12,
-     0.5
+     0.3,
+     0.42
     ]
    ],
    "rel": [],
    "mira": "¿Hacia dónde cae el agua?",
-   "vista": "Un chorro fino de agua que sale hacia la izquierda y cae en arco."
+   "vista": "Las manos a la altura de la cintura y, desde ahí, un chorro fino de agua que sale hacia la izquierda."
   },
   "pies": {
    "n": "Los pies",
