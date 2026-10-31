@@ -2012,9 +2012,11 @@ const SIN = {cara:'rost', mide:'tama', medi:'tama', dime:'tama', chic:'muje', se
 const normal = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 const raiz = w => { const r = w.length >= 5 ? w.slice(0, 4) : w.replace(/s$/, ''); return SIN[r] || r; };
 const toks = s => [...new Set(normal(s).split(' ').filter(w => w.length > 2 && !STOP.has(w)).map(raiz))];
+// Un significado del banco: la pregunta que se muestra y otras formas de hacerla («v»), que también cuentan al buscar
+const formas = x => [x.q, ...(Array.isArray(x.v) ? x.v : [])];
 function banco(){
   const m = M(); if(m._banco) return m._banco;
-  const docs = (m.qa || []).map((x, k) => ({k, q:toks(x.q), z:x.z && OBRA.zonas[x.z] ? toks(OBRA.zonas[x.z].n) : [], a:toks(x.a)}));
+  const docs = (m.qa || []).map((x, k) => ({k, q:toks(formas(x).join(' ')), z:x.z && OBRA.zonas[x.z] ? toks(OBRA.zonas[x.z].n) : [], a:toks(x.a)}));
   const df = {}; docs.forEach(d => new Set([...d.q, ...d.z, ...d.a]).forEach(t => { df[t] = (df[t] || 0) + 1; }));
   return (m._banco = {docs, df, N:docs.length || 1});
 }
@@ -2036,7 +2038,7 @@ const IAlista = () => IA.modo === 'claude' || IA.modo === 'api' || (IA.modo === 
 function preguntarV2(q){
   q = q.replace(/\s+/g, ' ').trim().slice(0, 300); if(!q) return;
   if(pideImagenes(q)){ const z = zonaNombrada(q); return z ? zonaTocada(z, q) : imagenes(q); }
-  const nq = normal(q), igual = (M().qa || []).find(x => normal(x.q) === nq); if(igual) return preguntaPreparada(igual, q);
+  const nq = normal(q), igual = (M().qa || []).find(x => formas(x).some(f => normal(f) === nq)); if(igual) return preguntaPreparada(igual, q);
   const r = ranking(q);
   if(r.length && r[0].s >= .5) return preguntaPreparada(M().qa[r[0].k], q);
   const z = zonaNombrada(q); if(z) return zonaTocada(z, q);

@@ -1,0 +1,8 @@
+{
+ "nombre": "La fuente que Bruselas viste",
+ "lugar": "Bruselas · en la calle",
+ "d": "Una fuente de esquina que da agua desde el siglo XV y a la que la ciudad ha vestido, perdido y recuperado.",
+ "obras": [
+  "../obras/calle/manneken-pis.json"
+ ]
+}

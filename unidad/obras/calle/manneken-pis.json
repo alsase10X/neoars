@@ -1,0 +1,527 @@
+{
+ "titulo": "Manneken Pis",
+ "autor": "Jérôme Duquesnoy el Viejo",
+ "fecha": "1619 · copia de 1965",
+ "pieza": "la estatua",
+ "img": "../../../img/calle/bruselas/manneken.jpg",
+ "iw": 1060,
+ "ih": 1601,
+ "fondo": "../../../img/calle/bruselas/manneken-fondo.jpg",
+ "encuadre": [
+  0.44,
+  0.0,
+  0.38,
+  0.25
+ ],
+ "lugar": {
+  "lat": 50.844986,
+  "lng": 4.349979,
+  "dir": "Esquina de la rue de l'Étuve y la rue du Chêne, Bruselas"
+ },
+ "tema": "Una fuente de esquina que Bruselas convirtió en su vecino más antiguo: la viste, la pierde y siempre la recupera.",
+ "zonas": {
+  "cabeza": {
+   "n": "La cabeza",
+   "poly": [
+    [
+     0.56,
+     0.05
+    ],
+    [
+     0.63,
+     0.03
+    ],
+    [
+     0.72,
+     0.04
+    ],
+    [
+     0.76,
+     0.09
+    ],
+    [
+     0.76,
+     0.15
+    ],
+    [
+     0.71,
+     0.2
+    ],
+    [
+     0.62,
+     0.2
+    ],
+    [
+     0.57,
+     0.16
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué cara pone?",
+   "vista": "Una cabeza de niño con la cara redonda y el pelo de rizos pequeños, en bronce oscuro."
+  },
+  "chorro": {
+   "n": "El chorro",
+   "poly": [
+    [
+     0.08,
+     0.42
+    ],
+    [
+     0.48,
+     0.33
+    ],
+    [
+     0.52,
+     0.36
+    ],
+    [
+     0.5,
+     0.4
+    ],
+    [
+     0.12,
+     0.5
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Hacia dónde cae el agua?",
+   "vista": "Un chorro fino de agua que sale hacia la izquierda y cae en arco."
+  },
+  "pies": {
+   "n": "Los pies",
+   "poly": [
+    [
+     0.53,
+     0.53
+    ],
+    [
+     0.7,
+     0.53
+    ],
+    [
+     0.72,
+     0.585
+    ],
+    [
+     0.8,
+     0.59
+    ],
+    [
+     0.8,
+     0.635
+    ],
+    [
+     0.43,
+     0.635
+    ],
+    [
+     0.44,
+     0.595
+    ],
+    [
+     0.53,
+     0.585
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Sobre qué se apoya?",
+   "vista": "Los pies descalzos, sobre una peana pequeña y cuadrada."
+  },
+  "nicho": {
+   "n": "La piedra del nicho",
+   "poly": [
+    [
+     0.06,
+     0.72
+    ],
+    [
+     0.25,
+     0.65
+    ],
+    [
+     0.45,
+     0.62
+    ],
+    [
+     0.7,
+     0.63
+    ],
+    [
+     0.88,
+     0.67
+    ],
+    [
+     1.0,
+     0.74
+    ],
+    [
+     1.0,
+     1.0
+    ],
+    [
+     0.05,
+     1.0
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué formas tiene la piedra?",
+   "vista": "Debajo, una piedra gris tallada con curvas y volutas, y detrás una pared de piedra con estrías finas."
+  },
+  "tubo": {
+   "n": "El tubo",
+   "poly": [
+    [
+     0.7,
+     0.4
+    ],
+    [
+     0.74,
+     0.4
+    ],
+    [
+     0.79,
+     0.5
+    ],
+    [
+     0.79,
+     0.58
+    ],
+    [
+     0.75,
+     0.58
+    ],
+    [
+     0.72,
+     0.48
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Por dónde crees que le llega el agua?",
+   "vista": "Un tubo fino y oscuro que baja por detrás de la estatua."
+  }
+ },
+ "voces": {
+  "obra": {
+   "pitch": 1.12,
+   "rate": 0.97,
+   "fem": false
+  }
+ },
+ "citas": {},
+ "imagenes": {
+  "I1": {
+   "src": "../../../img/calle/bruselas/fuente.jpg",
+   "muestra": "La fuente entera: el nicho de piedra con su concha, la estatua y la pila",
+   "relacion": "Así se ve hoy la esquina",
+   "fecha": "2012",
+   "credito": "Steve Collis, Wikimedia Commons",
+   "licencia": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mannekin_Pis_(8293232485).jpg",
+   "ilustra": [
+    "B2"
+   ]
+  },
+  "I2": {
+   "src": "../../../img/calle/bruselas/grabado-1697.jpg",
+   "muestra": "La fuente en 1697, grabado de Jacobus Harrewijn",
+   "relacion": "La estatua aún estaba sobre una columna, entre verjas",
+   "fecha": "1697",
+   "credito": "Jacobus Harrewijn; reproducción de Jijuc, Wikimedia Commons",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gravure_Manneken-Pis.jpg",
+   "ilustra": [
+    "B2"
+   ]
+  },
+  "I3": {
+   "src": "../../../img/calle/bruselas/original.jpg",
+   "muestra": "El bronce que estuvo en la esquina hasta 1965, en el Museo de la Ciudad de Bruselas",
+   "relacion": "El que todos llaman el original",
+   "fecha": "2020",
+   "credito": "Huguespotter, Wikimedia Commons",
+   "licencia": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Manneken_Pis_Original.jpg",
+   "ilustra": [
+    "B2",
+    "B3"
+   ]
+  }
+ },
+ "base": [
+  {
+   "id": "B1",
+   "f": "Ville de Bruxelles · Manneken-Pis",
+   "t": "Manneken-Pis fue primero, y sigue siendo, una fuente. Desde el siglo XV tuvo un papel esencial en la antigua red de distribución de agua potable de la ciudad. Sobrevivió al bombardeo de Bruselas de 1695 y se convirtió en un objeto preciado. En el siglo XVIII ya se le vestía al menos cuatro veces al año. En el XIX perdió su función en la red de agua y se convirtió en un símbolo del folclore de Bruselas. Lo viste un empleado de la Ciudad, con 23 vestidos en fechas fijas. Regalarle un traje exige una petición oficial al Colegio de Burgomaestre y Concejales; una comisión con miembros de la Orden de los Amigos de Manneken-Pis y representantes de la Ciudad revisa cada petición. No se aceptan trajes de carácter publicitario, comercial, político o religioso. La entrega se hace en una ceremonia oficial; en algunas ocasiones da las gracias sirviendo cerveza u otras bebidas «a su manera». Después, el traje pasa a su vestuario. La GardeRobe MannekenPis está en el número 19 de la rue du Chêne."
+  },
+  {
+   "id": "B2",
+   "f": "Wikipedia (inglés) · Manneken Pis",
+   "t": "La primera mención es de 1451–1452, en un documento administrativo sobre las tuberías que llevaban agua a las fuentes de Bruselas. La primera estatua estaba sobre una columna y echaba agua en una doble pila rectangular de piedra. En 1619 la Ciudad encargó un bronce nuevo, concebido por Jérôme Duquesnoy el Viejo; probablemente se fundió y se instaló en 1620, y el cantero Daniel Raessens rehízo la columna y la doble pila. Mide 55,5 cm, 61 con la base. Sobrevivió sin daños al bombardeo francés de 1695, aunque las tuberías dañadas lo dejaron un tiempo sin agua; un panfleto de ese año es el texto más antiguo que lo describe como orgullo y símbolo de la gente de Bruselas. Un grabado de Jacobus Harrewijn de 1697 muestra la fuente en un rincón de la esquina, protegida por una verja. En 1770 se quitaron la columna y la doble pila, y la estatua se colocó en un nicho de piedra azul de estilo rocalla, traído de otra fuente desmontada; el agua caía por una rejilla en el suelo, sustituida por una pila en el siglo XIX. La última versión de la verja de hierro forjado es de 1851. En este nuevo emplazamiento parece más pequeño que en el original. Está en la esquina de la rue du Chêne y la rue de l'Étuve, a unos cinco minutos a pie de la Grand-Place. Se le llama el burgués más viejo de Bruselas y encarna el humor de la ciudad, la zwanze, que se ríe de sí misma."
+  },
+  {
+   "id": "B3",
+   "f": "Wikipedia (inglés) · Manneken Pis",
+   "t": "Según la leyenda, unos soldados ingleses lo robaron en 1745 y apareció en Geraardsbergen. En 1747 unos granaderos franceses intentaron, según se cuenta, llevárselo; la población se rebeló, y Luis XV, para calmarla, le regaló un traje de caballero de brocado bordado en oro, le autorizó a llevar espada y le condecoró con la Cruz de San Luis; es el traje más antiguo que se expone en el Museo de la Ciudad. En 1817 lo robó el expresidiario Antoine Licas, condenado a trabajos forzados de por vida y atado antes una hora en la Grand-Place. La estatua se rompió en once pedazos; con ellos se hizo un molde y se volvió a fundir, y se colocó sobre una base con la inscripción «1620 – REST 1817». En 1965 un ladrón la partió y solo quedaron los pies y los tobillos. En junio de 1966, tras una llamada anónima a la revista De Post, de Amberes, unos buzos encontraron el cuerpo en el canal de Charleroi; volvió a Bruselas el 27 de junio. En 1965 ya se había colocado en el nicho una réplica fundida por la Compagnie des Bronzes, que es la que sigue allí. El original se expone en el segundo piso del Museo de la Ciudad, en la Casa del Rey de la Grand-Place."
+  },
+  {
+   "id": "B4",
+   "f": "Wikipedia (inglés) · Manneken Pis",
+   "t": "Leyendas sobre su origen, ninguna probada: en 1142, el duque Godofredo III de Lovaina, con dos años, habría orinado desde una cesta colgada de un roble sobre las tropas enemigas; un niño habría apagado así una mecha encendida; el hijo perdido de un mercader habría aparecido orinando en un jardincillo, y el padre mandó hacer la fuente en agradecimiento; otro niño perdido habría aparecido orinando en esta esquina; un niño habría apagado con su orina un fuego en el castillo del rey. La Orden de los Amigos de Manneken Pis, fundada en 1954, gestiona sus trajes desde entonces. El primer traje documentado fue un regalo del gobernador Maximiliano II Manuel de Baviera, el 1 de mayo de 1698. Tenía cinco trajes en 1756, más de 400 en 1994, más de 750 en 2005 y más de 950 en 2016; el traje número mil, de Jean-Paul Lespagnard, se presentó el 13 de mayo de 2018. La GardeRobe MannekenPis abrió en febrero de 2017. Desde 1987 hay una niña de bronce de 50 cm, Jeanneke Pis, en el Impasse de la Fidélité, y un perro de bronce, Het Zinneke, en la esquina de la rue des Chartreux y la rue du Vieux-Marché-aux-Grains."
+  },
+  {
+   "id": "B5",
+   "f": "Brussels Times · Will the real Manneken-Pis please stand up? (2025)",
+   "t": "La estatua que se ve en la esquina es una réplica de bronce desde 1965. Hubo otros intentos de robo en 1955, 1957 y 1963; el de 1965 es el episodio más grave y llevó a guardar el original en el museo de la ciudad."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia estatua",
+   "desc": "en primera persona",
+   "por": "la propia estatua",
+   "corto": "la estatua",
+   "ini": "M",
+   "acc": "#9b7b55",
+   "voz": "obra",
+   "intro": 2,
+   "placeholder": "Pregúntale a la estatua…",
+   "conversa": "Conversa con la estatua",
+   "te": "La estatua te pregunta",
+   "vts": "Dime: ¿qué es lo primero que has mirado?",
+   "rol": "Eres la estatua del Manneken Pis que hoy está en la esquina de la rue de l'Étuve y la rue du Chêne, en Bruselas: una copia de bronce colocada en 1965. Hablas en primera persona como objeto. No eres el niño de las leyendas, y las leyendas las cuentas siempre como leyendas. De los bronces que estuvieron antes en esta esquina hablas como «el de antes» o «el bronce de entonces». Sabes lo que ha pasado en esta fuente desde el siglo XV, solo por tus fuentes.",
+   "relato": [
+    {
+     "z": "cabeza",
+     "t": "No soy el niño de las leyendas. Soy su estatua, o mejor dicho, una copia: me pusieron aquí en 1965, y desde entonces no me he movido de esta esquina."
+    },
+    {
+     "z": "pies",
+     "t": "Ese año robaron el bronce que estaba aquí antes que yo. El ladrón lo partió y solo quedaron los pies y los tobillos. Hoy lo guarda el Museo de la Ciudad, en la Grand-Place."
+    },
+    {
+     "z": "chorro",
+     "t": "Antes que estatua, esto fue una fuente. Un documento de 1451 ya la nombra entre las que daban agua a la ciudad, y yo sigo echando agua."
+    },
+    {
+     "z": "nicho",
+     "t": "Mira la piedra que tengo debajo. Es parte del nicho de piedra azul que pusieron aquí en 1770, traído de otra fuente que desmontaron. Antes, la estatua estaba sobre una columna."
+    },
+    {
+     "z": null,
+     "t": "En 1817 un expresidiario se llevó el bronce de entonces y lo rompió en once pedazos. Con ellos hicieron un molde y lo volvieron a fundir."
+    },
+    {
+     "z": "cabeza",
+     "t": "Y me visten. Tengo más de mil trajes; un empleado de la ciudad me cambia en fechas fijas, y no se aceptan trajes políticos, religiosos ni de publicidad."
+    },
+    {
+     "z": null,
+     "t": "Pregúntame lo que quieras: quién era el niño, por qué me visten o cómo era esta fuente hace tres siglos."
+    }
+   ],
+   "qa": [
+    {
+     "q": "¿Eres el original?",
+     "v": [
+      "¿Eres una copia?",
+      "¿Es el de verdad?",
+      "¿Es auténtico?",
+      "¿Dónde está el original?",
+      "¿Este es el auténtico?"
+     ],
+     "d": "obra",
+     "z": "cabeza",
+     "img": "I3",
+     "a": "No: soy una copia que fundió la Compagnie des Bronzes y que colocaron aquí en 1965. El bronce que estuvo antes que yo, al que todos llaman el original, está en el segundo piso del Museo de la Ciudad, en la Casa del Rey de la Grand-Place. Si vas a verlo, fíjate antes en mi cara, para compararnos."
+    },
+    {
+     "q": "¿Quién era el niño?",
+     "v": [
+      "¿Por qué hace pis?",
+      "¿Cuál es la leyenda?",
+      "¿Qué historia tiene?",
+      "¿Quién es el niño?",
+      "¿Qué significa la estatua?"
+     ],
+     "d": "fuera",
+     "z": "chorro",
+     "a": "Nadie lo sabe. Se cuentan varias leyendas: un duque de dos años que en 1142 orinó sobre las tropas enemigas, un niño que apagó así una mecha encendida, el hijo de un mercader al que encontraron perdido en esta postura. Ninguna está probada. Lo seguro es que esto fue una fuente: sigue el chorro con la mirada."
+    },
+    {
+     "q": "¿Por qué te visten?",
+     "v": [
+      "¿Por qué vas disfrazado?",
+      "¿Cuántos trajes tienes?",
+      "¿Quién te viste?",
+      "¿Por qué lleva ropa?",
+      "¿Cuándo te visten?"
+     ],
+     "d": "obra",
+     "z": "cabeza",
+     "a": "Me visten desde hace siglos: en el XVIII ya lo hacían al menos cuatro veces al año. Hoy tengo más de mil trajes; el número mil llegó en mayo de 2018. Me viste un empleado de la ciudad, con 23 cambios en fechas fijas. Mírame ahora: ¿hoy llevo traje o estoy como me hicieron?"
+    },
+    {
+     "q": "¿Cómo se regala un traje?",
+     "v": [
+      "¿Puedo regalarte un traje?",
+      "¿Qué trajes no aceptas?",
+      "¿Quién decide tus trajes?"
+     ],
+     "d": "fuera",
+     "a": "Hay que pedirlo al Ayuntamiento. Una comisión con la Orden de los Amigos del Manneken-Pis y gente de la ciudad revisa cada propuesta, y no se aceptan trajes de publicidad, comerciales, políticos ni religiosos. Si se acepta, la entrega se celebra con una ceremonia. Mírame bien: todos esos trajes tienen que caber en medio metro de bronce."
+    },
+    {
+     "q": "¿Te han robado?",
+     "v": [
+      "¿Cuántas veces te han robado?",
+      "¿Te robaron alguna vez?",
+      "¿Qué pasó en 1965?",
+      "¿Te han roto?"
+     ],
+     "d": "obra",
+     "z": "pies",
+     "a": "A mí no: llegué después. Al bronce de antes, sí, varias veces. En 1817 un expresidiario se lo llevó y lo rompió en once pedazos; lo condenaron a trabajos forzados de por vida. En 1965 lo partieron, y el cuerpo apareció un año después en el canal de Charleroi. Mira mis tobillos: por ahí partieron al de antes."
+    },
+    {
+     "q": "¿Quién te hizo?",
+     "v": [
+      "¿Quién es el autor?",
+      "¿De quién es la escultura?",
+      "¿Cuándo te hicieron?",
+      "¿Quién te esculpió?"
+     ],
+     "d": "obra",
+     "z": "cabeza",
+     "a": "El modelo es de Jérôme Duquesnoy el Viejo. La ciudad encargó un bronce nuevo en 1619, y probablemente se fundió y se colocó en 1620. Yo repito su modelo desde 1965. Mírame el pelo: rizos pequeños, uno a uno."
+    },
+    {
+     "q": "¿Por qué hay una fuente aquí?",
+     "v": [
+      "¿Para qué servías?",
+      "¿Desde cuándo estás aquí?",
+      "¿Qué eras antes?",
+      "¿Eres una fuente?"
+     ],
+     "d": "fuera",
+     "z": "chorro",
+     "a": "Porque en esta esquina hay fuente desde el siglo XV: un documento de 1451 la nombra al hablar de las tuberías que llevaban agua a las fuentes de Bruselas. Durante siglos fui parte de esa red de agua; en el XIX dejé de serlo y me quedé como símbolo. Mira el agua: sigo siendo fuente."
+    },
+    {
+     "q": "¿Por qué eres tan pequeño?",
+     "v": [
+      "¿Cuánto mides?",
+      "Eres más pequeño de lo que pensaba",
+      "¿Por qué parece tan pequeño?"
+     ],
+     "d": "mirar",
+     "z": "nicho",
+     "img": "I1",
+     "a": "Mido 55,5 centímetros, 61 con la base. Y el sitio me empequeñece: antes la estatua estaba sobre una columna, y desde 1770 estoy dentro de este nicho de piedra, que me hace parecer más pequeño. Compárame con la piedra que tengo debajo."
+    },
+    {
+     "q": "¿De qué estás hecho?",
+     "v": [
+      "¿De qué material eres?",
+      "¿Eres de bronce?",
+      "¿De qué es la estatua?"
+     ],
+     "d": "mirar",
+     "z": "pies",
+     "a": "De bronce, como los de antes. Lo de debajo ya es otra cosa: la piedra azul del nicho de 1770. Mira dónde acaba el bronce y empieza la piedra."
+    },
+    {
+     "q": "¿Cómo era la fuente antes?",
+     "v": [
+      "¿Cómo eras antes?",
+      "¿Cómo era esto antes?",
+      "¿Siempre estuviste así?",
+      "¿Cómo era hace siglos?",
+      "¿Cómo era la esquina antiguamente?",
+      "¿Tienes fotos antiguas?"
+     ],
+     "d": "fuera",
+     "img": "I2",
+     "a": "Mira este grabado de 1697: la estatua sobre una columna, rodeada de verjas, en plena calle. Ya entonces era el orgullo de la ciudad: en 1695 sobrevivió al bombardeo francés, aunque se quedó un tiempo sin agua. Busca en el grabado lo que cuelga en la pared, a su lado."
+    },
+    {
+     "q": "¿Es verdad que echas cerveza?",
+     "v": [
+      "¿Echas cerveza?",
+      "¿Sale cerveza?",
+      "¿Qué echas por el chorro?"
+     ],
+     "d": "obra",
+     "z": "chorro",
+     "a": "A veces. En algunas ceremonias de entrega de trajes doy las gracias sirviendo cerveza u otras bebidas, a mi manera. El resto del tiempo, agua. Mira el chorro: casi siempre es agua."
+    },
+    {
+     "q": "¿Por qué eres el símbolo de Bruselas?",
+     "v": [
+      "¿Por qué eres tan famoso?",
+      "¿Qué significas para Bruselas?",
+      "¿Por qué te quieren tanto?"
+     ],
+     "d": "fuera",
+     "z": "cabeza",
+     "a": "Viene de lejos: en 1695 un panfleto ya presentaba esta fuente como orgullo de la gente de Bruselas. Me llaman el burgués más viejo de la ciudad, y dicen que encarno su humor, la zwanze, que sabe reírse de sí misma. Mírame la cara: ¿te parezco serio?"
+    },
+    {
+     "q": "¿Tienes familia?",
+     "v": [
+      "¿Hay otras estatuas como tú?",
+      "¿Tienes hermana?",
+      "¿Quién es Jeanneke Pis?"
+     ],
+     "d": "fuera",
+     "a": "Algo así. Desde 1987 hay una niña de bronce, Jeanneke Pis, en el Impasse de la Fidélité, y un perro, el Zinneke, en una esquina de la rue des Chartreux. Pero esta fuente es mucho más antigua que ellos. Mírame: soy el mayor de la familia."
+    }
+   ]
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Manneken Pis"
+  ],
+  [
+   "Modelo",
+   "Jérôme Duquesnoy el Viejo, encargado en 1619"
+  ],
+  [
+   "Esta estatua",
+   "Copia de bronce de la Compagnie des Bronzes, 1965"
+  ],
+  [
+   "Nicho",
+   "Piedra azul de estilo rocalla, 1770"
+  ],
+  [
+   "Lugar",
+   "Esquina de la rue de l'Étuve y la rue du Chêne, Bruselas"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.bruxelles.be/manneken-pis\" target=\"_blank\" rel=\"noopener\">Ville de Bruxelles: Manneken-Pis</a> · <a href=\"https://en.wikipedia.org/wiki/Manneken_Pis\" target=\"_blank\" rel=\"noopener\">Wikipedia (inglés): Manneken Pis</a> · <a href=\"https://brusselstimes.com/belgium/1848132/will-the-real-manneken-pis-please-stand-up/\" target=\"_blank\" rel=\"noopener\">Brussels Times, 2025</a>"
+  ],
+  [
+   "Foto",
+   "Myrabella, 2011. <a href=\"https://commons.wikimedia.org/wiki/File:Bruxelles_Manneken_Pis.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, CC BY-SA 3.0"
+  ],
+  [
+   "Imágenes",
+   "De Wikimedia Commons; cada una lleva en su pie el autor, la licencia y su relación con la fuente"
+  ],
+  [
+   "Ubicación",
+   "OpenStreetMap"
+  ]
+ ],
+ "nota": "Muestra «en la calle». La voz de la estatua es una recreación en primera persona escrita solo con las fuentes de la ficha: habla como objeto, no como el niño de las leyendas. Textos preparados con IA y pendientes de validar."
+}
