@@ -179,7 +179,103 @@ dd a{text-decoration:underline;text-underline-offset:2px}
   #ajS .pn,#fichaS .pn{max-width:620px;width:100%;margin:0 auto}
 }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important} .w,#ov,.cap,.fin{transition:none!important} }
+
+/* ---------- Interfaz Material 3 (en pruebas). Se elige en ⋯ › «Interfaz Material 3» o con ?interfaz=m3; sin elegir, la anterior.
+   Esquema oscuro monocromo de Material 3 (el color lo pone la obra), formas redondeadas y texto a tamaño de lectura.
+   Una sola acción principal a la vista: Escuchar; el micrófono pasa a enviar cuando se escribe.
+   Sin avatar para la guía ni para el cuadro; si habla el autor (recreado), su cara en escala de grises. ---------- */
+:root[data-interfaz=m3]{
+  --bg:#131313; --fg:#e2e2e2; --muted:#c6c6c6; --hair:#474747;
+  --m3-outline:#919191; --m3-low:#1b1b1b; --m3-high:#2a2a2a; --m3-highest:#353535;
+  --m3-primary:#ffffff; --m3-on-primary:#1b1b1b; --m3-tonal:#474747; --m3-on-tonal:#e2e2e2;
+  --m3-inv:#e2e2e2; --m3-on-inv:#303030;
+  --m3-pend:color-mix(in srgb,var(--fg) 55%,var(--bg));   /* lo que aún no suena: 5,5:1 sobre el fondo */
+  --m3-capa:rgba(226,226,226,.08);                        /* capa de estado al pasar o pulsar */
+}
+:root[data-interfaz=m3] :focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+/* Cabecera: barra superior pequeña; botones de icono redondos con capa de estado */
+:root[data-interfaz=m3] .who b{font-size:1.375rem;font-weight:400;letter-spacing:0;line-height:1.75rem}
+:root[data-interfaz=m3] .who small{font-size:.875rem;color:var(--muted)}
+:root[data-interfaz=m3] .ib{width:48px;height:48px;border-radius:50%}
+:root[data-interfaz=m3] .ib svg{width:24px;height:24px}
+:root[data-interfaz=m3] .ib:hover,:root[data-interfaz=m3] .ib[aria-pressed=true]{background:var(--m3-capa);color:inherit}
+:root[data-interfaz=m3] .pill{height:40px;padding:0 20px;border:0;border-radius:20px;background:var(--m3-tonal);color:var(--m3-on-tonal);font-size:.875rem;font-weight:500}
+:root[data-interfaz=m3] .pill:hover{background:var(--m3-highest);color:var(--m3-on-tonal)}
+/* Quién lo cuenta y Escuchar: el nombre, discreto; Escuchar, el único botón relleno de la pantalla */
+:root[data-interfaz=m3] #letra{background:linear-gradient(rgba(19,19,19,0),rgba(19,19,19,.88) 34px,rgba(19,19,19,.96))}
+:root[data-interfaz=m3] .lhd{gap:12px;padding:12px var(--pad) 6px}
+:root[data-interfaz=m3] #lAv:empty{display:none}
+:root[data-interfaz=m3] .lhd .quien b{font-size:.875rem;font-weight:500;letter-spacing:.006em}
+:root[data-interfaz=m3] .lhd .quien small{font-size:.75rem}
+:root[data-interfaz=m3] .play{height:40px;padding:0 24px 0 16px;border-radius:20px;background:var(--m3-primary);color:var(--m3-on-primary);font-size:.875rem;font-weight:500;letter-spacing:.006em}
+:root[data-interfaz=m3] .play svg{width:18px;height:18px}
+:root[data-interfaz=m3] .av.foto{filter:grayscale(1)}
+/* El relato a tamaño de lectura; lo que no suena se lee (5,5:1), no parece desactivado */
+:root[data-interfaz=m3] .cap{font-size:1.125rem;font-weight:400;letter-spacing:0;line-height:1.5;max-width:38ch;opacity:1;color:var(--m3-pend)}
+:root[data-interfaz=m3] .cap.ya{opacity:1}
+:root[data-interfaz=m3] .cap.ahora,:root[data-interfaz=m3] .cap.apunta{color:var(--fg)}
+:root[data-interfaz=m3] #lista.moviendo .cap.ahora:not(.apunta){opacity:1;color:var(--m3-pend)}
+:root[data-interfaz=m3] .cap.pregunta{font-size:1.25rem;font-weight:500;letter-spacing:0;line-height:1.35}
+:root[data-interfaz=m3] .cap blockquote{font-weight:400}
+:root[data-interfaz=m3] #unidad.sonando .cap.ahora .w{opacity:1;color:var(--m3-pend)}
+:root[data-interfaz=m3] #unidad.sonando .cap.ahora .w.on{color:var(--fg)}
+:root[data-interfaz=m3] .b1{height:48px;border-radius:24px;padding:0 24px;background:var(--m3-primary);color:var(--m3-on-primary);font-size:.94rem;font-weight:500}
+:root[data-interfaz=m3] .lk{font-weight:500}
+/* Preguntar: un campo redondo; vacío, al lado un micrófono tonal; con texto, la flecha de enviar en su lugar */
+:root[data-interfaz=m3] .askbar{align-items:center;gap:8px;padding:8px 12px calc(env(safe-area-inset-bottom,0px) + 8px);background:var(--bg);border-top:0}
+:root[data-interfaz=m3] .askbar input{height:56px;padding:0 20px;border-radius:28px;background:var(--m3-high)}
+:root[data-interfaz=m3] .askbar input::placeholder{color:var(--muted)}
+:root[data-interfaz=m3] .askbar input:focus-visible{outline:none}
+:root[data-interfaz=m3] .askbar button{width:56px;height:56px;border:0;border-radius:50%;flex:none}
+:root[data-interfaz=m3] .askbar button svg{width:24px;height:24px}
+:root[data-interfaz=m3] #mic{background:var(--m3-tonal);color:var(--m3-on-tonal)}
+:root[data-interfaz=m3] .askbar .send{background:var(--m3-primary);color:var(--m3-on-primary)}
+:root[data-interfaz=m3] #askF:not(.lleno) .send,:root[data-interfaz=m3] #askF.lleno #mic{display:none}
+html[data-interfaz=m3].teclado .askbar{padding-bottom:8px}
+/* Hojas: esquinas de 28 px arriba, sin filetes de separación; interruptores, segmentos y radios de Material */
+:root[data-interfaz=m3] .sheet .pn{background:var(--m3-low);border-top:0;border-radius:28px 28px 0 0}
+:root[data-interfaz=m3] #ajS,:root[data-interfaz=m3] #fichaS{background:rgba(0,0,0,.32)}
+:root[data-interfaz=m3] .sheet .hd{border-bottom:0;padding:14px 8px 4px 24px}
+:root[data-interfaz=m3] .sheet .hd b{font-size:1.375rem;font-weight:400}
+:root[data-interfaz=m3] .deep{padding:12px 24px 24px}
+:root[data-interfaz=m3] .menu{border-top:0}
+:root[data-interfaz=m3] .fila-m{border-bottom:0;padding:10px 0}
+:root[data-interfaz=m3] .fila-m b{font-size:1rem;font-weight:400}
+:root[data-interfaz=m3] .fila-m small{font-size:.875rem;font-weight:400}
+:root[data-interfaz=m3] .tog{width:52px;height:32px;border:2px solid var(--m3-outline);border-radius:16px;background:var(--m3-highest)}
+:root[data-interfaz=m3] .tog::after{top:6px;left:6px;width:16px;height:16px;border-radius:50%;background:var(--m3-outline);transition:left .2s,top .2s,width .2s,height .2s}
+:root[data-interfaz=m3] .fila-m[aria-pressed=true] .tog{border-color:var(--m3-primary);background:var(--m3-primary)}
+:root[data-interfaz=m3] .fila-m[aria-pressed=true] .tog::after{top:2px;left:22px;width:24px;height:24px;background:var(--m3-on-primary)}
+:root[data-interfaz=m3] legend{font-size:.875rem;font-weight:500;color:var(--muted)}
+:root[data-interfaz=m3] .seg{border:1px solid var(--m3-outline);border-radius:20px;overflow:hidden}
+:root[data-interfaz=m3] .seg button{border-left-color:var(--m3-outline);font-size:.875rem;font-weight:500}
+:root[data-interfaz=m3] .seg button[aria-pressed=true]{background:var(--m3-tonal);color:var(--m3-on-tonal)}
+:root[data-interfaz=m3] .opts{border-top:0}
+:root[data-interfaz=m3] .opts button{border-bottom:0;font-size:1rem;font-weight:400}
+:root[data-interfaz=m3] .opts button::before{width:20px;height:20px;margin-top:0;border-color:var(--m3-outline)}
+:root[data-interfaz=m3] .opts button[aria-pressed=true]::before{background:var(--m3-primary);border-color:var(--m3-primary);box-shadow:inset 0 0 0 4px var(--m3-low)}
+:root[data-interfaz=m3] .opts small{font-size:.875rem;font-weight:400}
+:root[data-interfaz=m3] .sheet .foot{border-top:0;padding:8px 24px calc(env(safe-area-inset-bottom,0px) + 16px)}
+:root[data-interfaz=m3] .b2{height:48px;border:0;border-radius:24px;font-weight:500}
+:root[data-interfaz=m3] .b2:hover{background:var(--m3-capa)}
+/* La conversación: texto de lectura, sugerencias en chips y la respuesta sin hueco cuando no hay avatar */
+:root[data-interfaz=m3] .vts{font-size:1.375rem;font-weight:400;letter-spacing:0;line-height:1.3}
+:root[data-interfaz=m3] .you{font-weight:400}
+:root[data-interfaz=m3] .qn{font-weight:500}
+:root[data-interfaz=m3] .ans{font-size:1rem;font-weight:400}
+:root[data-interfaz=m3] .resp:not(:has(>.av)){display:block}
+:root[data-interfaz=m3] .q{min-height:40px;padding:8px 16px;border-color:var(--hair);border-radius:8px;font-size:.94rem;font-weight:500;line-height:1.3}
+:root[data-interfaz=m3] .q:hover{border-color:var(--m3-outline);background:var(--m3-capa)}
+:root[data-interfaz=m3] .pasar{height:40px;padding:0 20px;border:0;border-radius:20px;background:var(--m3-tonal);color:var(--m3-on-tonal);font-weight:500}
+:root[data-interfaz=m3] .pasar:hover{background:var(--m3-highest);color:var(--m3-on-tonal)}
+:root[data-interfaz=m3] .dots i{border-radius:50%}
+/* Avisos: snackbar abajo, sobre la barra de preguntar */
+:root[data-interfaz=m3] #toast{top:auto;bottom:calc(var(--barH) + 12px);border-radius:4px;background:var(--m3-inv);color:var(--m3-on-inv);padding:14px 16px;font-size:.875rem;font-weight:400}
 </style>
+<script>
+// Interfaz en pruebas: ?interfaz=m3 (o =anterior) manda; si no, la última elegida en ⋯, para todas las obras. Por defecto, la anterior.
+(() => { let v = null; try{ v = new URLSearchParams(location.search).get('interfaz') || localStorage.getItem('am.unidad.interfaz'); }catch(e){} if(v === 'm3') document.documentElement.dataset.interfaz = 'm3'; })();
+</script>
 
 <section id="unidad">
   <div class="fondo" aria-hidden="true"></div>
@@ -232,6 +328,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
       <div class="menu">
         <button class="fila-m" type="button" id="mFicha"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
         <button class="fila-m" type="button" id="musicaB" aria-pressed="false" hidden><span><b>Música</b><small id="mMus"></small></span><span class="tog" aria-hidden="true"></span></button>
+        <button class="fila-m" type="button" id="m3B" aria-pressed="false"><span><b>Interfaz Material 3</b><small>En pruebas, para compararla con la anterior</small></span><span class="tog" aria-hidden="true"></span></button>
       </div>
       <div class="menu" id="mExtra" hidden></div>
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
@@ -317,7 +414,7 @@ function resolver(desde){
   const abs = v => v && !/^(data:|blob:|https?:)/.test(v) ? new URL(v, desde).href : v;
   OBRA.img = abs(OBRA.img); OBRA.fondo = abs(OBRA.fondo); OBRA.salir = abs(OBRA.salir); OBRA.iiif = abs(OBRA.iiif);
   if(OBRA.musica) OBRA.musica.src = abs(OBRA.musica.src);
-  Object.values(OBRA.mediadores || {}).forEach(m => { if(m.audio) m.audio.src = abs(m.audio.src); });
+  Object.values(OBRA.mediadores || {}).forEach(m => { if(m.audio) m.audio.src = abs(m.audio.src); if(m.foto) m.foto = abs(m.foto); });
   if(OBRA.siguiente && OBRA.siguiente.obra) OBRA.siguiente.obra = abs(OBRA.siguiente.obra);
 }
 /* ======================= Imagen: archivo único o IIIF (teselas a la resolución que pide el zoom) ======================= */
@@ -660,6 +757,8 @@ function limitar(){
 // El mediador puede traer su retrato a línea ({viewBox, trazos}); la guía tiene uno provisional; si no, sus iniciales
 const RETRATO_GUIA = {"viewBox": "30 30 140 200", "trazos": ["M58 112 C52 72 72 44 102 44 C132 44 150 70 144 112 C142 124 145 133 151 139", "M58 112 C56 123 53 132 47 138", "M70 72 C86 80 110 77 130 63", "M67 112 C69 140 84 160 100 162 C116 160 131 140 133 112", "M86 106.5 a1.8 1.8 0 1 0 0.01 0", "M114 106.5 a1.8 1.8 0 1 0 0.01 0", "M101 110 C100 119 98 126 95 130 C98 133 102 133 105 131", "M90 145 C96 148 104 148 110 145", "M91 161 L91 180", "M109 161 L109 180", "M91 180 C71 184 55 196 47 222", "M109 180 C129 184 145 196 153 222", "M91 180 L100 195 L109 180"]};
 function avatarHTML(m){
+  // Material 3: la guía y el cuadro no llevan avatar; el autor recreado, su cara (en grises, por CSS)
+  if(document.documentElement.dataset.interfaz === 'm3') return m.voz === 'autor' && m.foto ? `<img class="av foto" src="${esc(m.foto)}" alt="">` : '';
   if(m.foto) return `<img class="av foto" src="${esc(m.foto)}" alt="">`;   // su cara real, si el artista la trae
   const r = m.retrato || (m.voz === 'guia' ? RETRATO_GUIA : null);
   if(!r) return `<span class="av ini" aria-hidden="true">${esc(m.ini || (m.nombre || '?')[0])}</span>`;
@@ -710,6 +809,9 @@ function teclado(){
 if(window.visualViewport){ visualViewport.addEventListener('resize', teclado); visualViewport.addEventListener('scroll', teclado); }
 addEventListener('orientationchange', () => { hMax = 0; setTimeout(teclado, 400); });
 $('askI').addEventListener('pointerdown', abrirHablar);
+// Con algo escrito, enviar ocupa el sitio del micrófono (en Material 3; en la anterior se ven los dos)
+const lleno = () => $('askF').classList.toggle('lleno', !!$('askI').value.trim());
+$('askI').addEventListener('input', lleno);
 // Tres preguntas sugeridas, una por dirección: sobre la obra, más allá de ella, volver a mirar
 function elegir(){
   const m = M(), libres = (m.qa || []).map((x, k) => k).filter(k => !U.asked.has(m.qa[k].q));
@@ -744,7 +846,7 @@ $('deep').addEventListener('click', e => {
   const b = e.target.closest('[data-k]'); if(!b) return; const x = M().qa[+b.dataset.k]; U.asked.add(x.q); guardar(); responder(x.q, x, P.guia);
 });
 $('askF').onsubmit = e => {
-  e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; $('askI').blur();
+  e.preventDefault(); const q = $('askI').value.trim(); if(!q) return; $('askI').value = ''; lleno(); $('askI').blur();
   abrirHablar();
   if(IA.modo){ preguntarIA(q); return; }
   const vts = !/[?¿]/.test(q);   // si responde a la pregunta de mirar, se le devuelve a la obra (VTS)
@@ -1166,6 +1268,18 @@ function musicaUI(){ $('musicaB').setAttribute('aria-pressed', P.musica); }
 $('musicaB').onclick = () => { P.musica = !P.musica; store.set('musica', P.musica ? '1' : '0'); musicaUI(); musica(P.musica); toast(P.musica ? `Música: ${OBRA.musica.titulo}` : 'Sin música'); };
 document.addEventListener('visibilitychange', () => { if(document.hidden){ if(U && U.playing) pausa(); if(AC) AC.suspend(); } else if(AC && P.musica) AC.resume(); });
 
+/* Interfaz: la anterior o Material 3, en pruebas. Se guarda para todas las obras */
+const esM3 = () => document.documentElement.dataset.interfaz === 'm3';
+function interfazUI(){ $('m3B').setAttribute('aria-pressed', esM3()); }
+$('m3B').onclick = () => {
+  const on = !esM3();
+  if(on) document.documentElement.dataset.interfaz = 'm3'; else delete document.documentElement.dataset.interfaz;
+  try{ localStorage.setItem('am.unidad.interfaz', on ? 'm3' : 'anterior'); }catch(e){}
+  interfazUI(); avActual = ''; cabecera();
+  requestAnimationFrame(() => { reencuadrar(0); centrar(U.fin ? $('fin') : capEl(U.i), false); });
+  toast(on ? 'Interfaz Material 3' : 'Interfaz anterior');
+};
+interfazUI();
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2600); }
 addEventListener('keydown', e => {
   if(!U) return;
