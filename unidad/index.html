@@ -271,6 +271,24 @@ html[data-interfaz=m3].teclado .askbar{padding-bottom:8px}
 :root[data-interfaz=m3] .dots i{border-radius:50%}
 /* Avisos: snackbar abajo, sobre la barra de preguntar */
 :root[data-interfaz=m3] #toast{top:auto;bottom:calc(var(--barH) + 12px);border-radius:4px;background:var(--m3-inv);color:var(--m3-on-inv);padding:14px 16px;font-size:.875rem;font-weight:400}
+/* Escuchar: cada párrafo aparece al empezar a sonar y sube al llegar el siguiente; lo que no se ha dicho no está.
+   Antes de empezar, el tema de la obra. Al acabar, el relato entero y las preguntas */
+#unidad.revela .oculta{display:none}
+:root[data-interfaz=m3] .tema{padding:12px 0;font-size:1.125rem;line-height:1.5;color:var(--muted);max-width:38ch}
+:root[data-interfaz=m3] .cap.entra{animation:entra .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes entra{from{opacity:0;transform:translateY(16px)}}
+/* Pantalla grande: el cuadro a la izquierda, sin nada encima salvo la barra de arriba; a la derecha,
+   una columna con quién lo cuenta, el relato y la caja de preguntar (el «panel de apoyo» de Material 3) */
+@media (min-width:900px){
+  :root[data-interfaz=m3]{--col:clamp(360px,30vw,440px)}
+  :root[data-interfaz=m3] .top{right:var(--col)}
+  :root[data-interfaz=m3] #letra{left:auto;right:0;margin-left:0;width:var(--col);top:0;bottom:var(--barH);height:auto;background:var(--m3-low);padding-top:12px}
+  :root[data-interfaz=m3] .askbar{left:auto;right:0;margin-left:0;width:var(--col);background:var(--m3-low)}
+  :root[data-interfaz=m3] #hablarS{left:auto;right:0;margin-left:0;width:var(--col);top:0}
+  :root[data-interfaz=m3] #hablarS .pn{border-radius:0;animation:none}
+  :root[data-interfaz=m3] #encuadre{bottom:24px;left:calc((100% - var(--col))/2)}
+  :root[data-interfaz=m3] #toast{left:24px;right:auto;bottom:24px;max-width:min(560px,calc(100% - var(--col) - 48px))}
+}
 </style>
 <script>
 // Interfaz en pruebas: ?interfaz=m3 (o =anterior) manda; si no, la última elegida en ⋯, para todas las obras. Por defecto, la anterior.
@@ -329,6 +347,7 @@ html[data-interfaz=m3].teclado .askbar{padding-bottom:8px}
         <button class="fila-m" type="button" id="mFicha"><span><b>Ficha y fuentes</b><small>Datos de la obra, créditos y de dónde salen los textos</small></span><span aria-hidden="true">→</span></button>
         <button class="fila-m" type="button" id="musicaB" aria-pressed="false" hidden><span><b>Música</b><small id="mMus"></small></span><span class="tog" aria-hidden="true"></span></button>
         <button class="fila-m" type="button" id="m3B" aria-pressed="false"><span><b>Interfaz Material 3</b><small>En pruebas, para compararla con la anterior</small></span><span class="tog" aria-hidden="true"></span></button>
+        <button class="fila-m" type="button" id="leerB" aria-pressed="false" hidden><span><b>Leer en vez de escuchar</b><small>El relato entero, a tu ritmo</small></span><span class="tog" aria-hidden="true"></span></button>
       </div>
       <div class="menu" id="mExtra" hidden></div>
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
@@ -399,10 +418,10 @@ async function iniciar(datos, desde){
   $('fPerfil').innerHTML = Object.entries(OBRA.visitas).map(([k, v]) => `<button data-v="${k}"><span>${esc(v.n)}<small>${esc(v.d || '')}</small></span></button>`).join('');
   let V = null; try{ V = JSON.parse(store.get('visita', '') || 'null'); }catch(e){}
   U.asked = new Set(V && V.a || []);
-  U.caps = construir(); U.i = V && !V.fin ? Math.min(V.i || 0, U.caps.length - 1) : 0;
+  U.caps = construir(); U.i = V && !V.fin ? Math.min(V.i || 0, U.caps.length - 1) : 0; U.visto = U.i - 1;
   cabecera(); musicaUI(); pintarLista();
   requestAnimationFrame(() => {
-    encajar(); volar(null, 0); centrar(capEl(U.i), false); U.zona = '__'; camaraCap(true);
+    encajar(); volar(null, 0); centrar(capVista(), false); U.zona = '__'; camaraCap(true);
     if(FOCO && !RM){ volar(FOCO, 0); setTimeout(() => { if(!U.manual && !U.started) volar(null, 1700); }, 900); }
   });
   aviso({tipo:'unidad-lista'});
@@ -470,7 +489,7 @@ function construir(){
 }
 const refHTML = C => { const t = esc(C.breve || C.ref || ''); return `<p class="ref">${C.url ? `<a href="${esc(C.url)}" target="_blank" rel="noopener">${t}</a>` : t}</p>`; };
 function pintarLista(){
-  const L = $('lista'); L.innerHTML = '<div class="tope" aria-hidden="true"></div>';
+  const L = $('lista'); L.innerHTML = '<div class="tope" aria-hidden="true"></div>' + (OBRA.tema ? `<p class="tema" id="temaP" hidden>${esc(OBRA.tema)}</p>` : '');
   U.caps.forEach((C, i) => {
     const el = document.createElement('div'); el.className = 'cap' + (C.k === 'pregunta' ? ' pregunta' : ''); el.dataset.i = i; el.setAttribute('role', 'button'); el.tabIndex = 0;
     C.frases = [];
@@ -504,9 +523,26 @@ function foco(){ return Math.round($('lista').clientHeight*.16); }
 function marcarActual(scroll = true){
   document.querySelectorAll('#lista .cap').forEach((el, n) => { el.classList.toggle('ya', n < U.i); el.classList.toggle('ahora', n === U.i && !U.fin); });
   $('fin').classList.toggle('ahora', U.fin);
-  if(scroll && !U.dedo) centrar(U.fin ? $('fin') : capEl(U.i));
+  mostrar();
+  if(scroll && !U.dedo) centrar(capVista());
   estadoPlay();
 }
+// Material 3 · Escuchar: el relato aparece a medida que suena; lo que aún no se ha dicho no está.
+// Antes de empezar, solo el tema de la obra; al acabar, el relato entero. «Leer» (en ⋯) lo enseña todo desde el principio.
+function mostrar(){
+  const r = revela();
+  if(U.started || U.fin) U.visto = Math.max(U.visto, U.fin ? U.caps.length - 1 : U.i);
+  $('unidad').classList.toggle('revela', r);
+  document.querySelectorAll('#lista .cap').forEach((el, n) => {
+    const oculta = r && n > U.visto;
+    if(!oculta && el.classList.contains('oculta')) el.classList.add('entra');
+    el.classList.toggle('oculta', oculta);
+  });
+  $('fin').classList.toggle('oculta', r && !U.fin);
+  const t = $('temaP'); if(t) t.hidden = !(r && U.visto < 0 && !U.fin);
+}
+// La cápsula que se pone en la línea de lectura: la que suena o, si aún no ha empezado, la última dicha
+const capVista = () => U.fin ? $('fin') : revela() && U.i > U.visto ? capEl(U.visto) : capEl(U.i);
 function centrar(el, suave = true){ if(!el) return; const L = $('lista'); L.style.setProperty('--foco', foco() + 'px'); L.scrollTo({top:Math.max(0, el.offsetTop - foco()), behavior:suave && !RM ? 'smooth' : 'auto'}); }
 function seguirPalabra(w){
   if(U.dedo || !w) return; const L = $('lista'), y = w.offsetTop - L.scrollTop;
@@ -523,8 +559,9 @@ function estadoPlay(){
   nivelMusica();
 }
 function play(){
-  if(U.fin){ U.fin = false; U.i = 0; U.si = 0; marcarActual(); camaraCap(true); }
+  if(U.fin){ U.fin = false; U.i = 0; U.si = 0; if(revela()) U.visto = -1; marcarActual(); camaraCap(true); }
   U.playing = true; U.started = true;
+  if(revela()){ U.dedo = false; marcarActual(); }   // aparece lo que empieza a sonar, y el texto vuelve a seguir a la voz
   if(P.musica) musica(true);
   estadoPlay(); sonar(); deriva();
 }
@@ -589,6 +626,7 @@ lista.addEventListener('click', e => {
   const vz = e.target.closest('[data-voz]'); if(vz){ cambiarVoz(vz.dataset.voz); return; }
   const c = e.target.closest('.cap'); if(!c) return;
   const n = +c.dataset.i;
+  if(revela()) U.dedo = false;   // tocar un párrafo ya dicho lo vuelve a contar desde ahí
   if(n === U.i && !U.fin){ U.playing ? pausa() : play(); return; }
   ir(n); if(!U.playing) play();
 });
@@ -596,12 +634,23 @@ lista.addEventListener('keydown', e => { if(e.key === 'Enter' && e.target.classL
 // Desplazar el relato: la cápsula que llega a la línea de lectura se ilumina y la cámara la sigue;
 // al soltar, tras una pausa breve, la voz continúa desde ahí
 let asentarT = 0, apuntada = -1, apuntaCamT = 0;
-['touchmove','wheel'].forEach(ev => lista.addEventListener(ev, () => { if(!U.dedo){ U.dedo = true; U.reanudar = U.playing; if(U.playing){ parar(); } lista.classList.add('moviendo'); } }, {passive:true}));
+['touchmove','wheel'].forEach(ev => lista.addEventListener(ev, () => {
+  if(revela()){ U.dedo = true; clearTimeout(asentarT); asentarT = setTimeout(volverAlHilo, 600); return; }   // releer no para la voz
+  if(!U.dedo){ U.dedo = true; U.reanudar = U.playing; if(U.playing){ parar(); } lista.classList.add('moviendo'); }
+}, {passive:true}));
 lista.addEventListener('scroll', () => {
   if(!U.dedo) return;
+  if(revela()){ clearTimeout(asentarT); asentarT = setTimeout(volverAlHilo, 600); return; }
   const n = capEnFoco(); apuntar(n);
   clearTimeout(asentarT); asentarT = setTimeout(asentar, 420);
 }, {passive:true});
+// Releyendo hacia atrás, lo nuevo no arrastra el texto; si lo que suena vuelve a estar a la vista, el texto lo sigue otra vez
+function volverAlHilo(){
+  const el = U.fin ? null : capEl(U.i); if(!el || el.classList.contains('oculta')) return;
+  const rel = el.offsetTop - lista.scrollTop;
+  if(rel < lista.clientHeight*.85 && rel + el.offsetHeight > 0){ U.dedo = false; centrar(el); }
+}
+lista.addEventListener('animationend', e => e.target.classList.remove('entra'));
 function capEnFoco(){
   const y = lista.scrollTop + foco() + 24; let mejor = 0, d = 1e9;
   document.querySelectorAll('#lista .cap, #fin').forEach(el => { const top = el.offsetTop, bot = top + el.offsetHeight, dd = y < top ? top - y : y > bot ? y - bot : 0; if(dd < d){ d = dd; mejor = el.id === 'fin' ? 'fin' : +el.dataset.i; } });
@@ -629,6 +678,7 @@ const T = {s:1, x:0, y:0}; let anim = 0;
 function base(){ const W = innerWidth, H = innerHeight; return {W, H, k:Math.min(W/OBRA.iw, H/OBRA.ih)}; }
 function marco(){
   const H = innerHeight, top = 58;
+  if(lateral()){ const W = innerWidth - ($('letra').offsetWidth || 400), t = 72, b = H - 32; return {top:t, bottom:b, W, cx:W/2, cy:(t + b)/2, w:W*.9, h:(b - t)*.9}; }
   let bottom = H - ($('askF').offsetHeight || 58) - ($('letra').offsetHeight || H*.44);
   if(!$('hablarS').hidden){ const t = $('hablarS').getBoundingClientRect().top; if(t > 0) bottom = Math.min(bottom, t); }
   bottom = Math.max(bottom, top + 140);
@@ -692,7 +742,7 @@ function camaraCap(forzar){
 function soltarManual(){ U.manual = false; $('encuadre').hidden = true; }
 $('encuadre').onclick = () => { soltarManual(); U.zona = '__'; camaraCap(); };
 function reencuadrar(dur){ if(U.manual) return; volar(hayEncuadre(U.zona) ? caja(U.zona) : null, dur, U.zona === null ? deriva : null); }
-let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { reencuadrar(0); centrar(capEl(U.i), false); }, 120); });
+let rT = 0; addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { reencuadrar(0); if(!(revela() && U.dedo)) centrar(revela() ? capVista() : capEl(U.i), false); }, 120); });
 function marcar(z){
   U.sel = z;
   const vh = 1000*OBRA.ih/OBRA.iw, P_ = poly => poly.map(p => (p[0]*1000).toFixed(1) + ',' + (p[1]*vh).toFixed(1)).join(' ');
@@ -749,7 +799,8 @@ vp.addEventListener('wheel', e => { e.preventDefault(); tomar(); zoom(e.clientX,
 function zoom(cx, cy, ns){ ns = Math.max(U.sWhole*.7, Math.min(IIIF ? Math.max(U.sWhole*9, 1.5/base().k) : U.sWhole*9, ns)); const r = ns/T.s; T.x = cx - (cx - T.x)*r; T.y = cy - (cy - T.y)*r; T.s = ns; limitar(); aplicar(); }
 function limitar(){
   const b = base(), f = marco(), w = OBRA.iw*b.k*T.s, h = OBRA.ih*b.k*T.s, fh = f.bottom - f.top;
-  T.x = w <= b.W ? Math.min(Math.max(T.x, -w*.25), b.W - w*.75) : Math.min(b.W*.3, Math.max(b.W - w - b.W*.3, T.x));
+  const W = f.W;   // el ancho donde se ve el cuadro (en pantalla grande con Material 3, sin la columna del relato)
+  T.x = w <= W ? Math.min(Math.max(T.x, -w*.25), W - w*.75) : Math.min(W*.3, Math.max(W - w - W*.3, T.x));
   T.y = h <= fh ? Math.min(Math.max(T.y, f.top - h*.25), f.bottom - h*.75) : Math.min(f.top + fh*.3, Math.max(f.bottom - h - fh*.3, T.y));
 }
 
@@ -915,7 +966,7 @@ $('aplicar').onclick = () => {
   if(cambia){ $('deep').innerHTML = ''; rehacer(); toast(`${VIS().n} · ${M().nombre}`); }
   if(ajAntes || (cambia && U.started)) play(); else estadoPlay();
 };
-function rehacer(){ parar(); U.voz = M().voz; U.gen = []; U.genClave = ''; U.chat = []; if(U.genCtl) U.genCtl.abort(); U.caps = construir(); U.i = 0; U.si = 0; U.fin = false; cabecera(); pintarLista(); U.zona = '__'; camaraCap(true); centrar(capEl(0), false); guardar(); }
+function rehacer(){ parar(); U.voz = M().voz; U.gen = []; U.genClave = ''; U.chat = []; if(U.genCtl) U.genCtl.abort(); U.caps = construir(); U.i = 0; U.si = 0; U.fin = false; U.visto = -1; cabecera(); pintarLista(); U.zona = '__'; camaraCap(true); centrar(capEl(0), false); guardar(); }
 function cambiarVoz(k){ P.guia = k; store.set('guia', k); $('deep').innerHTML = ''; rehacer(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); play(); }
 let fichaAntes = false;
 $('mFicha').onclick = () => { $('ajS').hidden = true; fichaAntes = ajAntes; ajAntes = false; $('fichaS').hidden = false; };
@@ -1270,14 +1321,27 @@ document.addEventListener('visibilitychange', () => { if(document.hidden){ if(U 
 
 /* Interfaz: la anterior o Material 3, en pruebas. Se guarda para todas las obras */
 const esM3 = () => document.documentElement.dataset.interfaz === 'm3';
-function interfazUI(){ $('m3B').setAttribute('aria-pressed', esM3()); }
+// En Material 3, «Leer en vez de escuchar» enseña el relato entero desde el principio (también se guarda para todas)
+let LEER = false; try{ LEER = localStorage.getItem('am.unidad.leer') === '1'; }catch(e){}
+const revela = () => esM3() && !LEER;
+// Material 3 en pantalla grande: el relato va en una columna a la derecha y el cuadro ocupa el resto
+const lateral = () => esM3() && innerWidth >= 900;
+function interfazUI(){
+  $('m3B').setAttribute('aria-pressed', esM3());
+  $('leerB').hidden = !esM3(); $('leerB').setAttribute('aria-pressed', LEER);
+}
+function reponer(){ U.dedo = false; marcarActual(false); requestAnimationFrame(() => { reencuadrar(0); centrar(capVista(), false); }); }
 $('m3B').onclick = () => {
   const on = !esM3();
   if(on) document.documentElement.dataset.interfaz = 'm3'; else delete document.documentElement.dataset.interfaz;
   try{ localStorage.setItem('am.unidad.interfaz', on ? 'm3' : 'anterior'); }catch(e){}
-  interfazUI(); avActual = ''; cabecera();
-  requestAnimationFrame(() => { reencuadrar(0); centrar(U.fin ? $('fin') : capEl(U.i), false); });
+  interfazUI(); avActual = ''; cabecera(); reponer();
   toast(on ? 'Interfaz Material 3' : 'Interfaz anterior');
+};
+$('leerB').onclick = () => {
+  LEER = !LEER; try{ localStorage.setItem('am.unidad.leer', LEER ? '1' : '0'); }catch(e){}
+  interfazUI(); reponer();
+  toast(LEER ? 'Leer: el relato entero, a tu ritmo' : 'Escuchar: el relato aparece a medida que suena');
 };
 interfazUI();
 function toast(m){ const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 2600); }
