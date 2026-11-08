@@ -165,13 +165,113 @@
  "base": [
   {
    "id": "B1",
-   "f": "Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra",
-   "t": "El monumento responde a la reacción navarra contra el proyecto antiforal de 1893 del ministro de Hacienda Germán Gamazo, que menoscababa la autonomía fiscal reconocida por la Ley Paccionada de 1841; «vino a simbolizar la reacción navarra en defensa de sus derechos». Fecha: 1903. Proyecto de Manuel Martínez de Ubago; esculturas del primer cuerpo de Ramón Carmona. Bronce, mármol y piedras de distintos tipos. Altura: 23,40 m. Pedestal poligonal alto, templete cúbico de dos cuerpos y columna de mármol rojo con capitel blanco. Cinco figuras alegóricas en los ángulos del primer cuerpo: Historia, Justicia, Autonomía, Paz y Trabajo; el número cinco es una referencia constante a las merindades. Arriba, una estatua monumental de bronce representa a Navarra como una matrona victoriosa: en la mano derecha, un fragmento de las cadenas del escudo del Reino, símbolo de la libertad conquistada; en la izquierda, un pergamino con sello de cera y la leyenda «Ley Foral». Planchas de bronce con inscripciones sobre las libertades navarras."
+   "f": "Ficha · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "Ubicación: extremo oriental del Paseo de Sarasate (popularmente Paseo de Valencia), frente al Palacio de la Diputación (Palacio de Navarra). Fecha: 1903; la fecha figura en una pieza de bronce en el fuste de la columna. Proyecto del arquitecto Manuel Martínez de Ubago, elegido en 1893. Las cinco alegorías de piedra son de Ramón Carmona Urrutia, en piedra de Angulema. Remata el conjunto una matrona de bronce de 5,5 m y 5.000 kg; sobre quién modeló el bronce las fuentes no coinciden del todo, y algunas lo atribuyen a José Martínez de Ubago, hermano del arquitecto. Altura total: unos 23,4 m. Peso del conjunto: unas 20 toneladas, según Wikipedia."
   },
   {
    "id": "B2",
-   "f": "Wikipedia en español, «Monumento a los Fueros (Pamplona)»",
-   "t": "Se costeó por suscripción popular, con una cuota mínima de 25 céntimos de peseta y máxima de 25 pesetas; el coste total fue de 200.000 pesetas. La idea inicial era levantarlo en la plaza de la Constitución, hoy plaza del Castillo, pero las dificultades para reunir fondos llevaron a cambiar la ubicación. Materiales de canteras navarras. La estatua de Navarra mide 5,5 m. Las inscripciones de bronce se colocaron en 1905 y la polémica por las inscripciones en euskera hizo que el monumento no se inaugurara oficialmente, aunque ya se habían acuñado medallas conmemorativas. El basamento pentagonal tiene cinco escalinatas. Está frente a la fachada occidental del Palacio de Navarra. En 2010 se restauró: el trabajo principal fue la limpieza del conjunto durante cinco semanas."
+   "f": "Ficha · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "Estilo ecléctico, con arcos ciegos de aire románico y capiteles clásicos con motivos vegetales. Materiales: base en piedra de Tafalla; primer cuerpo en piedra de Almándoz; segundo cuerpo en piedra blanca con columnillas de mármol rojo de Aizcorbe; columna de mármol rojo con capitel blanco; alegorías en piedra de Angulema; matrona en bronce."
+  },
+  {
+   "id": "B3",
+   "f": "Restauración · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "A finales de 2010 el Ayuntamiento de Pamplona lo restauró dentro de su plan de limpieza de esculturas públicas; según Wikipedia, el trabajo principal fue la limpieza del conjunto durante cinco semanas."
+  },
+  {
+   "id": "B4",
+   "f": "Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra",
+   "t": "Es un templete de dos cuerpos sobre un pedestal alto, con una columna y una figura femenina arriba. Según la Cátedra, el monumento «vino a simbolizar la reacción navarra en defensa de sus derechos»: los fueros, frente al proyecto del ministro de Hacienda Germán Gamazo, que se consideró lesivo para la autonomía fiscal reconocida a Navarra en la Ley Paccionada de 1841."
+  },
+  {
+   "id": "B5",
+   "f": "El número cinco · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "El número cinco se repite en todo el conjunto, en alusión a las cinco merindades históricas: base pentagonal con cinco escalinatas, dos cuerpos pentagonales, cinco columnas en los ángulos, cinco figuras sedentes y cinco placas de bronce. La matrona mide 5,5 m y pesa 5.000 kg. En la base, entre las cinco escalinatas, penden de unos pilares cadenas que simbolizan el escudo de Navarra."
+  },
+  {
+   "id": "B6",
+   "f": "Las cinco alegorías · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "En los ángulos del primer cuerpo hay cinco alegorías que representan los valores que los navarros de la manifestación de 1893 querían proclamar y defender. Historia: la musa Clío, símbolo de saber y cultura. Justicia: una mujer con una espada entre las manos. Autonomía (o Autogobierno): un ángel alado con un timón. Paz: una mujer con una rama de olivo que estrecha contra el pecho un alción; los antiguos veían en esta ave un símbolo de paz y tranquilidad porque, mientras hacía el nido, cesaban los vientos y las tempestades. Trabajo: un herrero con un mazo que descansa sobre un yunque de acero. Los modelos de las alegorías fueron jóvenes vecinos de Pamplona; no constan sus nombres."
+  },
+  {
+   "id": "B7",
+   "f": "Los escudos · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "En el segundo cuerpo están los escudos de Navarra y de Pamplona y, bajo ellos, el crismón, símbolo de Cristo y de la religión cristiana. Junto a ellos, los de las demás merindades históricas: Tudela, Olite, Sangüesa y Estella. Además, veinte escudos de villas y pueblos de Navarra recorren el perímetro."
+  },
+  {
+   "id": "B8",
+   "f": "La matrona · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "La matrona de bronce es una alegoría de Navarra como mujer victoriosa, vestida a la clásica, con corona real (símbolo del Reino de Navarra) y mirada al frente, firme y decidida. Lleva una espada envainada a la cintura. En la mano derecha sostiene un fragmento de las cadenas del escudo del Reino, símbolo de la libertad conquistada. En la izquierda, un pergamino medio enrollado, con sello de cera, con la leyenda «Ley Foral». A sus pies hay un escudo y un turbante almohade, en referencia a la victoria del rey navarro Sancho el Fuerte en la batalla de las Navas de Tolosa."
+  },
+  {
+   "id": "B9",
+   "f": "Quién posó para la matrona · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "Sirvió de modelo para la matrona Rosa Oteiza Armona, vecina de la calle San Antón de Pamplona. Se la describe como una mujer discreta y celosa de su independencia."
+  },
+  {
+   "id": "B10",
+   "f": "Decoración · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "La decoración secundaria incluye hojas de hiedra y acanto; girasol, encina y roble; rana, búho, león y cigüeña; una esfera; y seres fabulosos como el basilisco y el grifo. No se conoce un significado documentado para cada uno."
+  },
+  {
+   "id": "B11",
+   "f": "Las placas · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes); Fontes Linguae Vasconum n.º 60 (1992)",
+   "t": "En el primer cuerpo hay cinco planchas de bronce con inscripciones alusivas a las libertades navarras: tres en romance (castellano), una en euskera y una en euskera con caracteres «supuestamente ibéricos», de difícil comprensión. Se colocaron en 1905. Los textos son de Hermilio de Olóriz; la inscripción en caracteres ibéricos la redactó el jesuita Fidel Fita. Hay un estudio sobre esa escritura en la revista Fontes Linguae Vasconum (n.º 60, 1992). El texto exacto y la traducción oficial de las placas no están en esta documentación."
+  },
+  {
+   "id": "B12",
+   "f": "La Gamazada · Wikipedia en español («Gamazada», «Monumento a los Fueros (Pamplona)»)",
+   "t": "La Gamazada fue la reacción popular de 1893 y 1894 contra el proyecto de Germán Gamazo, ministro de Hacienda del gobierno liberal de Sagasta. El 4 de junio de 1893 hubo en Pamplona una gran manifestación encabezada por la Diputación. Según Wikipedia, 120.000 personas firmaron su adhesión, sobre una población de unos 300.000 navarros, y se publicó el Libro de Honor de los Navarros."
+  },
+  {
+   "id": "B13",
+   "f": "Origen del monumento · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "Tras la amplia respuesta popular se generalizó la idea de levantar algo que recordara a las generaciones futuras el sentir unánime de los navarros. Se citan como impulsores al comediógrafo Fiacro Iráizoz Espinal, que pedía «nada de subvenciones», y al médico Manuel Jimeno Egúrvide. La Diputación y el Ayuntamiento recogieron la iniciativa."
+  },
+  {
+   "id": "B14",
+   "f": "Financiación · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "Se pagó por suscripción popular, con una cuota mínima de 25 céntimos y una máxima de 25 pesetas. El coste suele cifrarse en unas 200.000 pesetas, aunque es un dato de fuente no académica."
+  },
+  {
+   "id": "B15",
+   "f": "Emplazamiento · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "Se pensó primero para la plaza de la Constitución, hoy Plaza del Castillo; finalmente se levantó en el extremo oriental del entonces Paseo de Valencia, frente a la Diputación."
+  },
+  {
+   "id": "B16",
+   "f": "Construcción · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "El proyecto de Martínez de Ubago se eligió en 1893. La cimentación se hizo en 1895. Las figuras de piedra se colocaron entre febrero y junio de 1903, y la matrona se subió el 7 de abril de 1903. Se tardó unos diez años. El proyecto original de la cima era un joven atlético amparando a un guerrero, símbolo de la edad moderna protegiendo a la antigua; por las dificultades económicas y la caída de las donaciones se sustituyó hacia 1895 por la matrona. Según Wikipedia, el bronce lo fundió la casa Masriera y Campins (dato por confirmar); Josep Miret realizó una restauración."
+  },
+  {
+   "id": "B17",
+   "f": "Sin inauguración · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "El monumento nunca se inauguró oficialmente, aunque se acuñaron medallas conmemorativas. Según Wikipedia, la causa pudo ser la polémica por las placas en euskera, que se leyeron como de sesgo nacionalista vasco; es una hipótesis, no un hecho documentado. En marzo de 1909 el teniente de alcalde Echave-Susaeta propuso trasladarlo al centro de la Plaza del Castillo e inaugurarlo en las fiestas de San Fermín, con invitación a todos los ayuntamientos de Navarra. No se trasladó ni se inauguró."
+  },
+  {
+   "id": "B18",
+   "f": "Cultura popular · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "La imagen del monumento aparece, entre otros, en carteles de San Fermín de entre 1899 y 1904."
+  },
+  {
+   "id": "B19",
+   "f": "Lectura política · Wikipedia en español",
+   "t": "El historiador Urricelqui, citado en Wikipedia, sostiene que el monumento expresa un patriotismo navarro «no necesariamente anticastellano». Como ejemplo, en 1902 la Diputación y los ayuntamientos participaron en un monumento a Alfonso XII en Madrid."
+  },
+  {
+   "id": "B20",
+   "f": "El arquitecto · Auñamendi Eusko Ikaskuntza y PARES",
+   "t": "Manuel Martínez de Ubago Lizárraga (Pamplona, 1869 – Zaragoza, 16 de enero de 1928) fue arquitecto, titulado en la Escuela Superior de Arquitectura de Madrid en 1892, y uno de los principales exponentes de la arquitectura pamplonesa de entresiglos, de estilo ecléctico con influencias modernistas. El monumento fue su primera gran obra, encargada en 1893. Otras obras suyas: la Casa Cipriano Salvatierra (1900) y el edificio La Actividad (1902), en Pamplona, y la restauración de la iglesia de San Miguel de Estella. Hacia 1904 se instaló en Zaragoza."
+  },
+  {
+   "id": "B21",
+   "f": "El escultor · Wikipedia en español («Ramón Carmona Urrutia»)",
+   "t": "Ramón Canuto Carmona Urrutia (Pamplona, 19 de enero de 1871 – Pamplona, 8 de noviembre de 1929) fue escultor marmolista. Aprendió el oficio en el taller de Lino Celedonio Irigaray, en el n.º 4 del Paseo de Valencia, y se lo compró en 1904 por 3.000 pesetas. Además de las cinco alegorías, hizo el mausoleo de Pablo Sarasate en el cementerio de Pamplona."
+  },
+  {
+   "id": "B22",
+   "f": "Lo que no consta · Dosier documental (Cátedra de Patrimonio UNAV, Wikipedia y otras fuentes)",
+   "t": "No constan en la documentación: los sentimientos u opiniones de los autores o de los modelos; el significado de cada animal y planta de la decoración; el texto oficial de las placas; el autor concreto del modelo de la matrona, porque las fuentes discrepan; ni el número actual de visitantes."
   }
  ],
  "visitas": {
