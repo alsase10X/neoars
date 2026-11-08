@@ -2096,9 +2096,10 @@ function escuchado(){
   if(!U.started) return '';
   return U.caps.slice(0, U.fin ? U.caps.length : U.i + 1).map(C => C.segs.map(s => s.cita ? '«' + s.t + '»' : s.t).join(' ')).join('\n');
 }
+// El prompt de una pieza no cambia entre preguntas (reglas, base, zonas, imágenes): así el proveedor puede guardarlo en caché
+// y cobrarlo con descuento. Lo que cambia (el visitante y su pregunta) va al final, en el último mensaje (visitanteChat)
 function promptChat(){
   const zonas = Object.entries(OBRA.zonas).map(([k, z]) => `- ${k}: ${z.n}${z.vista ? '. ' + z.vista : ''}`).join('\n');
-  const oido = escuchado();
   return `OBRA: «${OBRA.titulo}», de ${OBRA.autor} (${OBRA.fecha}).
 ${OBRA.tema ? 'IDEA QUE VERTEBRA LA OBRA: ' + OBRA.tema : ''}
 
@@ -2108,12 +2109,6 @@ ${zonas}
 BASE DOCUMENTAL (lo único que puedes presentar como dato, con su identificador):
 ${BASE().map(b => `[${b.id}] ${b.f}: ${b.t}`).join('\n')}
 ${imagenesPrompt()}
-VISITANTE
-- Visita que eligió: ${VIS().n}${VIS().d ? ' (' + VIS().d + ')' : ''}
-- Lugar de la obra que tiene señalado: ${U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno'}
-- Preguntas que ha hecho: ${[...U.asked].slice(-6).join(' / ') || 'ninguna'}
-- Lo que ya ha escuchado de la visita:${oido ? '\n' + oido : ' nada todavía'}
-
 CÓMO HABLAS
 - Eres la guía del museo. Hablas del artista en tercera persona y al visitante de tú, en castellano de España, con frases cortas, concretas y sensoriales. Nada de grandilocuencia ni de adjetivos vacíos.
 - Sigues la interpretación patrimonial (Tilden, Ham): una idea que vertebra, mirar antes que el dato, conectar con la experiencia de quien escucha y devolver siempre la mirada a la obra.
@@ -2139,6 +2134,17 @@ FORMATO
 Responde solo con un objeto JSON, sin texto antes ni después:
 {"partes":[{"t":"…","e":"fuente","f":"B1"},{"t":"…","e":"vista"}],"z":"identificador de zona o null"${OBRA.imagenes ? ',"imagen":"identificador de imagen o null"' : ''}}`;
 }
+// Lo que cambia en cada pregunta: quién es el visitante, qué ha visto y oído, y lo que pregunta. Va siempre en el último mensaje
+function visitanteChat(q){
+  const oido = escuchado();
+  return `VISITANTE
+- Visita que eligió: ${VIS().n}${VIS().d ? ' (' + VIS().d + ')' : ''}
+- Lugar de la obra que tiene señalado: ${U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno'}
+- Preguntas que ha hecho: ${[...U.asked].slice(-6).join(' / ') || 'ninguna'}
+- Lo que ya ha escuchado de la visita:${oido ? '\n' + oido : ' nada todavía'}
+
+PREGUNTA DEL VISITANTE: ${q}`;
+}
 // Las imágenes de contexto que el modelo puede enseñar: solo estas, y solo si ayudan a ver lo que cuenta
 function imagenesPrompt(){
   const ims = Object.entries(OBRA.imagenes || {}); if(!ims.length) return '';
@@ -2156,7 +2162,7 @@ async function preguntarIA(q){
   let r = null;
   try{
     await listo;
-    r = await IA.json([{role:'user', content:promptChat()}, ...U.chat.slice(-6), {role:'user', content:q}], ctl.signal);
+    r = await IA.json([{role:'user', content:promptChat()}, ...U.chat.slice(-6), {role:'user', content:visitanteChat(q)}], ctl.signal);
   }catch(e){
     if(U.ctl === ctl) U.ctl = null;
     if(e && e.code === 'cancelled') return;
