@@ -480,6 +480,26 @@ dd a{text-decoration:underline;text-underline-offset:2px}
 :root[data-plantilla] .carrYoB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 104px)}
 :root[data-plantilla] #salaV.conPortada .carrTop{padding-left:calc(max(12px,env(safe-area-inset-left,0px)) + 52px)}
 
+/* ---------- Mapa y carrusel juntos (prueba: ⋯ › Índice) ----------
+   Una sola pantalla: el mapa arriba y el carrusel debajo, sincronizados. Al deslizar, el mapa va a la pieza y la señala;
+   al tocar una pieza en el mapa, el carrusel se mueve a ella. Los sellos quedan a caballo entre el mapa y el panel.
+   JavaScript pone --corte (donde acaba el mapa: la mitad de la fila de sellos) y --solape (lo que los sellos tapan del mapa) */
+#salaV.juntos .mapa{top:0!important;bottom:auto;height:var(--corte,55%);border-top:0}
+#salaV.juntos .mk.sel{z-index:2}
+#salaV.juntos #mapaC .maplibregl-ctrl-bottom-right{bottom:var(--solape,0px)}
+.carr.juntos{background:none;pointer-events:none;--cs:min(30vw,128px,17vh);--cs:min(30vw,128px,17dvh);--paso:calc(var(--cs)*1.12)}
+.carr.juntos .carrYoB,.carr.juntos .carrMarca,.carr.juntos .carrPista,.carr.juntos .carrCab,.carr.juntos .carrPie{pointer-events:auto}
+.carr.juntos .carrF{clip-path:inset(calc(var(--corte,55%) + 60px) 0 0 0)}
+.carr.juntos .carrIn{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}
+.carr.juntos .carrPista{flex:none;min-height:0;height:calc(var(--cs) + 44px);margin-top:auto}
+.carr.juntos .carrCab{order:1;margin-top:0}
+.carr.juntos .carrPie{order:2;gap:6px;margin-top:8px}
+.carr.juntos .carrTw{font-size:clamp(1.45rem,6.4vw,1.9rem)}
+.carr.juntos .carrT{max-width:20ch}
+.carr.juntos .carrYoB{right:calc(max(6px,env(safe-area-inset-right,0px)) + 46px)}
+:root[data-plantilla] .carr.juntos .carrYoB{right:calc(max(12px,env(safe-area-inset-right,0px)) + 52px)}
+@media (max-height:720px){ .carr.juntos{--cs:min(26vw,104px,15vh);--cs:min(26vw,104px,15dvh)} }
+
 /* ---------- Expressive (Material 3 Expressive) ---------- */
 :root[data-plantilla=expressive]{
   --fuente:"Google Sans Flex","Google Sans",Roboto,system-ui,sans-serif;
@@ -722,7 +742,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
   <div class="pn" role="dialog" aria-label="Modo de la visita">
     <div class="hd"><b>Tu visita</b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
     <div class="deep"><fieldset><legend>Modo</legend><div class="seg" id="sModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset>
-      <fieldset><legend>Índice · pruebas</legend><div class="seg" id="sIndice"><button type="button" data-v="lista">Lista<small>La de ahora</small></button><button type="button" data-v="carrusel">Carrusel<small>Una pieza cada vez</small></button></div></fieldset>
+      <fieldset><legend>Índice · pruebas</legend><div class="seg" id="sIndice"><button type="button" data-v="lista">Lista<small>La de ahora</small></button><button type="button" data-v="carrusel">Carrusel<small>Una pieza cada vez</small></button><button type="button" data-v="mapa-carrusel">Mapa y carrusel<small>En una pantalla</small></button></div></fieldset>
       <fieldset><legend>Plantilla · pruebas</legend><div class="seg" id="sPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset>
       <fieldset><legend>Disposición de la pieza · pruebas</legend><div class="seg" id="sDisp"><button type="button" data-v="abajo">Sello abajo<small>La de ahora</small></button><button type="button" data-v="arriba">Sello arriba<small>Como una llamada</small></button><button type="button" data-v="filetes">Entre filetes<small>Arriba, con rayas</small></button></div></fieldset></div>
     <div class="foot"><button class="b1" id="sAplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
@@ -984,6 +1004,9 @@ function pintarSala(){
 /* ======================= En la calle: lista y mapa, cerca de ti ======================= */
 // Tres maneras de saber dónde estás: el GPS si lo permites, «Estoy aquí» en una pieza y el código de cada pieza
 const GEO = {pos:null, desde:null, watch:null, vista:'lista', mapa:null, marcas:{}, yo:null, sel:null, cargando:null};
+// Mapa y carrusel juntos (prueba): on, si está a la vista; nuevo, si falta encuadrar el mapa; fresco, si nadie lo ha movido desde entonces;
+// arriba y abajo, lo que tapan del mapa los botones y los sellos; margen, lo que se deja hasta ellos; corte y solape, lo último medido; fallo, si el mapa no carga (queda el carrusel solo)
+const JT = {on:false, nuevo:false, fresco:false, oye:false, cargando:false, arriba:0, abajo:0, margen:36, corte:-1, solape:-1, fallo:false};
 const conLugar = () => !!(SALA && SALA.obras.some(o => o.lugar));
 function distancia(a, b){ const R = 6371000, r = x => x*Math.PI/180, dLa = r(b.lat - a.lat), dLo = r(b.lng - a.lng); const h = Math.sin(dLa/2)**2 + Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLo/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
 const dist = o => GEO.pos && o.lugar ? distancia(GEO.pos, o.lugar) : null;
@@ -1049,22 +1072,23 @@ function iniciarMapa(){
   pts.forEach(o => {
     const el = document.createElement('button'); el.type = 'button'; el.className = 'mk'; el.style.backgroundImage = `url('${o.img}')`; el.style.backgroundPosition = encuadrePos(o) || 'center';
     el.innerHTML = `<b>${SALA.obras.indexOf(o) + 1}</b>`; el.dataset.id = o.id;
-    el.addEventListener('click', ev => { ev.stopPropagation(); tarjeta(o); });
+    // Con el mapa y el carrusel juntos, tocar una pieza mueve el carrusel a ella (y él mueve el mapa); si no, sale su tarjeta
+    el.addEventListener('click', ev => { ev.stopPropagation(); if(JT.on){ CAR.tocado = true; irA(SALA.obras.indexOf(o)); } else tarjeta(o); });
     GEO.marcas[o.id] = new maplibregl.Marker({element:el}).setLngLat([o.lugar.lng, o.lugar.lat]).addTo(m);
     el.setAttribute('aria-label', o.titulo);   // después de añadirlo: MapLibre pone «Map marker»
   });
-  m.on('click', cerrarTarjeta);
+  m.on('click', () => { if(!JT.on) cerrarTarjeta(); });
   pintarMapa();
 }
 function pintarMapa(){
   if(!GEO.mapa) return;
-  SALA.obras.forEach(o => { const mk = GEO.marcas[o.id]; if(mk){ const el = mk.getElement(); el.classList.toggle('sel', GEO.sel === o.id); el.classList.toggle('aqui', estaJunto(o)); } });
+  SALA.obras.forEach((o, i) => { const mk = GEO.marcas[o.id]; if(mk){ const el = mk.getElement(); el.classList.toggle('sel', JT.on ? i === CAR.i : GEO.sel === o.id); el.classList.toggle('aqui', estaJunto(o)); } });
   // El punto azul es solo para el GPS; con «Estoy aquí» o el código, se ilumina la pieza
   if(GEO.pos && !GEO.desde){
     if(!GEO.yo){ const el = document.createElement('div'); el.className = 'yo'; GEO.yo = new maplibregl.Marker({element:el}).setLngLat([GEO.pos.lng, GEO.pos.lat]).addTo(GEO.mapa); }
     else GEO.yo.setLngLat([GEO.pos.lng, GEO.pos.lat]);
   } else if(GEO.yo){ GEO.yo.remove(); GEO.yo = null; }
-  if(GEO.sel) tarjeta(SALA.obras.find(o => o.id === GEO.sel), false);
+  if(GEO.sel && !JT.on) tarjeta(SALA.obras.find(o => o.id === GEO.sel), false);
 }
 // Cómo llegar: con el mapa del móvil (Apple Maps en iPhone, Google Maps en el resto), a pie y sin API de pago
 const comoLlegar = o => /iP(hone|ad|od)/.test(navigator.userAgent) ? `https://maps.apple.com/?daddr=${o.lugar.lat},${o.lugar.lng}&dirflg=w` : `https://www.google.com/maps/dir/?api=1&destination=${o.lugar.lat},${o.lugar.lng}&travelmode=walking`;
@@ -1085,11 +1109,13 @@ $('mcard').onclick = e => {
 /* ======================= Índice en carrusel (prueba) ======================= */
 // Una pieza cada vez: el sello grande, su fondo, su frase (el tema) y un botón que entra en ella y empieza a sonar.
 // Ese toque es el que el navegador necesita para la voz, así que desde aquí no hace falta la portada de la pieza.
-// Se elige en el ⋯ del índice («Índice · pruebas»), se recuerda en el dispositivo y va en el enlace (?indice=carrusel)
-const INDICES = ['lista', 'carrusel'];
+// Se elige en el ⋯ del índice («Índice · pruebas»), se recuerda en el dispositivo y va en el enlace (?indice=carrusel).
+// «Mapa y carrusel» (?indice=mapa-carrusel) es el mismo carrusel con el mapa encima, en una sola pantalla
+const INDICES = ['lista', 'carrusel', 'mapa-carrusel'];
 let INDICE = (() => { try{ const v = new URLSearchParams(location.search).get('indice'); if(INDICES.includes(v)) return v; }catch(e){} const s = st.get('am.sala.indice', 'lista'); return INDICES.includes(s) ? s : 'lista'; })();
-function cambiarIndice(v){ INDICE = v; st.set('am.sala.indice', v); try{ const u = new URL(location.href); if(v === 'carrusel') u.searchParams.set('indice', v); else u.searchParams.delete('indice'); history.replaceState(null, '', u); }catch(e){} }
-if(INDICE === 'carrusel') cambiarIndice(INDICE);
+const conCarrusel = () => INDICE !== 'lista';
+function cambiarIndice(v){ INDICE = v; st.set('am.sala.indice', v); try{ const u = new URL(location.href); if(v !== 'lista') u.searchParams.set('indice', v); else u.searchParams.delete('indice'); history.replaceState(null, '', u); }catch(e){} }
+if(INDICE !== 'lista') cambiarIndice(INDICE);
 // i: la pieza del centro; tocado: el visitante ya ha movido el carrusel (el GPS no se lo cambia); gps: ya se saltó a la más cercana
 const CAR = {i:0, hecho:null, tocado:false, gps:false, ancho:-1, raf:0, capa:0, fondo:''};
 const durTxt = s => s < 90 ? `${Math.max(30, Math.round(s/15)*15)} s` : `${(Math.round(s/60*2)/2).toString().replace('.', ',')} min`;
@@ -1102,9 +1128,12 @@ function recorteSello(o){
 }
 const cercana = () => { let k = CAR.i, m = Infinity; SALA.obras.forEach((o, i) => { const d = dist(o); if(d != null && d < m){ m = d; k = i; } }); return k; };
 function pintarCarrusel(){
-  const on = INDICE === 'carrusel' && GEO.vista !== 'mapa' && !!SALA;
+  const on = conCarrusel() && GEO.vista !== 'mapa' && !!SALA;
   $('carr').hidden = !on; $('salaV').classList.toggle('enCarr', on);
-  const lista = $('vistaSel').querySelector('[data-v=lista]'); if(lista) lista.textContent = INDICE === 'carrusel' ? 'Carrusel' : 'Lista';
+  const lista = $('vistaSel').querySelector('[data-v=lista]'); if(lista) lista.textContent = conCarrusel() ? 'Carrusel' : 'Lista';
+  // Con el mapa encima se pone después de crear los sellos, para medir el panel ya completo
+  const jt = on && INDICE === 'mapa-carrusel' && conLugar() && !JT.fallo;
+  if(!jt) juntos(false);
   if(!on) return;
   const n = SALA.obras.length;
   if(CAR.hecho !== SALA){
@@ -1113,11 +1142,12 @@ function pintarCarrusel(){
     // Si este navegador ya dio permiso de ubicación, el GPS arranca solo; si no, se pide con el icono de arriba (nunca por sorpresa)
     if(conLugar() && GEO.watch == null && !GEO.pos && navigator.permissions) navigator.permissions.query({name:'geolocation'}).then(r => { if(r.state === 'granted' && GEO.watch == null && !GEO.pos) pedirUbicacion(); }).catch(() => {});
   }
+  if(jt) juntos(true);
   // Arriba, solo el logo del cliente si lo hay
   const mk = $('carrMarca');
   if(MARCA && MARCA.logo){ mk.innerHTML = MARCA.logo; mk.setAttribute('role', 'img'); mk.setAttribute('aria-label', MARCA.nombre); }
   else { mk.textContent = ''; mk.removeAttribute('role'); mk.removeAttribute('aria-label'); }
-  $('carrMapaB').hidden = !conLugar();
+  $('carrMapaB').hidden = !conLugar() || JT.on;
   const yo = $('carrYoB'), gps = !!(GEO.pos && !GEO.desde);
   yo.hidden = !conLugar(); yo.classList.toggle('buscando', GEO.watch != null && !GEO.pos);
   yo.setAttribute('aria-pressed', gps); yo.setAttribute('aria-label', gps ? 'Ir a la pieza más cercana' : 'Usar mi ubicación');
@@ -1140,6 +1170,61 @@ function datosCarrusel(){
     CAR.fondo = o.fondo; const a = $('carrF' + CAR.capa), b = $('carrF' + (1 - CAR.capa));
     b.style.backgroundImage = `url("${o.fondo}")`; b.classList.add('on'); a.classList.remove('on'); CAR.capa = 1 - CAR.capa;
   }
+  seguirMapa();
+}
+/* ---------- Mapa y carrusel juntos (prueba) ----------
+   El mismo carrusel, con sellos más pequeños, en la parte de abajo; encima, el mapa de la calle. Se siguen el uno al otro:
+   el carrusel, al pararse, lleva el mapa a su pieza y la señala; tocar una pieza en el mapa mueve el carrusel a ella */
+function juntos(on){
+  if(on === JT.on){ if(on) medirJunto(); return; }
+  JT.on = on; JT.nuevo = on; $('salaV').classList.toggle('juntos', on); $('carr').classList.toggle('juntos', on);
+  // Cambia el tamaño de los sellos y lo que se reserva para el texto: se vuelve a medir y a centrar
+  if(!$('carr').hidden && $('carrPista').clientWidth){ reservarFrase(); irA(CAR.i, false); }
+  if(on){ $('mcard').hidden = true; $('mapa').hidden = false; medirJunto(); }
+  else {
+    $('mapa').hidden = GEO.vista !== 'mapa'; JT.corte = -1; JT.fresco = false;
+    if(GEO.mapa){ GEO.mapa.resize(); pintarMapa(); }
+  }
+}
+// Dónde acaba el mapa (la mitad de la fila de sellos) y qué parte suya tapan los botones de arriba y los sellos.
+// Solo con la pantalla a la vista (detrás de la portada no se mide nada ni se carga el mapa)
+function medirJunto(){
+  if(!JT.on) return;
+  const P = $('carrPista'), S = $('salaV'); if(!P.offsetHeight) return;
+  const solape = Math.round(P.offsetHeight/2), corte = Math.round(P.offsetTop) + solape, cambio = corte !== JT.corte || solape !== JT.solape;
+  JT.arriba = Math.round($('salaMenu').getBoundingClientRect().bottom - S.getBoundingClientRect().top) + 8; JT.abajo = solape + 8;
+  if(cambio){ JT.corte = corte; JT.solape = solape; S.style.setProperty('--corte', corte + 'px'); S.style.setProperty('--solape', solape + 'px'); }
+  if(!GEO.mapa || JT.nuevo){ prepararMapa(); return; }
+  if(cambio){ GEO.mapa.resize(); if(JT.fresco) encuadrarJunto(true); }
+}
+// MapLibre se carga la primera vez que hace falta; si no llega, queda el carrusel solo
+function prepararMapa(){
+  if(JT.cargando) return; JT.cargando = true;
+  cargarMapa().then(() => { JT.cargando = false; if(!JT.on || !$('carrPista').offsetHeight) return; iniciarMapa(); encuadrarJunto(); })
+    .catch(() => { JT.cargando = false; JT.fallo = true; toast('No se ha podido cargar el mapa. Revisa la conexión: el carrusel funciona igual.'); pintarCarrusel(); });
+}
+// Al entrar, el mapa enseña todo el recorrido en lo que queda a la vista. Mientras nadie lo mueva («fresco»),
+// se vuelve a encuadrar si cambia su tamaño (al llegar las letras o al girar el móvil)
+function encuadrarJunto(otraVez){
+  if(!GEO.mapa || !(JT.nuevo || otraVez)) return; JT.nuevo = false;
+  const caja = new maplibregl.LngLatBounds(); SALA.obras.forEach(o => { if(o.lugar) caja.extend([o.lugar.lng, o.lugar.lat]); });
+  GEO.mapa.fitBounds(caja, {padding:{top:JT.arriba + JT.margen, bottom:JT.abajo + JT.margen, left:JT.margen + 8, right:JT.margen + 8}, maxZoom:17, duration:0});
+  JT.fresco = true;
+  if(!JT.oye){ JT.oye = true; ['pointerdown', 'touchstart', 'wheel'].forEach(t => GEO.mapa.getCanvasContainer().addEventListener(t, () => { JT.fresco = false; }, {passive:true})); }
+  seguirMapa();
+}
+// La pieza del carrusel, señalada en el mapa. El mapa solo se mueve si la pieza queda fuera de lo que se ve (o pegada al borde),
+// y entonces la centra en lo que no tapan los botones ni los sellos
+function seguirMapa(){
+  if(!JT.on || !GEO.mapa || !SALA || JT.nuevo) return;
+  const o = SALA.obras[CAR.i]; if(!o) return;
+  Object.entries(GEO.marcas).forEach(([k, mk]) => mk.getElement().classList.toggle('sel', k === o.id));
+  if(!o.lugar) return;
+  const p = GEO.mapa.project([o.lugar.lng, o.lugar.lat]), c = GEO.mapa.getContainer(), m = JT.margen - 4;
+  if(!c.clientHeight) return;   // con la pantalla escondida (dentro de una pieza) no se mueve
+  if(p.x > m && p.x < c.clientWidth - m && p.y > JT.arriba + m && p.y < c.clientHeight - JT.abajo - m) return;
+  JT.fresco = false;
+  GEO.mapa.easeTo({center:[o.lugar.lng, o.lugar.lat], offset:[0, Math.round((JT.arriba - JT.abajo)/2)], duration:RM ? 0 : 600});
 }
 // Las vecinas, más pequeñas y apagadas cuanto más lejos del centro. Si el navegador lo hace con CSS (animation-timeline), aquí solo
 // se marca la del centro; si no, JavaScript calcula el tamaño en cada fotograma
@@ -1183,16 +1268,22 @@ $('carrYoB').onclick = () => { CAR.tocado = false; CAR.gps = false; if(GEO.watch
 $('carrMapaB').onclick = () => { GEO.sel = SALA.obras[CAR.i].id; verVista('mapa'); };
 // Al aparecer (o al girar el móvil) se recoloca en su pieza; solo cuando cambia el ancho, para no saltar a mitad de un gesto
 if(window.ResizeObserver) new ResizeObserver(() => { const w = $('carrPista').clientWidth; if(w === CAR.ancho) return; CAR.ancho = w; if(w){ reservarFrase(); irA(CAR.i, false); } }).observe($('carrPista'));
-// Mide la frase más larga de la sala con el ancho de ahora y reserva ese alto (hasta 4 líneas, 3 en pantallas bajas)
+// Mide la frase más larga de la sala con el ancho de ahora y reserva ese alto (hasta 4 líneas, 3 en pantallas bajas).
+// Con el mapa encima, una línea menos, y el título también se mide (el más alto de la sala) para que nada salte al deslizar
 function reservarFrase(){
   const d = $('carrD'); if(!SALA) return;
-  const max = matchMedia('(max-height:720px)').matches ? 3 : 4, lh = parseFloat(getComputedStyle(d).lineHeight) || 22;
+  const tw = $('carrT').parentElement;
+  if(JT.on){ const t = $('carrT'); tw.style.minHeight = '0'; let mt = 0; SALA.obras.forEach(o => { t.textContent = o.titulo; mt = Math.max(mt, t.offsetHeight); }); tw.style.minHeight = mt + 'px'; }
+  else tw.style.minHeight = '';
+  const max = (matchMedia('(max-height:720px)').matches ? 3 : 4) - (JT.on ? 1 : 0), lh = parseFloat(getComputedStyle(d).lineHeight) || 22;
   d.style.minHeight = '0'; d.style.webkitLineClamp = 'unset'; let m = 0;
   SALA.obras.forEach(o => { d.textContent = o.tema || ''; m = Math.max(m, d.scrollHeight); });
   const n = Math.max(1, Math.min(max, Math.round(m/lh)));
   d.style.minHeight = n*lh + 'px'; d.style.webkitLineClamp = String(n);
-  datosCarrusel();
+  datosCarrusel(); medirJunto();
 }
+// Con el mapa encima: si cambia el alto de la pantalla o del panel (al girar, al llegar las letras), el mapa se vuelve a ajustar
+if(window.ResizeObserver){ const ro = new ResizeObserver(() => medirJunto()); ['carr', 'carrT', 'carrD'].forEach(id => ro.observe($(id))); }
 
 let QS = 'guiada', QI = INDICE, QP = PLANT, QD = DISP;
 const syncS = () => { [['sModo', QS], ['sIndice', QI], ['sPlant', QP], ['sDisp', QD]].forEach(([id, v]) => document.querySelectorAll(`#${id} [data-v]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v))); };
@@ -1209,7 +1300,7 @@ $('sAplicar').onclick = () => {
   if(mP) cambiarPlantilla(QP);
   if(mD) cambiarDisp(QD);
   pintarSala();
-  toast([mI ? (INDICE === 'carrusel' ? 'Carrusel: una pieza cada vez' : 'Lista: todas las piezas a la vista') : '', mM ? (conv ? 'Conversación: pregúntale a cada obra' : 'Visita guiada: como una audioguía') : '', mP ? 'Plantilla: ' + NOMBRE_P[PLANT] : '', mD ? 'Pieza: ' + NOMBRE_D[DISP] : ''].filter(Boolean).join(' · '));
+  toast([mI ? ({carrusel:'Carrusel: una pieza cada vez', 'mapa-carrusel':'Mapa y carrusel: en una pantalla'}[INDICE] || 'Lista: todas las piezas a la vista') : '', mM ? (conv ? 'Conversación: pregúntale a cada obra' : 'Visita guiada: como una audioguía') : '', mP ? 'Plantilla: ' + NOMBRE_P[PLANT] : '', mD ? 'Pieza: ' + NOMBRE_D[DISP] : ''].filter(Boolean).join(' · '));
 };
 $('obras').onclick = e => { const b = e.target.closest('[data-id]'); if(b) abrir(b.dataset.id); };
 function volverSala(){
@@ -1247,9 +1338,9 @@ function verPortada(){
 // Empezar: en la calle, el mapa con la primera pieza señalada (cómo llegar, o abrirla si ya estás allí); en una sala, la lista
 $('portEmpezar').onclick = () => {
   // Con el carrusel, Empezar lleva a la primera pieza en grande
-  if(INDICE === 'carrusel'){ CAR.i = 0; CAR.tocado = true; }
+  if(conCarrusel()){ CAR.i = 0; CAR.tocado = true; }
   $('portV').hidden = true; $('salaV').hidden = false; pintarSala();
-  if(conLugar() && INDICE !== 'carrusel'){ GEO.sel = SALA.obras[0].id; verVista('mapa'); }
+  if(conLugar() && !conCarrusel()){ GEO.sel = SALA.obras[0].id; verVista('mapa'); }
 };
 $('salaAtras').onclick = () => { if(GEO.vista === 'mapa') verVista('lista'); cerrarTarjeta(); verPortada(); };
 
