@@ -227,6 +227,7 @@ textarea.campo{resize:vertical;min-height:84px}
 .sug .eyb{margin-bottom:4px}
 .q{text-align:left;border:1px solid var(--hair);padding:12px 14px;font-size:1.02rem;font-weight:600;line-height:1.3;min-height:50px;background:color-mix(in srgb,var(--bg) 30%,transparent)}
 .q.ia{border-style:dashed}
+.q.oferta{border-color:color-mix(in srgb,var(--fg) 70%,transparent)}
 .q:hover{border-color:var(--fg)}
 .b1{min-height:56px;background:var(--acento);color:var(--sobre-acento);font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;text-align:left;margin-top:8px}
 .b1 span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1827,9 +1828,13 @@ function sugerencias(extra = '', ks = null){
   // v2: cuando ya no queda relato, las otras voces de la obra (la visita guiada, contada por la guía)
   if(V2 && U.fin && !extra.includes('data-voz')) extra += otrasVoces();
   const mem = puertaMem();
-  if(!s.length && !extra && !ent && !mem) return;
+  // Lo que la pieza acaba de ofrecer va primero y destacado (una respuesta preparada o la pregunta que propone el modelo)
+  const of = U.oferta; let ofB = '', ss = s;
+  if(of && of.k != null && M().qa[of.k] && !U.asked.has(M().qa[of.k].q)){ ofB = qBoton(of.k).replace('class="q', 'class="q oferta'); ss = s.filter(k => k !== of.k).slice(0, 2); }
+  else if(of && of.q){ ofB = `<button class="q oferta" type="button" data-pregunta="${esc(of.q)}">${esc(of.q)}</button>`; ss = s.slice(0, 2); }
+  if(!ss.length && !extra && !ent && !mem && !ofB) return;
   const box = document.createElement('div'); box.className = 'sug';
-  box.innerHTML = (s.length || ent ? `<p class="eyb">Sugerencias</p>${ent}${s.map(qBoton).join('')}` : '') + mem + extra;
+  box.innerHTML = (ss.length || ent || ofB ? `<p class="eyb">Sugerencias</p>${ofB}${ent}${ss.map(qBoton).join('')}` : '') + mem + extra;
   $('lineas').appendChild(box);
 }
 const otrasVoces = () => Object.keys(OBRA.mediadores).filter(k => k !== P.guia).map(k => `<button class="lk" type="button" data-voz="${k}">Escúchala contada por ${esc(MED(k).por || MED(k).nombre)}</button>`).join('');
@@ -1857,6 +1862,7 @@ $('lineas').addEventListener('click', e => {
   // Otra voz: su visita entera (en la v2 también, sin quedarse en la presentación)
   const v = e.target.closest('[data-voz]'); if(v){ P.guia = v.dataset.voz; store.set('guia', P.guia); preparar(); toast(`Ahora te la cuenta ${M().por || M().nombre}`); $('empezar').click(); U.intro = false; return; }
   const p = e.target.closest('[data-pasa]'); if(p){ pasarALaGuia(p); return; }
+  const pq = e.target.closest('[data-pregunta]'); if(pq){ U.oferta = null; preguntar(pq.dataset.pregunta); return; }
   const en = e.target.closest('[data-entrar]'); if(en){ en.remove(); preguntarIA(en.dataset.entrar); return; }
   if(e.target.closest('[data-memorias]')){ DIS.memorias === 'notas' ? notas() : oirMemoria(0); return; }
   const mm = e.target.closest('[data-mem]'); if(mm){ oirMemoria(+mm.dataset.mem); return; }
@@ -2004,7 +2010,7 @@ function encabezar(q){
   if(SUBT) [...$('lineas').children].forEach(el => el.classList.add('viejo'));
   const y = document.createElement('p'); y.className = 'you'; y.textContent = q; $('lineas').appendChild(y);
   const dots = document.createElement('div'); dots.className = 'dots'; dots.setAttribute('aria-label', 'Pensando'); dots.innerHTML = '<i></i><i></i><i></i>'; $('lineas').appendChild(dots);
-  alTope(y); U.pensando = true; U.tarjeta = null; esperar(q); estado();
+  alTope(y); U.pensando = true; U.tarjeta = null; U.oferta = null; esperar(q); estado();
   return dots;
 }
 // Mientras llega la respuesta, bajo el micrófono, frases que cambian cada pocos segundos (como en Ask Mona). Salen de
@@ -2056,12 +2062,35 @@ function preguntaPreparada(x, eco){
     dots.remove();
     const partes = [{t:x.a, voz:M().voz}];
     if(x.c != null && OBRA.citas[x.c]) partes.push({t:OBRA.citas[x.c].t, voz:OBRA.citas[x.c].voz, cita:String(x.c)});
+    // Si la respuesta enlaza con otra, la pieza la ofrece en voz y sale como primera sugerencia; un «sí» la reproduce
+    const of = ofertaDe(x); U.oferta = of ? {k:of.k} : null;
+    if(of) partes.push({t:of.t, voz:M().voz});
     const frases = responder(partes, x.ia); figura(x.img, $('lineas').lastElementChild);
     if(x.ia) $('lineas').insertAdjacentHTML('beforeend', '<p class="ep ep-general"><b>Conocimiento general</b> · no sale de la base documental: verifícalo</p>');
     // Lo que el autor ya no vivió lo cuenta la guía
     const pasa = x.pasa && MED(x.pasa.a) ? `<button class="pasar" type="button" data-pasa="${esc(x.pasa.a)}" data-t="${esc(x.pasa.t)}">Preguntar a ${esc(MED(x.pasa.a).corto || MED(x.pasa.a).nombre)} →</button>` : '';
     sugerencias(pasa); estado(); hablar(frases);
   }, 450);
+}
+// La red de respuestas preparadas: cada una dice cuál ofrece después («sigue») y cada una sabe cómo se ofrece («oferta»).
+// Si la siguiente ya se ha oído, se sigue la cadena hasta una que no
+function ofertaDe(x){
+  const qa = M().qa || []; let q = x.sigue, vistas = 0;
+  while(q && vistas++ < qa.length){
+    const k = qa.findIndex(y => y.q === q); if(k < 0) return null;
+    if(!U.asked.has(qa[k].q)) return qa[k].oferta ? {k, t:qa[k].oferta} : null;
+    q = qa[k].sigue;
+  }
+  return null;
+}
+// «Sí», «vale», «cuéntamelo»…: acepta lo que la pieza acaba de ofrecer, sin pasar por el modelo
+const SIES = new Set(['si', 'sii', 'vale', 'venga', 'claro', 'dale', 'ok', 'okay', 'de', 'acuerdo', 'por', 'favor', 'porfa', 'cuentamelo', 'cuentame', 'dime', 'adelante', 'quiero', 'me', 'interesa', 'bueno', 'va', 'pues', 'que']);
+const esSi = q => { const w = normal(q).split(' ').filter(Boolean); return w.length > 0 && w.length <= 5 && w.every(t => SIES.has(t)) && w.some(t => !['de', 'por', 'me', 'pues', 'que'].includes(t)); };
+function aceptaOferta(q){
+  const o = U && U.oferta; if(!o || !esSi(q)) return false;
+  U.oferta = null;
+  if(o.k != null && M().qa[o.k]) preguntaPreparada(M().qa[o.k]); else if(o.q) preguntar(o.q); else return false;
+  return true;
 }
 function pasarALaGuia(b){
   const k = b.dataset.pasa, t = b.dataset.t; parar(); apagarAnteriores();
@@ -2220,7 +2249,8 @@ El visitante está de pie delante de la obra real, en el museo, y te escucha con
 
 FORMATO
 Responde solo con un objeto JSON, sin texto antes ni después:
-{"partes":[{"t":"…","e":"fuente","f":"B1"},{"t":"…","e":"vista"}],"z":"identificador de zona o null"${OBRA.imagenes ? ',"imagen":"identificador de imagen o null"' : ''}}`;
+{"partes":[{"t":"…","e":"fuente","f":"B1"},{"t":"…","e":"vista"}],"z":"identificador de zona o null"${OBRA.imagenes ? ',"imagen":"identificador de imagen o null"' : ''},"sigue":"…"}
+En "sigue", si tu cierre le ofrece contarle algo más, esa misma pregunta escrita como la haría el visitante («¿Qué dicen las placas?»); si tu cierre es una pregunta para que piense, null.`;
 }
 // Lo que cambia en cada pregunta: quién es el visitante, qué ha visto y oído, y lo que pregunta. Va siempre en el último mensaje
 function visitanteChat(q){
@@ -2274,6 +2304,7 @@ async function preguntarIA(q){
   U.chat.push({role:'user', content:q}, {role:'assistant', content:partes.map(p => p.t).join(' ')});
   const z = ZONA(r.z); if(z) selloCam(z);
   U.tarjeta = z;
+  U.oferta = typeof r.sigue === 'string' && /\?\s*$/.test(r.sigue.trim()) && r.sigue.trim().length <= 120 ? {q:r.sigue.trim()} : null;
   // Responde siempre la guía: el autor solo habla con palabras suyas comprobadas
   const g = MED(MEDG());
   const frases = responder(partes.map(p => ({t:p.t, voz:g.voz})), false, MEDG() !== P.guia ? `<p class="qn">Te responde ${esc(g.por || g.nombre)}</p>` : '');
@@ -2392,7 +2423,7 @@ function sinPreparada(q, r){
     estado(); hablar(frases);
   }, 450);
 }
-const preguntar = q => (V2 ? preguntarV2 : preguntarIA)(q);
+const preguntar = q => { if(aceptaOferta(q)) return; (V2 ? preguntarV2 : preguntarIA)(q); };
 
 /* ======================= Escribir o preguntar con la voz ======================= */
 function abrirEscribir(){
