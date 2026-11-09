@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Prueba de voz · artmedium</title>
+<style>
+  :root{--bg:#0e0e0e;--panel:#1a1a1a;--hair:#2c2c2c;--fg:#ededed;--muted:#9a9a9a;--acc:#b4483a;color-scheme:dark}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:max(16px,env(safe-area-inset-top)) 16px 40px}
+  main{max-width:640px;margin:0 auto;display:grid;gap:14px}
+  h1{font-size:1.3rem;margin:4px 0 0}
+  p{margin:0}
+  .mut{color:var(--muted);font-size:.88rem}
+  label{display:grid;gap:4px;font-size:.85rem;color:var(--muted)}
+  select,textarea,button{font:inherit;color:inherit}
+  select,textarea{width:100%;background:var(--panel);border:1px solid var(--hair);border-radius:10px;padding:10px}
+  textarea{min-height:150px;resize:vertical;font-size:.92rem}
+  .fila{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .var{background:var(--panel);border:1px solid var(--hair);border-radius:14px;padding:14px;display:grid;gap:10px}
+  .var h2{font-size:1rem;margin:0}
+  .pie{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  button{background:var(--acc);border:0;border-radius:999px;padding:10px 18px;font-weight:600;cursor:pointer}
+  button:disabled{opacity:.5;cursor:default}
+  button.sec{background:transparent;border:1px solid var(--hair);padding:6px 12px;font-weight:500;font-size:.85rem}
+  audio{width:100%}
+  .err{color:#ff8a7a;font-size:.88rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>Prueba de voz · Voxtral TTS 3</h1>
+  <p class="mut" id="estado">Comprobando el intermediario…</p>
+
+  <div class="fila">
+    <label>Pieza<select id="pieza"></select></label>
+    <label>Voz<select id="voz"><option value="">Cargando voces…</option></select></label>
+  </div>
+  <p class="mut" id="vozDesc"></p>
+  <p><button class="sec" id="todas">Ver todas las voces, no solo las de español</button></p>
+
+  <div id="variantes"></div>
+
+  <p class="mut">Cada locución se paga una sola vez: volver a escucharla no cuesta. Mistral solo ha probado las etiquetas de emoción y ritmo en inglés; en español "se espera que funcionen".</p>
+</main>
+
+<script>
+const API = 'https://artmedium-ia.alberto-studio76.workers.dev';
+const PIEZAS = [['fueros', 'Monumento a los Fueros'], ['fuente-santa-cecilia', 'Fuente de Santa Cecilia'], ['encierro', 'Monumento al Encierro'], ['hemingway', 'Monumento a Hemingway']];
+const PRECIO = 13 / 1e6;   // dólares por carácter (Voxtral TTS 3)
+const $ = id => document.getElementById(id);
+const hechos = new Map();  // voz + texto → url del audio ya generado
+let VOCES = [], OBRA = null;
+
+const VARIANTES = [
+  {id: 'a', n: 'Tal cual', d: 'El texto sin indicaciones: la voz decide.', hacer: f => f.join('\n\n')},
+  {id: 'b', n: 'Calma y despacio', d: 'Una indicación al principio para todo el texto.', hacer: f => '[emotion=calm][pace=slow]' + f.join('\n\n')},
+  {id: 'c', n: 'Dirigida frase a frase', d: 'Seguro al presentarse, reflexivo al contar, curioso al final.',
+    hacer: f => f.map((t, i) => (i === 0 ? '[emotion=confident][pace=slow]' : i === f.length - 1 ? '[emotion=curious]' : '[emotion=reflective]') + t).join('\n\n')}
+];
+
+$('variantes').innerHTML = VARIANTES.map(v => `
+  <section class="var" id="v-${v.id}">
+    <h2>${v.n}</h2>
+    <p class="mut">${v.d}</p>
+    <textarea id="t-${v.id}"></textarea>
+    <div class="pie"><button id="b-${v.id}">Generar y escuchar</button><span class="mut" id="c-${v.id}"></span></div>
+    <audio id="a-${v.id}" controls hidden></audio>
+    <p class="err" id="e-${v.id}" hidden></p>
+  </section>`).join('');
+
+const coste = t => { const n = t.length; return n + ' caracteres · ' + (n * PRECIO * 100).toFixed(2).replace('.', ',') + ' céntimos de dólar'; };
+VARIANTES.forEach(v => {
+  const ta = $('t-' + v.id);
+  ta.oninput = () => { $('c-' + v.id).textContent = coste(ta.value); };
+  $('b-' + v.id).onclick = () => generar(v.id);
+});
+
+async function generar(id){
+  const texto = $('t-' + id).value.trim(), voz = $('voz').value, b = $('b-' + id), e = $('e-' + id), a = $('a-' + id);
+  e.hidden = true;
+  if (!texto || !voz) return;
+  const clave = voz + '\n' + texto;
+  if (!hechos.has(clave)) {
+    b.disabled = true; b.textContent = 'Generando…';
+    try {
+      const r = await fetch(API + '/voz', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({texto, voz})});
+      if (!r.ok) throw new Error(await r.text());
+      hechos.set(clave, URL.createObjectURL(await r.blob()));
+    } catch (err) {
+      e.textContent = 'No ha salido: ' + (err.message || err); e.hidden = false;
+      return;
+    } finally { b.disabled = false; b.textContent = 'Generar y escuchar'; }
+  }
+  a.src = hechos.get(clave); a.hidden = false; a.play().catch(() => {});
+}
+
+async function cargarPieza(){
+  const r = await fetch('../obras/calle/' + $('pieza').value + '.json');
+  OBRA = await r.json();
+  const m = Object.values(OBRA.mediadores || {})[0] || {};
+  const frases = (m.relato || []).map(x => x.t);
+  VARIANTES.forEach(v => { $('t-' + v.id).value = v.hacer(frases); $('t-' + v.id).oninput(); $('a-' + v.id).hidden = true; $('e-' + v.id).hidden = true; });
+  elegirVoz();
+}
+
+function elegirVoz(){
+  if (!VOCES.length || !OBRA) return;
+  const m = Object.values(OBRA.mediadores || {})[0] || {};
+  const fem = ((OBRA.voces || {})[m.voz] || {}).fem;
+  const quiero = fem ? 'female' : 'male';
+  const ya = VOCES.find(v => v.id === $('voz').value);
+  if (!ya || (ya.genero && ya.genero !== quiero)) {
+    const v = VOCES.find(v => v.genero === quiero) || VOCES[0];
+    $('voz').value = v.id;
+  }
+  describirVoz();
+}
+
+function describirVoz(){
+  const v = VOCES.find(v => v.id === $('voz').value);
+  $('vozDesc').textContent = v ? [v.genero === 'female' ? 'Mujer' : v.genero === 'male' ? 'Hombre' : v.genero, v.edad, (v.idiomas || []).join(', '), v.desc].filter(Boolean).join(' · ') : '';
+}
+
+async function cargarVoces(todas){
+  $('voz').innerHTML = '<option value="">Cargando voces…</option>';
+  try {
+    const r = await fetch(API + '/voces' + (todas ? '' : '?language=es'));
+    if (!r.ok) throw new Error(await r.text());
+    VOCES = await r.json();
+    if (!VOCES.length && !todas) return cargarVoces(true);
+    $('voz').innerHTML = VOCES.map(v => `<option value="${v.id}">${v.nombre || v.slug || v.id}${v.genero ? ' · ' + (v.genero === 'female' ? 'mujer' : v.genero === 'male' ? 'hombre' : v.genero) : ''}</option>`).join('');
+    elegirVoz();
+  } catch (err) {
+    $('voz').innerHTML = '<option value="">Sin voces</option>';
+    $('vozDesc').textContent = 'No he podido cargar las voces: ' + (err.message || err);
+  }
+}
+
+$('pieza').innerHTML = PIEZAS.map(([p, n]) => `<option value="${p}">${n}</option>`).join('');
+$('pieza').onchange = cargarPieza;
+$('voz').onchange = describirVoz;
+$('todas').onclick = () => cargarVoces(true);
+
+fetch(API).then(r => r.text()).then(t => { $('estado').textContent = t; })
+  .catch(() => { $('estado').textContent = 'No llego al intermediario. Si hay fútbol, puede ser el bloqueo de LaLiga: prueba con datos móviles o más tarde.'; });
+cargarPieza().then(() => cargarVoces(false));
+</script>
+</body>
+</html>
