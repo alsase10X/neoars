@@ -842,8 +842,9 @@ const SALA_WEB = {
   obras:['../obras/noche-estrellada.json', '../obras/el-dormitorio.json', '../obras/el-panuelo-rojo.json', '../obras/el-incendio-del-parlamento.json']
 };
 // Modelo para las preguntas libres. Dentro de Claude responde Claude; en la web, Puter (cada visitante
-// con su propia cuenta) o, si se rellena «api», el servidor intermedio del proyecto.
-const CONFIG = {api:'', puterModelo:''};
+// con su propia cuenta) o, en las piezas que traen «nube»: true, el intermediario del proyecto (Perplexity para el texto
+// y Mistral para la voz de las que tienen un id de voz en «nube» dentro de sus voces).
+const CONFIG = {api:'https://artmedium-ia.alberto-studio76.workers.dev', puterModelo:''};
 // Variante v2 (?v=2): conversación primero, como las esculturas que hablan. Habla la propia obra si tiene voz
 // («obra»), si no el autor, y si no la guía. Una presentación, sugerencias y preguntas libres que se responden
 // antes con el banco validado de la obra (qa) que con un modelo.
@@ -1449,7 +1450,7 @@ function abrir(id){
   P = {guia:store.get('guia', vozDefecto(meds)), perfil:store.get('perfil', vis[0])};
   if(!OBRA.mediadores[P.guia]) P.guia = meds[0];
   if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
-  U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false};
+  U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false, nubeYa:false};
   $('oTit').textContent = OBRA.titulo; $('oSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
   document.title = `${OBRA.titulo} · ${SALA.nombre}`;
   pintarLogo('iniLogo');
@@ -1468,7 +1469,7 @@ function abrir(id){
 }
 // Vuelve al inicio de la obra: el sello grande y un botón (el toque que deja sonar la voz)
 function preparar(){
-  parar(); U.voz = M().voz; U.caps = construir(); U.els = []; U.i = 0; U.si = 0; U.fin = false; U.started = false; U.playing = false; U.conv = false; U.intro = false; U.introI = 0; U.introF = 0;
+  parar(); U.voz = M().voz; U.caps = construir(); U.nubeYa = false; U.els = []; U.i = 0; U.si = 0; U.fin = false; U.started = false; U.playing = false; U.conv = false; U.intro = false; U.introI = 0; U.introF = 0;
   U.segundos = Math.round(U.caps.reduce((a, C) => a + (C.au ? C.au.a - C.au.de : C.palabras/2.5), 0) + U.caps.length*1.2 + U.caps.filter(C => C.k === 'pregunta').length*espPregunta()/1000);
   $('lineas').innerHTML = ''; $('lineas').classList.remove('hablando');
   U.fut = {}; U.entera = false; U.dedo = false; U.reanudar = false; $('porvenir').innerHTML = ''; $('porvenir').hidden = true; $('flujo').classList.remove('conFuturo', 'moviendo');
@@ -1637,6 +1638,7 @@ const espPregunta = () => (VIS().lenta || VIS().preguntaZonas) ? 9000 : 7000;
 function sonar(){
   const C = U.caps[U.i]; if(!C) return terminar();
   const n = U.caps.length;
+  if(!U.nubeYa){ U.nubeYa = true; anticiparNube(U.caps.slice(U.i).flatMap(C => C.segs.flatMap(s => SENT(s.t).map(t => ({t, voz:s.voz}))))); }
   if(U.si === 0){
     const nueva = !U.els[U.i]; anadirCap(U.i); if(!nueva){ apagarAnteriores(); U.els[U.i].classList.remove('ya'); U.els[U.i].classList.add('ahora'); alTope(U.els[U.i]); }
     limpiar(C); selloCam(C.z); $('obraV').classList.toggle('mirando', C.k === 'pregunta'); anillo(U.i/n);
@@ -2000,6 +2002,7 @@ function pasarALaGuia(b){
 let hablando = false;
 function hablar(frases, alAcabar){
   const tok = ++U.tok, L = $('lineas'); L.classList.add('hablando'); let k = 0; contexto(); hablando = true; nivelMusica(); estado();
+  anticiparNube(frases);
   const fin = () => { L.classList.remove('hablando'); hablando = false; nivelMusica(); estado(); mostrarOpciones(); };
   const next = () => {
     if(tok !== U.tok) return;
@@ -2031,11 +2034,13 @@ function cargarPuter(){
 }
 const puterDentro = () => { try{ return !!(window.puter && puter.auth.isSignedIn()); }catch(e){ return false; } };
 const IA = {
-  modo:null, s:null,
+  _modo:null, s:null,
+  // Las piezas con «nube» contestan con el modelo del proyecto, a través del intermediario; las demás, como siempre
+  get modo(){ return this._modo !== 'claude' && CONFIG.api && OBRA && OBRA.nube ? 'api' : this._modo; },
+  set modo(v){ this._modo = v; },
   async iniciar(){
     try{ if(window.claude && claude.use){ const s = await claude.use('sample'); if(s){ this.s = s; this.modo = 'claude'; } } }catch(e){}
-    if(!this.modo && CONFIG.api) this.modo = 'api';
-    if(!this.modo && !window.claude){ this.modo = 'puter'; if(st.get('am.puter', '0') === '1') cargarPuter().catch(() => {}); }
+    if(!this._modo && !window.claude){ this.modo = 'puter'; if(st.get('am.puter', '0') === '1') cargarPuter().catch(() => {}); }
   },
   nombre(){ return {claude:'Claude', puter:'Puter', api:'el modelo del proyecto'}[this.modo] || 'IA'; },
   // Dentro del gesto (enviar, tocar): en Puter abre aquí el inicio de sesión si hace falta
@@ -2610,7 +2615,12 @@ function decirFrase(f, tok, fin){
   const acabar = () => { if(hecho || tok !== U.tok) return; hecho = true; clearTimeout(wd); clearInterval(U.reloj); fin(); };
   const sinVoz = () => { reloj(); clearTimeout(wd); wd = setTimeout(acabar, f.w.length*ms + 500); };
   encender(f, 1);
-  if(!G.voz || !window.speechSynthesis) return sinVoz();
+  if(!G.voz) return sinVoz();
+  const nv = vozNube(f.voz || U.voz);
+  if(nv) return decirNube(f, tok, nv, acabar, local);
+  local();
+  function local(){
+  if(!window.speechSynthesis) return sinVoz();
   try{
     speechSynthesis.cancel();
     const limpio = HABLA(f.t), u = new SpeechSynthesisUtterance(limpio); u.lang = 'es-ES'; u.rate = rate; u.pitch = vd.pitch || 1;
@@ -2622,6 +2632,64 @@ function decirFrase(f, tok, fin){
     wd = setTimeout(() => { if(!empezo && tok === U.tok) sinVoz(); }, 1800);
     speechSynthesis.speak(u);
   }catch(e){ sinVoz(); }
+  }
+}
+// Voz en la nube (intermediario → Mistral): cada frase se pide una vez y se guarda mientras la página está abierta.
+// El plan gratuito admite una petición por segundo, así que van en fila, con la que toca decir ahora siempre delante
+const NUBE = {hechas:new Map(), fila:[], andando:false, ultima:0};
+const vozNube = k => (CONFIG.api && OBRA && OBRA.nube && (OBRA.voces[k] || {}).nube) || null;
+function audioNube(texto, voz, urgente){
+  const clave = voz + '\n' + texto;
+  let e = NUBE.hechas.get(clave);
+  if(!e){
+    e = {texto, voz}; e.p = new Promise((res, rej) => { e.res = res; e.rej = rej; });
+    e.p.catch(() => { if(NUBE.hechas.get(clave) === e) NUBE.hechas.delete(clave); });   // si falla, la próxima vez se vuelve a pedir
+    NUBE.hechas.set(clave, e); NUBE.fila[urgente ? 'unshift' : 'push'](e);
+  } else if(urgente && NUBE.fila.includes(e)){ NUBE.fila.splice(NUBE.fila.indexOf(e), 1); NUBE.fila.unshift(e); }
+  andarNube();
+  return e.p;
+}
+async function andarNube(){
+  if(NUBE.andando) return; NUBE.andando = true;
+  while(NUBE.fila.length){
+    const e = NUBE.fila.shift();
+    const falta = NUBE.ultima + 1100 - Date.now(); if(falta > 0) await new Promise(r => setTimeout(r, falta));
+    NUBE.ultima = Date.now();
+    try{
+      const r = await fetch(CONFIG.api.replace(/\/+$/, '') + '/voz', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({texto:e.texto, voz:e.voz})});
+      if(!r.ok) throw new Error('voz ' + r.status);
+      const ac = contexto(); if(!ac) throw new Error('sin audio');
+      const b = await r.arrayBuffer();
+      e.res(await new Promise((res, rej) => ac.decodeAudioData(b, res, rej)));
+    }catch(err){ e.rej(err); }
+  }
+  NUBE.andando = false;
+}
+function anticiparNube(frases){ frases.forEach(f => { const v = vozNube(f.voz || U.voz); if(v) audioNube(HABLA(f.t), v).catch(() => {}); }); }
+// Una frase con la voz de la nube; las palabras se encienden según avanza el audio, repartidas por su longitud.
+// Si la nube falla o tarda, la dice la voz del dispositivo
+function decirNube(f, tok, voz, acabar, local){
+  let ya = false, wd = 0;
+  const rendirse = () => { if(ya || tok !== U.tok) return; ya = true; clearTimeout(wd); local(); };
+  wd = setTimeout(rendirse, 9000);
+  audioNube(HABLA(f.t), voz, true).then(buf => {
+    if(ya || tok !== U.tok) return; ya = true; clearTimeout(wd);
+    const ac = contexto(); if(!ac) return local();
+    callar();
+    const src = ac.createBufferSource(); src.buffer = buf; src.connect(ac.destination);
+    const t0 = ac.currentTime + .05; src.start(t0); VOZ.nodo = src;
+    const pesos = f.w.map(w => w.textContent.length + 1), total = pesos.reduce((a, b) => a + b, 0) || 1;
+    let n0 = 1;
+    const paso = () => {
+      if(tok !== U.tok) return;
+      const p = Math.min(1, Math.max(0, (ac.currentTime - t0)/buf.duration))*total;
+      let n = 0, a = 0; while(n < pesos.length && a + pesos[n]*.5 <= p){ a += pesos[n]; n++; }
+      if(n > n0){ n0 = n; encender(f, n); }
+      VOZ.raf = requestAnimationFrame(paso);
+    };
+    src.onended = () => { if(tok !== U.tok) return; cancelAnimationFrame(VOZ.raf); VOZ.nodo = null; acabar(); };
+    paso();
+  }).catch(rendirse);
 }
 // La pantalla no se apaga mientras suena la visita
 let WL = null;

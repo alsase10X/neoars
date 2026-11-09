@@ -154,11 +154,13 @@
    "vista": "Una columna de mármol rojo con una cartela de bronce."
   }
  },
+ "nube": true,
  "voces": {
   "obra": {
    "pitch": 0.9,
    "rate": 0.95,
-   "fem": false
+   "fem": false,
+   "nube": "01a0f318-4afd-77a5-aa5e-f4d741c30187"
   }
  },
  "citas": {},
