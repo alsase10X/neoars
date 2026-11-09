@@ -333,52 +333,70 @@
     {
      "q": "¿Por qué no te inauguraron?",
      "d": "obra",
-     "a": "Por la polémica que levantaron mis inscripciones en euskera cuando se colocaron, en 1905. Para entonces ya se habían acuñado medallas para celebrarlo. Busca abajo las planchas de bronce con las inscripciones."
+     "a": "Por la polémica que levantaron mis inscripciones en euskera cuando se colocaron, en 1905. Para entonces ya se habían acuñado medallas para celebrarlo. Busca abajo las planchas de bronce con las inscripciones.",
+     "sigue": "¿Quién te pagó?",
+     "oferta": "¿Te cuento por qué nunca me inauguraron?"
     },
     {
      "q": "¿Quién te pagó?",
      "d": "obra",
      "z": "columna",
-     "a": "La gente, por suscripción popular: cada uno daba entre veinticinco céntimos y veinticinco pesetas. En total costé doscientas mil pesetas, y la piedra salió de canteras navarras. Mira el mármol rojo de la columna."
+     "a": "La gente, por suscripción popular: cada uno daba entre veinticinco céntimos y veinticinco pesetas. En total costé doscientas mil pesetas, y la piedra salió de canteras navarras. Mira el mármol rojo de la columna.",
+     "sigue": "¿Qué fue la Gamazada?",
+     "oferta": "¿Quieres saber quién me pagó?"
     },
     {
      "q": "¿Qué fue la Gamazada?",
      "d": "fuera",
      "z": "pergamino",
-     "a": "La reacción de Navarra al proyecto de 1893 del ministro de Hacienda Germán Gamazo, que recortaba la autonomía fiscal reconocida por la Ley Paccionada de 1841. Yo vine a simbolizar esa defensa. Mira el pergamino de arriba: «Ley Foral»."
+     "a": "La reacción de Navarra al proyecto de 1893 del ministro de Hacienda Germán Gamazo, que recortaba la autonomía fiscal reconocida por la Ley Paccionada de 1841. Yo vine a simbolizar esa defensa. Mira el pergamino de arriba: «Ley Foral».",
+     "sigue": "¿Qué son las cadenas?",
+     "oferta": "¿Te cuento qué fue la Gamazada?"
     },
     {
      "q": "¿Qué son las cinco figuras de abajo?",
      "d": "obra",
-     "a": "Son alegorías: la Historia, la Justicia, la Autonomía, la Paz y el Trabajo. Las esculpió Ramón Carmona. Cinco, como las merindades: ese número se repite por todo mi cuerpo. Cuenta las escalinatas de la base."
+     "a": "Son alegorías: la Historia, la Justicia, la Autonomía, la Paz y el Trabajo. Las esculpió Ramón Carmona. Cinco, como las merindades: ese número se repite por todo mi cuerpo. Cuenta las escalinatas de la base.",
+     "sigue": "¿Quién te diseñó?",
+     "oferta": "¿Quieres saber quiénes son las cinco figuras de abajo?"
     },
     {
      "q": "¿Cuánto mides?",
      "d": "mirar",
      "z": "navarra",
-     "a": "Veintitrés metros y cuarenta centímetros. Solo Navarra, la estatua de arriba, mide cinco y medio. Échate hacia atrás para verla entera."
+     "a": "Veintitrés metros y cuarenta centímetros. Solo Navarra, la estatua de arriba, mide cinco y medio. Échate hacia atrás para verla entera.",
+     "sigue": "¿Por qué estás aquí y no en la plaza del Castillo?",
+     "oferta": "¿Te digo cuánto mido?"
     },
     {
      "q": "¿Quién te diseñó?",
      "d": "obra",
      "z": "capitel",
-     "a": "El proyecto es de Manuel Martínez de Ubago, y las esculturas de abajo, de Ramón Carmona. Mira el capitel blanco sobre la columna roja: hojas y volutas talladas."
+     "a": "El proyecto es de Manuel Martínez de Ubago, y las esculturas de abajo, de Ramón Carmona. Mira el capitel blanco sobre la columna roja: hojas y volutas talladas.",
+     "sigue": "¿Cuánto mides?",
+     "oferta": "¿Quieres saber quién me diseñó?"
     },
     {
      "q": "¿Por qué estás aquí y no en la plaza del Castillo?",
      "d": "fuera",
-     "a": "La idea era levantarme en la plaza, que entonces se llamaba de la Constitución, pero costó reunir el dinero y se cambió el sitio. Aquí estoy, frente a la fachada del Palacio de Navarra. Busca el palacio a tu alrededor."
+     "a": "La idea era levantarme en la plaza, que entonces se llamaba de la Constitución, pero costó reunir el dinero y se cambió el sitio. Aquí estoy, frente a la fachada del Palacio de Navarra. Busca el palacio a tu alrededor.",
+     "sigue": "¿Por qué no te inauguraron?",
+     "oferta": "¿Te cuento por qué estoy aquí y no en la plaza del Castillo?"
     },
     {
      "q": "¿Qué son las cadenas?",
      "d": "mirar",
      "z": "cadenas",
-     "a": "Un fragmento de las cadenas del escudo del Reino de Navarra, roto: es la libertad conquistada. Mira su mano derecha, la que queda a tu izquierda."
+     "a": "Un fragmento de las cadenas del escudo del Reino de Navarra, roto: es la libertad conquistada. Mira su mano derecha, la que queda a tu izquierda.",
+     "sigue": "¿Te han restaurado?",
+     "oferta": "¿Quieres saber qué son las cadenas que lleva en la mano?"
     },
     {
      "q": "¿Te han restaurado?",
      "d": "obra",
-     "a": "En 2010: me limpiaron durante cinco semanas. Mira el bronce de arriba y la piedra de abajo: no envejecen igual."
+     "a": "En 2010: me limpiaron durante cinco semanas. Mira el bronce de arriba y la piedra de abajo: no envejecen igual.",
+     "sigue": "¿Qué son las cinco figuras de abajo?",
+     "oferta": "¿Te cuento cómo me restauraron?"
     }
    ]
   }
