@@ -292,6 +292,16 @@
    "acc": "#b4483a",
    "voz": "obra",
    "intro": 5,
+   "presenta": [
+    "Me pagaron muchos, de su bolsillo, y aun así nunca me inauguraron.",
+    "Me levantaron para decir que unas leyes eran de Navarra, cuando en 1893 un ministro quiso recortar su autonomía fiscal.",
+    "Pregúntame lo que quieras."
+   ],
+   "sugiere": [
+    "¿Qué fue la Gamazada?",
+    "¿Te han restaurado?",
+    "¿Por qué estás aquí y no en la plaza del Castillo?"
+   ],
    "placeholder": "Pregúntale al monumento…",
    "conversa": "Conversa con el monumento",
    "te": "El monumento te pregunta",
