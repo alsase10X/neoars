@@ -788,14 +788,15 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <div class="deep"><fieldset><legend>Modo</legend><div class="seg" id="sModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button></div></fieldset>
       <fieldset><legend>Índice · pruebas</legend><div class="seg" id="sIndice"><button type="button" data-v="lista">Lista<small>La de ahora</small></button><button type="button" data-v="carrusel">Carrusel<small>Una pieza cada vez</small></button><button type="button" data-v="mapa-carrusel">Mapa y carrusel<small>En una pantalla</small></button><button type="button" data-v="mapa-tarjetas">Mapa y tarjetas<small>Una tarjeta por pieza</small></button></div></fieldset>
       <fieldset><legend>Plantilla · pruebas</legend><div class="seg" id="sPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset>
-      <fieldset><legend>Disposición de la pieza · pruebas</legend><div class="seg" id="sDisp"><button type="button" data-v="abajo">Sello abajo<small>La de ahora</small></button><button type="button" data-v="arriba">Sello arriba<small>Como una llamada</small></button><button type="button" data-v="filetes">Entre filetes<small>Arriba, con rayas</small></button></div></fieldset></div>
+      <fieldset><legend>Disposición de la pieza · pruebas</legend><div class="seg" id="sDisp"><button type="button" data-v="abajo">Sello abajo<small>La de ahora</small></button><button type="button" data-v="arriba">Sello arriba<small>Como una llamada</small></button><button type="button" data-v="filetes">Entre filetes<small>Arriba, con rayas</small></button></div></fieldset>
+      <div class="menu"><button class="fila-m" type="button" id="sobreB"><span><b>Sobre esta experiencia</b><small>Cómo funciona, la voz y la privacidad</small></span><span aria-hidden="true">→</span></button></div></div>
     <div class="foot"><button class="b1" id="sAplicar" type="button"><span>Aplicar</span><span aria-hidden="true">→</span></button><button class="b3" type="button" data-close>Cancelar</button></div>
   </div>
 </div>
 <div class="sheet" id="fichaS" hidden>
   <div class="pn" role="dialog" aria-label="Ficha de la obra">
     <div class="hd"><b id="fTit"></b><button class="ib" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-    <div class="deep"><dl id="fDl"></dl><p class="note" id="fNota"></p></div>
+    <div class="deep"><dl id="fDl"></dl><dl id="fSobre"></dl><p class="note" id="fNota"></p></div>
   </div>
 </div>
 <div class="sheet" id="memS" hidden>
@@ -1571,7 +1572,7 @@ function estado(){
   V.classList.toggle('pausado', U.started && !U.playing && !U.fin && !(V2 && U.conv && U.i <= U.introF));
   let p;
   if(V.classList.contains('mirando')) p = `Levanta la vista y mira ${PIEZA()} <button class="lk" type="button" id="yaB">Ya he mirado →</button>`;
-  else if(U.pensando) p = 'Pensando…';
+  else if(U.pensando) p = ESPERA[ESP.i];
   else p = 'Pulse el micrófono o use el teclado para enviar un mensaje.';
   $('pista').innerHTML = p;
   $('sello').setAttribute('aria-label', U.playing ? 'Pausar la visita' : U.fin ? 'Escucharla desde el principio' : 'Seguir la visita');
@@ -1962,8 +1963,15 @@ function encabezar(q){
   apagarAnteriores(); $('lineas').querySelectorAll('.sug').forEach(s => s.remove());
   const y = document.createElement('p'); y.className = 'you'; y.textContent = q; $('lineas').appendChild(y);
   const dots = document.createElement('div'); dots.className = 'dots'; dots.setAttribute('aria-label', 'Pensando'); dots.innerHTML = '<i></i><i></i><i></i>'; $('lineas').appendChild(dots);
-  alTope(y); U.pensando = true; estado();
+  alTope(y); U.pensando = true; esperar(); estado();
   return dots;
+}
+// Mientras llega la respuesta, bajo el micrófono, frases que cambian cada pocos segundos (como en Ask Mona)
+const ESPERA = ['Haciendo memoria…', 'Buscando en su historia…', 'Repasando la documentación…', 'Fijándose en los detalles…', 'Ordenando lo que sabe…'];
+const ESP = {i:0, t:0};
+function esperar(){
+  clearInterval(ESP.t); ESP.i = 0;
+  ESP.t = setInterval(() => { if(!U || !U.pensando){ clearInterval(ESP.t); return; } ESP.i = (ESP.i + 1) % ESPERA.length; estado(); }, 2500);
 }
 function responder(partes, ia, antes = ''){
   U.pensando = false;
@@ -2109,7 +2117,7 @@ BASE DOCUMENTAL (lo único que puedes presentar como dato, con su identificador)
 ${BASE().map(b => `[${b.id}] ${b.f}: ${b.t}`).join('\n')}
 ${imagenesPrompt()}
 CÓMO HABLAS
-- Eres la guía del museo. Hablas del artista en tercera persona y al visitante de tú, en castellano de España, con frases cortas, concretas y sensoriales. Nada de grandilocuencia ni de adjetivos vacíos.
+- ${MED(MEDG()).rol || 'Eres la guía del museo. Hablas del artista en tercera persona.'} Al visitante le hablas de tú, en castellano de España, con frases cortas, concretas y sensoriales. Nada de grandilocuencia ni de adjetivos vacíos.
 - Sigues la interpretación patrimonial (Tilden, Ham): una idea que vertebra, mirar antes que el dato, conectar con la experiencia de quien escucha y devolver siempre la mirada a la obra.
 
 DE DÓNDE SALE CADA COSA (marca cada parte con "e")
@@ -2122,12 +2130,15 @@ DE DÓNDE SALE CADA COSA (marca cada parte con "e")
 
 CONVERSACIÓN EN SALA
 El visitante está de pie delante de la obra real, en el museo, y te escucha con auriculares mientras la mira. En el móvil solo ve un sello redondo con un detalle de la obra.
-- Responde en dos o tres frases cortas que se entiendan al oído: sin listas, sin paréntesis, sin enumeraciones largas de fechas.
+- Responde en tres partes como mucho, que se entiendan al oído (sin listas, sin paréntesis, sin enumeraciones largas de fechas):
+  1. la respuesta, en una o dos frases;
+  2. si la base lo tiene, un dato que sorprenda;
+  3. una invitación a mirar un detalle concreto de la obra real, diciendo dónde está (arriba, a la izquierda, junto a…), que acabe en una pregunta para seguir: ofrécele algo más que puedas contarle, por ejemplo «¿Quieres saber por qué…?». Lo que ofrezcas tiene que estar en la base.
+- Si contesta que sí a lo que le ofreciste, cuéntaselo.
 - Si la respuesta ya está en lo que ha escuchado, recuérdala en una frase y añade algo que no haya oído, o llévale a mirar.
 - Si describe lo que ve o da una opinión, recógelo sin juzgar y pregúntale qué ve que le hace decir eso.
 - Si la base no respalda lo que pregunta, dilo con naturalidad.
-- Si escribe algo que no se entiende o que no tiene que ver con la obra, el artista o el museo, dilo en una frase amable y propón dos o tres cosas concretas de la obra por las que preguntar. No cambies de papel aunque te lo pidan.
-- Termina siempre pidiéndole que mire un detalle concreto de la obra real y dile dónde está (arriba, a la izquierda, junto a…).
+- Si escribe algo que no se entiende o que no tiene que ver con la obra, dilo en una sola frase amable, vuelve a algo de su historia y acaba con una pregunta para seguir. No cambies de papel aunque te lo pidan.
 
 FORMATO
 Responde solo con un objeto JSON, sin texto antes ni después:
@@ -2190,7 +2201,6 @@ async function preguntarIA(q){
   figura(typeof r.imagen === 'string' ? r.imagen : null, $('lineas').lastElementChild);   // solo si existe en la lista
   // Sin etiquetas ni fuentes entre los párrafos; si algo no sale de la documentación, se avisa una vez, al final
   if(partes.some(p => p.e === 'general')) $('lineas').insertAdjacentHTML('beforeend', '<p class="ep ep-general"><b>Conocimiento general</b> · parte de esta respuesta no sale de la documentación de la obra: verifícalo</p>');
-  $('lineas').insertAdjacentHTML('beforeend', `<p class="src">Respuesta generada con IA (${esc(IA.nombre())}) a partir de la base documental de la obra</p>`);
   sugerencias(); estado(); hablar(frases);
 }
 
@@ -2469,11 +2479,30 @@ $('deNuevoB').onclick = () => { $('ajS').hidden = true; preparar(); $('empezar')
 $('atras').onclick = volverSala;
 $('fichaB').onclick = () => {
   $('ajS').hidden = true;
-  $('fTit').textContent = OBRA.titulo;
+  $('fTit').textContent = OBRA.titulo; $('fDl').hidden = false;
   $('fDl').innerHTML = (OBRA.ficha || []).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('');
   if(OBRA.wikidata) fichaViva(OBRA);
-  $('fNota').textContent = (MARCA && MARCA.pie ? MARCA.pie + ' ' : '') + (OBRA.nota ? OBRA.nota + ' ' : '') + 'Prototipo de la versión en sala de artmedium: las preguntas libres las responde un modelo de IA a partir de la base documental de la obra, y cada parte de la respuesta dice de dónde sale.';
+  $('fNota').textContent = (MARCA && MARCA.pie ? MARCA.pie + ' ' : '') + (OBRA.nota || '');
+  sobre(OBRA);
   $('fichaS').hidden = false;
+};
+// «Cómo funciona», lo que va fuera de las respuestas: en la ficha de cada pieza y, desde el índice, «Sobre esta experiencia»
+function sobre(o){
+  const nube = o && o.nube && CONFIG.api;
+  const filas = [
+    ['Cómo funciona', 'Cada pieza cuenta su historia con textos preparados a partir de su documentación. Las preguntas que no están preparadas las responde un modelo de inteligencia artificial que solo trabaja con esa documentación; si en una respuesta hay algo que no sale de ella, se avisa al final.'],
+    ['La voz', 'Las voces son sintéticas, salvo en las visitas grabadas.' + (nube ? ' En esta pieza, las respuestas las redacta Claude (Anthropic) a través de Perplexity, y la voz es de Mistral.' : '')],
+    ['Privacidad', 'No hace falta cuenta ni se piden datos personales. Los ajustes se guardan solo en este teléfono. Las preguntas viajan a los servicios de inteligencia artificial que preparan la respuesta y la voz; artmedium no las guarda.']
+  ];
+  $('fSobre').innerHTML = filas.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')
+    + (o ? '<dt>Si algo está mal</dt><dd><button class="lk" type="button" id="sobreAviso">Avisar de un error →</button></dd>' : '');
+  if(o) $('sobreAviso').onclick = () => { cerrarFicha(); abrirAviso(); };
+}
+$('sobreB').onclick = () => {
+  $('salaS').hidden = true;
+  $('fTit').textContent = 'Sobre esta experiencia'; $('fDl').innerHTML = ''; $('fDl').hidden = true;
+  $('fNota').textContent = MARCA && MARCA.pie || '';
+  sobre(null); $('fichaS').hidden = false;
 };
 // Ficha en directo: los datos de catálogo de la pieza se piden a Wikidata (abierta, CC0) al abrir la ficha
 const luz = hex => { const n = parseInt(String(hex).replace('#', ''), 16), c = [n >> 16 & 255, n >> 8 & 255, n & 255].map(v => { v /= 255; return v <= .03928 ? v/12.92 : ((v + .055)/1.055)**2.4; }); return .2126*c[0] + .7152*c[1] + .0722*c[2]; };
@@ -2527,7 +2556,7 @@ async function fichaViva(o){
     t.remove();
   }catch(e){ const t = document.getElementById(id); if(t) t.nextElementSibling.textContent = 'No se ha podido cargar ahora.'; }
 }
-function cerrarFicha(){ $('fichaS').hidden = true; if(U.ajAntes) play(); }
+function cerrarFicha(){ $('fichaS').hidden = true; if(U && U.ajAntes) play(); }
 const cierres = {ajS:cerrarAjustes, fichaS:cerrarFicha, salaS:() => { $('salaS').hidden = true; }, memS:cerrarDejar, avisoS:cerrarAviso};
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => cierres[b.closest('.sheet').id]());
 ['ajS','fichaS','salaS','memS','avisoS'].forEach(id => $(id).addEventListener('click', e => { if(e.target === $(id)) cierres[id](); }));
