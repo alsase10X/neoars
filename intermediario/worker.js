@@ -10,6 +10,7 @@
 //   MISTRAL_API_KEY     (Secret)  la clave de la consola de Mistral
 //   MODELO              (Text, opcional)  por defecto anthropic/claude-haiku-5-5
 //   MODELO_VOZ          (Text, opcional)  por defecto voxtral-mini-tts-3-0
+//   RAZONAR             (Text, opcional)  cuánto razona el modelo antes de escribir: none, minimal, low… (ahora: minimal)
 //   ORIGENES            (Text, opcional)  webs que pueden llamarlo, separadas por comas
 //
 // Sin herramientas: el modelo no busca en la web y responde solo con la base de la pieza que le manda la página.
@@ -19,7 +20,7 @@ const MODELO_VOZ = 'voxtral-mini-tts-3-0';
 const ORIGENES = 'https://alsase10x.github.io';
 const MAX_CUERPO = 60000;   // caracteres: la base de una pieza y unos pocos turnos caben de sobra
 const MAX_TURNOS = 12;
-const MAX_SALIDA = 700;     // tokens de respuesta
+const MAX_SALIDA = 1500;    // tokens de respuesta, contando lo que el modelo razona antes de escribir
 const MAX_VOZ = 3000;       // caracteres por locución (a 13 $ el millón, unos 4 céntimos como mucho)
 
 export default {
@@ -83,7 +84,7 @@ export default {
       : [];
     if (!turnos.length) return texto('Falta la conversación', 400);
 
-    const base = {model: env.MODELO || MODELO, max_output_tokens: MAX_SALIDA};
+    const base = {model: env.MODELO || MODELO, max_output_tokens: MAX_SALIDA, reasoning: {effort: env.RAZONAR || 'none'}};
     // Primero, la conversación con sus papeles; si la API no la acepta así, la misma conversación en un solo texto
     let r = await pedir(env, {...base, input: turnos});
     if (r.status === 400 || r.status === 422) {
@@ -94,6 +95,8 @@ export default {
     const j = await r.json();
     const salida = (j.output || []).filter(o => o && o.type === 'message')
       .flatMap(o => o.content || []).filter(c => c && c.type === 'output_text').map(c => c.text).join('') || j.output_text || '';
+    // Si no hay texto (p. ej. se le acabaron los tokens razonando), se dice por qué en vez de devolver nada
+    if (!salida) return texto('Respuesta vacía del modelo: ' + JSON.stringify({estado: j.status, motivo: j.incomplete_details, tipos: (j.output || []).map(o => o && o.type), uso: j.usage}).slice(0, 600), 502);
     return texto(salida);
   }
 };
