@@ -1451,7 +1451,7 @@ function abrir(id){
   if(!OBRA.mediadores[P.guia]) P.guia = meds[0];
   if(!OBRA.visitas[P.perfil]) P.perfil = vis[0];
   U = {caps:[], els:[], i:0, si:0, playing:false, started:false, tok:0, timer:0, reloj:0, fin:false, zona:null, asked:new Set(), chat:[], ctl:null, voz:M().voz, segundos:60, conv:false, nubeYa:false};
-  $('oTit').textContent = OBRA.titulo; $('oSub').textContent = `${OBRA.autor} · ${OBRA.fecha}`;
+  $('oTit').textContent = OBRA.titulo; $('oSub').textContent = ''; $('oSub').style.display = 'none';   // autor y fecha, en la ficha
   document.title = `${OBRA.titulo} · ${SALA.nombre}`;
   pintarLogo('iniLogo');
   // El segundo color de cada pieza, si la marca lo pide (el texto sobre él, claro u oscuro según su luz)
@@ -1569,16 +1569,10 @@ function estado(){
   const V = $('obraV');
   V.classList.toggle('sonando', U.playing); V.classList.toggle('quieto', !U.playing && !hablando);
   V.classList.toggle('pausado', U.started && !U.playing && !U.fin && !(V2 && U.conv && U.i <= U.introF));
-  const C = U.caps[U.i], zona = U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : '';
   let p;
   if(V.classList.contains('mirando')) p = `Levanta la vista y mira ${PIEZA()} <button class="lk" type="button" id="yaB">Ya he mirado →</button>`;
   else if(U.pensando) p = 'Pensando…';
-  else if(hablando && zona) p = `Búscalo en ${PIEZA()} · ${esc(zona)}`;
-  else if(U.playing) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}` : 'Toca el sello para pausar';
-  else if(V2 && U.conv && !U.fin && U.i <= U.introF) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}` : 'Pregunta con el micrófono o el teclado';
-  else if(U.conv && !U.fin) p = zona ? `Búscalo en ${PIEZA()} · ${esc(zona)}. Toca el sello para seguir la visita` : 'Toca el sello para seguir la visita, o pregunta otra cosa';
-  else if(U.fin) p = 'Pregunta con el micrófono o el teclado. Toca el sello para escucharla de nuevo';
-  else p = 'Toca el sello para seguir, o pregunta con el micrófono o el teclado';
+  else p = 'Pulse el micrófono o use el teclado para enviar un mensaje.';
   $('pista').innerHTML = p;
   $('sello').setAttribute('aria-label', U.playing ? 'Pausar la visita' : U.fin ? 'Escucharla desde el principio' : 'Seguir la visita');
   pintarEstado();
@@ -2192,8 +2186,10 @@ async function preguntarIA(q){
   const z = ZONA(r.z); if(z) selloCam(z);
   // Responde siempre la guía: el autor solo habla con palabras suyas comprobadas
   const g = MED(MEDG());
-  const frases = responder(partes.map(p => ({t:p.t, voz:g.voz, lab:etiqueta(p)})), false, MEDG() !== P.guia ? `<p class="qn">Te responde ${esc(g.por || g.nombre)}</p>` : '');
+  const frases = responder(partes.map(p => ({t:p.t, voz:g.voz})), false, MEDG() !== P.guia ? `<p class="qn">Te responde ${esc(g.por || g.nombre)}</p>` : '');
   figura(typeof r.imagen === 'string' ? r.imagen : null, $('lineas').lastElementChild);   // solo si existe en la lista
+  // Sin etiquetas ni fuentes entre los párrafos; si algo no sale de la documentación, se avisa una vez, al final
+  if(partes.some(p => p.e === 'general')) $('lineas').insertAdjacentHTML('beforeend', '<p class="ep ep-general"><b>Conocimiento general</b> · parte de esta respuesta no sale de la documentación de la obra: verifícalo</p>');
   $('lineas').insertAdjacentHTML('beforeend', `<p class="src">Respuesta generada con IA (${esc(IA.nombre())}) a partir de la base documental de la obra</p>`);
   sugerencias(); estado(); hablar(frases);
 }
