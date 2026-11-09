@@ -2152,6 +2152,10 @@ function BASE(){
     add('Visita general del museo', m.relato.filter(c => (!c.p || tiene(c.p, 'general')) && !(c.x && tiene(c.x, 'general')) && c.k !== 'pregunta')
       .map(c => c.t + (c.c != null && OBRA.citas[c.c] ? ' «' + OBRA.citas[c.c].t + '»' : '') + (c.tras ? ' ' + c.tras : '')).join(' '));
     (m.qa || []).filter(x => !x.ia).forEach(x => add('Respuestas preparadas del museo', x.q + ' ' + x.a));
+  } else {
+    // Las respuestas preparadas también, para que lo que diga el modelo no contradiga lo que el visitante ya ha oído
+    const m = OBRA.mediadores[MEDG()];
+    (m.qa || []).filter(x => !x.ia).forEach((x, k) => b.push({id:'R' + (k + 1), f:'Respuesta preparada', t:x.q + ' ' + x.a}));
   }
   return (OBRA._base = b);
 }
@@ -2195,6 +2199,7 @@ DE DÓNDE SALE CADA COSA (marca cada parte con "e")
 - "lectura": una interpretación, una asociación o una conexión con la vida de quien escucha. Se dice como lectura («se puede ver como», «quizá»), nunca como un hecho.
 - "general": conocimiento general fiable que no está en la base; se mostrará con «verifícalo». Úsalo poco y nunca para datos de esta obra.
 - No pongas entre comillas nada que no esté literalmente entre comillas en la base. No inventes palabras del artista.
+- Las «Respuesta preparada» de la base son textos revisados que el visitante puede haber oído ya: no los contradigas.
 - Si algo no tiene respaldo, no lo digas.
 
 CONVERSACIÓN EN SALA
@@ -2317,12 +2322,20 @@ function preguntarV2(q){
   q = q.replace(/\s+/g, ' ').trim().slice(0, 300); if(!q) return;
   if(pideImagenes(q)){ const z = zonaNombrada(q); return z ? zonaTocada(z, q) : imagenes(q); }
   const nq = normal(q), igual = (M().qa || []).find(x => formas(x).some(f => normal(f) === nq)); if(igual) return preguntaPreparada(igual, q);
-  const r = ranking(q);
-  if(r.length && r[0].s >= .5) return preguntaPreparada(M().qa[r[0].k], q);
+  const r = ranking(q), conIA = IAlista();
+  // Con modelo, la respuesta preparada solo si pregunta lo mismo: muy parecida y con las mismas partículas (quién, qué,
+  // por qué…), para que «¿Por qué tiene cadenas?» no reciba la de «¿Qué son las cadenas?». Lo demás lo contesta el modelo,
+  // que conoce las preparadas. Sin modelo, la más parecida, o lo que se ve en la zona que nombra
+  if(r.length){
+    const x = M().qa[r[0].k];
+    if(conIA ? r[0].s >= .8 && formas(x).some(f => interrogativos(f) === interrogativos(q)) : r[0].s >= .5) return preguntaPreparada(x, q);
+  }
+  if(conIA) return preguntarIA(q);
   const z = zonaNombrada(q); if(z) return zonaTocada(z, q);
-  if(IAlista()) return preguntarIA(q);
   sinPreparada(q, r);
 }
+const INTERR = [['porque', /\bpor que\b|\bporque\b/], ['quien', /\bquien(es)?\b/], ['cuando', /\bcuando\b/], ['donde', /\bdonde\b/], ['cuanto', /\bcuant[oa]s?\b/], ['como', /\bcomo\b/], ['que', /\b(que|cual(es)?)\b/]];
+const interrogativos = q => { let n = ' ' + normal(q) + ' '; const out = []; INTERR.forEach(([k, re]) => { if(re.test(n)){ out.push(k); n = n.replace(re, ' '); } }); return out.sort().join(','); };
 const NUM = ['', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'];
 // Los lugares del cuadro como imágenes dentro de la respuesta. La voz dice cuántos y se encienden al llegar a ellos
 function imagenes(eco){
