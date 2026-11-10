@@ -15,10 +15,11 @@ header.barra{display:flex;flex-wrap:wrap;gap:1rem;align-items:end;justify-conten
 header.barra h1{font-size:1.1rem;margin:0}
 header.barra label{margin:0;font-size:.85rem}
 header.barra select{margin:0;padding-block:.35rem;width:auto;min-width:11rem}
-header.barra button{margin:0;padding:.35rem .8rem;font-size:.85rem;width:auto}
 .elige{display:flex;gap:.75rem;align-items:end}
+.elige button{margin:0;padding:.35rem .8rem;font-size:.85rem}
 nav.pest{justify-content:flex-start;margin-bottom:1rem;border-bottom:1px solid var(--pico-muted-border-color)}
 nav.pest button{margin:0 .5rem -1px 0;border-radius:var(--pico-border-radius) var(--pico-border-radius) 0 0}
+nav.pest .tec{margin-left:auto}
 .probar{display:grid;grid-template-columns:390px minmax(0,1fr);gap:1.5rem;align-items:start}
 @media (max-width:900px){.probar{grid-template-columns:1fr}}
 .movil{position:sticky;top:1rem}
@@ -46,23 +47,22 @@ pre{white-space:pre-wrap;word-break:break-word;max-height:22rem;overflow:auto;fo
 .sec h3 button{padding:.15rem .6rem;font-size:.78rem;margin:0}
 .sec textarea{font-family:var(--pico-font-family-monospace);font-size:.82rem;line-height:1.45;margin-bottom:.2rem;field-sizing:content;min-height:4rem;max-height:34rem}
 .sec.cambiada{border-left:3px solid var(--pico-primary)}
-#uForm label{font-size:.9rem}
-#uForm label small{display:block;color:var(--pico-muted-color);font-size:.78rem;font-weight:400;margin-top:.1rem}
-#uForm input,#uForm textarea,#uForm select{margin-bottom:.6rem;font-size:.92rem}
-#uForm textarea{field-sizing:content;min-height:3.2rem;max-height:30rem;line-height:1.45}
-#uForm article h3{display:flex;gap:.6rem;align-items:baseline;justify-content:space-between}
-#uForm article h3 small{font-weight:400;font-size:.8rem;color:var(--pico-muted-color);flex:1;margin-left:.5rem}
-#uForm article h3 button{padding:.15rem .6rem;font-size:.78rem;margin:0}
-.item{border-top:1px solid var(--pico-muted-border-color);padding-top:.7rem;margin-top:.4rem;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 .8rem}
-.item .cuerpo{min-width:0}
-.item .quitar{padding:.15rem .5rem;font-size:.75rem;margin:0;align-self:start}
-.item .meta{margin-bottom:.4rem}
-.item .par{display:grid;grid-template-columns:1fr 1fr;gap:0 .8rem}
-@media (max-width:700px){.item .par{grid-template-columns:1fr}}
-.anadir{margin-top:.4rem;padding:.3rem .8rem;font-size:.85rem}
-.pegar{margin-top:.8rem}
-.pegar summary{font-size:.88rem}
-.verificar{padding:.2rem .6rem;font-size:.78rem;margin:.2rem 0 .4rem}
+/* El editor de la unidad */
+.ed{max-width:60rem}
+.ed label{font-size:.85rem}
+.ed input,.ed select,.ed textarea{margin-bottom:.7rem}
+.ed textarea{field-sizing:content;min-height:3.2rem;max-height:28rem;line-height:1.45}
+.ed .fila{display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));gap:0 1rem}
+.ed .foto{display:flex;gap:1rem;align-items:flex-start}
+.ed .foto img{width:7rem;height:7rem;object-fit:cover;border-radius:50%;border:2px solid var(--pico-muted-border-color);background:#222}
+.ed .item{border-top:1px solid var(--pico-muted-border-color);padding-top:.7rem;margin-top:.4rem}
+.ed .item .cab{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;font-size:.82rem;color:var(--pico-muted-color);margin-bottom:.3rem}
+.ed .item .cab button,.ed .mas{padding:.15rem .6rem;font-size:.78rem;margin:0;width:auto}
+.ed .mas{margin-top:.3rem}
+.ed .ok{color:var(--pico-ins-color)}
+.ed .mal{color:var(--pico-del-color)}
+.ed .nuevo-texto{background:var(--pico-card-sectioning-background-color);padding:.8rem;border-radius:var(--pico-border-radius);margin-top:.6rem}
+.verificar{padding:.2rem .6rem;font-size:.78rem;margin:0 0 .4rem;width:auto}
 </style>
 </head>
 <body>
@@ -76,11 +76,24 @@ pre{white-space:pre-wrap;word-break:break-word;max-height:22rem;overflow:auto;fo
     </div>
   </header>
   <nav class="pest" id="pest">
-    <button type="button" data-p="probar">Probar</button>
-    <button type="button" data-p="unidad" class="outline">Unidad</button>
-    <button type="button" data-p="prompt" class="outline">Prompt</button>
+    <button type="button" data-p="unidad">Unidad</button>
+    <button type="button" data-p="probar" class="outline">Probar</button>
+    <button type="button" data-p="ajustes" class="outline tec">Ajustes</button>
   </nav>
 
+  <!-- ======================= Unidad: lo que edita el curador ======================= -->
+  <section id="unidad" class="ed" hidden>
+    <div class="estado">
+      <p id="uEstado"></p>
+      <div class="acc">
+        <button type="button" class="secondary outline" id="uDescartar">Descartar los cambios</button>
+        <button type="button" id="uGuardar">Guardar</button>
+      </div>
+    </div>
+    <div id="editor"></div>
+  </section>
+
+  <!-- ======================= Probar ======================= -->
   <section id="probar" class="probar">
     <div class="movil">
       <iframe id="marco" title="La unidad, como la ve el visitante" allow="microphone; autoplay; geolocation"></iframe>
@@ -95,20 +108,9 @@ pre{white-space:pre-wrap;word-break:break-word;max-height:22rem;overflow:auto;fo
     </div>
   </section>
 
-  <section id="unidad" hidden>
-    <div class="estado">
-      <p id="uEstado"></p>
-      <div class="acc">
-        <button type="button" class="secondary outline" id="uProbar">Probar los cambios</button>
-        <button type="button" class="secondary outline" id="uDescartar">Descartar los cambios</button>
-        <button type="button" id="uGuardar">Guardar</button>
-      </div>
-    </div>
-    <p class="nota">Lo que cambies aquí se queda en este navegador hasta que lo guardes, y se puede probar antes en el móvil de «Probar». Al guardar se publica en el repositorio como una versión nueva.</p>
-    <div id="uForm"></div>
-  </section>
-
-  <section id="prompt" hidden>
+  <!-- ======================= Ajustes: la parte técnica ======================= -->
+  <section id="ajustes" hidden>
+    <h2 style="font-size:1.05rem">Las reglas (prompt)</h2>
     <div class="estado">
       <p id="pEstado"></p>
       <div class="acc">
@@ -134,6 +136,8 @@ const num = n => Math.round(n).toLocaleString('es-ES');
 const st = {get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k, v){ try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} }};
 const REPO = 'alsase10X/neoars';
 const IA = 'https://artmedium-ia.alberto-studio76.workers.dev';   // el intermediario: tiene las claves y escribe en GitHub
+const igual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const copia = o => JSON.parse(JSON.stringify(o));
 
 /* ======================= Guardar: el intermediario escribe en el repositorio ======================= */
 // La contraseña se pide una vez y se queda en este navegador; si deja de valer, se vuelve a pedir
@@ -150,20 +154,21 @@ async function leerArchivo(ruta){
   if(!r.ok) return null;
   return {sha:r.headers.get('X-Sha'), datos: await r.json()};
 }
-async function guardarArchivo(ruta, contenido, mensaje, sha){
+async function guardarArchivo(ruta, contenido, mensaje, sha, base64){
   for(let intento = 0; intento < 2; intento++){
     const c = clave(true); if(!c) throw new Error('Sin contraseña no se puede guardar.');
-    const r = await fetch(`${IA}/archivo`, {method:'PUT', headers:{'Content-Type':'application/json', 'X-Panel-Clave':c}, body:JSON.stringify({ruta, contenido, mensaje, sha})});
+    const r = await fetch(`${IA}/archivo`, {method:'PUT', headers:{'Content-Type':'application/json', 'X-Panel-Clave':c}, body:JSON.stringify({ruta, contenido, mensaje, sha, base64:!!base64})});
     if(r.status === 401){ st.set('am.panel.clave', null); if(intento) throw new Error('Contraseña incorrecta.'); continue; }
     if(!r.ok) throw new Error(await r.text());
     return r.json();
   }
 }
+const aJSON = o => JSON.stringify(o, null, 1) + '\n';
 // Medido en el Monumento a los Fueros: unos 2,8 caracteres por token en castellano. La voz de Mistral, 13 $ por millón de caracteres
 const TOKENS = c => c/2.8, VOZ = c => c*13/1e6;
 
 /* ======================= Qué unidad ======================= */
-let SALAS = ['pamplona'];
+let SALAS = ['pamplona'], SALA = null;   // SALA: el archivo de la agrupación abierta
 async function cargarSalas(){
   // La lista de agrupaciones sale del repositorio; si no llega, queda la de pruebas
   try{
@@ -175,46 +180,47 @@ async function cargarSalas(){
   $('sala').innerHTML = SALAS.map(x => `<option${x === s ? ' selected' : ''}>${esc(x)}</option>`).join('');
   await cargarPiezas(q.get('pieza') || st.get('am.panel.pieza') || 'fueros');
 }
-// La agrupación abierta: tal como está publicada (SALAPUB) y con las unidades nuevas aún sin guardar (SALADEF)
-let SALAPUB = null, SALADEF = null, SALASHA = null;
-const idDe = r => r.split('/').pop().replace(/\.json$/, '');
-const rutaDe = id => (SALADEF && SALADEF.obras || []).find(r => idDe(r) === id);
-const repoRuta = r => new URL(r, 'http://x/unidad/salas/').pathname.slice(1);   // «../obras/calle/x.json» → «unidad/obras/calle/x.json»
-const nuevas = () => { try{ return JSON.parse(st.get('am.panel.nuevas.' + $('sala').value) || '[]'); }catch(e){ return []; } };
 async function cargarPiezas(quiero){
-  const sala = $('sala').value; SALAPUB = null; SALASHA = null;
-  try{ const f = await leerArchivo(`unidad/salas/${sala}.json`); if(f){ SALAPUB = f.datos; SALASHA = f.sha; } }catch(e){}
-  if(!SALAPUB) try{ SALAPUB = await fetch(`../salas/${sala}.json`, {cache:'no-cache'}).then(r => r.json()); }catch(e){ SALAPUB = {obras:[]}; }
-  SALADEF = JSON.parse(JSON.stringify(SALAPUB)); SALADEF.obras = SALADEF.obras || [];
-  nuevas().forEach(r => { if(!SALADEF.obras.includes(r)) SALADEF.obras.push(r); });
-  const ids = SALADEF.obras.map(idDe); if(!ids.includes(quiero)) quiero = ids[0];
+  SALA = null;
+  try{ const f = await leerArchivo(`unidad/salas/${$('sala').value}.json`); if(f) SALA = {sha:f.sha, datos:f.datos}; }catch(e){}
+  if(!SALA) try{ SALA = {sha:null, datos: await fetch(`../salas/${$('sala').value}.json`, {cache:'no-cache'}).then(r => r.json())}; }catch(e){ SALA = {sha:null, datos:{obras:[]}}; }
+  const ids = (SALA.datos.obras || []).map(r => r.split('/').pop().replace(/\.json$/, ''));
+  // Las unidades nuevas sin guardar también salen en la lista
+  nuevasDe($('sala').value).forEach(id => { if(!ids.includes(id)) ids.push(id); });
+  if(quiero && !ids.includes(quiero)) quiero = ids[0];
   $('pieza').innerHTML = ids.map(x => `<option${x === quiero ? ' selected' : ''}>${esc(x)}</option>`).join('');
-  abrir(); cargarUnidad();
+  await abrirUnidad();
+  abrir();
 }
-let probadoV = 0;
 function abrir(){
   st.set('am.panel.sala', $('sala').value); st.set('am.panel.pieza', $('pieza').value);
-  entradas.length = 0; actual = null; pintarTraza(); probadoV = UDv;
-  // «t» solo sirve para que el marco se recargue entero y la conversación empiece de cero
+  entradas.length = 0; actual = null; pintarTraza();
+  // «t» solo sirve para que el marco se recargue entero y la conversación empiece de cero; «panel=1», para que espere los cambios sin guardar
   $('marco').src = `../sala/?sala=${encodeURIComponent($('sala').value)}&v=3&panel=1${$('conVoz').checked ? '' : '&voz=0'}&t=${Date.now()}#${encodeURIComponent($('pieza').value)}`;
+  probadoCon = U ? JSON.stringify(U.datos) : '';
 }
 $('sala').onchange = () => cargarPiezas();
-$('pieza').onchange = () => { abrir(); cargarUnidad(); };
+$('pieza').onchange = async () => { await abrirUnidad(); abrir(); };
 $('conVoz').onchange = abrir;
 $('reiniciar').onclick = abrir;
 const W = () => $('marco').contentWindow;
 $('marco').addEventListener('load', () => {
   let w; try{ w = W(); w.addEventListener('am:traza', e => alLlegar(e.detail)); }catch(e){ return; }
-  // La pieza espera esto antes de cargar: la agrupación con las nuevas y lo que haya sin guardar en este navegador
-  const piezas = {}; (SALADEF && SALADEF.obras || []).forEach(r => { const b = borradorU(idDe(r)); if(b) piezas[idDe(r)] = b; });
-  if(UD && $('pieza').value) piezas[$('pieza').value] = UD;   // la abierta, siempre: recién guardada, la web aún no la sirve
-  try{ w.postMessage({tipo:'am:panel', sala:SALADEF, piezas}, '*'); }catch(e){}
+  // La unidad abierta, tal como está en el editor (con o sin cambios): el motor la usa en lugar de la publicada
+  if(U){
+    const piezas = {}; piezas[U.id] = paraMotor(U.datos);
+    let sala = SALA && SALA.datos; if(sala && U.nueva) sala = {...sala, obras:[...(sala.obras || []), `../obras/calle/${U.id}.json`]};
+    try{ w.postMessage({tipo:'am:panel', sala, piezas}, '*'); }catch(e){}
+  }
   aplicarBorrador();
 });
+let probadoCon = '';
+// Al pasar a «Probar» con cambios desde la última carga, el móvil se recarga con ellos
+function probarAlDia(){ if(U && JSON.stringify(U.datos) !== probadoCon) abrir(); }
 
 /* ======================= Probar: lo que ha pasado con cada pregunta ======================= */
-const entradas = []; let actual = null, nEntrada = 0;
-const nueva = q => { const e = {q, hora:new Date(), n:++nEntrada}; entradas.unshift(e); return (actual = e); };
+const entradas = []; let actual = null;
+const nueva = q => { const e = {q, hora:new Date()}; entradas.unshift(e); return (actual = e); };
 const abierta = q => actual && !actual.cerrada ? actual : nueva(q);
 function alLlegar(d){
   if(d.tipo === 'pregunta') nueva(d.q);
@@ -237,7 +243,7 @@ function porque(e){
   return ['Sin respuesta', 'Ni preparada ni modelo: se ofrecen las preguntas más cercanas.'];
 }
 const ORIGEN = {fuente:'de la base', vista:'a la vista', lectura:'lectura', general:'conocimiento general'};
-function pintarEntrada(e){
+function pintarEntrada(e, i){
   const [titulo, motivo] = porque(e); let h = `<article><h3>${esc(e.q)}</h3>`;
   if(titulo) h += `<p class="camino"><strong>${titulo}.</strong> ${motivo}</p>`;
   if(e.preparada){
@@ -250,12 +256,13 @@ function pintarEntrada(e){
   if(e.respuesta){
     const r = e.respuesta, base = (() => { try{ return W().AM.base(); }catch(x){ return []; } })();
     h += '<div class="resp">' + r.partes.map(p => `<p>${esc(p.t)} <small>· ${ORIGEN[p.e] || p.e}${p.f ? ' ' + esc(p.f) : ''}</small></p>`).join('') + '</div>';
+    // Una respuesta buena del modelo pasa a las preparadas de la unidad con un botón; después se retoca y se guarda en «Unidad»
+    h += e.verificada ? '<p class="meta">Añadida a las respuestas preparadas. Revísala y guarda la unidad.</p>'
+      : `<button type="button" class="secondary outline verificar" data-v="${i}">Verificar: pasar a respuestas preparadas</button>`;
     const dicho = r.partes.reduce((a, p) => a + p.t.length, 0), env = e.envio ? e.envio.turnos.reduce((a, t) => a + t.content.length, 0) : 0;
     h += `<p class="meta">${(r.ms/1000).toFixed(1).replace('.', ',')} s${e.envio && e.envio.borrador ? ' · <strong>con el borrador</strong>' : ''} · enviado: ${num(env)} caracteres (unos ${num(TOKENS(env))} tokens) · respuesta: ${num(dicho)} caracteres · voz: unos ${VOZ(dicho).toFixed(4).replace('.', ',')} $${r.crudo && r.crudo.z ? ' · zona ' + esc(r.crudo.z) : ''}${r.crudo && r.crudo.sigue ? ' · ofrece «' + esc(r.crudo.sigue) + '»' : ''}</p>`;
     const usados = r.partes.filter(p => p.f).map(p => base.find(b => b.id === p.f)).filter(Boolean);
     if(usados.length) h += `<details><summary>Fragmentos de la base que cita</summary>${usados.map(b => `<p class="meta"><strong>${esc(b.id)}</strong> · ${esc(b.f)}<br>${esc(b.t)}</p>`).join('')}</details>`;
-    // Si la respuesta es buena, pasa a las preparadas de la unidad tal cual (se puede retocar en «Unidad»)
-    if(UD) h += `<button type="button" class="verificar secondary outline" data-v="${e.n}"${e.verificada ? ' disabled' : ''}>${e.verificada ? 'Añadida a las respuestas preparadas' : 'Verificar: pasar a respuestas preparadas'}</button>`;
   }
   if(e.envio){
     const t = e.envio.turnos, medio = t.slice(1, -1);
@@ -271,10 +278,227 @@ function pintarTraza(){
   $('traza').innerHTML = entradas.length ? entradas.map(pintarEntrada).join('')
     : '<p class="vacio">Pregunta en el móvil de la izquierda. Aquí verás por dónde ha ido cada pregunta, qué se le envió al modelo y qué devolvió.</p>';
 }
+$('traza').addEventListener('click', ev => {
+  const b = ev.target.closest('.verificar'); if(!b || !U) return;
+  const e = entradas[+b.dataset.v]; if(!e || !e.respuesta) return;
+  const m = MEDU(); if(!Array.isArray(m.qa)) m.qa = [];
+  m.qa.push({q:e.q, d:MEDK(), a:e.respuesta.partes.map(p => p.t).join(' '), sigue:null, oferta:null});
+  e.verificada = true; cambioU(true); pintarTraza();
+});
+
+/* ======================= Unidad: el editor ======================= */
+let U = null;   // {id, ruta, sha, datos, pub, nueva, foto}
+const MEDK = () => Object.keys(U.datos.mediadores || {})[0] || 'obra';
+const MEDU = () => U.datos.mediadores[MEDK()];
+const rutaDe = id => { const r = (SALA.datos.obras || []).find(x => x.split('/').pop() === id + '.json'); return r ? 'unidad/' + r.replace(/^(\.\.\/)+/, '') : `unidad/obras/calle/${id}.json`; };
+const kBorrador = () => `am.panel.u.${$('sala').value}/${U.id}`;
+const nuevasDe = sala => { const l = []; try{ for(let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i), m = k.match(/^am\.panel\.u\.([^/]+)\/(.+)$/); if(m && m[1] === sala){ const b = JSON.parse(localStorage.getItem(k)); if(b && b.nueva) l.push(m[2]); } } }catch(e){} return l; };
+async function abrirUnidad(){
+  const id = $('pieza').value; U = null; $('editor').innerHTML = ''; estadoU();
+  if(!id) return;
+  const ruta = rutaDe(id);
+  let b = null; try{ b = JSON.parse(st.get(`am.panel.u.${$('sala').value}/${id}`) || 'null'); }catch(e){}
+  let pub = null, sha = null;
+  if(!(b && b.nueva)){
+    try{ const f = await leerArchivo(ruta); if(f){ pub = f.datos; sha = f.sha; } }catch(e){}
+    if(!pub) try{ pub = await fetch('../' + ruta.replace(/^unidad\//, ''), {cache:'no-cache'}).then(r => r.ok ? r.json() : null); }catch(e){}
+  }
+  if(!pub && !(b && b.nueva)){ $('uEstado').textContent = 'No se ha podido leer la unidad.'; return; }
+  U = {id, ruta, sha, pub, nueva:!!(b && b.nueva), datos: b && b.datos ? b.datos : copia(pub), foto:null};
+  if(U.pub && b && igual(b.datos, U.pub)) st.set(kBorrador(), null);
+  pintarEditor(); estadoU(); cargarVoces();
+}
+function cambioU(repintar){
+  // Cada cambio se queda en este navegador hasta que se guarda; si no hay cambios, no queda nada
+  if(!U) return;
+  const hay = U.nueva || !igual(U.datos, U.pub);
+  st.set(kBorrador(), hay ? JSON.stringify({nueva:U.nueva, datos:U.datos}) : null);
+  if(repintar) pintarEditor();
+  estadoU();
+}
+function estadoU(){
+  if(!U){ $('uEstado').textContent = ''; $('uGuardar').disabled = $('uDescartar').disabled = true; return; }
+  const hay = U.nueva || !igual(U.datos, U.pub), sinFoto = U.nueva && !U.foto;
+  $('uEstado').innerHTML = U.nueva ? `<strong>Unidad nueva, sin guardar.</strong>${sinFoto ? ' Para guardarla hace falta la foto.' : ''}` : hay ? '<strong>Cambios sin guardar.</strong> La unidad de «Probar» ya responde con ellos.' : 'Sin cambios.';
+  $('uGuardar').disabled = !hay || sinFoto; $('uDescartar').disabled = !hay;
+  pintarAviso();
+}
+// El aviso de «Probar»: con qué se está probando, si no es lo publicado
+function pintarAviso(){
+  const u = U && !U.nueva && !igual(U.datos, U.pub), p = !!BOR && $('usar').checked;
+  $('aviso').hidden = !u && !p;
+  $('aviso').innerHTML = u && p ? '<strong>Estás probando con cambios sin guardar de la unidad y con el borrador del prompt.</strong>'
+    : u ? '<strong>Estás probando con cambios sin guardar de la unidad.</strong>' : p ? '<strong>Estás probando con el borrador del prompt</strong>, no con las reglas publicadas.' : '';
+}
+// Lo que el motor recibe: la unidad tal cual, y la foto recién elegida como dato en memoria (Pages tarda en servir la subida)
+function paraMotor(d){ const o = copia(d), f = U && (U.foto || U.fotoVista); if(f){ o.img = f.url; o.fondo = f.url; o.iw = f.w; o.ih = f.h; } return o; }
+const fotoActual = () => { const f = U.foto || U.fotoVista; if(f) return f.url; return U.datos.img ? new URL(U.datos.img, new URL('../' + U.ruta.replace(/^unidad\//, ''), location.href)).href : ''; };
+
+const campo = (k, titulo, v, tipo = 'input', nota = '') => tipo === 'textarea'
+  ? `<label>${esc(titulo)}<textarea data-k="${esc(k)}" spellcheck="true">${esc(v)}</textarea>${nota ? `<small>${nota}</small>` : ''}</label>`
+  : `<label>${esc(titulo)}<input data-k="${esc(k)}" value="${esc(v)}"${tipo === 'num' ? ' type="number" step="any"' : ''}>${nota ? `<small>${nota}</small>` : ''}</label>`;
+const lineas = a => (Array.isArray(a) ? a : []).join('\n');
+function pintarEditor(){
+  if(!U) return;
+  const d = U.datos, mk = MEDK(), m = MEDU(), L = d.lugar || {}, P = `mediadores.${mk}.`;
+  const foto = fotoActual();
+  const mapa = isFinite(L.lat) && isFinite(L.lng) ? `<a href="https://www.openstreetmap.org/?mlat=${L.lat}&mlon=${L.lng}#map=18/${L.lat}/${L.lng}" target="_blank" rel="noopener">Ver el punto en el mapa</a>` : '<span class="meta">Sin coordenadas no sale en el mapa de la ruta.</span>';
+  let h = `<article><h3>Ficha y lugar</h3>
+    <div class="fila">${campo('titulo', 'Título', d.titulo)}${campo('autor', 'Autor', d.autor)}${campo('fecha', 'Fecha', d.fecha)}</div>
+    <div class="fila">${campo('pieza', 'Cómo se nombra', d.pieza, 'input', 'Con artículo: «el monumento», «la fuente». Así se habla de ella en pantalla.')}${campo('lugar.dir', 'Dirección', L.dir)}</div>
+    <div class="fila">${campo('lugar.lat', 'Latitud', L.lat == null ? '' : L.lat, 'num')}${campo('lugar.lng', 'Longitud', L.lng == null ? '' : L.lng, 'num')}</div>
+    <p class="meta">${mapa} · Para sacar las coordenadas: botón derecho sobre el punto en Google Maps y copiar los dos números.</p>
+    <div class="foto">${foto ? `<img src="${esc(foto)}" alt="">` : '<img alt="" style="opacity:.3">'}<label>Foto principal <input type="file" id="uFoto" accept="image/*"><small>Una foto vertical de la pieza. Se guarda reducida a 1.600 px.</small></label></div>
+  </article>`;
+  h += `<article><h3>Quién habla</h3>
+    ${campo(P + 'rol', 'Papel', m.rol || '', 'textarea', 'Quién es y cómo habla. Si se deja vacío, se usa el papel por defecto de las reglas.')}
+    ${campo('tema', 'Idea que vertebra la pieza', d.tema || '', 'textarea')}
+    ${campo('gancho', 'Gancho', d.gancho || '', 'input', 'Una frase corta que se ve en la ruta, antes de abrir la pieza.')}
+    ${campo(P + 'presenta', 'Presentación', lineas(m.presenta), 'textarea', 'Lo primero que dice al abrir. Una frase por línea; la última suele invitar a preguntar.')}
+    ${campo(P + 'sugiere', 'Preguntas de arranque', lineas(m.sugiere), 'textarea', 'Tres, una por línea. Son las que se ofrecen al visitante.')}
+    ${campo(P + 'relato', 'Relato entero', (m.relato || []).map(c => c.t).join('\n\n'), 'textarea', 'Lo que cuenta si el visitante pide «cuéntamela entera». Un párrafo por bloque, separados por una línea en blanco.')}
+  </article>`;
+  const base = Array.isArray(d.base) ? d.base : (d.base = []);
+  h += `<article><h3>Base documental</h3><p class="nota">Lo único que el modelo puede dar como dato. Cada fragmento lleva su fuente; el modelo la cita por su identificador.</p>
+    ${base.map((b, i) => `<div class="item"><div class="cab"><span>${esc(b.id)}</span><button type="button" class="secondary outline" data-quitar="base.${i}">Quitar</button></div>${campo(`base.${i}.f`, 'Fuente', b.f)}${campo(`base.${i}.t`, 'Texto', b.t, 'textarea')}</div>`).join('')}
+    <div class="nuevo-texto"><label>Añadir texto<textarea id="bTexto" placeholder="Pega aquí el texto. Cada párrafo será un fragmento."></textarea></label><label>Fuente<input id="bFuente" placeholder="De dónde sale: libro, web, archivo…"></label><button type="button" class="mas" id="bPartir">Partir en fragmentos y añadir</button></div>
+  </article>`;
+  const qa = Array.isArray(m.qa) ? m.qa : (m.qa = []);
+  const sel = (i, v) => `<label>Después ofrece<select data-k="${P}qa.${i}.sigue"><option value="">— nada —</option>${qa.map((x, j) => j !== i && x.q ? `<option${x.q === v ? ' selected' : ''}>${esc(x.q)}</option>` : '').join('')}</select></label>`;
+  h += `<article><h3>Respuestas preparadas</h3><p class="nota">Preguntas con su respuesta verificada. Si el visitante pregunta lo mismo, se responde con esto sin pasar por el modelo. Desde «Probar», una respuesta buena del modelo se puede pasar aquí con «Verificar».</p>
+    ${qa.map((x, i) => `<div class="item"><div class="cab"><span>${i + 1}</span><button type="button" class="secondary outline" data-quitar="${P}qa.${i}">Quitar</button></div>${campo(`${P}qa.${i}.q`, 'Pregunta', x.q)}${campo(`${P}qa.${i}.a`, 'Respuesta', x.a, 'textarea')}<div class="fila">${sel(i, x.sigue)}${campo(`${P}qa.${i}.oferta`, 'Cómo la ofrece', x.oferta || '', 'input', 'Opcional: «¿Te cuento por qué…?»')}</div></div>`).join('')}
+    <button type="button" class="mas" id="qaMas">Añadir una respuesta</button>
+  </article>`;
+  const vk = m.voz || 'obra', V = (d.voces || {})[vk] || {};
+  h += `<article><h3>Voz y modelo</h3>
+    <label><input type="checkbox" role="switch" data-k="nube"${d.nube ? ' checked' : ''}> Responde con el modelo y la voz de la nube <small>(sin esto, la pieza solo usa las respuestas preparadas y la voz del navegador)</small></label>
+    <div class="fila"><label>Voz<select id="uVoz" data-k="voces.${vk}.nube"><option value="${esc(V.nube || '')}">${esc(V.nube ? 'Cargando voces…' : '— elegir —')}</option></select></label><label>&nbsp;<button type="button" class="secondary outline" id="uEscuchar" style="width:auto;padding:.4rem .9rem">Escuchar</button></label></div>
+    <p class="meta" id="uVozNota"></p>
+  </article>`;
+  $('editor').innerHTML = h;
+  $('uFoto').onchange = elegirFoto;
+  $('bPartir').onclick = partirBase;
+  $('qaMas').onclick = () => { MEDU().qa.push({q:'', d:MEDK(), a:'', sigue:null, oferta:null}); cambioU(true); };
+  $('uEscuchar').onclick = escuchar;
+  if(VOCES) pintarVoces();
+}
+// Cada campo lleva la ruta del dato dentro de la unidad («lugar.lat», «mediadores.obra.qa.2.q»)
+function poner(k, v){
+  const p = k.split('.'); let o = U.datos;
+  for(let i = 0; i < p.length - 1; i++){ if(o[p[i]] == null) o[p[i]] = /^\d+$/.test(p[i + 1]) ? [] : {}; o = o[p[i]]; }
+  const f = p[p.length - 1];
+  if(f === 'presenta' || f === 'sugiere') o[f] = v.split('\n').map(s => s.trim()).filter(Boolean);
+  else if(f === 'relato'){ const viejo = o.relato || []; o.relato = v.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean).map((t, i) => ({...(viejo[i] || {z:null}), t})); }
+  else if(f === 'lat' || f === 'lng') o[f] = v === '' ? null : +v;
+  else if(f === 'sigue' || f === 'oferta') o[f] = v || null;
+  else o[f] = v;
+}
+$('editor').addEventListener('input', e => {
+  const k = e.target.dataset.k; if(!k || !U) return;
+  if(e.target.type === 'checkbox'){ poner(k, e.target.checked); }
+  else poner(k, e.target.value);
+  cambioU(false);
+});
+$('editor').addEventListener('change', e => { if(e.target.tagName === 'SELECT' && e.target.dataset.k && U){ poner(e.target.dataset.k, e.target.value); cambioU(e.target.id !== 'uVoz'); } });
+$('editor').addEventListener('click', e => {
+  const b = e.target.closest('[data-quitar]'); if(!b || !U) return;
+  const p = b.dataset.quitar.split('.'), i = +p.pop(); let o = U.datos; p.forEach(x => { o = o[x]; });
+  o.splice(i, 1); cambioU(true);
+});
+function partirBase(){
+  const t = $('bTexto').value.trim(), f = $('bFuente').value.trim(); if(!t) return;
+  const base = U.datos.base, n0 = base.reduce((a, b) => Math.max(a, +String(b.id).replace(/\D/g, '') || 0), 0);
+  t.split(/\n\s*\n/).map(s => s.replace(/\s+/g, ' ').trim()).filter(Boolean).forEach((s, i) => base.push({id:'B' + (n0 + i + 1), f:f || 'Sin fuente', t:s}));
+  cambioU(true);
+}
+// La foto se reduce aquí mismo y se guarda con la unidad
+function elegirFoto(){
+  const f = this.files && this.files[0]; if(!f) return;
+  const im = new Image(); im.onload = () => {
+    const k = Math.min(1, 1600/Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas');
+    c.width = Math.round(im.naturalWidth*k); c.height = Math.round(im.naturalHeight*k);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    const url = c.toDataURL('image/jpeg', .85);
+    U.foto = {url, w:c.width, h:c.height, base64:url.split(',')[1]};
+    U.datos.img = `../../../img/calle/${U.id}.jpg`; U.datos.fondo = U.datos.img; U.datos.iw = c.width; U.datos.ih = c.height;
+    URL.revokeObjectURL(im.src); cambioU(true);
+  };
+  im.src = URL.createObjectURL(f);
+}
+let VOCES = null;
+async function cargarVoces(){
+  if(VOCES) return; try{ const r = await fetch(`${IA}/voces?language=es`); if(r.ok){ VOCES = await r.json(); pintarVoces(); } }catch(e){}
+}
+function pintarVoces(){
+  const s = $('uVoz'); if(!s || !U) return;
+  const v = ((U.datos.voces || {})[MEDU().voz || 'obra'] || {}).nube || '';
+  s.innerHTML = '<option value="">— elegir —</option>' + VOCES.map(x => `<option value="${esc(x.id)}"${x.id === v ? ' selected' : ''}>${esc(x.nombre)}${x.genero ? ' · ' + esc(x.genero) : ''}${x.desc ? ' · ' + esc(String(x.desc).slice(0, 60)) : ''}</option>`).join('');
+}
+async function escuchar(){
+  const id = $('uVoz').value; if(!id){ $('uVozNota').textContent = 'Elige una voz.'; return; }
+  const m = MEDU(), texto = (m.presenta && m.presenta[0]) || U.datos.gancho || U.datos.titulo || 'Hola.';
+  $('uVozNota').textContent = 'Pidiendo la voz…';
+  try{
+    const r = await fetch(`${IA}/voz`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({texto, voz:id})});
+    if(!r.ok) throw new Error(await r.text());
+    const a = new Audio(URL.createObjectURL(await r.blob())); a.play(); $('uVozNota').textContent = `«${texto}»`;
+  }catch(e){ $('uVozNota').textContent = 'No ha sonado: ' + e.message; }
+}
+$('uDescartar').onclick = async () => {
+  if(!U) return;
+  if(U.nueva){
+    if(!confirm('¿Quitar esta unidad nueva sin guardarla?')) return;
+    st.set(kBorrador(), null); const o = [...$('pieza').options].find(x => x.value === U.id); if(o) o.remove();
+    await abrirUnidad(); abrir(); return;
+  }
+  U.datos = copia(U.pub); U.foto = null; cambioU(true);
+};
+$('uGuardar').onclick = async () => {
+  if(!U) return;
+  const b = $('uGuardar'); b.disabled = true; b.setAttribute('aria-busy', 'true');
+  try{
+    if(U.foto){ await guardarArchivo(`img/calle/${U.id}.jpg`, U.foto.base64, `Foto: ${U.datos.titulo || U.id}`, null, true); U.fotoVista = {url:U.foto.url, w:U.foto.w, h:U.foto.h}; U.foto = null; }
+    const r = await guardarArchivo(U.ruta, aJSON(U.datos), `${U.nueva ? 'Nueva unidad' : 'Unidad'}: ${U.datos.titulo || U.id}`, U.sha);
+    U.sha = r.sha;
+    if(U.nueva){
+      // La agrupación abierta la incorpora al final
+      const s = SALA.datos; s.obras = [...(s.obras || []), `../obras/calle/${U.id}.json`];
+      const rs = await guardarArchivo(`unidad/salas/${$('sala').value}.json`, aJSON(s), `Agrupación ${$('sala').value}: entra ${U.datos.titulo || U.id}`, SALA.sha);
+      SALA.sha = rs.sha; U.nueva = false;
+    }
+    U.pub = copia(U.datos); cambioU(true);
+    $('uEstado').innerHTML = `<strong>Guardado.</strong> La web tarda unos minutos en servirlo. <a href="${esc(r.url)}" target="_blank" rel="noopener">Ver la versión</a>`;
+  }catch(e){
+    $('uEstado').innerHTML = `<strong>No se ha guardado.</strong> ${esc(e.message)}`;
+    b.disabled = false;
+  }
+  b.removeAttribute('aria-busy');
+};
+// Una unidad nueva: un nombre, un archivo con lo mínimo y valores por defecto. Se guarda cuando tenga foto
+const slug = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+$('nueva').onclick = () => {
+  const titulo = (window.prompt('Nombre de la pieza (por ejemplo, «Monumento al encierro»)') || '').trim(); if(!titulo) return;
+  const id = slug(titulo); if(!id) return;
+  const existe = [...$('pieza').options].some(o => o.value === id); if(existe){ alert('Ya hay una unidad con ese nombre: ' + id); return; }
+  const pieza = (window.prompt('Cómo se nombra en pantalla, con artículo (por ejemplo, «el monumento», «la fuente»)', 'la escultura') || 'la pieza').trim().toLowerCase();
+  const fem = /^la /.test(pieza), sinArt = pieza.replace(/^(el|la) /, ''), cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const d = {
+    titulo, autor:'', fecha:'', pieza, img:`../../../img/calle/${id}.jpg`, lugar:{lat:null, lng:null, dir:''},
+    tema:'', gancho:'', zonas:{}, nube:true, voces:{obra:{pitch:1, rate:1, fem, nube:''}}, citas:{}, base:[],
+    visitas:{general:{n:'Visita general', d:'Para todos'}},
+    mediadores:{obra:{nombre:`${fem ? 'La propia' : 'El propio'} ${sinArt}`, desc:'en primera persona', por:`${fem ? 'la propia' : 'el propio'} ${sinArt}`, corto:pieza, ini:sinArt.charAt(0).toUpperCase(), acc:'#b4483a', voz:'obra', intro:1,
+      presenta:[`Soy ${titulo}. Pregúntame lo que quieras.`], sugiere:['¿Qué eres?', '¿Quién te hizo?', '¿Por qué estás aquí?'],
+      placeholder:`Pregúntale ${fem ? 'a la' : 'al'} ${sinArt}…`, conversa:`Conversa con ${pieza}`, te:`${cap(pieza)} te pregunta`,
+      rol:'', relato:[{z:null, t:`Soy ${titulo}.`}], qa:[]}},
+    ficha:[['Pieza', titulo]], nota:''
+  };
+  U = {id, ruta:`unidad/obras/calle/${id}.json`, sha:null, pub:null, nueva:true, datos:d, foto:null};
+  $('pieza').insertAdjacentHTML('beforeend', `<option selected>${esc(id)}</option>`);
+  cambioU(true); verPestana('unidad');
+};
 
 /* ======================= Prompt: las reglas, publicadas y en borrador ======================= */
 let PUB = null, BOR = null, SHA = null;
-const igual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const vigente = () => BOR || PUB;
 async function cargarPrompt(){
   // Primero del repositorio (fresco); si no hay contraseña guardada, de la web publicada
@@ -298,7 +522,7 @@ function aplicarBorrador(){
     const w = W(); w.AM_BORRADOR = usa ? BOR : null;
     if(!usa && PUB && w.AM && w.AM.listo) w.AM.listo.then(() => { const r = w.AM.reglas(); if(!w.AM_BORRADOR && PUB && !igual(r, PUB)) w.AM_BORRADOR = PUB; });
   }catch(e){}
-  $('aviso').hidden = !usa; $('aviso').innerHTML = usa ? '<strong>Estás probando con el borrador del prompt</strong>, no con las reglas publicadas.' : '';
+  pintarAviso();
   if($('entero').open) verEntero();
 }
 function estadoPrompt(){
@@ -314,7 +538,7 @@ function estadoPrompt(){
 }
 // Cada bloque editable: una sección de las reglas, el papel por defecto o lo que cambia en cada pregunta
 const valor = (o, k) => k === 'rolPorDefecto' || k === 'visitante' ? o[k] || '' : ((o.secciones || []).find(s => s.id === k) || {}).t || '';
-function poner(o, k, v){ if(k === 'rolPorDefecto' || k === 'visitante') o[k] = v; else o.secciones.find(s => s.id === k).t = v; }
+function ponerP(o, k, v){ if(k === 'rolPorDefecto' || k === 'visitante') o[k] = v; else o.secciones.find(s => s.id === k).t = v; }
 function pintarPrompt(){
   if(!PUB){ $('secciones').innerHTML = ''; estadoPrompt(); return; }
   const o = vigente();
@@ -326,12 +550,12 @@ function pintarPrompt(){
 }
 $('secciones').addEventListener('input', e => {
   const a = e.target.closest('.sec'); if(!a || !PUB) return;
-  if(!BOR) BOR = JSON.parse(JSON.stringify(PUB));
-  poner(BOR, a.dataset.k, e.target.value); guardarBorrador();
+  if(!BOR) BOR = copia(PUB);
+  ponerP(BOR, a.dataset.k, e.target.value); guardarBorrador();
 });
 $('secciones').addEventListener('click', e => {
   const b = e.target.closest('.sec button'); if(!b || !BOR) return;
-  const a = b.closest('.sec'); poner(BOR, a.dataset.k, valor(PUB, a.dataset.k)); a.querySelector('textarea').value = valor(PUB, a.dataset.k); guardarBorrador();
+  const a = b.closest('.sec'); ponerP(BOR, a.dataset.k, valor(PUB, a.dataset.k)); a.querySelector('textarea').value = valor(PUB, a.dataset.k); guardarBorrador();
 });
 $('usar').onchange = () => { st.set('am.panel.usar', $('usar').checked ? '1' : null); aplicarBorrador(); };
 $('descartar').onclick = () => { BOR = null; guardarBorrador(); pintarPrompt(); };
@@ -342,7 +566,7 @@ $('publicar').onclick = async () => {
   const cambiadas = [...document.querySelectorAll('#secciones .sec.cambiada span')].map(s => s.textContent);
   const b = $('publicar'); b.disabled = true; b.setAttribute('aria-busy', 'true');
   try{
-    const r = await guardarArchivo('unidad/prompt.json', JSON.stringify(o, null, 1) + '\n', 'Prompt: ' + (cambiadas.join(', ') || 'cambios'), SHA);
+    const r = await guardarArchivo('unidad/prompt.json', aJSON(o), 'Prompt: ' + (cambiadas.join(', ') || 'cambios'), SHA);
     PUB = o; SHA = r.sha; BOR = null; guardarBorrador(); pintarPrompt();
     $('pEstado').innerHTML = `<strong>Publicado</strong> (versión ${esc(o.version)}). La web tarda unos minutos en servirlo; aquí ya se prueba con lo publicado. <a href="${esc(r.url)}" target="_blank" rel="noopener">Ver la versión</a>`;
   }catch(e){
@@ -358,186 +582,15 @@ function verEntero(){
 }
 $('entero').addEventListener('toggle', () => { if($('entero').open) verEntero(); });
 
-/* ======================= Unidad: el editor ======================= */
-// UPUB: la unidad como está publicada; UD: lo que se edita (se guarda en este navegador hasta publicar); UDv cambia con cada edición
-let UPUB = null, UD = null, USHA = null, URUTA = null, UNUEVA = false, UDv = 0;
-const clon = o => JSON.parse(JSON.stringify(o));
-const borradorU = id => { try{ return JSON.parse(st.get('am.panel.u.' + id) || 'null'); }catch(e){ return null; } };
-const MK = () => Object.keys(UD.mediadores)[0];
-const get = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
-const set = (o, p, v) => { const ks = p.split('.'); let a = o; ks.slice(0, -1).forEach(k => { if(a[k] == null || typeof a[k] !== 'object') a[k] = {}; a = a[k]; }); a[ks[ks.length - 1]] = v; };
-
-// Lo que una unidad nueva trae de serie: habla la propia pieza, con la voz de los Fueros y una imagen neutra hasta que tenga foto
-function plantillaUnidad(titulo){
-  return {
-    titulo, autor:'', fecha:'', pieza:'la pieza',
-    img:'../../../img/sin-imagen.jpg',
-    lugar:{dir:''},
-    tema:'', gancho:'',
-    zonas:{}, nube:true,
-    voces:{obra:{pitch:0.95, rate:0.95, fem:true, nube:'01a0f318-4afd-77a5-aa5e-f4d741c30187'}},
-    citas:{}, base:[],
-    visitas:{general:{n:'Visita general', d:'Para todos'}},
-    mediadores:{obra:{nombre:'La propia pieza', desc:'en primera persona', por:'la propia pieza', corto:'la pieza', ini:'P', acc:'#b4483a', voz:'obra', intro:1,
-      presenta:[], sugiere:[], placeholder:'Pregúntale…', conversa:'Conversa con la pieza', te:'La pieza te pregunta', rol:'', relato:[], qa:[]}}
-  };
-}
-// De «el monumento» salen los textos de la interfaz que lo nombran
-function nombrar(u){
-  const p = (u.pieza || 'la pieza').trim(), m = u.mediadores[MK()];
-  const al = p.replace(/^el /i, 'al ').replace(/^la /i, 'a la '), Cap = p.charAt(0).toUpperCase() + p.slice(1);
-  const propio = p.replace(/^(el|la) /i, (x, a) => a + (a.toLowerCase() === 'el' ? ' propio ' : ' propia '));
-  Object.assign(m, {corto:p, por:propio, nombre:propio.charAt(0).toUpperCase() + propio.slice(1), placeholder:`Pregúntale ${al}…`, conversa:`Conversa con ${p}`, te:`${Cap} te pregunta`, ini:p.replace(/^(el|la) /i, '').charAt(0).toUpperCase() || 'P'});
-}
-const slug = t => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'unidad';
-
-async function cargarUnidad(){
-  const id = $('pieza').value, ruta = rutaDe(id); UPUB = null; USHA = null; UD = null; URUTA = ruta ? repoRuta(ruta) : null;
-  if(!ruta){ pintarUnidad(); return; }
-  try{ const f = await leerArchivo(URUTA); if(f){ UPUB = f.datos; USHA = f.sha; } }catch(e){}
-  if(!UPUB) try{ UPUB = await fetch('../salas/' + ruta, {cache:'no-cache'}).then(r => r.ok ? r.json() : null); }catch(e){}
-  if($('pieza').value !== id) return;   // se ha cambiado de unidad mientras se leía
-  UNUEVA = !UPUB && nuevas().includes(ruta);
-  UD = borradorU(id) || (UPUB ? clon(UPUB) : null);
-  if(UD && !UD.mediadores) UD.mediadores = plantillaUnidad('').mediadores;
-  pintarUnidad();
-}
-function guardarBorradorU(){
-  const id = $('pieza').value; UDv++;
-  if(!UNUEVA && UPUB && igual(UD, UPUB)) st.set('am.panel.u.' + id, null); else st.set('am.panel.u.' + id, JSON.stringify(UD));
-  estadoUnidad();
-}
-const cambiosU = () => UD && (UNUEVA || !UPUB || !igual(UD, UPUB));
-function estadoUnidad(){
-  const hay = !!cambiosU();
-  $('uEstado').innerHTML = !UD ? '' : UNUEVA ? '<strong>Unidad nueva, sin guardar todavía.</strong> Al guardar se publica y entra en la agrupación.' : hay ? '<strong>Tienes cambios sin guardar.</strong>' : 'Guardada. Sin cambios.';
-  $('uGuardar').disabled = !hay; $('uDescartar').disabled = !hay; $('uProbar').disabled = !UD || UDv === probadoV;
-}
-function pintarUnidad(){
-  if(!UD){ $('uForm').innerHTML = `<p class="vacio">${$('pieza').value ? 'No se ha podido leer esta unidad.' : 'Esta agrupación no tiene unidades. Crea una con «Nueva unidad».'}</p>`; estadoUnidad(); return; }
-  const M = 'mediadores.' + MK() + '.';
-  const campo = (p, titulo, o = {}) => {
-    const v = p === 'lugar.coord' ? (UD.lugar && UD.lugar.lat != null ? `${UD.lugar.lat}, ${UD.lugar.lng}` : '') : get(UD, p);
-    const val = o.lineas ? (Array.isArray(v) ? v.join('\n') : '') : (v == null ? '' : v);
-    return `<label>${esc(titulo)}${o.nota ? `<small>${o.nota}</small>` : ''}${o.multi || o.lineas ? `<textarea data-c="${p}"${o.lineas ? ' data-lineas="1"' : ''} spellcheck="true">${esc(val)}</textarea>` : `<input data-c="${p}" value="${esc(val)}">`}</label>`;
-  };
-  $('uForm').innerHTML = `
-    <article><h3>Ficha</h3>
-      <div class="grid">${campo('titulo', 'Título')}${campo('autor', 'Autor')}${campo('fecha', 'Fecha')}</div>
-      <div class="grid">${campo('pieza', 'Cómo se nombra a sí misma', {nota:'«el monumento», «la fuente», «la escultura»: de aquí salen «Pregúntale al monumento…» y los demás textos'})}${campo('lugar.dir', 'Dónde está', {nota:'calle, plaza o paseo'})}${campo('lugar.coord', 'Coordenadas', {nota:'latitud, longitud: en Google Maps, clic derecho sobre el punto y copiar'})}</div>
-    </article>
-    <article><h3>Quién habla</h3>
-      ${campo(M + 'rol', 'Papel', {multi:true, nota:'quién es y cómo habla; vacío, usa el papel por defecto de las reglas'})}
-      ${campo('tema', 'Tema', {nota:'la idea que vertebra la pieza, en una frase; el modelo la conoce'})}
-      ${campo('gancho', 'Gancho', {nota:'la frase que se ve antes de empezar'})}
-      ${campo(M + 'presenta', 'Presentación', {lineas:true, nota:'lo primero que dice al abrir, una frase por línea'})}
-      ${campo(M + 'sugiere', 'Preguntas de arranque', {lineas:true, nota:'las que se ofrecen para empezar, una por línea (tres va bien)'})}
-    </article>
-    <article class="lista" data-l="relato"><h3><span>Relato</span><small>lo que cuenta de seguido si no le preguntan, una cápsula por cuadro</small></h3><div class="items"></div><button type="button" class="anadir secondary outline">Añadir una cápsula</button></article>
-    <article class="lista" data-l="base"><h3><span>Base documental</span><small>lo único que el modelo puede dar como dato; cada fragmento con su fuente</small></h3><div class="items"></div><button type="button" class="anadir secondary outline">Añadir un fragmento</button>
-      <details class="pegar"><summary>Pegar un texto entero</summary><label>Fuente<small>de dónde sale: libro, web, ficha…</small><input id="pFuente"></label><label>Texto<small>se parte en fragmentos por párrafos</small><textarea id="pTexto"></textarea></label><button type="button" class="anadir" id="pPartir">Añadir como fragmentos</button></details></article>
-    <article class="lista" data-l="qa"><h3><span>Respuestas preparadas</span><small>a estas preguntas se contesta con el texto verificado, sin modelo; también se añaden desde «Probar»</small></h3><div class="items"></div><button type="button" class="anadir secondary outline">Añadir una respuesta</button></article>`;
-  ['relato', 'base', 'qa'].forEach(pintarLista);
-  estadoUnidad();
-}
-const LISTA = {
-  relato:{de:() => UD.mediadores[MK()].relato || (UD.mediadores[MK()].relato = []), nuevo:() => ({z:null, t:''}),
-    item:(c, i) => `${c.z ? `<p class="meta">zona: ${esc(c.z)}</p>` : ''}<textarea data-k="t" aria-label="Cápsula ${i + 1}">${esc(c.t || '')}</textarea>`},
-  base:{de:() => UD.base || (UD.base = []), nuevo:() => ({id:idBase(), f:'', t:''}),
-    item:b => `<p class="meta">${esc(b.id)}</p><input data-k="f" placeholder="Fuente" value="${esc(b.f || '')}"><textarea data-k="t" aria-label="Texto del fragmento ${esc(b.id)}">${esc(b.t || '')}</textarea>`},
-  qa:{de:() => UD.mediadores[MK()].qa || (UD.mediadores[MK()].qa = []), nuevo:() => ({q:'', d:MK(), a:''}),
-    item:(x, i, l) => `<input data-k="q" placeholder="Pregunta" value="${esc(x.q || '')}"><textarea data-k="a" aria-label="Respuesta" placeholder="Respuesta">${esc(x.a || '')}</textarea>
-      <div class="par"><label>Después ofrece<small>lo que propone al acabar («¿Te cuento…?»)</small><input data-k="oferta" value="${esc(x.oferta || '')}"></label>
-      <label>Y si dice que sí, sigue con<small>otra de las preparadas</small><select data-k="sigue"><option value="">—</option>${l.map((y, j) => j !== i && y.q ? `<option${y.q === x.sigue ? ' selected' : ''}>${esc(y.q)}</option>` : '').join('')}</select></label></div>`}
-};
-const idBase = () => { const n = Math.max(0, ...(UD.base || []).map(b => parseInt(String(b.id).replace(/\D/g, ''), 10) || 0)); return 'B' + (n + 1); };
-function pintarLista(l){
-  const arr = LISTA[l].de(), box = document.querySelector(`.lista[data-l="${l}"] .items`);
-  box.innerHTML = arr.map((x, i) => `<div class="item" data-i="${i}"><div class="cuerpo">${LISTA[l].item(x, i, arr)}</div><button type="button" class="quitar secondary outline" aria-label="Quitar">Quitar</button></div>`).join('') || '<p class="vacio">Nada todavía.</p>';
-}
-$('uForm').addEventListener('input', e => {
-  const t = e.target; if(!UD) return;
-  if(t.dataset.c){
-    const p = t.dataset.c;
-    if(p === 'lugar.coord'){ const m = t.value.match(/(-?\d+(?:[.,]\d+)?)\s*[,; ]\s*(-?\d+(?:[.,]\d+)?)/); if(m){ set(UD, 'lugar.lat', parseFloat(m[1].replace(',', '.'))); set(UD, 'lugar.lng', parseFloat(m[2].replace(',', '.'))); } else if(UD.lugar){ delete UD.lugar.lat; delete UD.lugar.lng; } }
-    else if(t.dataset.lineas) set(UD, p, t.value.split('\n').map(s => s.trim()).filter(Boolean));
-    else set(UD, p, t.value);
-    if(p === 'pieza') nombrar(UD);
-  } else if(t.dataset.k){
-    const l = t.closest('.lista').dataset.l, i = +t.closest('.item').dataset.i, arr = LISTA[l].de();
-    if(t.value === '' && (t.dataset.k === 'oferta' || t.dataset.k === 'sigue')) delete arr[i][t.dataset.k]; else arr[i][t.dataset.k] = t.value;
-  } else return;
-  guardarBorradorU();
-});
-// Los desplegables «sigue» ofrecen las preguntas tal como están ahora, sin repintar la lista (se perdería el foco)
-function refrescarSigue(){
-  const l = LISTA.qa.de();
-  document.querySelectorAll('[data-l="qa"] .item').forEach((it, i) => { const sel = it.querySelector('[data-k=sigue]'), v = l[i].sigue || ''; sel.innerHTML = '<option value="">—</option>' + l.map((y, j) => j !== i && y.q ? `<option${y.q === v ? ' selected' : ''}>${esc(y.q)}</option>` : '').join(''); });
-}
-$('uForm').addEventListener('change', e => { if(e.target.dataset.k === 'q') refrescarSigue(); });
-$('uForm').addEventListener('click', e => {
-  const b = e.target.closest('button'); if(!b || !UD) return;
-  if(b.id === 'pPartir'){
-    const f = $('pFuente').value.trim(), txt = $('pTexto').value.trim(); if(!txt) return;
-    let trozos = txt.split(/\n\s*\n/).map(s => s.replace(/\s+/g, ' ').trim()).filter(Boolean);
-    if(trozos.length === 1) trozos = txt.split(/\n/).map(s => s.trim()).filter(Boolean);
-    trozos.forEach(t => UD.base.push({id:idBase(), f, t}));
-    $('pTexto').value = ''; pintarLista('base'); guardarBorradorU(); return;
-  }
-  const art = b.closest('.lista'); if(!art) return;
-  const l = art.dataset.l, arr = LISTA[l].de();
-  if(b.classList.contains('anadir')){ arr.push(LISTA[l].nuevo()); pintarLista(l); guardarBorradorU(); const u = art.querySelector('.item:last-child input, .item:last-child textarea'); if(u) u.focus(); }
-  else if(b.classList.contains('quitar')){ arr.splice(+b.closest('.item').dataset.i, 1); pintarLista(l); guardarBorradorU(); }
-});
-// Desde «Probar»: una respuesta del modelo que vale pasa a las preparadas
-$('traza').addEventListener('click', async e => {
-  const b = e.target.closest('[data-v]'); if(!b || !UD) return;
-  const en = entradas.find(x => x.n === +b.dataset.v); if(!en || !en.respuesta) return;
-  LISTA.qa.de().push({q:en.q, d:MK(), a:en.respuesta.partes.map(p => p.t).join(' ')});
-  en.verificada = true; pintarTraza(); pintarLista('qa'); guardarBorradorU();
-});
-$('nueva').onclick = () => {
-  const titulo = (window.prompt('Título de la unidad nueva (p. ej. «Fuente de Santa Cecilia»)') || '').trim(); if(!titulo) return;
-  let id = slug(titulo); const ids = SALADEF.obras.map(idDe); let n = 2; while(ids.includes(id)) id = slug(titulo) + '-' + n++;
-  const ruta = `../obras/calle/${id}.json`, u = plantillaUnidad(titulo);
-  st.set('am.panel.u.' + id, JSON.stringify(u));
-  st.set('am.panel.nuevas.' + $('sala').value, JSON.stringify([...nuevas(), ruta]));
-  SALADEF.obras.push(ruta);
-  $('pieza').insertAdjacentHTML('beforeend', `<option selected>${esc(id)}</option>`);
-  abrir(); cargarUnidad(); irA('unidad');
-};
-$('uProbar').onclick = () => { abrir(); irA('probar'); };
-$('uDescartar').onclick = () => {
-  const id = $('pieza').value;
-  if(UNUEVA){ if(!confirm('¿Quitar esta unidad nueva sin guardarla?')) return; st.set('am.panel.u.' + id, null); st.set('am.panel.nuevas.' + $('sala').value, JSON.stringify(nuevas().filter(r => idDe(r) !== id))); cargarPiezas(); return; }
-  st.set('am.panel.u.' + id, null); UD = clon(UPUB); UDv++; pintarUnidad();
-};
-$('uGuardar').onclick = async () => {
-  if(!cambiosU()) return;
-  const id = $('pieza').value, b = $('uGuardar'); b.disabled = true; b.setAttribute('aria-busy', 'true');
-  try{
-    const que = UNUEVA ? 'nueva' : Object.keys(UD).filter(k => !igual(UD[k], (UPUB || {})[k])).join(', ') || 'cambios';
-    const r = await guardarArchivo(URUTA, JSON.stringify(UD, null, 1) + '\n', `Unidad ${id}: ${que}`, USHA);
-    if(UNUEVA){
-      const ruta = rutaDe(id); SALAPUB.obras = [...(SALAPUB.obras || []), ruta];
-      const s = await guardarArchivo(`unidad/salas/${$('sala').value}.json`, JSON.stringify(SALAPUB, null, 1) + '\n', `Agrupación ${$('sala').value}: entra ${id}`, SALASHA);
-      SALASHA = s.sha; st.set('am.panel.nuevas.' + $('sala').value, JSON.stringify(nuevas().filter(x => x !== ruta))); UNUEVA = false;
-    }
-    UPUB = clon(UD); USHA = r.sha; st.set('am.panel.u.' + id, null); UDv++;
-    estadoUnidad(); $('uEstado').innerHTML = `<strong>Guardada.</strong> La web tarda unos minutos en servirla; aquí ya se prueba con lo guardado. <a href="${esc(r.url)}" target="_blank" rel="noopener">Ver la versión</a>`;
-  }catch(e){
-    $('uEstado').innerHTML = `<strong>No se ha guardado.</strong> ${esc(e.message)}${/cambiado desde/.test(e.message) ? ' Recarga la página para ver la versión actual; tus cambios se conservan.' : ''}`;
-  }
-  b.removeAttribute('aria-busy'); b.disabled = !cambiosU();
-};
-
 /* ======================= Pestañas y arranque ======================= */
-function irA(p){
+function verPestana(p){
   document.querySelectorAll('#pest [data-p]').forEach(x => x.classList.toggle('outline', x.dataset.p !== p));
-  ['probar', 'unidad', 'prompt'].forEach(s => { $(s).hidden = s !== p; });
-  if(p === 'probar' && UDv !== probadoV) abrir();   // la unidad se prueba con lo último editado
+  ['unidad', 'probar', 'ajustes'].forEach(k => { $(k).hidden = k !== p; });
+  st.set('am.panel.pestana', p);
+  if(p === 'probar') probarAlDia();
 }
-$('pest').onclick = e => { const b = e.target.closest('[data-p]'); if(b) irA(b.dataset.p); };
+$('pest').onclick = e => { const b = e.target.closest('[data-p]'); if(b) verPestana(b.dataset.p); };
+verPestana(st.get('am.panel.pestana') || 'unidad');
 cargarPrompt().then(cargarSalas);
 </script>
 </body>
