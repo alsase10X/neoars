@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>artmedium · panel de creación</title>
+<!-- El aspecto es Pico CSS (picocss.com, licencia MIT), tal cual: el panel no inventa diseño -->
+<link rel="stylesheet" href="pico.min.css">
+<style>
+:root{--pico-font-size:100%}
+[hidden]{display:none !important}
+main{padding-top:1rem}
+header.barra{display:flex;flex-wrap:wrap;gap:1rem;align-items:end;justify-content:space-between;margin-bottom:1rem}
+header.barra h1{font-size:1.1rem;margin:0}
+header.barra label{margin:0;font-size:.85rem}
+header.barra select{margin:0;padding-block:.35rem;width:auto;min-width:11rem}
+.elige{display:flex;gap:.75rem;align-items:end}
+nav.pest{justify-content:flex-start;margin-bottom:1rem;border-bottom:1px solid var(--pico-muted-border-color)}
+nav.pest button{margin:0 .5rem -1px 0;border-radius:var(--pico-border-radius) var(--pico-border-radius) 0 0}
+.probar{display:grid;grid-template-columns:390px minmax(0,1fr);gap:1.5rem;align-items:start}
+@media (max-width:900px){.probar{grid-template-columns:1fr}}
+.movil{position:sticky;top:1rem}
+.movil iframe{display:block;width:390px;max-width:100%;height:min(760px,calc(100vh - 11rem));border:1px solid var(--pico-muted-border-color);border-radius:1.25rem;background:#000}
+.movil .mandos{display:flex;gap:1rem;align-items:center;justify-content:space-between;margin-top:.6rem;font-size:.85rem}
+.movil .mandos label,.movil .mandos button{margin:0}
+.movil .mandos button{padding:.3rem .7rem;font-size:.85rem}
+article{margin-bottom:1rem;padding:1rem 1.1rem}
+article h3{font-size:1rem;margin-bottom:.35rem}
+article p{margin-bottom:.5rem}
+.camino{font-size:.9rem}
+.meta,.nota{font-size:.82rem;color:var(--pico-muted-color)}
+.resp{border-left:3px solid var(--pico-muted-border-color);padding-left:.8rem;margin:.6rem 0}
+.resp p{margin-bottom:.3rem}
+.resp small{color:var(--pico-muted-color)}
+details{margin-bottom:.4rem}
+details summary{font-size:.88rem}
+pre{white-space:pre-wrap;word-break:break-word;max-height:22rem;overflow:auto;font-size:.78rem;padding:.7rem;margin-bottom:.6rem}
+.vacio{color:var(--pico-muted-color)}
+.estado{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.estado p,.estado label,.estado button{margin:0}
+.estado .acc{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+.estado button{padding:.35rem .8rem;font-size:.88rem}
+.sec h3{display:flex;gap:.6rem;align-items:baseline;justify-content:space-between}
+.sec h3 button{padding:.15rem .6rem;font-size:.78rem;margin:0}
+.sec textarea{font-family:var(--pico-font-family-monospace);font-size:.82rem;line-height:1.45;margin-bottom:.2rem;field-sizing:content;min-height:4rem;max-height:34rem}
+.sec.cambiada{border-left:3px solid var(--pico-primary)}
+</style>
+</head>
+<body>
+<main class="container-fluid">
+  <header class="barra">
+    <h1>artmedium · panel de creación</h1>
+    <div class="elige">
+      <label>Agrupación <select id="sala"></select></label>
+      <label>Unidad <select id="pieza"></select></label>
+    </div>
+  </header>
+  <nav class="pest" id="pest">
+    <button type="button" data-p="probar">Probar</button>
+    <button type="button" data-p="prompt" class="outline">Prompt</button>
+  </nav>
+
+  <section id="probar" class="probar">
+    <div class="movil">
+      <iframe id="marco" title="La unidad, como la ve el visitante" allow="microphone; autoplay; geolocation"></iframe>
+      <div class="mandos">
+        <label><input type="checkbox" id="conVoz" role="switch"> Con voz</label>
+        <button type="button" class="secondary outline" id="reiniciar">Empezar de nuevo</button>
+      </div>
+    </div>
+    <div>
+      <p class="nota" id="aviso" hidden></p>
+      <div id="traza"><p class="vacio">Pregunta en el móvil de la izquierda. Aquí verás por dónde ha ido cada pregunta, qué se le envió al modelo y qué devolvió.</p></div>
+    </div>
+  </section>
+
+  <section id="prompt" hidden>
+    <div class="estado">
+      <p id="pEstado"></p>
+      <div class="acc">
+        <label><input type="checkbox" id="usar" role="switch"> Probar con el borrador</label>
+        <button type="button" class="secondary outline" id="descartar">Descartar el borrador</button>
+        <button type="button" id="descargar">Descargar prompt.json</button>
+      </div>
+    </div>
+    <p class="nota">Estas son las reglas con las que responde el modelo, las mismas para todas las unidades. Lo que cambies se queda en este navegador como borrador: puedes probarlo en «Probar» antes de publicarlo. Entre llaves van los datos de cada unidad; entre dobles corchetes, lo que solo sale si la unidad tiene ese dato.</p>
+    <div id="secciones"></div>
+    <details id="entero">
+      <summary>Ver el prompt completo de esta unidad</summary>
+      <p class="meta" id="enteroM"></p>
+      <pre id="enteroT"></pre>
+    </details>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
+const num = n => Math.round(n).toLocaleString('es-ES');
+const st = {get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k, v){ try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} }};
+const REPO = 'alsase10X/neoars';
+// Medido en el Monumento a los Fueros: unos 2,8 caracteres por token en castellano. La voz de Mistral, 13 $ por millón de caracteres
+const TOKENS = c => c/2.8, VOZ = c => c*13/1e6;
+
+/* ======================= Qué unidad ======================= */
+let SALAS = ['pamplona'];
+async function cargarSalas(){
+  // La lista de agrupaciones sale del repositorio; si no llega, queda la de pruebas
+  try{
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/unidad/salas`);
+    if(r.ok){ const l = (await r.json()).filter(f => /\.json$/.test(f.name)).map(f => f.name.replace(/\.json$/, '')); if(l.length) SALAS = l; }
+  }catch(e){}
+  const q = new URLSearchParams(location.search), s = q.get('sala') || st.get('am.panel.sala') || 'pamplona';
+  if(!SALAS.includes(s)) SALAS.unshift(s);
+  $('sala').innerHTML = SALAS.map(x => `<option${x === s ? ' selected' : ''}>${esc(x)}</option>`).join('');
+  await cargarPiezas(q.get('pieza') || st.get('am.panel.pieza') || 'fueros');
+}
+async function cargarPiezas(quiero){
+  let ids = [];
+  try{ const d = await fetch(`../salas/${$('sala').value}.json`).then(r => r.json()); ids = (d.obras || []).map(r => r.split('/').pop().replace(/\.json$/, '')); }catch(e){}
+  $('pieza').innerHTML = ids.map(x => `<option${x === quiero ? ' selected' : ''}>${esc(x)}</option>`).join('');
+  abrir();
+}
+function abrir(){
+  st.set('am.panel.sala', $('sala').value); st.set('am.panel.pieza', $('pieza').value);
+  entradas.length = 0; actual = null; pintarTraza();
+  // «t» solo sirve para que el marco se recargue entero y la conversación empiece de cero
+  $('marco').src = `../sala/?sala=${encodeURIComponent($('sala').value)}&v=3${$('conVoz').checked ? '' : '&voz=0'}&t=${Date.now()}#${encodeURIComponent($('pieza').value)}`;
+}
+$('sala').onchange = () => cargarPiezas();
+$('pieza').onchange = abrir;
+$('conVoz').onchange = abrir;
+$('reiniciar').onclick = abrir;
+const W = () => $('marco').contentWindow;
+$('marco').addEventListener('load', () => {
+  let w; try{ w = W(); w.addEventListener('am:traza', e => alLlegar(e.detail)); }catch(e){ return; }
+  aplicarBorrador();
+});
+
+/* ======================= Probar: lo que ha pasado con cada pregunta ======================= */
+const entradas = []; let actual = null;
+const nueva = q => { const e = {q, hora:new Date()}; entradas.unshift(e); return (actual = e); };
+const abierta = q => actual && !actual.cerrada ? actual : nueva(q);
+function alLlegar(d){
+  if(d.tipo === 'pregunta') nueva(d.q);
+  else if(d.tipo === 'camino') abierta(d.q).camino = d;
+  else if(d.tipo === 'preparada'){ const e = abierta(d.dicho); e.preparada = d; e.cerrada = true; }
+  else if(d.tipo === 'envio') abierta(d.q).envio = d;
+  else if(d.tipo === 'respuesta'){ const e = abierta(d.q); e.respuesta = d; e.cerrada = true; }
+  else if(d.tipo === 'error'){ const e = abierta(d.q); e.error = d; e.cerrada = true; }
+  pintarTraza();
+}
+const cerca = c => c && c.cerca && c.cerca[0] ? `«${esc(c.cerca[0].q)}» (${String(c.cerca[0].s).replace('.', ',')})` : '';
+function porque(e){
+  const c = e.camino;
+  if(!c) return e.preparada ? ['Respuesta preparada', 'Elegida en la pantalla.'] : e.envio ? ['Modelo', 'Enviada directamente al modelo.'] : ['', ''];
+  if(c.camino === 'oferta') return ['Oferta aceptada', `Ha dicho que sí a lo que se le ofrecía: «${esc(c.lleva)}».`];
+  if(c.camino === 'preparada') return ['Respuesta preparada', c.motivo === 'igual' ? 'Es, tal cual, una de las preguntas preparadas.' : c.conIA ? `Se parece a ${cerca(c)} y pregunta lo mismo.` : `Sin modelo: la preparada más parecida es ${cerca(c)}.`];
+  if(c.camino === 'modelo') return ['Modelo', c.motivo === 'nada' ? 'No se parece a ninguna respuesta preparada.' : c.motivo === 'poco' ? `La preparada más parecida es ${cerca(c)}: no llega a 0,8.` : `Se parece a ${cerca(c)}, pero no pregunta lo mismo.`];
+  if(c.camino === 'zona') return ['Zona', `Nombra una zona de la pieza (${esc(c.zona)}): se dice lo que se ve en ella.`];
+  if(c.camino === 'imagenes') return ['Imágenes', 'Pide ver imágenes: salen los detalles de la pieza.'];
+  return ['Sin respuesta', 'Ni preparada ni modelo: se ofrecen las preguntas más cercanas.'];
+}
+const ORIGEN = {fuente:'de la base', vista:'a la vista', lectura:'lectura', general:'conocimiento general'};
+function pintarEntrada(e){
+  const [titulo, motivo] = porque(e); let h = `<article><h3>${esc(e.q)}</h3>`;
+  if(titulo) h += `<p class="camino"><strong>${titulo}.</strong> ${motivo}</p>`;
+  if(e.preparada){
+    const p = e.preparada;
+    h += `<div class="resp"><p>${esc(p.a)}</p>${p.oferta ? `<p>${esc(p.oferta)} <small>· oferta</small></p>` : ''}</div>`;
+    h += `<p class="meta">Texto revisado: «${esc(p.q)}»${p.z ? ' · zona ' + esc(p.z) : ''} · voz: ${num((p.a + (p.oferta || '')).length)} caracteres</p>`;
+  }
+  if(e.envio && !e.respuesta && !e.error) h += '<p class="meta" aria-busy="true">Esperando al modelo…</p>';
+  if(e.error) h += `<p class="camino"><strong>No ha respondido.</strong> ${esc({invalid_json:'Lo que devolvió no tenía el formato pedido.', upstream_error:'El intermediario o el modelo han fallado.', sin_reglas:'No se han podido leer las reglas (prompt.json).'}[e.error.codigo] || 'Código: ' + e.error.codigo)} <span class="meta">${(e.error.ms/1000).toFixed(1).replace('.', ',')} s</span></p>${e.error.crudo ? `<details><summary>Lo que devolvió</summary><pre>${esc(e.error.crudo)}</pre></details>` : ''}`;
+  if(e.respuesta){
+    const r = e.respuesta, base = (() => { try{ return W().AM.base(); }catch(x){ return []; } })();
+    h += '<div class="resp">' + r.partes.map(p => `<p>${esc(p.t)} <small>· ${ORIGEN[p.e] || p.e}${p.f ? ' ' + esc(p.f) : ''}</small></p>`).join('') + '</div>';
+    const dicho = r.partes.reduce((a, p) => a + p.t.length, 0), env = e.envio ? e.envio.turnos.reduce((a, t) => a + t.content.length, 0) : 0;
+    h += `<p class="meta">${(r.ms/1000).toFixed(1).replace('.', ',')} s${e.envio && e.envio.borrador ? ' · <strong>con el borrador</strong>' : ''} · enviado: ${num(env)} caracteres (unos ${num(TOKENS(env))} tokens) · respuesta: ${num(dicho)} caracteres · voz: unos ${VOZ(dicho).toFixed(4).replace('.', ',')} $${r.crudo && r.crudo.z ? ' · zona ' + esc(r.crudo.z) : ''}${r.crudo && r.crudo.sigue ? ' · ofrece «' + esc(r.crudo.sigue) + '»' : ''}</p>`;
+    const usados = r.partes.filter(p => p.f).map(p => base.find(b => b.id === p.f)).filter(Boolean);
+    if(usados.length) h += `<details><summary>Fragmentos de la base que cita</summary>${usados.map(b => `<p class="meta"><strong>${esc(b.id)}</strong> · ${esc(b.f)}<br>${esc(b.t)}</p>`).join('')}</details>`;
+  }
+  if(e.envio){
+    const t = e.envio.turnos, medio = t.slice(1, -1);
+    h += `<details><summary>Lo que se envió al modelo</summary>
+      <p class="meta">Reglas, base y zonas · ${num(t[0].content.length)} caracteres. No cambia entre preguntas: el proveedor lo guarda y lo cobra con descuento.</p><pre>${esc(t[0].content)}</pre>
+      ${medio.length ? `<p class="meta">Conversación anterior</p><pre>${esc(medio.map(x => (x.role === 'assistant' ? 'Pieza: ' : 'Visitante: ') + x.content).join('\n'))}</pre>` : ''}
+      <p class="meta">Lo que cambia en cada pregunta</p><pre>${esc(t[t.length - 1].content)}</pre></details>`;
+  }
+  if(e.respuesta) h += `<details><summary>Lo que devolvió, tal cual</summary><pre>${esc(JSON.stringify(e.respuesta.crudo, null, 1))}</pre></details>`;
+  return h + '</article>';
+}
+function pintarTraza(){
+  $('traza').innerHTML = entradas.length ? entradas.map(pintarEntrada).join('')
+    : '<p class="vacio">Pregunta en el móvil de la izquierda. Aquí verás por dónde ha ido cada pregunta, qué se le envió al modelo y qué devolvió.</p>';
+}
+
+/* ======================= Prompt: las reglas, publicadas y en borrador ======================= */
+let PUB = null, BOR = null;
+const igual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const vigente = () => BOR || PUB;
+async function cargarPrompt(){
+  try{ PUB = await fetch('../prompt.json', {cache:'no-cache'}).then(r => r.json()); }catch(e){ PUB = null; }
+  try{ BOR = JSON.parse(st.get('am.panel.borrador') || 'null'); }catch(e){ BOR = null; }
+  if(BOR && PUB && igual({...BOR, version:0}, {...PUB, version:0})) BOR = null;
+  $('usar').checked = !!BOR && st.get('am.panel.usar') === '1';
+  pintarPrompt(); aplicarBorrador();
+}
+function guardarBorrador(){
+  if(BOR && igual({...BOR, version:0}, {...PUB, version:0})) BOR = null;
+  st.set('am.panel.borrador', BOR ? JSON.stringify(BOR) : null);
+  if(!BOR){ $('usar').checked = false; st.set('am.panel.usar', null); }
+  estadoPrompt(); aplicarBorrador();
+}
+function aplicarBorrador(){
+  const usa = !!BOR && $('usar').checked;
+  try{ W().AM_BORRADOR = usa ? BOR : null; }catch(e){}
+  $('aviso').hidden = !usa; $('aviso').innerHTML = usa ? '<strong>Estás probando con el borrador del prompt</strong>, no con las reglas publicadas.' : '';
+  if($('entero').open) verEntero();
+}
+function estadoPrompt(){
+  if(!PUB){ $('pEstado').textContent = 'No se han podido leer las reglas publicadas.'; return; }
+  $('pEstado').innerHTML = BOR
+    ? `<strong>Tienes un borrador sin publicar.</strong> Publicada: versión ${esc(PUB.version)}.${BOR.version !== PUB.version ? ` El borrador partió de la versión ${esc(BOR.version)}: revisa que no pise cambios posteriores.` : ''}`
+    : `Versión publicada: ${esc(PUB.version)}. Sin cambios.`;
+  $('usar').disabled = $('descartar').disabled = $('descargar').disabled = !BOR;
+  document.querySelectorAll('#secciones .sec').forEach(a => {
+    const k = a.dataset.k, cambiada = !!BOR && valor(BOR, k) !== valor(PUB, k);
+    a.classList.toggle('cambiada', cambiada); a.querySelector('button').hidden = !cambiada;
+  });
+}
+// Cada bloque editable: una sección de las reglas, el papel por defecto o lo que cambia en cada pregunta
+const valor = (o, k) => k === 'rolPorDefecto' || k === 'visitante' ? o[k] || '' : ((o.secciones || []).find(s => s.id === k) || {}).t || '';
+function poner(o, k, v){ if(k === 'rolPorDefecto' || k === 'visitante') o[k] = v; else o.secciones.find(s => s.id === k).t = v; }
+function pintarPrompt(){
+  if(!PUB){ $('secciones').innerHTML = ''; estadoPrompt(); return; }
+  const o = vigente();
+  const bloque = (k, titulo, nota) => `<article class="sec" data-k="${esc(k)}"><h3><span>${esc(titulo)}</span><button type="button" class="secondary outline" hidden>Deshacer</button></h3>${nota ? `<p class="nota">${nota}</p>` : ''}<textarea spellcheck="false" aria-label="${esc(titulo)}">${esc(valor(o, k))}</textarea></article>`;
+  $('secciones').innerHTML = o.secciones.map(s => bloque(s.id, s.titulo, s.tecnico ? 'El motor depende de este formato: cambiarlo puede romper las respuestas.' : s.datos ? 'Se rellena con los datos de cada unidad.' : '')).join('')
+    + bloque('rolPorDefecto', 'Papel por defecto', 'Lo que va en {rol} si la unidad no trae su propio papel.')
+    + bloque('visitante', 'Lo que cambia en cada pregunta', 'Va al final, en el último mensaje, para que lo de arriba se pueda guardar entre preguntas.');
+  estadoPrompt();
+}
+$('secciones').addEventListener('input', e => {
+  const a = e.target.closest('.sec'); if(!a || !PUB) return;
+  if(!BOR) BOR = JSON.parse(JSON.stringify(PUB));
+  poner(BOR, a.dataset.k, e.target.value); guardarBorrador();
+});
+$('secciones').addEventListener('click', e => {
+  const b = e.target.closest('.sec button'); if(!b || !BOR) return;
+  const a = b.closest('.sec'); poner(BOR, a.dataset.k, valor(PUB, a.dataset.k)); a.querySelector('textarea').value = valor(PUB, a.dataset.k); guardarBorrador();
+});
+$('usar').onchange = () => { st.set('am.panel.usar', $('usar').checked ? '1' : null); aplicarBorrador(); };
+$('descartar').onclick = () => { BOR = null; guardarBorrador(); pintarPrompt(); };
+$('descargar').onclick = () => {
+  if(!BOR) return;
+  const d = new Date(), o = {...BOR, version:`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`};
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(o, null, 1) + '\n'], {type:'application/json'})); a.download = 'prompt.json'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+function verEntero(){
+  let t = ''; try{ t = W().AM.prompt(); }catch(e){}
+  $('enteroT').textContent = t || 'Abre una unidad en «Probar» para ver su prompt.';
+  $('enteroM').textContent = t ? `${num(t.length)} caracteres, unos ${num(TOKENS(t.length))} tokens${BOR && $('usar').checked ? ' · con el borrador' : ''}` : '';
+}
+$('entero').addEventListener('toggle', () => { if($('entero').open) verEntero(); });
+
+/* ======================= Pestañas y arranque ======================= */
+$('pest').onclick = e => {
+  const b = e.target.closest('[data-p]'); if(!b) return;
+  document.querySelectorAll('#pest [data-p]').forEach(x => x.classList.toggle('outline', x !== b));
+  $('probar').hidden = b.dataset.p !== 'probar'; $('prompt').hidden = b.dataset.p !== 'prompt';
+};
+cargarPrompt().then(cargarSalas);
+</script>
+</body>
+</html>
