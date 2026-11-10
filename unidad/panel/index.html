@@ -318,9 +318,9 @@ function cambioU(repintar){
 }
 function estadoU(){
   if(!U){ $('uEstado').textContent = ''; $('uGuardar').disabled = $('uDescartar').disabled = true; return; }
-  const hay = U.nueva || !igual(U.datos, U.pub), sinFoto = U.nueva && !U.foto;
-  $('uEstado').innerHTML = U.nueva ? `<strong>Unidad nueva, sin guardar.</strong>${sinFoto ? ' Para guardarla hace falta la foto.' : ''}` : hay ? '<strong>Cambios sin guardar.</strong> La unidad de «Probar» ya responde con ellos.' : 'Sin cambios.';
-  $('uGuardar').disabled = !hay || sinFoto; $('uDescartar').disabled = !hay;
+  const hay = U.nueva || !igual(U.datos, U.pub);
+  $('uEstado').innerHTML = U.nueva ? '<strong>Unidad nueva, sin guardar.</strong> La unidad de «Probar» ya responde con ella.' : hay ? '<strong>Cambios sin guardar.</strong> La unidad de «Probar» ya responde con ellos.' : 'Sin cambios.';
+  $('uGuardar').disabled = !hay; $('uDescartar').disabled = !hay;
   pintarAviso();
 }
 // El aviso de «Probar»: con qué se está probando, si no es lo publicado
@@ -348,7 +348,7 @@ function pintarEditor(){
     <div class="fila">${campo('pieza', 'Cómo se nombra', d.pieza, 'input', 'Con artículo: «el monumento», «la fuente». Así se habla de ella en pantalla.')}${campo('lugar.dir', 'Dirección', L.dir)}</div>
     <div class="fila">${campo('lugar.lat', 'Latitud', L.lat == null ? '' : L.lat, 'num')}${campo('lugar.lng', 'Longitud', L.lng == null ? '' : L.lng, 'num')}</div>
     <p class="meta">${mapa} · Para sacar las coordenadas: botón derecho sobre el punto en Google Maps y copiar los dos números.</p>
-    <div class="foto">${foto ? `<img src="${esc(foto)}" alt="">` : '<img alt="" style="opacity:.3">'}<label>Foto principal <input type="file" id="uFoto" accept="image/*"><small>Una foto vertical de la pieza. Se guarda reducida a 1.600 px.</small></label></div>
+    <div class="foto">${foto ? `<img src="${esc(foto)}" alt="">` : '<img alt="" style="opacity:.3">'}<label>Foto principal <input type="file" id="uFoto" accept="image/*"><small>Una foto vertical de la pieza, reducida a 1.600 px al guardar. Hasta que la tenga, sale una imagen neutra.</small></label></div>
   </article>`;
   h += `<article><h3>Quién habla</h3>
     ${campo(P + 'rol', 'Papel', m.rol || '', 'textarea', 'Quién es y cómo habla. Si se deja vacío, se usa el papel por defecto de las reglas.')}
@@ -474,7 +474,7 @@ $('uGuardar').onclick = async () => {
   }
   b.removeAttribute('aria-busy');
 };
-// Una unidad nueva: un nombre, un archivo con lo mínimo y valores por defecto. Se guarda cuando tenga foto
+// Una unidad nueva: un nombre, un archivo con lo mínimo y valores por defecto; una imagen neutra hasta que tenga foto
 const slug = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
 $('nueva').onclick = () => {
   const titulo = (window.prompt('Nombre de la pieza (por ejemplo, «Monumento al encierro»)') || '').trim(); if(!titulo) return;
@@ -483,7 +483,7 @@ $('nueva').onclick = () => {
   const pieza = (window.prompt('Cómo se nombra en pantalla, con artículo (por ejemplo, «el monumento», «la fuente»)', 'la escultura') || 'la pieza').trim().toLowerCase();
   const fem = /^la /.test(pieza), sinArt = pieza.replace(/^(el|la) /, ''), cap = s => s.charAt(0).toUpperCase() + s.slice(1);
   const d = {
-    titulo, autor:'', fecha:'', pieza, img:`../../../img/calle/${id}.jpg`, lugar:{lat:null, lng:null, dir:''},
+    titulo, autor:'', fecha:'', pieza, img:'../../../img/sin-imagen.jpg', iw:900, ih:1200, lugar:{lat:null, lng:null, dir:''},
     tema:'', gancho:'', zonas:{}, nube:true, voces:{obra:{pitch:1, rate:1, fem, nube:''}}, citas:{}, base:[],
     visitas:{general:{n:'Visita general', d:'Para todos'}},
     mediadores:{obra:{nombre:`${fem ? 'La propia' : 'El propio'} ${sinArt}`, desc:'en primera persona', por:`${fem ? 'la propia' : 'el propio'} ${sinArt}`, corto:pieza, ini:sinArt.charAt(0).toUpperCase(), acc:'#b4483a', voz:'obra', intro:1,
