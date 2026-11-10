@@ -1012,16 +1012,24 @@ async function aplicarMarca(url){
   }catch(e){ MARCA = null; }
 }
 function pintarLogo(id){ const el = $(id), ok = !!(MARCA && MARCA.logo); el.hidden = !ok; if(ok){ el.innerHTML = MARCA.logo; el.setAttribute('aria-label', MARCA.nombre); } }
+// Dentro del panel de creación (?panel=1), la pieza espera a que el panel le pase lo que tiene sin guardar:
+// {tipo:'am:panel', sala, piezas:{id: datos}}. Lo que llegue sustituye a lo publicado; lo demás se lee como siempre
+let PANEL = null;
+const panelListo = new URLSearchParams(location.search).get('panel') === '1' && window.parent !== window
+  ? new Promise(ok => { const t = setTimeout(ok, 3000); window.addEventListener('message', e => { if(e.source === window.parent && e.data && e.data.tipo === 'am:panel'){ PANEL = e.data; clearTimeout(t); ok(); } }); })
+  : Promise.resolve();
 async function cargarSala(){
   if(SALA) return;
+  await panelListo;
   const abs = (v, desde) => v && !/^(data:|blob:|https?:)/.test(v) ? new URL(v, desde).href : v;
   let DEF = SALA_WEB, base = location.href;
-  if(SALA_ID){ base = new URL(`../salas/${SALA_ID}.json`, location.href).href; DEF = await fetch(base).then(r => { if(!r.ok) throw new Error('sala'); return r.json(); }); }
+  if(SALA_ID){ base = new URL(`../salas/${SALA_ID}.json`, location.href).href; DEF = PANEL && PANEL.sala ? PANEL.sala : await fetch(base).then(r => { if(!r.ok) throw new Error('sala'); return r.json(); }); }
   if(MARCA_ID !== 'ninguna'){ const mu = MARCA_ID ? new URL(`../marcas/${MARCA_ID}.json`, location.href).href : DEF.marca ? new URL(DEF.marca, base).href : null; if(mu) await aplicarMarca(mu); }
   const res = await Promise.allSettled(DEF.obras.map(async ruta => {
-    const url = new URL(ruta, base).href;
-    const d = await fetch(url).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });
-    d.id = ruta.split('/').pop().replace(/\.json$/, '');
+    const url = new URL(ruta, base).href, id = ruta.split('/').pop().replace(/\.json$/, '');
+    const d = PANEL && PANEL.piezas && PANEL.piezas[id] ? JSON.parse(JSON.stringify(PANEL.piezas[id])) : await fetch(url).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });
+    d.id = id;
+    if(d.lugar && !(isFinite(d.lugar.lat) && isFinite(d.lugar.lng))){ d.dir = d.lugar.dir; delete d.lugar; }   // sin coordenadas no hay punto en el mapa
     Object.values(d.mediadores || {}).forEach(m => { if(m.audio && m.audio.src) m.audio.src = abs(m.audio.src, url); });
     Object.values(d.imagenes || {}).forEach(im => { im.src = abs(im.src, url); });
     if(d.iiif){
@@ -2215,7 +2223,7 @@ let PROMPT = null;
 const promptListo = fetch(new URL('../prompt.json', location.href).href).then(r => r.ok ? r.json() : null).then(j => { PROMPT = j; }).catch(() => {});
 const REGLAS = () => window.AM_BORRADOR || PROMPT;
 // Lo que el panel de creación puede pedirle a la pieza abierta
-window.AM = {listo:promptListo, reglas:() => PROMPT, pieza:() => OBRA, base:() => OBRA ? BASE() : [], prompt:() => OBRA ? promptChat() : ''};
+window.AM = {listo:promptListo, reglas:() => PROMPT, pieza:() => OBRA, base:() => OBRA ? BASE() : [], prompt:() => OBRA ? promptChat() : '', panel:() => PANEL};
 // Entre llaves, los datos de la pieza; entre dobles corchetes, lo que solo sale si la pieza tiene ese dato
 function plantilla(t, d){
   const vacio = k => d[k] == null || d[k] === '';

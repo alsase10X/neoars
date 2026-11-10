@@ -15,6 +15,7 @@ header.barra{display:flex;flex-wrap:wrap;gap:1rem;align-items:end;justify-conten
 header.barra h1{font-size:1.1rem;margin:0}
 header.barra label{margin:0;font-size:.85rem}
 header.barra select{margin:0;padding-block:.35rem;width:auto;min-width:11rem}
+header.barra button{margin:0;padding:.35rem .8rem;font-size:.85rem;width:auto}
 .elige{display:flex;gap:.75rem;align-items:end}
 nav.pest{justify-content:flex-start;margin-bottom:1rem;border-bottom:1px solid var(--pico-muted-border-color)}
 nav.pest button{margin:0 .5rem -1px 0;border-radius:var(--pico-border-radius) var(--pico-border-radius) 0 0}
@@ -45,6 +46,23 @@ pre{white-space:pre-wrap;word-break:break-word;max-height:22rem;overflow:auto;fo
 .sec h3 button{padding:.15rem .6rem;font-size:.78rem;margin:0}
 .sec textarea{font-family:var(--pico-font-family-monospace);font-size:.82rem;line-height:1.45;margin-bottom:.2rem;field-sizing:content;min-height:4rem;max-height:34rem}
 .sec.cambiada{border-left:3px solid var(--pico-primary)}
+#uForm label{font-size:.9rem}
+#uForm label small{display:block;color:var(--pico-muted-color);font-size:.78rem;font-weight:400;margin-top:.1rem}
+#uForm input,#uForm textarea,#uForm select{margin-bottom:.6rem;font-size:.92rem}
+#uForm textarea{field-sizing:content;min-height:3.2rem;max-height:30rem;line-height:1.45}
+#uForm article h3{display:flex;gap:.6rem;align-items:baseline;justify-content:space-between}
+#uForm article h3 small{font-weight:400;font-size:.8rem;color:var(--pico-muted-color);flex:1;margin-left:.5rem}
+#uForm article h3 button{padding:.15rem .6rem;font-size:.78rem;margin:0}
+.item{border-top:1px solid var(--pico-muted-border-color);padding-top:.7rem;margin-top:.4rem;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 .8rem}
+.item .cuerpo{min-width:0}
+.item .quitar{padding:.15rem .5rem;font-size:.75rem;margin:0;align-self:start}
+.item .meta{margin-bottom:.4rem}
+.item .par{display:grid;grid-template-columns:1fr 1fr;gap:0 .8rem}
+@media (max-width:700px){.item .par{grid-template-columns:1fr}}
+.anadir{margin-top:.4rem;padding:.3rem .8rem;font-size:.85rem}
+.pegar{margin-top:.8rem}
+.pegar summary{font-size:.88rem}
+.verificar{padding:.2rem .6rem;font-size:.78rem;margin:.2rem 0 .4rem}
 </style>
 </head>
 <body>
@@ -54,10 +72,12 @@ pre{white-space:pre-wrap;word-break:break-word;max-height:22rem;overflow:auto;fo
     <div class="elige">
       <label>Agrupación <select id="sala"></select></label>
       <label>Unidad <select id="pieza"></select></label>
+      <button type="button" class="secondary outline" id="nueva">Nueva unidad</button>
     </div>
   </header>
   <nav class="pest" id="pest">
     <button type="button" data-p="probar">Probar</button>
+    <button type="button" data-p="unidad" class="outline">Unidad</button>
     <button type="button" data-p="prompt" class="outline">Prompt</button>
   </nav>
 
@@ -73,6 +93,19 @@ pre{white-space:pre-wrap;word-break:break-word;max-height:22rem;overflow:auto;fo
       <p class="nota" id="aviso" hidden></p>
       <div id="traza"><p class="vacio">Pregunta en el móvil de la izquierda. Aquí verás por dónde ha ido cada pregunta, qué se le envió al modelo y qué devolvió.</p></div>
     </div>
+  </section>
+
+  <section id="unidad" hidden>
+    <div class="estado">
+      <p id="uEstado"></p>
+      <div class="acc">
+        <button type="button" class="secondary outline" id="uProbar">Probar los cambios</button>
+        <button type="button" class="secondary outline" id="uDescartar">Descartar los cambios</button>
+        <button type="button" id="uGuardar">Guardar</button>
+      </div>
+    </div>
+    <p class="nota">Lo que cambies aquí se queda en este navegador hasta que lo guardes, y se puede probar antes en el móvil de «Probar». Al guardar se publica en el repositorio como una versión nueva.</p>
+    <div id="uForm"></div>
   </section>
 
   <section id="prompt" hidden>
@@ -142,31 +175,46 @@ async function cargarSalas(){
   $('sala').innerHTML = SALAS.map(x => `<option${x === s ? ' selected' : ''}>${esc(x)}</option>`).join('');
   await cargarPiezas(q.get('pieza') || st.get('am.panel.pieza') || 'fueros');
 }
+// La agrupación abierta: tal como está publicada (SALAPUB) y con las unidades nuevas aún sin guardar (SALADEF)
+let SALAPUB = null, SALADEF = null, SALASHA = null;
+const idDe = r => r.split('/').pop().replace(/\.json$/, '');
+const rutaDe = id => (SALADEF && SALADEF.obras || []).find(r => idDe(r) === id);
+const repoRuta = r => new URL(r, 'http://x/unidad/salas/').pathname.slice(1);   // «../obras/calle/x.json» → «unidad/obras/calle/x.json»
+const nuevas = () => { try{ return JSON.parse(st.get('am.panel.nuevas.' + $('sala').value) || '[]'); }catch(e){ return []; } };
 async function cargarPiezas(quiero){
-  let ids = [];
-  try{ const d = await fetch(`../salas/${$('sala').value}.json`).then(r => r.json()); ids = (d.obras || []).map(r => r.split('/').pop().replace(/\.json$/, '')); }catch(e){}
+  const sala = $('sala').value; SALAPUB = null; SALASHA = null;
+  try{ const f = await leerArchivo(`unidad/salas/${sala}.json`); if(f){ SALAPUB = f.datos; SALASHA = f.sha; } }catch(e){}
+  if(!SALAPUB) try{ SALAPUB = await fetch(`../salas/${sala}.json`, {cache:'no-cache'}).then(r => r.json()); }catch(e){ SALAPUB = {obras:[]}; }
+  SALADEF = JSON.parse(JSON.stringify(SALAPUB)); SALADEF.obras = SALADEF.obras || [];
+  nuevas().forEach(r => { if(!SALADEF.obras.includes(r)) SALADEF.obras.push(r); });
+  const ids = SALADEF.obras.map(idDe); if(!ids.includes(quiero)) quiero = ids[0];
   $('pieza').innerHTML = ids.map(x => `<option${x === quiero ? ' selected' : ''}>${esc(x)}</option>`).join('');
-  abrir();
+  abrir(); cargarUnidad();
 }
+let probadoV = 0;
 function abrir(){
   st.set('am.panel.sala', $('sala').value); st.set('am.panel.pieza', $('pieza').value);
-  entradas.length = 0; actual = null; pintarTraza();
+  entradas.length = 0; actual = null; pintarTraza(); probadoV = UDv;
   // «t» solo sirve para que el marco se recargue entero y la conversación empiece de cero
-  $('marco').src = `../sala/?sala=${encodeURIComponent($('sala').value)}&v=3${$('conVoz').checked ? '' : '&voz=0'}&t=${Date.now()}#${encodeURIComponent($('pieza').value)}`;
+  $('marco').src = `../sala/?sala=${encodeURIComponent($('sala').value)}&v=3&panel=1${$('conVoz').checked ? '' : '&voz=0'}&t=${Date.now()}#${encodeURIComponent($('pieza').value)}`;
 }
 $('sala').onchange = () => cargarPiezas();
-$('pieza').onchange = abrir;
+$('pieza').onchange = () => { abrir(); cargarUnidad(); };
 $('conVoz').onchange = abrir;
 $('reiniciar').onclick = abrir;
 const W = () => $('marco').contentWindow;
 $('marco').addEventListener('load', () => {
   let w; try{ w = W(); w.addEventListener('am:traza', e => alLlegar(e.detail)); }catch(e){ return; }
+  // La pieza espera esto antes de cargar: la agrupación con las nuevas y lo que haya sin guardar en este navegador
+  const piezas = {}; (SALADEF && SALADEF.obras || []).forEach(r => { const b = borradorU(idDe(r)); if(b) piezas[idDe(r)] = b; });
+  if(UD && $('pieza').value) piezas[$('pieza').value] = UD;   // la abierta, siempre: recién guardada, la web aún no la sirve
+  try{ w.postMessage({tipo:'am:panel', sala:SALADEF, piezas}, '*'); }catch(e){}
   aplicarBorrador();
 });
 
 /* ======================= Probar: lo que ha pasado con cada pregunta ======================= */
-const entradas = []; let actual = null;
-const nueva = q => { const e = {q, hora:new Date()}; entradas.unshift(e); return (actual = e); };
+const entradas = []; let actual = null, nEntrada = 0;
+const nueva = q => { const e = {q, hora:new Date(), n:++nEntrada}; entradas.unshift(e); return (actual = e); };
 const abierta = q => actual && !actual.cerrada ? actual : nueva(q);
 function alLlegar(d){
   if(d.tipo === 'pregunta') nueva(d.q);
@@ -206,6 +254,8 @@ function pintarEntrada(e){
     h += `<p class="meta">${(r.ms/1000).toFixed(1).replace('.', ',')} s${e.envio && e.envio.borrador ? ' · <strong>con el borrador</strong>' : ''} · enviado: ${num(env)} caracteres (unos ${num(TOKENS(env))} tokens) · respuesta: ${num(dicho)} caracteres · voz: unos ${VOZ(dicho).toFixed(4).replace('.', ',')} $${r.crudo && r.crudo.z ? ' · zona ' + esc(r.crudo.z) : ''}${r.crudo && r.crudo.sigue ? ' · ofrece «' + esc(r.crudo.sigue) + '»' : ''}</p>`;
     const usados = r.partes.filter(p => p.f).map(p => base.find(b => b.id === p.f)).filter(Boolean);
     if(usados.length) h += `<details><summary>Fragmentos de la base que cita</summary>${usados.map(b => `<p class="meta"><strong>${esc(b.id)}</strong> · ${esc(b.f)}<br>${esc(b.t)}</p>`).join('')}</details>`;
+    // Si la respuesta es buena, pasa a las preparadas de la unidad tal cual (se puede retocar en «Unidad»)
+    if(UD) h += `<button type="button" class="verificar secondary outline" data-v="${e.n}"${e.verificada ? ' disabled' : ''}>${e.verificada ? 'Añadida a las respuestas preparadas' : 'Verificar: pasar a respuestas preparadas'}</button>`;
   }
   if(e.envio){
     const t = e.envio.turnos, medio = t.slice(1, -1);
@@ -308,12 +358,186 @@ function verEntero(){
 }
 $('entero').addEventListener('toggle', () => { if($('entero').open) verEntero(); });
 
-/* ======================= Pestañas y arranque ======================= */
-$('pest').onclick = e => {
-  const b = e.target.closest('[data-p]'); if(!b) return;
-  document.querySelectorAll('#pest [data-p]').forEach(x => x.classList.toggle('outline', x !== b));
-  $('probar').hidden = b.dataset.p !== 'probar'; $('prompt').hidden = b.dataset.p !== 'prompt';
+/* ======================= Unidad: el editor ======================= */
+// UPUB: la unidad como está publicada; UD: lo que se edita (se guarda en este navegador hasta publicar); UDv cambia con cada edición
+let UPUB = null, UD = null, USHA = null, URUTA = null, UNUEVA = false, UDv = 0;
+const clon = o => JSON.parse(JSON.stringify(o));
+const borradorU = id => { try{ return JSON.parse(st.get('am.panel.u.' + id) || 'null'); }catch(e){ return null; } };
+const MK = () => Object.keys(UD.mediadores)[0];
+const get = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
+const set = (o, p, v) => { const ks = p.split('.'); let a = o; ks.slice(0, -1).forEach(k => { if(a[k] == null || typeof a[k] !== 'object') a[k] = {}; a = a[k]; }); a[ks[ks.length - 1]] = v; };
+
+// Lo que una unidad nueva trae de serie: habla la propia pieza, con la voz de los Fueros y una imagen neutra hasta que tenga foto
+function plantillaUnidad(titulo){
+  return {
+    titulo, autor:'', fecha:'', pieza:'la pieza',
+    img:'../../../img/sin-imagen.jpg',
+    lugar:{dir:''},
+    tema:'', gancho:'',
+    zonas:{}, nube:true,
+    voces:{obra:{pitch:0.95, rate:0.95, fem:true, nube:'01a0f318-4afd-77a5-aa5e-f4d741c30187'}},
+    citas:{}, base:[],
+    visitas:{general:{n:'Visita general', d:'Para todos'}},
+    mediadores:{obra:{nombre:'La propia pieza', desc:'en primera persona', por:'la propia pieza', corto:'la pieza', ini:'P', acc:'#b4483a', voz:'obra', intro:1,
+      presenta:[], sugiere:[], placeholder:'Pregúntale…', conversa:'Conversa con la pieza', te:'La pieza te pregunta', rol:'', relato:[], qa:[]}}
+  };
+}
+// De «el monumento» salen los textos de la interfaz que lo nombran
+function nombrar(u){
+  const p = (u.pieza || 'la pieza').trim(), m = u.mediadores[MK()];
+  const al = p.replace(/^el /i, 'al ').replace(/^la /i, 'a la '), Cap = p.charAt(0).toUpperCase() + p.slice(1);
+  const propio = p.replace(/^(el|la) /i, (x, a) => a + (a.toLowerCase() === 'el' ? ' propio ' : ' propia '));
+  Object.assign(m, {corto:p, por:propio, nombre:propio.charAt(0).toUpperCase() + propio.slice(1), placeholder:`Pregúntale ${al}…`, conversa:`Conversa con ${p}`, te:`${Cap} te pregunta`, ini:p.replace(/^(el|la) /i, '').charAt(0).toUpperCase() || 'P'});
+}
+const slug = t => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'unidad';
+
+async function cargarUnidad(){
+  const id = $('pieza').value, ruta = rutaDe(id); UPUB = null; USHA = null; UD = null; URUTA = ruta ? repoRuta(ruta) : null;
+  if(!ruta){ pintarUnidad(); return; }
+  try{ const f = await leerArchivo(URUTA); if(f){ UPUB = f.datos; USHA = f.sha; } }catch(e){}
+  if(!UPUB) try{ UPUB = await fetch('../salas/' + ruta, {cache:'no-cache'}).then(r => r.ok ? r.json() : null); }catch(e){}
+  if($('pieza').value !== id) return;   // se ha cambiado de unidad mientras se leía
+  UNUEVA = !UPUB && nuevas().includes(ruta);
+  UD = borradorU(id) || (UPUB ? clon(UPUB) : null);
+  if(UD && !UD.mediadores) UD.mediadores = plantillaUnidad('').mediadores;
+  pintarUnidad();
+}
+function guardarBorradorU(){
+  const id = $('pieza').value; UDv++;
+  if(!UNUEVA && UPUB && igual(UD, UPUB)) st.set('am.panel.u.' + id, null); else st.set('am.panel.u.' + id, JSON.stringify(UD));
+  estadoUnidad();
+}
+const cambiosU = () => UD && (UNUEVA || !UPUB || !igual(UD, UPUB));
+function estadoUnidad(){
+  const hay = !!cambiosU();
+  $('uEstado').innerHTML = !UD ? '' : UNUEVA ? '<strong>Unidad nueva, sin guardar todavía.</strong> Al guardar se publica y entra en la agrupación.' : hay ? '<strong>Tienes cambios sin guardar.</strong>' : 'Guardada. Sin cambios.';
+  $('uGuardar').disabled = !hay; $('uDescartar').disabled = !hay; $('uProbar').disabled = !UD || UDv === probadoV;
+}
+function pintarUnidad(){
+  if(!UD){ $('uForm').innerHTML = `<p class="vacio">${$('pieza').value ? 'No se ha podido leer esta unidad.' : 'Esta agrupación no tiene unidades. Crea una con «Nueva unidad».'}</p>`; estadoUnidad(); return; }
+  const M = 'mediadores.' + MK() + '.';
+  const campo = (p, titulo, o = {}) => {
+    const v = p === 'lugar.coord' ? (UD.lugar && UD.lugar.lat != null ? `${UD.lugar.lat}, ${UD.lugar.lng}` : '') : get(UD, p);
+    const val = o.lineas ? (Array.isArray(v) ? v.join('\n') : '') : (v == null ? '' : v);
+    return `<label>${esc(titulo)}${o.nota ? `<small>${o.nota}</small>` : ''}${o.multi || o.lineas ? `<textarea data-c="${p}"${o.lineas ? ' data-lineas="1"' : ''} spellcheck="true">${esc(val)}</textarea>` : `<input data-c="${p}" value="${esc(val)}">`}</label>`;
+  };
+  $('uForm').innerHTML = `
+    <article><h3>Ficha</h3>
+      <div class="grid">${campo('titulo', 'Título')}${campo('autor', 'Autor')}${campo('fecha', 'Fecha')}</div>
+      <div class="grid">${campo('pieza', 'Cómo se nombra a sí misma', {nota:'«el monumento», «la fuente», «la escultura»: de aquí salen «Pregúntale al monumento…» y los demás textos'})}${campo('lugar.dir', 'Dónde está', {nota:'calle, plaza o paseo'})}${campo('lugar.coord', 'Coordenadas', {nota:'latitud, longitud: en Google Maps, clic derecho sobre el punto y copiar'})}</div>
+    </article>
+    <article><h3>Quién habla</h3>
+      ${campo(M + 'rol', 'Papel', {multi:true, nota:'quién es y cómo habla; vacío, usa el papel por defecto de las reglas'})}
+      ${campo('tema', 'Tema', {nota:'la idea que vertebra la pieza, en una frase; el modelo la conoce'})}
+      ${campo('gancho', 'Gancho', {nota:'la frase que se ve antes de empezar'})}
+      ${campo(M + 'presenta', 'Presentación', {lineas:true, nota:'lo primero que dice al abrir, una frase por línea'})}
+      ${campo(M + 'sugiere', 'Preguntas de arranque', {lineas:true, nota:'las que se ofrecen para empezar, una por línea (tres va bien)'})}
+    </article>
+    <article class="lista" data-l="relato"><h3><span>Relato</span><small>lo que cuenta de seguido si no le preguntan, una cápsula por cuadro</small></h3><div class="items"></div><button type="button" class="anadir secondary outline">Añadir una cápsula</button></article>
+    <article class="lista" data-l="base"><h3><span>Base documental</span><small>lo único que el modelo puede dar como dato; cada fragmento con su fuente</small></h3><div class="items"></div><button type="button" class="anadir secondary outline">Añadir un fragmento</button>
+      <details class="pegar"><summary>Pegar un texto entero</summary><label>Fuente<small>de dónde sale: libro, web, ficha…</small><input id="pFuente"></label><label>Texto<small>se parte en fragmentos por párrafos</small><textarea id="pTexto"></textarea></label><button type="button" class="anadir" id="pPartir">Añadir como fragmentos</button></details></article>
+    <article class="lista" data-l="qa"><h3><span>Respuestas preparadas</span><small>a estas preguntas se contesta con el texto verificado, sin modelo; también se añaden desde «Probar»</small></h3><div class="items"></div><button type="button" class="anadir secondary outline">Añadir una respuesta</button></article>`;
+  ['relato', 'base', 'qa'].forEach(pintarLista);
+  estadoUnidad();
+}
+const LISTA = {
+  relato:{de:() => UD.mediadores[MK()].relato || (UD.mediadores[MK()].relato = []), nuevo:() => ({z:null, t:''}),
+    item:(c, i) => `${c.z ? `<p class="meta">zona: ${esc(c.z)}</p>` : ''}<textarea data-k="t" aria-label="Cápsula ${i + 1}">${esc(c.t || '')}</textarea>`},
+  base:{de:() => UD.base || (UD.base = []), nuevo:() => ({id:idBase(), f:'', t:''}),
+    item:b => `<p class="meta">${esc(b.id)}</p><input data-k="f" placeholder="Fuente" value="${esc(b.f || '')}"><textarea data-k="t" aria-label="Texto del fragmento ${esc(b.id)}">${esc(b.t || '')}</textarea>`},
+  qa:{de:() => UD.mediadores[MK()].qa || (UD.mediadores[MK()].qa = []), nuevo:() => ({q:'', d:MK(), a:''}),
+    item:(x, i, l) => `<input data-k="q" placeholder="Pregunta" value="${esc(x.q || '')}"><textarea data-k="a" aria-label="Respuesta" placeholder="Respuesta">${esc(x.a || '')}</textarea>
+      <div class="par"><label>Después ofrece<small>lo que propone al acabar («¿Te cuento…?»)</small><input data-k="oferta" value="${esc(x.oferta || '')}"></label>
+      <label>Y si dice que sí, sigue con<small>otra de las preparadas</small><select data-k="sigue"><option value="">—</option>${l.map((y, j) => j !== i && y.q ? `<option${y.q === x.sigue ? ' selected' : ''}>${esc(y.q)}</option>` : '').join('')}</select></label></div>`}
 };
+const idBase = () => { const n = Math.max(0, ...(UD.base || []).map(b => parseInt(String(b.id).replace(/\D/g, ''), 10) || 0)); return 'B' + (n + 1); };
+function pintarLista(l){
+  const arr = LISTA[l].de(), box = document.querySelector(`.lista[data-l="${l}"] .items`);
+  box.innerHTML = arr.map((x, i) => `<div class="item" data-i="${i}"><div class="cuerpo">${LISTA[l].item(x, i, arr)}</div><button type="button" class="quitar secondary outline" aria-label="Quitar">Quitar</button></div>`).join('') || '<p class="vacio">Nada todavía.</p>';
+}
+$('uForm').addEventListener('input', e => {
+  const t = e.target; if(!UD) return;
+  if(t.dataset.c){
+    const p = t.dataset.c;
+    if(p === 'lugar.coord'){ const m = t.value.match(/(-?\d+(?:[.,]\d+)?)\s*[,; ]\s*(-?\d+(?:[.,]\d+)?)/); if(m){ set(UD, 'lugar.lat', parseFloat(m[1].replace(',', '.'))); set(UD, 'lugar.lng', parseFloat(m[2].replace(',', '.'))); } else if(UD.lugar){ delete UD.lugar.lat; delete UD.lugar.lng; } }
+    else if(t.dataset.lineas) set(UD, p, t.value.split('\n').map(s => s.trim()).filter(Boolean));
+    else set(UD, p, t.value);
+    if(p === 'pieza') nombrar(UD);
+  } else if(t.dataset.k){
+    const l = t.closest('.lista').dataset.l, i = +t.closest('.item').dataset.i, arr = LISTA[l].de();
+    if(t.value === '' && (t.dataset.k === 'oferta' || t.dataset.k === 'sigue')) delete arr[i][t.dataset.k]; else arr[i][t.dataset.k] = t.value;
+  } else return;
+  guardarBorradorU();
+});
+// Los desplegables «sigue» ofrecen las preguntas tal como están ahora, sin repintar la lista (se perdería el foco)
+function refrescarSigue(){
+  const l = LISTA.qa.de();
+  document.querySelectorAll('[data-l="qa"] .item').forEach((it, i) => { const sel = it.querySelector('[data-k=sigue]'), v = l[i].sigue || ''; sel.innerHTML = '<option value="">—</option>' + l.map((y, j) => j !== i && y.q ? `<option${y.q === v ? ' selected' : ''}>${esc(y.q)}</option>` : '').join(''); });
+}
+$('uForm').addEventListener('change', e => { if(e.target.dataset.k === 'q') refrescarSigue(); });
+$('uForm').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b || !UD) return;
+  if(b.id === 'pPartir'){
+    const f = $('pFuente').value.trim(), txt = $('pTexto').value.trim(); if(!txt) return;
+    let trozos = txt.split(/\n\s*\n/).map(s => s.replace(/\s+/g, ' ').trim()).filter(Boolean);
+    if(trozos.length === 1) trozos = txt.split(/\n/).map(s => s.trim()).filter(Boolean);
+    trozos.forEach(t => UD.base.push({id:idBase(), f, t}));
+    $('pTexto').value = ''; pintarLista('base'); guardarBorradorU(); return;
+  }
+  const art = b.closest('.lista'); if(!art) return;
+  const l = art.dataset.l, arr = LISTA[l].de();
+  if(b.classList.contains('anadir')){ arr.push(LISTA[l].nuevo()); pintarLista(l); guardarBorradorU(); const u = art.querySelector('.item:last-child input, .item:last-child textarea'); if(u) u.focus(); }
+  else if(b.classList.contains('quitar')){ arr.splice(+b.closest('.item').dataset.i, 1); pintarLista(l); guardarBorradorU(); }
+});
+// Desde «Probar»: una respuesta del modelo que vale pasa a las preparadas
+$('traza').addEventListener('click', async e => {
+  const b = e.target.closest('[data-v]'); if(!b || !UD) return;
+  const en = entradas.find(x => x.n === +b.dataset.v); if(!en || !en.respuesta) return;
+  LISTA.qa.de().push({q:en.q, d:MK(), a:en.respuesta.partes.map(p => p.t).join(' ')});
+  en.verificada = true; pintarTraza(); pintarLista('qa'); guardarBorradorU();
+});
+$('nueva').onclick = () => {
+  const titulo = (window.prompt('Título de la unidad nueva (p. ej. «Fuente de Santa Cecilia»)') || '').trim(); if(!titulo) return;
+  let id = slug(titulo); const ids = SALADEF.obras.map(idDe); let n = 2; while(ids.includes(id)) id = slug(titulo) + '-' + n++;
+  const ruta = `../obras/calle/${id}.json`, u = plantillaUnidad(titulo);
+  st.set('am.panel.u.' + id, JSON.stringify(u));
+  st.set('am.panel.nuevas.' + $('sala').value, JSON.stringify([...nuevas(), ruta]));
+  SALADEF.obras.push(ruta);
+  $('pieza').insertAdjacentHTML('beforeend', `<option selected>${esc(id)}</option>`);
+  abrir(); cargarUnidad(); irA('unidad');
+};
+$('uProbar').onclick = () => { abrir(); irA('probar'); };
+$('uDescartar').onclick = () => {
+  const id = $('pieza').value;
+  if(UNUEVA){ if(!confirm('¿Quitar esta unidad nueva sin guardarla?')) return; st.set('am.panel.u.' + id, null); st.set('am.panel.nuevas.' + $('sala').value, JSON.stringify(nuevas().filter(r => idDe(r) !== id))); cargarPiezas(); return; }
+  st.set('am.panel.u.' + id, null); UD = clon(UPUB); UDv++; pintarUnidad();
+};
+$('uGuardar').onclick = async () => {
+  if(!cambiosU()) return;
+  const id = $('pieza').value, b = $('uGuardar'); b.disabled = true; b.setAttribute('aria-busy', 'true');
+  try{
+    const que = UNUEVA ? 'nueva' : Object.keys(UD).filter(k => !igual(UD[k], (UPUB || {})[k])).join(', ') || 'cambios';
+    const r = await guardarArchivo(URUTA, JSON.stringify(UD, null, 1) + '\n', `Unidad ${id}: ${que}`, USHA);
+    if(UNUEVA){
+      const ruta = rutaDe(id); SALAPUB.obras = [...(SALAPUB.obras || []), ruta];
+      const s = await guardarArchivo(`unidad/salas/${$('sala').value}.json`, JSON.stringify(SALAPUB, null, 1) + '\n', `Agrupación ${$('sala').value}: entra ${id}`, SALASHA);
+      SALASHA = s.sha; st.set('am.panel.nuevas.' + $('sala').value, JSON.stringify(nuevas().filter(x => x !== ruta))); UNUEVA = false;
+    }
+    UPUB = clon(UD); USHA = r.sha; st.set('am.panel.u.' + id, null); UDv++;
+    estadoUnidad(); $('uEstado').innerHTML = `<strong>Guardada.</strong> La web tarda unos minutos en servirla; aquí ya se prueba con lo guardado. <a href="${esc(r.url)}" target="_blank" rel="noopener">Ver la versión</a>`;
+  }catch(e){
+    $('uEstado').innerHTML = `<strong>No se ha guardado.</strong> ${esc(e.message)}${/cambiado desde/.test(e.message) ? ' Recarga la página para ver la versión actual; tus cambios se conservan.' : ''}`;
+  }
+  b.removeAttribute('aria-busy'); b.disabled = !cambiosU();
+};
+
+/* ======================= Pestañas y arranque ======================= */
+function irA(p){
+  document.querySelectorAll('#pest [data-p]').forEach(x => x.classList.toggle('outline', x.dataset.p !== p));
+  ['probar', 'unidad', 'prompt'].forEach(s => { $(s).hidden = s !== p; });
+  if(p === 'probar' && UDv !== probadoV) abrir();   // la unidad se prueba con lo último editado
+}
+$('pest').onclick = e => { const b = e.target.closest('[data-p]'); if(b) irA(b.dataset.p); };
 cargarPrompt().then(cargarSalas);
 </script>
 </body>

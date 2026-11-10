@@ -42,6 +42,7 @@ export default {
       'Access-Control-Allow-Origin': permitidos.includes(origen) ? origen : permitidos[0],
       'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Panel-Clave',
+      'Access-Control-Expose-Headers': 'X-Sha',
       'Vary': 'Origin'
     };
     const texto = (t, status = 200) => new Response(t, {status, headers: {...cors, 'Content-Type': 'text/plain; charset=utf-8'}});
