@@ -81,10 +81,10 @@ pre{white-space:pre-wrap;word-break:break-word;max-height:22rem;overflow:auto;fo
       <div class="acc">
         <label><input type="checkbox" id="usar" role="switch"> Probar con el borrador</label>
         <button type="button" class="secondary outline" id="descartar">Descartar el borrador</button>
-        <button type="button" id="descargar">Descargar prompt.json</button>
+        <button type="button" id="publicar">Publicar</button>
       </div>
     </div>
-    <p class="nota">Estas son las reglas con las que responde el modelo, las mismas para todas las unidades. Lo que cambies se queda en este navegador como borrador: puedes probarlo en «Probar» antes de publicarlo. Entre llaves van los datos de cada unidad; entre dobles corchetes, lo que solo sale si la unidad tiene ese dato.</p>
+    <p class="nota">Estas son las reglas con las que responde el modelo, las mismas para todas las unidades. Lo que cambies se queda en este navegador como borrador: puedes probarlo en «Probar» antes de publicarlo. Al publicar se guarda en el repositorio como una versión nueva. Entre llaves van los datos de cada unidad; entre dobles corchetes, lo que solo sale si la unidad tiene ese dato.</p>
     <div id="secciones"></div>
     <details id="entero">
       <summary>Ver el prompt completo de esta unidad</summary>
@@ -100,6 +100,32 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp
 const num = n => Math.round(n).toLocaleString('es-ES');
 const st = {get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k, v){ try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} }};
 const REPO = 'alsase10X/neoars';
+const IA = 'https://artmedium-ia.alberto-studio76.workers.dev';   // el intermediario: tiene las claves y escribe en GitHub
+
+/* ======================= Guardar: el intermediario escribe en el repositorio ======================= */
+// La contraseña se pide una vez y se queda en este navegador; si deja de valer, se vuelve a pedir
+function clave(pedir){
+  let c = st.get('am.panel.clave');
+  if(!c && pedir){ c = window.prompt('Contraseña del panel'); if(c){ c = c.trim(); st.set('am.panel.clave', c); } }
+  return c || '';
+}
+async function leerArchivo(ruta){
+  // El archivo como está ahora en el repositorio, sin esperar a que GitHub Pages lo publique. Sin contraseña guardada, se lee de la web
+  const c = clave(false); if(!c) return null;
+  const r = await fetch(`${IA}/archivo?ruta=${encodeURIComponent(ruta)}`, {headers:{'X-Panel-Clave':c}});
+  if(r.status === 401){ st.set('am.panel.clave', null); return null; }
+  if(!r.ok) return null;
+  return {sha:r.headers.get('X-Sha'), datos: await r.json()};
+}
+async function guardarArchivo(ruta, contenido, mensaje, sha){
+  for(let intento = 0; intento < 2; intento++){
+    const c = clave(true); if(!c) throw new Error('Sin contraseña no se puede guardar.');
+    const r = await fetch(`${IA}/archivo`, {method:'PUT', headers:{'Content-Type':'application/json', 'X-Panel-Clave':c}, body:JSON.stringify({ruta, contenido, mensaje, sha})});
+    if(r.status === 401){ st.set('am.panel.clave', null); if(intento) throw new Error('Contraseña incorrecta.'); continue; }
+    if(!r.ok) throw new Error(await r.text());
+    return r.json();
+  }
+}
 // Medido en el Monumento a los Fueros: unos 2,8 caracteres por token en castellano. La voz de Mistral, 13 $ por millón de caracteres
 const TOKENS = c => c/2.8, VOZ = c => c*13/1e6;
 
@@ -146,7 +172,7 @@ function alLlegar(d){
   if(d.tipo === 'pregunta') nueva(d.q);
   else if(d.tipo === 'camino') abierta(d.q).camino = d;
   else if(d.tipo === 'preparada'){ const e = abierta(d.dicho); e.preparada = d; e.cerrada = true; }
-  else if(d.tipo === 'envio') abierta(d.q).envio = d;
+  else if(d.tipo === 'envio'){ d.borrador = d.borrador && !!BOR && $('usar').checked; abierta(d.q).envio = d; }   // lo recién publicado también entra por AM_BORRADOR, pero no es borrador
   else if(d.tipo === 'respuesta'){ const e = abierta(d.q); e.respuesta = d; e.cerrada = true; }
   else if(d.tipo === 'error'){ const e = abierta(d.q); e.error = d; e.cerrada = true; }
   pintarTraza();
@@ -197,11 +223,13 @@ function pintarTraza(){
 }
 
 /* ======================= Prompt: las reglas, publicadas y en borrador ======================= */
-let PUB = null, BOR = null;
+let PUB = null, BOR = null, SHA = null;
 const igual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const vigente = () => BOR || PUB;
 async function cargarPrompt(){
-  try{ PUB = await fetch('../prompt.json', {cache:'no-cache'}).then(r => r.json()); }catch(e){ PUB = null; }
+  // Primero del repositorio (fresco); si no hay contraseña guardada, de la web publicada
+  try{ const f = await leerArchivo('unidad/prompt.json'); if(f){ PUB = f.datos; SHA = f.sha; } }catch(e){}
+  if(!PUB) try{ PUB = await fetch('../prompt.json', {cache:'no-cache'}).then(r => r.json()); }catch(e){ PUB = null; }
   try{ BOR = JSON.parse(st.get('am.panel.borrador') || 'null'); }catch(e){ BOR = null; }
   if(BOR && PUB && igual({...BOR, version:0}, {...PUB, version:0})) BOR = null;
   $('usar').checked = !!BOR && st.get('am.panel.usar') === '1';
@@ -215,7 +243,11 @@ function guardarBorrador(){
 }
 function aplicarBorrador(){
   const usa = !!BOR && $('usar').checked;
-  try{ W().AM_BORRADOR = usa ? BOR : null; }catch(e){}
+  // Si no se prueba el borrador, la unidad usa lo publicado; recién publicado, la web tarda unos minutos y mientras se le pasa desde aquí
+  try{
+    const w = W(); w.AM_BORRADOR = usa ? BOR : null;
+    if(!usa && PUB && w.AM && w.AM.listo) w.AM.listo.then(() => { const r = w.AM.reglas(); if(!w.AM_BORRADOR && PUB && !igual(r, PUB)) w.AM_BORRADOR = PUB; });
+  }catch(e){}
   $('aviso').hidden = !usa; $('aviso').innerHTML = usa ? '<strong>Estás probando con el borrador del prompt</strong>, no con las reglas publicadas.' : '';
   if($('entero').open) verEntero();
 }
@@ -224,7 +256,7 @@ function estadoPrompt(){
   $('pEstado').innerHTML = BOR
     ? `<strong>Tienes un borrador sin publicar.</strong> Publicada: versión ${esc(PUB.version)}.${BOR.version !== PUB.version ? ` El borrador partió de la versión ${esc(BOR.version)}: revisa que no pise cambios posteriores.` : ''}`
     : `Versión publicada: ${esc(PUB.version)}. Sin cambios.`;
-  $('usar').disabled = $('descartar').disabled = $('descargar').disabled = !BOR;
+  $('usar').disabled = $('descartar').disabled = $('publicar').disabled = !BOR;
   document.querySelectorAll('#secciones .sec').forEach(a => {
     const k = a.dataset.k, cambiada = !!BOR && valor(BOR, k) !== valor(PUB, k);
     a.classList.toggle('cambiada', cambiada); a.querySelector('button').hidden = !cambiada;
@@ -253,11 +285,21 @@ $('secciones').addEventListener('click', e => {
 });
 $('usar').onchange = () => { st.set('am.panel.usar', $('usar').checked ? '1' : null); aplicarBorrador(); };
 $('descartar').onclick = () => { BOR = null; guardarBorrador(); pintarPrompt(); };
-$('descargar').onclick = () => {
+$('publicar').onclick = async () => {
   if(!BOR) return;
   const d = new Date(), o = {...BOR, version:`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`};
-  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(o, null, 1) + '\n'], {type:'application/json'})); a.download = 'prompt.json'; a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  // El mensaje de la versión dice qué secciones cambian
+  const cambiadas = [...document.querySelectorAll('#secciones .sec.cambiada span')].map(s => s.textContent);
+  const b = $('publicar'); b.disabled = true; b.setAttribute('aria-busy', 'true');
+  try{
+    const r = await guardarArchivo('unidad/prompt.json', JSON.stringify(o, null, 1) + '\n', 'Prompt: ' + (cambiadas.join(', ') || 'cambios'), SHA);
+    PUB = o; SHA = r.sha; BOR = null; guardarBorrador(); pintarPrompt();
+    $('pEstado').innerHTML = `<strong>Publicado</strong> (versión ${esc(o.version)}). La web tarda unos minutos en servirlo; aquí ya se prueba con lo publicado. <a href="${esc(r.url)}" target="_blank" rel="noopener">Ver la versión</a>`;
+  }catch(e){
+    $('pEstado').innerHTML = `<strong>No se ha publicado.</strong> ${esc(e.message)}`;
+    if(/cambiado desde/.test(e.message)) $('pEstado').innerHTML += ' Recarga la página para ver la versión actual; tu borrador se conserva.';
+  }
+  b.removeAttribute('aria-busy'); b.disabled = !BOR;
 };
 function verEntero(){
   let t = ''; try{ t = W().AM.prompt(); }catch(e){}
