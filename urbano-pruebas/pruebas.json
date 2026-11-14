@@ -1,0 +1,27 @@
+{
+ "nota": "Lo que ofrece la barra de pruebas. Para añadir una pieza: su archivo en piezas/ y una línea aquí. Para una versión de reglas: su archivo en reglas/ y una línea aquí.",
+ "piezas": [
+  {
+   "id": "fueros",
+   "n": "Monumento a los Fueros"
+  },
+  {
+   "id": "goya",
+   "n": "Monumento a Goya (Madrid)"
+  }
+ ],
+ "reglas": [
+  {
+   "id": "actual",
+   "n": "Reglas: actual (guía)"
+  },
+  {
+   "id": "personaje",
+   "n": "Reglas: personaje"
+  },
+  {
+   "id": "mediador",
+   "n": "Reglas: mediador"
+  }
+ ]
+}
