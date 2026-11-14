@@ -2312,7 +2312,9 @@ async function preguntarIA(q, abre = false){
     return aviso(m);
   }
   if(U.ctl !== ctl) return; U.ctl = null; dots.remove();
-  const partes = (r && Array.isArray(r.partes) ? r.partes : []).filter(p => p && typeof p.t === 'string' && p.t.trim()).slice(0, 5).map(limpiaParte);
+  // Pruebas: la respuesta llega como un solo texto libre ("texto") y la lista de hechos de la base que ha usado ("usa")
+  const crudas = r && Array.isArray(r.partes) ? r.partes : (r && typeof r.texto === 'string' ? r.texto.split(/\n+/).map(t => ({t})) : []);
+  const partes = crudas.filter(p => p && typeof p.t === 'string' && p.t.trim()).slice(0, 5).map(limpiaParte);
   traza({tipo:'respuesta', q, ms:Math.round(performance.now() - t0), crudo:r, partes});
   if(!partes.length) return aviso('No he sabido contestar a eso. Prueba a preguntarlo de otra manera.');
   U.chat.push({role:'user', content:q}, {role:'assistant', content:partes.map(p => p.t).join(' ')});
@@ -2326,6 +2328,8 @@ async function preguntarIA(q, abre = false){
   figura(typeof r.imagen === 'string' ? r.imagen : null, $('lineas').lastElementChild);   // solo si existe en la lista
   // Sin etiquetas ni fuentes entre los párrafos; si algo no sale de la documentación, se avisa una vez, al final
   if(partes.some(p => p.e === 'general')) $('lineas').insertAdjacentHTML('beforeend', '<p class="ep ep-general"><b>Conocimiento general</b> · parte de esta respuesta no sale de la documentación de la obra: verifícalo</p>');
+  const usa = r && Array.isArray(r.usa) ? r.usa.map(x => String(x).replace(/[\[\]\s]/g, '')).filter(x => BASE().some(b => b.id === x)) : [];
+  if(PRUEBAS && usa.length) $('lineas').insertAdjacentHTML('beforeend', `<p class="ep">De la base: ${esc(usa.join(' · '))}</p>`);
   sugerencias(); estado(); hablar(frases);
 }
 
