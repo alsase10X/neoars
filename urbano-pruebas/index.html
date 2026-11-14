@@ -984,6 +984,9 @@ const SALA_ID = (() => { try{ const v = new URLSearchParams(location.search).get
 const PARAM = k => { try{ const v = new URLSearchParams(location.search).get(k); return v && /^[a-z0-9-]+$/.test(v) ? v : null; }catch(e){ return null; } };
 const PIEZA_ID = PARAM('pieza') || 'fueros';
 const REGLAS_ID = PARAM('reglas') || 'actual';
+// Sin visita grabada: al empezar, la pieza abre la conversación con lo que genere el prompt
+const PRUEBAS = true;
+const APERTURA = '(Se ha parado delante de ti y ha acercado el móvil para escucharte. Todavía no ha dicho nada.)';
 // La marca del cliente: un archivo con su logo, tema, acento, tipografía de títulos y forma de los botones.
 // La lee la sala («marca») o el enlace (?marca=<marca>, o ?marca=ninguna para verla sin marca). La mediación no cambia
 let MARCA = null;
@@ -1514,7 +1517,7 @@ function preparar(){
   $('iniQ').textContent = V2 ? `Pregúntale lo que quieras ${alA(M().corto || M().nombre)}, con la voz o escribiendo. Mejor con auriculares.`
     : `Te la cuenta ${M().por || M().nombre}${P.perfil !== Object.keys(OBRA.visitas)[0] ? ' · ' + VIS().n : ''}. Mejor con auriculares, mirando ${PIEZA()}.`;
   // El botón dice lo que va a pasar: conversar, o escuchar la visita y cuánto dura
-  $('empT').textContent = V2 ? 'Iniciar conversación' : `Escuchar la visita · ${duracion()}`;
+  $('empT').textContent = PRUEBAS ? 'Empezar' : V2 ? 'Iniciar conversación' : `Escuchar la visita · ${duracion()}`;
   // v3: conversar o escuchar se elige al entrar, con dos puertas; la visita entera ya no va entre las sugerencias
   $('escucharB').hidden = !conVisitaAparte();
   if(conVisitaAparte()) $('escucharB').textContent = `Escuchar la visita · ${durTxt(segVisita())}`;
@@ -1544,6 +1547,12 @@ $('empezar').onclick = () => {
     U.introF = U.caps[0] && U.caps[0].k === 'presenta' ? 0 : Math.min(U.caps.length - 1, U.introI + Math.max(1, +M().intro || 1) - 1);
   }
   play();
+};
+if(PRUEBAS) $('empezar').onclick = () => {
+  U.started = true; U.fin = true; U.conv = true; $('inicio').hidden = true; $('flujo').hidden = false; $('abajo').hidden = false;
+  $('obraV').classList.toggle('sintexto', !G.texto);
+  requestAnimationFrame(() => selloCam(U.zona, false));
+  promptListo.then(() => preguntarIA((REGLAS() || {}).apertura || APERTURA, true));
 };
 
 /* ======================= El relato: cápsulas, frases, palabras ======================= */
@@ -1845,6 +1854,7 @@ function sugerencias(extra = '', ks = null){
   const of = U.oferta; let ofB = '', ss = s;
   if(of && of.k != null && M().qa[of.k] && !U.asked.has(M().qa[of.k].q)){ ofB = qBoton(of.k).replace('class="q', 'class="q oferta'); ss = s.filter(k => k !== of.k).slice(0, 2); }
   else if(of && of.q){ ofB = `<button class="q oferta" type="button" data-pregunta="${esc(of.q)}">${esc(of.q)}</button>`; ss = s.slice(0, 2); }
+  if(PRUEBAS && U.sugIA && U.sugIA.length){ ofB = U.sugIA.map(q => `<button class="q oferta" type="button" data-pregunta="${esc(q)}">${esc(q)}</button>`).join(''); ss = []; }
   if(!ss.length && !extra && !ent && !mem && !ofB) return;
   const box = document.createElement('div'); box.className = 'sug';
   box.innerHTML = (ss.length || ent || ofB ? `<p class="eyb">Sugerencias</p>${ofB}${ent}${ss.map(qBoton).join('')}` : '') + mem + extra;
@@ -2023,7 +2033,7 @@ function encabezar(q){
   if(SUBT) [...$('lineas').children].forEach(el => el.classList.add('viejo'));
   const y = document.createElement('p'); y.className = 'you'; y.textContent = q; $('lineas').appendChild(y);
   const dots = document.createElement('div'); dots.className = 'dots'; dots.setAttribute('aria-label', 'Pensando'); dots.innerHTML = '<i></i><i></i><i></i>'; $('lineas').appendChild(dots);
-  alTope(y); U.pensando = true; U.tarjeta = null; U.oferta = null; esperar(q); estado();
+  alTope(y); U.pensando = true; U.tarjeta = null; U.oferta = null; U.sugIA = []; esperar(q); estado();
   return dots;
 }
 // Mientras llega la respuesta, bajo el micrófono, frases que cambian cada pocos segundos (como en Ask Mona). Salen de
@@ -2266,12 +2276,13 @@ function imagenesPrompt(){
   const ims = Object.entries(OBRA.imagenes || {}); if(!ims.length) return '';
   return ims.map(([k, im]) => `- ${k}: ${im.muestra}.${im.relacion ? ' ' + im.relacion + '.' : ''}${im.ilustra ? ' Ilustra ' + im.ilustra.join(', ') + '.' : ''}`).join('\n');
 }
-async function preguntarIA(q){
+async function preguntarIA(q, abre = false){
   q = q.replace(/\s+/g, ' ').trim().slice(0, 300); if(!q) return;
   const listo = IA.modo ? IA.asegurar() : null;   // primero, para que el inicio de sesión de Puter salga dentro del gesto
   if(listo) listo.catch(() => {});
   U.asked.add(q);
   const dots = encabezar(q);
+  if(abre && dots.previousElementSibling && dots.previousElementSibling.classList.contains('you')) dots.previousElementSibling.remove();
   const aviso = m => { dots.remove(); U.pensando = false; $('lineas').insertAdjacentHTML('beforeend', `<div class="ans"><p>${esc(m)}</p></div>`); sugerencias(); estado(); };
   if(!IA.modo) return aviso('Aquí no tengo un modelo conectado, así que solo puedo responder con las preguntas que ha preparado el museo. Prueba con una de estas.');
   const ctl = U.ctl = new AbortController();
@@ -2308,6 +2319,7 @@ async function preguntarIA(q){
   const z = ZONA(r.z); if(z) selloCam(z);
   U.tarjeta = z;
   U.oferta = typeof r.sigue === 'string' && /\?\s*$/.test(r.sigue.trim()) && r.sigue.trim().length <= 120 ? {q:r.sigue.trim()} : null;
+  U.sugIA = Array.isArray(r.sugerencias) ? r.sugerencias.filter(x => typeof x === 'string' && x.trim()).map(x => x.trim().slice(0, 120)).slice(0, 3) : [];
   // Responde siempre la guía: el autor solo habla con palabras suyas comprobadas
   const g = MED(MEDG());
   const frases = responder(partes.map(p => ({t:p.t, voz:g.voz})), false, MEDG() !== P.guia ? `<p class="qn">Te responde ${esc(g.por || g.nombre)}</p>` : '');

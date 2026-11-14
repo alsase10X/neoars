@@ -10,7 +10,7 @@ Banco de pruebas para encontrar el prompt maestro de las piezas urbanas: una sol
 
 | Carpeta o archivo | Para qué |
 | --- | --- |
-| `index.html` | Copia del motor de `unidad/sala`, con tres cambios: abre una sola pieza (`?pieza=`), lee las reglas de `reglas/` (`?reglas=`) y lleva la barra de pruebas. |
+| `index.html` | Copia del motor de `unidad/sala`, con estos cambios: abre una sola pieza (`?pieza=`), lee las reglas de `reglas/` (`?reglas=`), no tiene visita grabada (la pieza abre hablando), muestra las sugerencias que genera el modelo y lleva la barra de pruebas. |
 | `piezas/` | Las piezas de prueba, con el mismo formato que `unidad/obras/calle/`. |
 | `reglas/` | Las versiones de reglas. `actual` es copia de `unidad/prompt.json`. |
 | `pruebas.json` | Lo que ofrece la barra. Para añadir una pieza o unas reglas: su archivo y una línea aquí. |
@@ -31,7 +31,12 @@ Lo que cambia entre tipos no es el prompt, sino la memoria de la pieza. En la fi
 - **Hecho o causa** (Fueros): «Tú no viviste aquello: te pusieron aquí para recordarlo».
 - **Objeto útil o recreación** (almadía): «Quienes te hicieron y te usaron son otros».
 
+## Cómo funciona una prueba
+
+- **Sin visita grabada.** Al pulsar «Empezar», la pieza abre la conversación con lo que genere el prompt a partir de la situación (`apertura` en cada archivo de reglas).
+- **Las sugerencias las genera el prompt**, dos al final de cada respuesta (sección «Para seguir» y campo `sugerencias` del formato). En `actual` sigue saliendo una sola, la de `sigue`.
+- **Las piezas solo traen lo que es de la pieza:** base documental, zonas, foto y la línea `representa`. La entrada y las preguntas son del prompt, no de la pieza.
+
 ## Al probar
 
-- La visita grabada de cada pieza es la misma con todas las reglas. Las reglas cambian las respuestas a lo que preguntes después.
 - Las piezas con `"nube": true` contestan por el intermediario (Claude Haiku a través de Perplexity) y gastan del saldo de Perplexity.
