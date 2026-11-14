@@ -200,33 +200,103 @@
  "base": [
   {
    "id": "B1",
-   "f": "Ayuntamiento de Madrid · Patrimonio urbano (vía Europeana)",
-   "t": "Estatua de bronce de Mariano Benlliure, en la calle de Felipe IV. La figura mide 2,50 m de alto, 1 m de ancho y 1 m de fondo. El monumento tiene tres cuerpos: basamento, pedestal y estatua."
+   "f": "Met Museum (Goya); Museo del Prado, ficha E000407 (Benlliure)",
+   "t": "Es un monumento a Francisco de Goya, pintor y grabador (Fuendetodos 1746 – Burdeos 1828), obra del escultor Mariano Benlliure (Valencia 1862 – Madrid 1947)."
   },
   {
    "id": "B2",
-   "f": "Comunidad de Madrid · Itinerario Benlliure, 150 aniversario (1862-2012)",
-   "t": "Está frente a la fachada norte del Museo del Prado. Lo encargó en 1902 el alcalde de Madrid Alberto Aguilera; al principio iba a ser una fuente. El pedestal de mármol es teatral a propósito: enseña al que pasa fragmentos de los Caprichos y La maja desnuda, tallada en altorrelieve y tumbada, que equilibra el conjunto. Benlliure esculpió la cabeza de Goya en varias versiones y materiales."
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Lo encargó en 1902 el alcalde de Madrid Alberto Aguilera."
   },
   {
    "id": "B3",
-   "f": "Real Academia de Bellas Artes de San Fernando · ficha de escultura E-616",
-   "t": "Benlliure hizo el modelo en 1901-1902. Fue un encargo del Ayuntamiento de Madrid para conmemorar la mayoría de edad de Alfonso XIII."
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Al principio iba a ser una fuente, cerca de la ermita de San Antonio de la Florida."
   },
   {
    "id": "B4",
-   "f": "Archivo fotográfico Scala / Art Resource",
-   "t": "El monumento es de bronce, mármol y granito. Goya nació en Fuendetodos en 1746 y murió en Burdeos en 1828; fue pintor y grabador."
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "El pedestal se hizo a propósito como un escenario: enseña al que pasa obras de Goya, entre ellas fragmentos de los Caprichos y La maja desnuda en altorrelieve, tumbada para equilibrar el conjunto."
   },
   {
    "id": "B5",
-   "f": "Julián Gállego, «Madrid y su eterna deuda con Francisco Goya», Heraldo de Aragón, suplemento del Pilar, 1996",
-   "t": "La estatua se inauguró primero en el parque del Retiro. Más tarde la llevaron a otro punto de la ciudad, donde el trole de un tranvía, al salirse del cable, le cortó la cabeza. La repararon y hoy está ante la puerta norte del Prado. El artículo no da la fecha del accidente."
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Va vestido a la moda de principios del siglo XIX."
   },
   {
    "id": "B6",
-   "f": "Museo del Prado · colección, E000407",
-   "t": "En el museo de enfrente se guarda una cabeza de Goya en bronce del mismo Benlliure (1902; 1911), de 57 cm de alto. El Prado se la compró al escultor en 1912."
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Para el rostro, Benlliure se inspiró en el retrato de Goya pintado por Vicente López."
+  },
+  {
+   "id": "B7",
+   "f": "Metropolitan Museum of Art, Nueva York",
+   "t": "Los Caprichos son 80 grabados que Goya publicó en 1799; se suelen leer como una crítica a la sociedad de su tiempo."
+  },
+  {
+   "id": "B8",
+   "f": "Metropolitan Museum of Art; Fundación Goya en Aragón",
+   "t": "«El sueño de la razón produce monstruos» es el número 43 de los Caprichos. La inscripción de su dibujo preparatorio, que está en el Prado, indica que al principio iba a ser la portada de la serie."
+  },
+  {
+   "id": "B9",
+   "f": "Fundación Goya en Aragón, ficha de La maja desnuda",
+   "t": "La maja desnuda fue de Manuel Godoy. Entró en la colección del Prado en 1901."
+  },
+  {
+   "id": "B10",
+   "f": "Fundación Goya en Aragón, ficha de La maja desnuda",
+   "t": "Por ese cuadro, la Inquisición investigó a Goya: en 1815 ordenó que se presentara a declarar si era obra suya. No se sabe cómo terminó el proceso ni se conservan sus declaraciones."
+  },
+  {
+   "id": "B11",
+   "f": "Wikipedia, «Vicente López Portaña»; Museo del Prado",
+   "t": "Vicente López pintó ese retrato en 1826, cuando Goya, con 80 años, visitó Madrid desde Burdeos, donde vivía. Murió dos años después. El cuadro está en el Prado."
+  },
+  {
+   "id": "B12",
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Benlliure esculpió la cabeza varias veces y en distintos materiales. Después se sacaron copias en escayola y fundiciones póstumas en bronce."
+  },
+  {
+   "id": "B13",
+   "f": "Museo del Prado, ficha E000407",
+   "t": "El Prado guarda una cabeza de Goya en bronce de Benlliure, de 57 cm, que compró al escultor en 1912."
+  },
+  {
+   "id": "B14",
+   "f": "Comunidad de Madrid · Benlliure, monumentos en el mundo, 150 aniversario (1862-2012)",
+   "t": "En 1995, el Ayuntamiento de Madrid encargó una copia póstuma de esta estatua para Burdeos. Está en la plaza de Chapelet."
+  },
+  {
+   "id": "B15",
+   "f": "Real Academia de Bellas Artes de San Fernando, ficha de escultura E-616",
+   "t": "El encargo servía también para conmemorar la mayoría de edad de Alfonso XIII. Benlliure hizo el modelo en 1901-1902."
+  },
+  {
+   "id": "B16",
+   "f": "Julián Gállego, «Madrid y su eterna deuda con Francisco Goya», Heraldo de Aragón; Paisaje de la Luz (Madrid)",
+   "t": "Se inauguró en el Retiro y pasó por otros lugares de Madrid. Desde 1946 está frente a la fachada norte del Prado."
+  },
+  {
+   "id": "B17",
+   "f": "Julián Gállego, «Madrid y su eterna deuda con Francisco Goya», Heraldo de Aragón",
+   "t": "En uno de esos sitios, el trole de un tranvía se salió del cable y le cortó la cabeza. La repararon. No consta el año."
+  },
+  {
+   "id": "B18",
+   "f": "Smithsonian Magazine; Patrimonio Nacional, ermita de San Antonio de la Florida",
+   "t": "Goya pintó la ermita de San Antonio de la Florida en 1798. Sus restos, traídos de Burdeos, descansan allí desde 1919."
+  },
+  {
+   "id": "B19",
+   "f": "Público, «El macabro misterio del Goya decapitado»",
+   "t": "Cuando se exhumaron sus restos en Burdeos, medio siglo después de su muerte, el cónsul español anotó que estaban todos los huesos menos la cabeza. Dónde acabó el cráneo sigue sin saberse."
+  },
+  {
+   "id": "B20",
+   "f": "Museo de Historia de Madrid (Ayuntamiento); Museo del Prado, «Cómo llegar»",
+   "t": "La fachada norte del Prado, la que tiene delante, es hoy la Puerta de Goya. Allí están las taquillas y por ahí se entra a ver la colección."
   }
  ],
  "visitas": {
@@ -274,6 +344,10 @@
    "Bronce, mármol y granito"
   ],
   [
+   "Medidas",
+   "Figura de bronce de 2,50 m de alto"
+  ],
+  [
    "Lugar",
    "Calle de Felipe IV, frente a la fachada norte del Museo del Prado, Madrid"
   ],
@@ -282,5 +356,5 @@
    "Facilitada por Alberto; autoría y licencia por confirmar"
   ]
  ],
- "nota": "Pieza de prueba. Base provisional preparada con fuentes públicas: se sustituirá por la base curada de Alberto."
+ "nota": "Pieza de prueba. Base revisada con Alberto: un hecho por entrada, cada uno con su fuente, elegidos por lo que importa a quien está delante. Las relaciones entre hechos no se escriben: las hace el modelo."
 }
