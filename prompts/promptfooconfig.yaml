@@ -11,30 +11,48 @@ prompts:
   - id: file://versiones/construir.js:reglamento
     label: reglamento
 
-# Misma temperatura y mismo tope para todos, para comparar prompts y no azar.
+# Todos los modelos pasan por la Agent API de Perplexity con una sola clave
+# (PERPLEXITY_API_KEY). Sin herramientas: no buscan en internet.
+# Para añadir o quitar uno, quita o pon el «#» de su bloque.
+# Lista de modelos: https://docs.perplexity.ai/docs/agent-api/models
 providers:
-  - id: anthropic:messages:claude-sonnet-5-5
-    label: claude-sonnet-5-5
-    config:
-      temperature: 0.7
-      max_tokens: 600
-  - id: anthropic:messages:claude-haiku-5-5
+  - id: file://versiones/perplexity.js
     label: claude-haiku-5-5
     config:
-      temperature: 0.7
-      max_tokens: 600
-  # Para añadir otros, quita el «#» y comprueba el nombre exacto del modelo
-  # en la web de cada proveedor:
-  # - id: openai:chat:NOMBRE-DEL-MODELO
-  #   label: openai
+      modelo: anthropic/claude-haiku-5-5
+  - id: file://versiones/perplexity.js
+    label: claude-sonnet-5-5
+    config:
+      modelo: anthropic/claude-sonnet-5-5
+  - id: file://versiones/perplexity.js
+    label: gpt-6-sol
+    config:
+      modelo: openai/gpt-6-sol
+  - id: file://versiones/perplexity.js
+    label: gemini-3.8-flash
+    config:
+      modelo: google/gemini-3.8-flash
+  # - id: file://versiones/perplexity.js
+  #   label: claude-opus-5-5
   #   config:
-  #     temperature: 0.7
-  #     max_tokens: 600
-  # - id: google:NOMBRE-DEL-MODELO
-  #   label: gemini
+  #     modelo: anthropic/claude-opus-5-5
+  # - id: file://versiones/perplexity.js
+  #   label: gpt-6-luna
   #   config:
-  #     temperature: 0.7
-  #     maxOutputTokens: 600
+  #     modelo: openai/gpt-6-luna
+  # - id: file://versiones/perplexity.js
+  #   label: gemini-4-argon
+  #   config:
+  #     modelo: google/gemini-4-argon
+  # - id: file://versiones/perplexity.js
+  #   label: grok-4.7
+  #   config:
+  #     modelo: xai/grok-4.7
+  #
+  # Opciones de cada modelo, dentro de «config»:
+  #   max_output_tokens: 1500   tope de tokens, contando lo que razona antes de escribir
+  #   razonar: none             cuánto razona: none, minimal, low… (si un modelo no admite
+  #                             un valor, Perplexity responde con error y lo verás en la tabla)
 
 defaultTest:
   vars:
