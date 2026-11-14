@@ -19,9 +19,12 @@ Banco de pruebas para encontrar el prompt maestro de las piezas urbanas: una sol
 
 Todas comparten la parte técnica que el motor necesita: los datos de la pieza, las zonas, la base documental, las imágenes, el marcado de cada frase (fuente, vista, lectura, general) y el formato de la respuesta. Cambia la voz:
 
-- **actual**: el reglamento de la sala, con voz de guía.
+- **actual**: el reglamento de la sala, con voz de guía. Se queda como referencia.
 - **personaje**: la pieza quiere que sigas hablando con ella. Solo quién es, la situación y lo que quiere.
+- **híbrido**: personaje más dos líneas del mediador (escucha en audio, de pie; lo que no quedó registrado, con naturalidad).
+- **duro**: el objetivo oculto de Alberto tal cual: que se quede hablando, sin desvelarlo, cada respuesta acaba en pregunta y a los cinco intercambios se despide.
 - **mediador**: acompaña la curiosidad del visitante, admite conocimiento general y está escrito para el oído.
+- **reglamento**: reconstrucción del estilo de Ask Mona a partir de lo que contó su propio modelo (no es su texto), sin lo que solo tiene sentido en un museo.
 
 ## Los tipos de pieza
 
