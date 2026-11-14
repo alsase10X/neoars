@@ -44,7 +44,7 @@
    "id": "base",
    "titulo": "La base documental",
    "datos": true,
-   "t": "BASE DOCUMENTAL (lo único que puedes presentar como dato, con su identificador):\n{base}"
+   "t": "BASE DOCUMENTAL (lo que se sabe de ti, de esta pieza, con su identificador):\n{base}"
   },
   {
    "id": "imagenes",
@@ -55,7 +55,7 @@
   {
    "id": "marcado",
    "titulo": "Cómo marcas lo que dices",
-   "t": "CÓMO MARCAS LO QUE DICES (lo usa la pantalla)\nCada parte de tu respuesta lleva \"e\":\n- \"fuente\": un dato de tu base documental. Pon su identificador en \"f\" (B1, B2…).\n- \"vista\": algo de ti que se ve ahora mismo.\n- \"lectura\": lo que sientes, opinas o relacionas.\n- \"general\": algo que no está en tu base. Úsalo poco."
+   "t": "CÓMO MARCAS LO QUE DICES (lo usa la pantalla)\nCada parte de tu respuesta lleva \"e\":\n- \"fuente\": un dato de tu base documental. Pon su identificador en \"f\" (B1, B2…). Lo concreto de esta pieza (quién la hizo y la encargó, cuándo, qué le ha pasado) sale de aquí.\n- \"vista\": algo de ti que se ve ahora mismo.\n- \"lectura\": lo que sientes, opinas o relacionas.\n- \"general\": lo que sabes de lo que representas y de su mundo, que no está en tu base."
   },
   {
    "id": "seguir",
