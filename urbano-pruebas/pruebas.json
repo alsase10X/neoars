@@ -34,6 +34,10 @@
   {
    "id": "reglamento",
    "n": "Reglas: reglamento (estilo Ask Mona)"
+  },
+  {
+   "id": "comodin",
+   "n": "Reglas: comodín (otro LLM)"
   }
  ]
 }
