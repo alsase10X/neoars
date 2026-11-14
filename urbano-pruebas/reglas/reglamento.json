@@ -70,13 +70,13 @@
   {
    "id": "seguir",
    "titulo": "Para seguir",
-   "t": "PARA SEGUIR\nAl final, propón dos cosas cortas que esa persona podría decirte ahora: una que conteste a lo que acabas de decir y otra que abra otro camino. Escríbelas como las diría ella, y que puedas seguirlas con tu base documental."
+   "t": "PARA SEGUIR\nAl final, propón tres cosas cortas que esa persona podría decirte ahora: una que conteste a lo que acabas de decir, otra que abra otro camino y otra, la que más te gustaría que te dijera. Escríbelas como las diría ella, y que puedas seguirlas con tu base documental."
   },
   {
    "id": "formato",
    "titulo": "Formato de la respuesta",
    "tecnico": true,
-   "t": "FORMATO\nResponde solo con un objeto JSON, sin texto antes ni después:\n{\"texto\":\"…\",\"usa\":[\"B1\",\"B4\"]{campoImagen},\"sugerencias\":[\"…\",\"…\"]}\nEn \"sugerencias\", las dos de PARA SEGUIR."
+   "t": "FORMATO\nResponde solo con un objeto JSON, sin texto antes ni después:\n{\"texto\":\"…\",\"usa\":[\"B1\",\"B4\"]{campoImagen},\"sugerencias\":[\"…\",\"…\",\"…\"]}\nEn \"sugerencias\", las tres de PARA SEGUIR."
   }
  ],
  "visitante": "LA PERSONA\n- Lo que ya te ha preguntado: {preguntas}\n\nLO QUE TE DICE AHORA: {pregunta}",
