@@ -2252,7 +2252,7 @@ function promptChat(){
   const d = {
     titulo:OBRA.titulo, autor:OBRA.autor, fecha:OBRA.fecha, tema:OBRA.tema || '',
     pieza:OBRA.pieza || '', lugar:(OBRA.lugar && OBRA.lugar.dir) || OBRA.dir || '', representa:OBRA.representa || '',
-    zonas:Object.entries(OBRA.zonas).map(([k, z]) => `- ${k}: ${z.n}${z.vista ? '. ' + z.vista : ''}`).join('\n'),
+    zonas:Object.values(OBRA.zonas).map(z => `- ${z.n}${z.vista ? ': ' + z.vista : ''}`).join('\n'),
     base:BASE().map(b => `[${b.id}] ${b.f}: ${b.t}`).join('\n'),
     imagenes:imagenesPrompt(),
     rol:MED(MEDG()).rol || R.rolPorDefecto || '',
