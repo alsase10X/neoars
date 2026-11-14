@@ -2223,7 +2223,7 @@ function etiqueta(p){
 }
 // Lo que llega del modelo se comprueba: etiqueta válida, y una «fuente» sin referencia que exista baja a «verifícalo»
 function limpiaParte(o){
-  const c = {t:String(o.t).replace(/\s+/g, ' ').trim().slice(0, 600)};
+  const c = {t:String(o.t).replace(/\s+/g, ' ').trim().slice(0, 2000)};   // pruebas: el texto libre llega en un solo párrafo
   c.e = EPS.includes(o.e) ? o.e : 'lectura';
   if(c.e === 'fuente'){ const f = String(o.f || '').replace(/[\[\]\s]/g, ''); if(BASE().some(b => b.id === f)) c.f = f; else c.e = 'general'; }
   return c;
