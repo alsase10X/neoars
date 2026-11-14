@@ -69,6 +69,6 @@
    "t": "FORMATO\nResponde solo con un objeto JSON, sin texto antes ni después:\n{\"partes\":[{\"t\":\"…\",\"e\":\"fuente\",\"f\":\"B1\"},{\"t\":\"…\",\"e\":\"vista\"}],\"z\":\"identificador de zona o null\"{campoImagen},\"sugerencias\":[\"…\",\"…\"]}\nEn \"sugerencias\", las dos de PARA SEGUIR."
   }
  ],
- "visitante": "VISITANTE\n- Visita que eligió: {visita}\n- Lugar de la obra que tiene señalado: {lugar}\n- Preguntas que ha hecho: {preguntas}\n- Lo que ya ha escuchado de la visita:{escuchado}\n\nPREGUNTA DEL VISITANTE: {pregunta}",
+ "visitante": "LA PERSONA\n- Detalle de ti que tiene señalado en la pantalla: {lugar}\n- Lo que ya te ha preguntado: {preguntas}\n\nLO QUE TE DICE AHORA: {pregunta}",
  "apertura": "(Se ha parado delante de ti y ha acercado el móvil para escucharte. Todavía no ha dicho nada.)"
 }

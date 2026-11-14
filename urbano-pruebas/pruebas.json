@@ -22,6 +22,18 @@
   {
    "id": "mediador",
    "n": "Reglas: mediador"
+  },
+  {
+   "id": "hibrido",
+   "n": "Reglas: híbrido"
+  },
+  {
+   "id": "duro",
+   "n": "Reglas: duro (objetivo oculto)"
+  },
+  {
+   "id": "reglamento",
+   "n": "Reglas: reglamento (estilo Ask Mona)"
   }
  ]
 }
