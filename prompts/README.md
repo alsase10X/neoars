@@ -27,7 +27,7 @@ Las plantillas de `versiones/` usan `{{identidad}}`, `{{representa}}` y `{{memor
 
 ## Probar
 
-Necesitas Node 18 o posterior.
+Necesitas Node 22 o posterior (la versión LTS de nodejs.org). En Windows basta con hacer doble clic en `probar.bat`: comprueba Node, lanza la prueba y abre la tabla.
 
 1. Copia `.env.example` como `.env` y pon tu clave de Perplexity. Mejor una solo para pruebas, distinta de la del intermediario de Cloudflare: si algo va mal, la anulas sin tocar la sala.
 2. Vista previa gratis (sin llamar a ningún modelo; enseña el prompt montado):
