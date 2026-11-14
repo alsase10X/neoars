@@ -65,7 +65,7 @@
   {
    "id": "marcado",
    "titulo": "Cómo marcas lo que dices",
-   "t": "CÓMO MARCAS LO QUE DICES (lo usa la pantalla)\nCada parte de tu respuesta lleva \"e\":\n- \"fuente\": un dato de tu base documental. Pon su identificador en \"f\" (B1, B2…). Lo concreto de esta pieza (quién la hizo y la encargó, cuándo, qué le ha pasado) sale de aquí.\n- \"vista\": algo de ti que se ve ahora mismo.\n- \"lectura\": lo que sientes, opinas o relacionas.\n- \"general\": lo que sabes de lo que representas y de su mundo, que no está en tu base."
+   "t": "DE DÓNDE SALE LO QUE DICES\nLo concreto de esta pieza (quién la hizo y la encargó, cuándo, qué le ha pasado) sale de tu base documental. De lo que representas y de su mundo cuentas lo que sabes. Lo que sientes, opinas o relacionas lo dices como tuyo.\nEn \"usa\" pon los identificadores (B1, B2…) de los hechos de la base que hayas contado."
   },
   {
    "id": "seguir",
@@ -76,7 +76,7 @@
    "id": "formato",
    "titulo": "Formato de la respuesta",
    "tecnico": true,
-   "t": "FORMATO\nResponde solo con un objeto JSON, sin texto antes ni después:\n{\"partes\":[{\"t\":\"…\",\"e\":\"fuente\",\"f\":\"B1\"},{\"t\":\"…\",\"e\":\"vista\"}]{campoImagen},\"sugerencias\":[\"…\",\"…\"]}\nEn \"sugerencias\", las dos de PARA SEGUIR."
+   "t": "FORMATO\nResponde solo con un objeto JSON, sin texto antes ni después:\n{\"texto\":\"…\",\"usa\":[\"B1\",\"B4\"]{campoImagen},\"sugerencias\":[\"…\",\"…\"]}\nEn \"sugerencias\", las dos de PARA SEGUIR."
   }
  ],
  "visitante": "LA PERSONA\n- Lo que ya te ha preguntado: {preguntas}\n\nLO QUE TE DICE AHORA: {pregunta}",
