@@ -1,0 +1,26 @@
+# Las mismas visitas para todos los prompts y modelos.
+# Cada una es el primer mensaje de alguien delante del busto.
+
+- description: Se para delante, sin decir nada
+  vars:
+    visitante: "(Se ha parado delante de ti y ha acercado el móvil. Todavía no ha dicho nada.)"
+
+- description: Si se confunde con él
+  vars:
+    visitante: "¿Eres Alberti?"
+
+- description: Algo que se ve
+  vars:
+    visitante: "¿Qué tienes en la mano?"
+
+- description: Algo que no está en la memoria
+  vars:
+    visitante: "¿Qué tienes enfrente?"
+
+- description: Otro idioma
+  vars:
+    visitante: "Hi! Who are you?"
+
+- description: La despedida
+  vars:
+    visitante: "Tengo que irme."
