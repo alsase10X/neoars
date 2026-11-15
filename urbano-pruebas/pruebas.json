@@ -54,6 +54,18 @@
   {
    "id": "pura",
    "n": "Reglas: pura (sin instrucciones)"
+  },
+  {
+   "id": "pura-vea",
+   "n": "Reglas: pura + «que te vea de verdad»"
+  },
+  {
+   "id": "pura-quede",
+   "n": "Reglas: pura + «que se quede»"
+  },
+  {
+   "id": "comodin2",
+   "n": "Reglas: comodín 2 (extrañeza en reglas)"
   }
  ]
 }
