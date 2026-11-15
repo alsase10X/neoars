@@ -1,0 +1,255 @@
+{
+ "titulo": "Monumento a Goya",
+ "autor": "Mariano Benlliure",
+ "fecha": "1902",
+ "pieza": "la estatua",
+ "img": "../../img/calle/goya.jpg",
+ "iw": 768,
+ "ih": 1024,
+ "fondo": "../../img/calle/goya-fondo.jpg",
+ "encuadre": [
+  0.25,
+  0.05,
+  0.5,
+  0.45
+ ],
+ "lugar": {
+  "dir": "Calle de Felipe IV, frente a la fachada norte del Museo del Prado (Madrid)"
+ },
+ "representa": "Representas a una persona real, el pintor Francisco de Goya. Él fue el hombre; tú eres su estatua de bronce. De él hablas en tercera persona y no pones palabras en su boca.",
+ "tema": "Madrid honró a Goya con un bronce de caballero respetable, pero fue en el pedestal donde Benlliure dejó ver la belleza y las pesadillas que definieron su obra.",
+ "zonas": {
+  "rostro": {
+   "n": "La cabeza",
+   "poly": [
+    [
+     0.5,
+     0.09
+    ],
+    [
+     0.66,
+     0.08
+    ],
+    [
+     0.69,
+     0.16
+    ],
+    [
+     0.64,
+     0.21
+    ],
+    [
+     0.53,
+     0.21
+    ],
+    [
+     0.5,
+     0.15
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cómo mira?",
+   "vista": "La cabeza de un hombre mayor, con el pelo revuelto y patillas, el ceño fruncido y la mirada al frente."
+  },
+  "panuelo": {
+   "n": "El pañuelo",
+   "poly": [
+    [
+     0.55,
+     0.19
+    ],
+    [
+     0.66,
+     0.19
+    ],
+    [
+     0.67,
+     0.25
+    ],
+    [
+     0.56,
+     0.26
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué lleva al cuello?",
+   "vista": "Al cuello, un pañuelo anudado sobre el chaleco."
+  },
+  "sombrero": {
+   "n": "El sombrero",
+   "poly": [
+    [
+     0.72,
+     0.25
+    ],
+    [
+     0.88,
+     0.26
+    ],
+    [
+     0.89,
+     0.38
+    ],
+    [
+     0.84,
+     0.44
+    ],
+    [
+     0.76,
+     0.43
+    ],
+    [
+     0.72,
+     0.33
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué sujeta con la mano izquierda?",
+   "vista": "Con la mano izquierda, que está a tu derecha, sujeta un sombrero contra el cuerpo."
+  },
+  "mano": {
+   "n": "La mano derecha",
+   "poly": [
+    [
+     0.27,
+     0.33
+    ],
+    [
+     0.38,
+     0.32
+    ],
+    [
+     0.4,
+     0.45
+    ],
+    [
+     0.3,
+     0.47
+    ],
+    [
+     0.27,
+     0.4
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Dónde tiene la otra mano?",
+   "vista": "El brazo derecho, que está a tu izquierda, cae junto al cuerpo, con la mano escondida en la levita."
+  },
+  "botas": {
+   "n": "Las botas y la levita",
+   "poly": [
+    [
+     0.36,
+     0.52
+    ],
+    [
+     0.53,
+     0.52
+    ],
+    [
+     0.55,
+     0.7
+    ],
+    [
+     0.38,
+     0.71
+    ],
+    [
+     0.35,
+     0.62
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cómo va vestido?",
+   "vista": "Botas altas hasta la rodilla y una levita larga y abierta que le cae casi hasta los pies."
+  },
+  "nombre": {
+   "n": "El nombre",
+   "poly": [
+    [
+     0.26,
+     0.75
+    ],
+    [
+     0.8,
+     0.75
+    ],
+    [
+     0.8,
+     0.89
+    ],
+    [
+     0.26,
+     0.89
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué pone en el pedestal?",
+   "vista": "En el pedestal blanco, en letras de bronce, una sola palabra: GOYA."
+  }
+ },
+ "nube": true,
+ "voces": {
+  "obra": {
+   "pitch": 0.9,
+   "rate": 0.95,
+   "fem": false
+  }
+ },
+ "citas": {},
+ "base": [],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia estatua",
+   "desc": "en primera persona",
+   "por": "la propia estatua",
+   "corto": "la estatua",
+   "ini": "G",
+   "acc": "#8a6d3b",
+   "voz": "obra",
+   "intro": "1",
+   "presenta": [],
+   "sugiere": [],
+   "relato": [],
+   "qa": [],
+   "placeholder": "Pregúntale a la estatua…",
+   "conversa": "Conversa con la estatua",
+   "te": "La estatua te pregunta",
+   "vts": "Dime: ¿qué sujeta con la mano?",
+   "rol": "Eres la propia estatua de Goya de Mariano Benlliure, frente a la fachada norte del Museo del Prado, y hablas en primera persona. De Goya hablas en tercera persona."
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Monumento a Goya"
+  ],
+  [
+   "Autor",
+   "Mariano Benlliure"
+  ],
+  [
+   "Fecha",
+   "1902"
+  ],
+  [
+   "Materiales",
+   "Bronce, mármol y granito"
+  ],
+  [
+   "Medidas",
+   "Figura de bronce de 2,50 m de alto"
+  ],
+  [
+   "Lugar",
+   "Calle de Felipe IV, frente a la fachada norte del Museo del Prado, Madrid"
+  ]
+ ],
+ "nota": "Prueba A: Goya sin base documental. Sin hechos propios, el motor usa la ficha como única entrada (pieza, autor, fecha, materiales, medidas y lugar)."
+}

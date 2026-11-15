@@ -6,8 +6,16 @@
    "n": "Monumento a los Fueros"
   },
   {
+   "id": "goya-sin-base",
+   "n": "Goya A · sin base (solo la ficha)"
+  },
+  {
    "id": "goya",
-   "n": "Monumento a Goya (Madrid)"
+   "n": "Goya B · base completa (20)"
+  },
+  {
+   "id": "goya-local",
+   "n": "Goya C · solo lo local (11)"
   }
  ],
  "reglas": [
@@ -38,6 +46,10 @@
   {
    "id": "comodin",
    "n": "Reglas: comodín (otro LLM)"
+  },
+  {
+   "id": "extraneza",
+   "n": "Reglas: extrañeza"
   }
  ]
 }
