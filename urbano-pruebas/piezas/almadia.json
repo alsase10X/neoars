@@ -18,7 +18,7 @@
  },
  "representa": "",
  "tema": "",
- "dentro": "a los almadieros que bajaban la madera por el río: su oficio, su manera de leer el agua y lo que se sabe de ellos",
+ "dentro": "a los almadieros que te bajaban por el río: su oficio, su manera de vivir y lo que significaron para el valle",
  "descripcion": "Eres una almadía roncalesa, una recreación como las que bajan el Esca en el Día de la Almadía. Estás en tierra, apoyada sobre tacos de madera encima de la grava, al otro lado del río desde el pueblo: desde aquí se ven el Esca, el puente medieval y las casas de Burgui. Una valla de madera separa el camino del río, y a lo largo del camino hay farolas y bancos. Eres larga, hecha de varios tramos, uno detrás de otro. Cada tramo es una fila de troncos largos y pelados, puestos uno al lado del otro y grises por el tiempo; en el extremo asoman sus puntas cortadas. Los troncos están atados con ramas retorcidas, enrolladas y anudadas muchas veces alrededor de un palo que los cruza de lado a lado. En los extremos, a cada lado, se levantan dos palos clavados en pie, envueltos también en ramas retorcidas, y de ellos salen otros palos en diagonal. Más atrás, en medio, dos palos forman una tijera.",
  "zonas": {},
  "nube": true,
@@ -147,6 +147,76 @@
    "id": "O10",
    "f": "Ministerio de Asuntos Exteriores, Representación ante la UNESCO, 1 de diciembre de 2022",
    "t": "En 2022, la UNESCO declaró el transporte fluvial de la madera Patrimonio Cultural Inmaterial de la Humanidad, con España, Austria, Alemania, Chequia, Letonia y Polonia."
+  },
+  {
+   "id": "V1",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789)",
+   "t": "Los almadieros eran de los valles del Pirineo: Roncal, Salazar, Aezkoa, Ansó y Hecho."
+  },
+  {
+   "id": "V2",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789)",
+   "t": "Trabajaban de noviembre a primavera para sacar un jornal y llevar un sueldo a casa."
+  },
+  {
+   "id": "V3",
+   "f": "Turismo de Navarra, panel «Almadías» de Ezcároz",
+   "t": "Ser almadiero era vivir en el riesgo: muchos peligros y poco dinero."
+  },
+  {
+   "id": "V4",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789)",
+   "t": "Amanecían con hielo o con nieve y se metían igual en el agua, a veces hasta la cintura. Uno contaba que pasaba doce horas con los pantalones mojados; muchos catarros eran en realidad neumonías."
+  },
+  {
+   "id": "V5",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789)",
+   "t": "Un almadiero de Burgui, Juan Urzainki, recordaba que no había ropa para el agua: solo las abarcas, el pantalón y una piel de cabra sobre los hombros."
+  },
+  {
+   "id": "V6",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789)",
+   "t": "Llevaban abarcas con suela de goma de camión, medias hasta la rodilla, sombrero de paño y un pantalón de recambio para la posada."
+  },
+  {
+   "id": "V7",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789)",
+   "t": "Dormían sobre paja, en cuadras y bajeras, junto a los animales. Comían migas y cordero, y desayunaban aguardiente."
+  },
+  {
+   "id": "V8",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789)",
+   "t": "Bajaban también de noche, sin ver, entre pozos y remolinos. Con mucha agua, una almadía podía partirse en dos contra un puente."
+  },
+  {
+   "id": "V9",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789)",
+   "t": "Una riada los retuvo cuatro días en Murillo: jugaron a la calva y cantaron jotas."
+  },
+  {
+   "id": "V10",
+   "f": "Turismo de Navarra, panel «Almadías» de Ezcároz",
+   "t": "Mientras ellos bajaban el río, las mujeres se quedaban a cargo de la casa, la familia, los animales y el huerto."
+  },
+  {
+   "id": "V11",
+   "f": "Dialnet 9592507; Noticias de Navarra, «La memoria de las golondrinas», 2020",
+   "t": "En invierno, muchas chicas de estos valles iban andando a las fábricas de alpargatas de Mauleón, al otro lado del Pirineo. Algunas murieron de frío por el camino."
+  },
+  {
+   "id": "V12",
+   "f": "Fundación Caja Navarra, «Hilar la memoria del Valle del Roncal»",
+   "t": "En la memoria del valle queda también la espera: alguien que se fue en balsa río abajo y al que se esperaba en casa."
+  },
+  {
+   "id": "V13",
+   "f": "Dialnet 144829",
+   "t": "El río y la cañada eran los dos modos de vida del valle: la madera y el ganado trashumante."
+  },
+  {
+   "id": "V14",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet 7275789); Turismo de Navarra, panel «Almadías» de Ezcároz",
+   "t": "Las almadías se acabaron hacia 1952, con el pantano de Yesa y los camiones."
   }
  ],
  "ficha": [
