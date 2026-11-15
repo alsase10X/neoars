@@ -1035,7 +1035,7 @@ async function cargarSala(){
   if(MARCA_ID !== 'ninguna'){ const mu = MARCA_ID ? new URL(`../unidad/marcas/${MARCA_ID}.json`, location.href).href : DEF.marca ? new URL(DEF.marca, base).href : null; if(mu) await aplicarMarca(mu); }
   const res = await Promise.allSettled(DEF.obras.map(async ruta => {
     const url = new URL(ruta, base).href, id = ruta.split('/').pop().replace(/\.json$/, '');
-    const d = PANEL && PANEL.piezas && PANEL.piezas[id] ? JSON.parse(JSON.stringify(PANEL.piezas[id])) : await fetch(url).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });
+    const d = PANEL && PANEL.piezas && PANEL.piezas[id] ? JSON.parse(JSON.stringify(PANEL.piezas[id])) : await fetch(url, {cache:'no-cache'}).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });   // pruebas: siempre la última versión de la pieza
     d.id = id;
     if(d.lugar && !(isFinite(d.lugar.lat) && isFinite(d.lugar.lng))){ d.dir = d.lugar.dir; delete d.lugar; }   // sin coordenadas no hay punto en el mapa
     Object.values(d.mediadores || {}).forEach(m => { if(m.audio && m.audio.src) m.audio.src = abs(m.audio.src, url); });
@@ -2235,7 +2235,7 @@ function escuchado(){
 // Las reglas con las que responde el modelo no están aquí: viven en un archivo de datos (unidad/prompt.json) que se lee al abrir.
 // El panel de creación puede probar un borrador sin publicarlo (window.AM_BORRADOR)
 let PROMPT = null;
-const promptListo = fetch(new URL(`reglas/${REGLAS_ID}.json`, location.href).href).then(r => r.ok ? r.json() : null).then(j => { PROMPT = j; }).catch(() => {});
+const promptListo = fetch(new URL(`reglas/${REGLAS_ID}.json`, location.href).href, {cache:'no-cache'}).then(r => r.ok ? r.json() : null).then(j => { PROMPT = j; }).catch(() => {});
 const REGLAS = () => window.AM_BORRADOR || PROMPT;
 // Lo que el panel de creación puede pedirle a la pieza abierta
 window.AM = {listo:promptListo, reglas:() => PROMPT, pieza:() => OBRA, base:() => OBRA ? BASE() : [], prompt:() => OBRA ? promptChat() : '', panel:() => PANEL};
