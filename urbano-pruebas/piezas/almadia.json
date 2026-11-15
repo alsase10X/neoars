@@ -1,25 +1,25 @@
 {
- "titulo": "Almadía del Paseo de los Oficios",
+ "titulo": "Almadía roncalesa",
  "autor": "",
  "fecha": "",
- "pieza": "la reproducción de una almadía",
+ "pieza": "la almadía",
  "img": "../../img/calle/almadia.jpg",
- "iw": 768,
- "ih": 1024,
+ "iw": 1200,
+ "ih": 900,
  "fondo": "../../img/calle/almadia-fondo.jpg",
  "encuadre": [
-  0.1,
-  0.35,
-  0.8,
-  0.5
+  0.2,
+  0.45,
+  0.6,
+  0.45
  ],
  "lugar": {
-  "dir": "Burgui (valle de Roncal, Navarra), junto al camino del Paseo de los Oficios, nada más cruzar el puente medieval sobre el río Esca"
+  "dir": "Burgui (valle de Roncal, Navarra), en el sendero interpretativo del Paseo de los Oficios, junto al camino, nada más cruzar el puente medieval sobre el río Esca"
  },
  "representa": "",
  "tema": "",
  "dentro": "a los almadieros que bajaban la madera por el río: su oficio, su manera de leer el agua y lo que se sabe de ellos",
- "descripcion": "Eres una balsa de troncos atados entre sí, hecha como las que bajaban por el Esca. Estás junto al camino del Paseo de los Oficios, cerca del río, nada más cruzar el puente medieval.",
+ "descripcion": "Eres una almadía roncalesa, una recreación como las que bajan el Esca en el Día de la Almadía. Estás en tierra, apoyada sobre tacos de madera encima de la grava, al otro lado del río desde el pueblo: desde aquí se ven el Esca, el puente medieval y las casas de Burgui. Una valla de madera separa el camino del río, y a lo largo del camino hay farolas y bancos. Eres larga, hecha de varios tramos, uno detrás de otro. Cada tramo es una fila de troncos largos y pelados, puestos uno al lado del otro y grises por el tiempo; en el extremo asoman sus puntas cortadas. Los troncos están atados con ramas retorcidas, enrolladas y anudadas muchas veces alrededor de un palo que los cruza de lado a lado. En los extremos, a cada lado, se levantan dos palos clavados en pie, envueltos también en ramas retorcidas, y de ellos salen otros palos en diagonal. Más atrás, en medio, dos palos forman una tijera.",
  "zonas": {},
  "nube": true,
  "voces": {
@@ -89,6 +89,11 @@
    "t": "En el ayuntamiento de Burgui está el Museo de la Almadía."
   },
   {
+   "id": "L8",
+   "f": "Senditur, «Foz de Burgui» (Paseo de los Oficios)",
+   "t": "En el mismo paseo, más adelante, hay una carbonera junto a un horno de pan, una nevera donde se sacaba hielo y una calera: otros oficios del valle."
+  },
+  {
    "id": "O1",
    "f": "Turismo de Navarra, panel «Almadías» de Ezcároz",
    "t": "Una almadía se hacía de cuatro a seis tramos de troncos, unidos con vergas: ramas de avellano maceradas."
@@ -142,16 +147,12 @@
  "ficha": [
   [
    "Pieza",
-   "Reproducción de una almadía"
+   "Almadía roncalesa (recreación)"
   ],
   [
    "Lugar",
    "Burgui, Paseo de los Oficios, junto al camino tras cruzar el puente medieval"
-  ],
-  [
-   "Foto",
-   "Pendiente"
   ]
  ],
- "nota": "Pieza de prueba para la v1 general. La descripción es mínima a propósito: solo lo que dicen las fuentes (una reproducción de almadía junto al camino del Paseo de los Oficios, tras cruzar el puente). Falta confirmar con foto: número de tramos, remos, si está en tierra y su tamaño. El título es descriptivo, no un nombre oficial."
+ "nota": "Descripción hecha a partir de la foto de Alberto (15/11/2026) y de lo que él indica: almadía roncalesa, recreación, sendero interpretativo de oficios. Por confirmar: si esta misma ha bajado el río en el Día de la Almadía, cuántos tramos tiene y si lleva remos."
 }
