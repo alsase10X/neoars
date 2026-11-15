@@ -2265,9 +2265,9 @@ function promptChat(){
 }
 // Lo que cambia en cada pregunta: quién es el visitante, qué ha visto y oído, y lo que pregunta. Va siempre en el último mensaje
 function visitanteChat(q){
-  const R = REGLAS() || {}, oido = escuchado();
+  const R = REGLAS() || {}, oido = escuchado(), V = VIS() || {n:'Visita general'};
   return plantilla(R.visitante, {
-    visita:VIS().n + (VIS().d ? ' (' + VIS().d + ')' : ''),
+    visita:V.n + (V.d ? ' (' + V.d + ')' : ''),
     lugar:U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno',
     preguntas:[...U.asked].slice(-6).join(' / ') || 'ninguna',
     escuchado:oido ? '\n' + oido : ' nada todavía',
