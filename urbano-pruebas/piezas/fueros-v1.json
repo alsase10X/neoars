@@ -231,5 +231,8 @@
    "Lancastermerrin88, 2010. <a href=\"https://commons.wikimedia.org/wiki/File:Monumento_a_los_Fueros_de_Navarra_en_Pamplona--3.JPG\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY-SA 4.0"
   ]
  ],
- "nota": "Ficha nueva para la v1 general, hecha con el dosier de fueros.json (UNAV y Wikipedia) en hechos secos. Sin zonas ni inicio escrito. Pendiente: chispas comprobadas."
+ "nota": "Ficha nueva para la v1 general, hecha con el dosier de fueros.json (UNAV y Wikipedia) en hechos secos. Sin zonas ni inicio escrito. Pendiente: chispas comprobadas.",
+ "inicio": {
+  "texto": "Soy el Monumento a los Fueros. En 1893 un ministro quiso cambiar los impuestos de Navarra, y 120.000 navarros firmaron para apoyar la protesta. Luego me pagaron entre muchos, desde veinticinco céntimos. Y nunca me inauguraron."
+ }
 }
