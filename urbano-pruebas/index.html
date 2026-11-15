@@ -785,6 +785,7 @@ dd a{text-decoration:underline;text-underline-offset:2px}
     <div class="deep">
       <fieldset id="fsModo"><legend>Modo</legend><div class="seg" id="fModo"><button type="button" data-v="guiada">Visita guiada<small>Como una audioguía</small></button><button type="button" data-v="conversa">Conversación<small>Pregunta lo que quieras</small></button><button type="button" data-v="subtitulos">Subtítulos · pruebas<small>Como Ask Mona</small></button></div></fieldset>
       <fieldset id="fsGuia"><legend>Quién te la cuenta</legend><div class="seg" id="fGuia"></div></fieldset>
+      <fieldset id="fsVozDe" hidden><legend>Voz · pruebas</legend><div class="seg" id="fVozDe"><button type="button" data-v="pieza">La de la pieza<small>Lo que dice su ficha</small></button><button type="button" data-v="dispositivo">Del dispositivo<small>Gratis</small></button><button type="button" data-v="mistral">Mistral<small>Voxtral</small></button><button type="button" data-v="gemini">Google<small>Gemini, tarda más</small></button></div></fieldset>
       <fieldset id="fsPerfil"><legend>Visita</legend><div class="opts" id="fPerfil"></div></fieldset>
       <fieldset id="fsDisp"><legend>Disposición · pruebas</legend><div class="seg" id="fDisp"><button type="button" data-v="abajo">Sello abajo<small>La de ahora</small></button><button type="button" data-v="arriba">Sello arriba<small>Como una llamada</small></button><button type="button" data-v="filetes">Entre filetes<small>Arriba, con rayas</small></button></div></fieldset>
       <fieldset id="fsPlant"><legend>Plantilla · pruebas</legend><div class="seg" id="fPlant"><button type="button" data-v="adn">ADN<small>La de ahora</small></button><button type="button" data-v="cristal">Cristal<small>Tintado, tipo Apple</small></button><button type="button" data-v="expressive">Expressive<small>Material 3</small></button></div></fieldset>
@@ -983,6 +984,11 @@ const SALA_ID = (() => { try{ const v = new URLSearchParams(location.search).get
 // Pruebas urbanas: una sola pieza (?pieza=fueros, en piezas/) y una versión de reglas (?reglas=personaje, en reglas/)
 const PARAM = k => { try{ const v = new URLSearchParams(location.search).get(k); return v && /^[a-z0-9-]+$/.test(v) ? v : null; }catch(e){ return null; } };
 const PIEZA_ID = PARAM('pieza') || 'fueros';
+// Pruebas de voz: la de la ficha de la pieza, la del dispositivo o la de un proveedor (?vozde=pieza|dispositivo|mistral|gemini)
+const VOCES_DE = ['pieza', 'dispositivo', 'mistral', 'gemini'];
+const NOMBRE_VOZ = {pieza:'la de la pieza', dispositivo:'la del dispositivo', mistral:'Mistral', gemini:'Google (Gemini)'};
+const VOZ_NUBE = {mistral:{nube:'01a0f318-4afd-77a5-aa5e-f4d741c30187'}, gemini:{nube:'gemini:Charon', estilo:'Calm and slow, warm and deep, speaking quietly to one person standing in front of it. Castilian Spanish accent from Spain.'}};
+let VOZ_DE = (() => { const v = PARAM('vozde') || st.get('am.sala.vozde', 'pieza'); return VOCES_DE.includes(v) ? v : 'pieza'; })();
 const REGLAS_ID = PARAM('reglas') || 'actual';
 // Sin visita grabada: al empezar, la pieza abre la conversación con lo que genere el prompt
 const PRUEBAS = true;
@@ -2602,6 +2608,7 @@ const Q = {};
 function abrirAjustes(){
   Object.assign(Q, P); Q.modo = modoActual(); Q.plantilla = PLANT; Q.disp = DISP; Q.botones = DIS.botones; Q.memorias = DIS.memorias; Q.cristal = DIS.cristal; Q.g = {...DIS.g};
   $('fsMem').hidden = !(OBRA._mem && OBRA._mem.activo);
+  Q.vozde = VOZ_DE; $('fsVozDe').hidden = !(CONFIG.api && OBRA && OBRA.nube);
   const meds = Object.keys(OBRA.mediadores), vis = Object.keys(OBRA.visitas);
   $('fGuia').innerHTML = meds.map((k, n) => `<button type="button" data-v="${k}">${esc(MED(k).nombre)}<small>${k === vozDefecto(meds) ? 'Por defecto' : esc(MED(k).desc || '')}</small></button>`).join('');
   $('fPerfil').innerHTML = vis.map(k => `<button type="button" data-v="${k}"><span>${esc(OBRA.visitas[k].n)}<small>${esc(OBRA.visitas[k].d || '')}</small></span></button>`).join('');
@@ -2611,12 +2618,18 @@ function abrirAjustes(){
   U.ajAntes = U.playing; if(U.playing) pausa();
   $('ajS').hidden = false;
 }
-function sync(){ $('fsDis').hidden = $('fsCri').hidden = Q.plantilla !== 'adn'; [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fDisp','disp'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); document.querySelectorAll('#fGoo [data-k]').forEach(b => b.setAttribute('aria-pressed', !!(Q.g && Q.g[b.dataset.k]))); }
+function sync(){ $('fsDis').hidden = $('fsCri').hidden = Q.plantilla !== 'adn'; [['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fDisp','disp'],['fBot','botones'],['fCri','cristal'],['fMem','memorias'],['fVozDe','vozde']].forEach(([id, k]) => document.querySelectorAll('#' + id + ' [data-v]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === Q[k]))); document.querySelectorAll('#fGoo [data-k]').forEach(b => b.setAttribute('aria-pressed', !!(Q.g && Q.g[b.dataset.k]))); }
 $('fGoo').onclick = e => { const b = e.target.closest('[data-k]'); if(!b || !Q.g) return; Q.g[b.dataset.k] = !Q.g[b.dataset.k]; sync(); };
-[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fDisp','disp'],['fBot','botones'],['fCri','cristal'],['fMem','memorias']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
+[['fModo','modo'],['fGuia','guia'],['fPerfil','perfil'],['fPlant','plantilla'],['fDisp','disp'],['fBot','botones'],['fCri','cristal'],['fMem','memorias'],['fVozDe','vozde']].forEach(([id, k]) => $(id).onclick = e => { const b = e.target.closest('[data-v]'); if(!b) return; Q[k] = b.dataset.v; sync(); });
 $('menuB').onclick = abrirAjustes;
 function cerrarAjustes(){ $('ajS').hidden = true; if(U.ajAntes) play(); }
 $('aplicar').onclick = () => {
+  if(Q.vozde && Q.vozde !== VOZ_DE){
+    VOZ_DE = Q.vozde; st.set('am.sala.vozde', VOZ_DE);
+    try{ const u = new URL(location.href); if(VOZ_DE === 'pieza') u.searchParams.delete('vozde'); else u.searchParams.set('vozde', VOZ_DE); history.replaceState(null, '', u); }catch(e){}
+    if(!G.voz){ G.voz = true; st.set('am.sala.voz', '1'); panelUI(); }   // quien elige una voz quiere oírla
+    toast('Voz: ' + NOMBRE_VOZ[VOZ_DE]);
+  }
   if(Q.plantilla !== PLANT){ cambiarPlantilla(Q.plantilla); toast('Plantilla: ' + NOMBRE_P[PLANT]); }
   if(Q.disp !== DISP){ cambiarDisp(Q.disp); toast('Pieza: ' + NOMBRE_D[DISP]); }
   if(Q.botones !== DIS.botones){ DIS.botones = Q.botones; st.set('am.sala.botones', DIS.botones); aplicarDiseno(); }
@@ -2830,10 +2843,16 @@ function decirFrase(f, tok, fin){
 // Voz en la nube (intermediario → Mistral): cada frase se pide una vez y se guarda mientras la página está abierta.
 // El plan gratuito admite una petición por segundo, así que van en fila, con la que toca decir ahora siempre delante
 const NUBE = {hechas:new Map(), fila:[], andando:false, ultima:0};
-const vozNube = k => (CONFIG.api && OBRA && OBRA.nube && (OBRA.voces[k] || {}).nube) || null;
+const vozNube = k => {
+  if(!(CONFIG.api && OBRA && OBRA.nube) || VOZ_DE === 'dispositivo') return null;
+  const propia = (OBRA.voces[k] || {}).nube || null;
+  if(VOZ_DE === 'mistral') return propia && !esGemini(propia) ? propia : VOZ_NUBE.mistral.nube;
+  if(VOZ_DE === 'gemini') return esGemini(propia) ? propia : VOZ_NUBE.gemini.nube;
+  return propia;
+};
 // Voces de Gemini («gemini:Charon»): llevan un estilo, cómo habla, en la misma entrada de la voz
 const esGemini = v => /^gemini:/.test(v || '');
-const estiloDe = v => { const e = Object.values((OBRA && OBRA.voces) || {}).find(x => x && x.nube === v); return (e && e.estilo) || ''; };
+const estiloDe = v => { const e = Object.values((OBRA && OBRA.voces) || {}).find(x => x && x.nube === v); return (e && e.estilo) || (v === VOZ_NUBE.gemini.nube ? VOZ_NUBE.gemini.estilo : ''); };
 const vozGemini = frases => { const v = frases.length && vozNube(frases[0].voz || U.voz); return esGemini(v) && frases.every(f => vozNube(f.voz || U.voz) === v) ? v : null; };
 function audioNube(texto, voz, urgente){
   const clave = voz + '\n' + texto;
