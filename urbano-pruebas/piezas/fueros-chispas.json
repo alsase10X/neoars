@@ -1,0 +1,300 @@
+{
+ "titulo": "Monumento a los Fueros",
+ "autor": "Manuel Martínez de Ubago y Ramón Carmona",
+ "fecha": "1903",
+ "pieza": "el monumento",
+ "img": "../../img/calle/fueros.jpg",
+ "iw": 1050,
+ "ih": 1400,
+ "fondo": "../../img/calle/fueros-fondo.jpg",
+ "encuadre": [
+  0.28,
+  0.1,
+  0.46,
+  0.4
+ ],
+ "lugar": {
+  "lat": 42.815726,
+  "lng": -1.643626,
+  "dir": "el extremo del Paseo de Sarasate de Pamplona, frente al Palacio de Navarra"
+ },
+ "representa": "",
+ "tema": "",
+ "dentro": "a los miles de navarros que te pagaron entre todos: lo que defendían, sus fueros, y lo que aquello significó para ellos",
+ "descripcion": "Eres un monumento de piedra y bronce de unos 23 metros de alto. Abajo, una base de cinco lados con cinco escalinatas; entre ellas, unos pilares de los que cuelgan cadenas. Encima, dos cuerpos de cinco lados: en las esquinas del primero hay cinco figuras sentadas, y en sus caras, placas de bronce con letras, una de ellas en una escritura que casi nadie sabe leer. En el segundo hay escudos. Entre la piedra hay plantas y animales tallados: una rana, un búho, un león, una cigüeña, un grifo. Sobre todo eso, una columna de mármol rojo con una fecha en bronce, 1903, y un capitel blanco lleno de hojas. Y arriba del todo, una mujer de bronce con corona y una espada a la cintura: en una mano lleva un trozo de cadena; en la otra, en alto, un pergamino.",
+ "zonas": {},
+ "nube": true,
+ "voces": {
+  "obra": {
+   "pitch": 0.9,
+   "rate": 0.95,
+   "fem": false,
+   "nube": "01a0f318-4afd-77a5-aa5e-f4d741c30187"
+  }
+ },
+ "citas": {},
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "El propio monumento",
+   "desc": "en primera persona",
+   "por": "el propio monumento",
+   "corto": "el monumento",
+   "ini": "M",
+   "acc": "#b4483a",
+   "voz": "obra",
+   "intro": 5,
+   "presenta": [],
+   "sugiere": [],
+   "placeholder": "Pregúntale al monumento…",
+   "conversa": "Conversa con el monumento",
+   "te": "El monumento te pregunta",
+   "vts": "",
+   "rol": "",
+   "relato": [],
+   "qa": []
+  }
+ },
+ "base": [
+  {
+   "id": "F1",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Se levantó en 1903 al final del entonces Paseo de Valencia, hoy de Sarasate, frente a la Diputación. Primero se pensó para la Plaza del Castillo."
+  },
+  {
+   "id": "F2",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "El cinco se repite por todo el monumento, por las cinco merindades de Navarra: cinco lados, cinco escalinatas, cinco figuras sentadas, cinco placas. La mujer de arriba mide 5,5 metros y pesa 5.000 kilos."
+  },
+  {
+   "id": "F3",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Las cadenas que cuelgan entre las escalinatas son las del escudo de Navarra. La mujer de arriba lleva en una mano un trozo de esas cadenas, y en la otra un pergamino con sello que dice «Ley Foral»."
+  },
+  {
+   "id": "F4",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "La mujer de bronce es Navarra: lleva corona real y una espada envainada. A sus pies hay un escudo y un turbante, por la victoria de Sancho el Fuerte en las Navas de Tolosa."
+  },
+  {
+   "id": "F5",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Posó para ella Rosa Oteiza Armona, vecina de la calle San Antón de Pamplona. La describen como una mujer discreta y celosa de su independencia."
+  },
+  {
+   "id": "F6",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "El bronce lo modeló, según la mayoría de las fuentes, José Martínez de Ubago, hermano del arquitecto, aunque no todas coinciden."
+  },
+  {
+   "id": "F7",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Las cinco figuras sentadas son la Historia, la Justicia (una mujer con una espada), la Autonomía (un ángel con un timón), la Paz (una mujer con una rama de olivo y un alción contra el pecho) y el Trabajo (un herrero con su mazo sobre el yunque). Posaron jóvenes de Pamplona; no se saben sus nombres."
+  },
+  {
+   "id": "F8",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Los antiguos decían que, mientras el alción hacía su nido, cesaban los vientos y las tempestades."
+  },
+  {
+   "id": "F9",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»; Fontes Linguae Vasconum n.º 60 (1992)",
+   "t": "Las placas se pusieron en 1905: tres en castellano, una en euskera y otra en euskera escrito con unas letras que parecen ibéricas, muy difíciles de leer. Los textos son de Hermilio de Olóriz; la de las letras ibéricas la escribió el jesuita Fidel Fita."
+  },
+  {
+   "id": "F10",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Entre la piedra hay hiedra, acanto, girasol, encina y roble; una rana, un búho, un león y una cigüeña; un basilisco y un grifo. No se sabe qué significa cada uno."
+  },
+  {
+   "id": "F11",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Hay escudos de Navarra, de Pamplona, de las otras merindades (Tudela, Olite, Sangüesa y Estella) y de veinte villas y pueblos."
+  },
+  {
+   "id": "F12",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Está hecho con piedras de muchos sitios: de Tafalla, de Almándoz, mármol rojo de Aizcorbe y piedra de Angulema, en Francia. La mujer es de bronce."
+  },
+  {
+   "id": "F13",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "En 1893 el ministro de Hacienda Germán Gamazo quiso cambiar los impuestos de Navarra. Muchos navarros lo vieron como un ataque a la autonomía fiscal que reconocía la Ley Paccionada de 1841."
+  },
+  {
+   "id": "F14",
+   "f": "Wikipedia, «Gamazada»",
+   "t": "El 4 de junio de 1893 hubo en Pamplona una gran manifestación, con la Diputación al frente. A aquella reacción, de 1893 y 1894, se la llamó la Gamazada."
+  },
+  {
+   "id": "F15",
+   "f": "Wikipedia, «Gamazada»",
+   "t": "120.000 personas firmaron su adhesión, en una Navarra de unos 300.000 habitantes. Se publicó el Libro de Honor de los Navarros."
+  },
+  {
+   "id": "F16",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "La idea del monumento fue recordar a los que vendrían después lo que sintieron entonces los navarros. Uno de sus impulsores, el comediógrafo Fiacro Iráizoz, pedía «nada de subvenciones»."
+  },
+  {
+   "id": "F27",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "La Diputación y el Ayuntamiento recogieron la iniciativa del monumento."
+  },
+  {
+   "id": "F17",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Se pagó por suscripción popular: se podía dar desde 25 céntimos hasta 25 pesetas."
+  },
+  {
+   "id": "F18",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Tardó unos diez años: el proyecto se eligió en 1893, la cimentación se hizo en 1895 y la mujer de bronce se subió el 7 de abril de 1903."
+  },
+  {
+   "id": "F19",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»; Patxi Mendiburu, «Rosa Oteiza y José Martínez de Ubago» (Dialnet 8277201, 2021)",
+   "t": "Arriba iba a ir un grupo de dos guerreros: un joven protegiendo a un anciano. Cuando bajaron las donaciones, hacia 1895, se cambió por la mujer."
+  },
+  {
+   "id": "F20",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Nunca se inauguró oficialmente, aunque se acuñaron medallas. Se ha dicho que pudo ser por la polémica de las placas en euskera, pero no está documentado."
+  },
+  {
+   "id": "F21",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "En 1909 un teniente de alcalde propuso llevarlo al centro de la Plaza del Castillo e inaugurarlo en San Fermín, invitando a todos los ayuntamientos de Navarra. No se movió ni se inauguró."
+  },
+  {
+   "id": "F22",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "Aparece en carteles de San Fermín de entre 1899 y 1904."
+  },
+  {
+   "id": "F23",
+   "f": "Wikipedia (cita al historiador Urricelqui)",
+   "t": "Un historiador sostiene que expresa un patriotismo navarro «no necesariamente anticastellano»: en 1902 la Diputación y los ayuntamientos participaron en un monumento a Alfonso XII en Madrid."
+  },
+  {
+   "id": "F24",
+   "f": "Auñamendi Eusko Ikaskuntza; PARES",
+   "t": "El arquitecto, Manuel Martínez de Ubago, era de Pamplona y tenía 24 años cuando se eligió su proyecto. Fue su primera gran obra."
+  },
+  {
+   "id": "F25",
+   "f": "Wikipedia, «Ramón Carmona Urrutia»",
+   "t": "El escultor de las cinco figuras, Ramón Carmona, aprendió el oficio en un taller de este mismo paseo, en el número 4, y en 1904 lo compró por 3.000 pesetas. También hizo la tumba de Sarasate."
+  },
+  {
+   "id": "F26",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "En 2010 lo limpiaron durante cinco semanas."
+  },
+  {
+   "id": "C1",
+   "f": "Wikipedia, «Gamazada»; Argia, efeméride del 2 de junio de 1893",
+   "t": "La noche del 1 al 2 de junio de 1893, un sargento, José López Zabalegui, se levantó en armas en Puente la Reina con dos soldados y cuatro vecinos de Obanos y Puente la Reina, gritando «¡Vivan los fueros!». Los detuvieron en Arraiza."
+  },
+  {
+   "id": "C2",
+   "f": "Wikipedia, «Gamazada»; Euskonews",
+   "t": "Después de aquello, el Gobierno puso trabas a la manifestación del 4 de junio y Pamplona amaneció llena de soldados. Aun así salieron a la calle más de 17.000 personas, de todas las clases y partidos."
+  },
+  {
+   "id": "C3",
+   "f": "Amaia Álvarez Berastegi, «Desde un segundo plano: la participación de las mujeres en la Gamazada», Príncipe de Viana 286 (2023)",
+   "t": "Miles de mujeres participaron en aquellas protestas y firmaron en el Libro de Honor, que recogía adhesiones a un escrito dirigido a la reina regente. Lo hicieron a pesar de la discriminación política, social y jurídica que vivían."
+  },
+  {
+   "id": "C4",
+   "f": "Auñamendi Eusko Entziklopedia, «Gamazada»; Noticias de Navarra, 10 de febrero de 2024",
+   "t": "El 18 de febrero de 1894, cuando los diputados navarros volvieron de Madrid sin haber cedido, una gran multitud los recibió en la estación de Castejón, y los aclamaron durante todo el viaje en tren hasta Pamplona."
+  },
+  {
+   "id": "C5",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV)",
+   "t": "La mujer de bronce se colocó en lo alto a las cuatro y media de la tarde del 7 de abril de 1903, Martes Santo."
+  },
+  {
+   "id": "C6",
+   "f": "Wikipedia, «Monumento a los Fueros (Pamplona)»",
+   "t": "El bronce se fundió en Barcelona, en la casa Masriera y Campins."
+  },
+  {
+   "id": "C7",
+   "f": "Patxi Mendiburu, «Rosa Oteiza y José Martínez de Ubago» (Dialnet 8277201, 2021)",
+   "t": "Según una investigación de 2021, al arquitecto le dio un soponcio al ver la estatua, y fue su hermano José quien dirigió la maniobra de subirla."
+  },
+  {
+   "id": "C8",
+   "f": "Ayuntamiento de Pamplona, «Rosa Oteiza (1883-1970)»",
+   "t": "Rosa Oteiza posó semidesnuda, y eso y ser madre sin marido le trajeron escándalo y rechazo en la Pamplona de entonces: la apartaron, mientras su imagen presidía el centro de la ciudad. Hoy el Ayuntamiento la recuerda como un símbolo de coraje."
+  },
+  {
+   "id": "C9",
+   "f": "Wikipedia, «Monumento a los Fueros (Pamplona)»; Patxi Mendiburu, «Rosa Oteiza y José Martínez de Ubago» (Dialnet 8277201, 2021)",
+   "t": "Rosa Oteiza tuvo una relación con José Martínez de Ubago, el que modeló el bronce. En la prensa de la época no se nombra a la modelo."
+  },
+  {
+   "id": "C10",
+   "f": "Patxi Mendiburu, «Rosa Oteiza y José Martínez de Ubago» (Dialnet 8277201, 2021); Ayuntamiento de Pamplona",
+   "t": "Rosa Oteiza había nacido en 1883 en la calle San Antón. En 1913 pidió una plaza de comadrona interina y en 1918 se casó. Murió en 1970."
+  },
+  {
+   "id": "C11",
+   "f": "J. A. Bizkarrondo, «El monumento a los Fueros en Pamplona. Su inscripción en escritura ibérica», Fontes Linguae Vasconum (Dialnet 26108)",
+   "t": "La placa de las letras ibéricas es la que mira hacia la iglesia de San Nicolás. Está en euskera y empieza diciendo: «Nosotros los euskaldunes no tenemos otro señor que Dios». Las letras son extrañas, pero una vez transcrito, cualquiera que hable euskera la entiende."
+  },
+  {
+   "id": "C12",
+   "f": "Ayuntamiento de Pamplona; Noticias de Navarra, 2025-2026",
+   "t": "En el paseo hubo durante 140 años seis estatuas de reyes compradas en Madrid en 1885, que se habían hecho para el Palacio Real. Entre finales de 2025 y comienzos de 2026 se llevaron al parque de la Taconera, porque el paseo se está reformando."
+  },
+  {
+   "id": "C13",
+   "f": "Sin comprobar (chispas aportadas)",
+   "t": "Se ha escrito que, tras la cimentación, las obras estuvieron casi paradas por falta de dinero hasta 1902, cuando la Diputación puso una partida en sus presupuestos. No está comprobado."
+  }
+ ],
+ "ficha": [
+  [
+   "Pieza",
+   "Monumento a los Fueros"
+  ],
+  [
+   "Autores",
+   "Proyecto de Manuel Martínez de Ubago; esculturas del primer cuerpo, de Ramón Carmona"
+  ],
+  [
+   "Fecha",
+   "1903"
+  ],
+  [
+   "Materiales",
+   "Bronce, mármol y piedras de distintos tipos"
+  ],
+  [
+   "Altura",
+   "23,40 m"
+  ],
+  [
+   "Lugar",
+   "Paseo de Sarasate, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://www.unav.edu/web/catedra-patrimonio/itinerarios-visitas/monumento-pamplona/monumento-a-los-fueros\" target=\"_blank\" rel=\"noopener\">Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra</a>; Wikipedia en español, «Monumento a los Fueros (Pamplona)»"
+  ],
+  [
+   "Foto",
+   "Lancastermerrin88, 2010. <a href=\"https://commons.wikimedia.org/wiki/File:Monumento_a_los_Fueros_de_Navarra_en_Pamplona--3.JPG\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>, licencia CC BY-SA 4.0"
+  ]
+ ],
+ "nota": "Fueros con chispas: la ficha nueva y, al final, chispas comprobadas (C13 sin comprobar, dicho como tal). Fuera: la visita real de 2025, las 50.000 personas de Castejón y que Olóriz fuera el culpable de que no se inaugurara."
+}
