@@ -987,7 +987,7 @@ const PIEZA_ID = PARAM('pieza') || 'fueros';
 // Pruebas de voz: la de la ficha de la pieza, la del dispositivo o la de un proveedor (?vozde=pieza|dispositivo|mistral|gemini)
 const VOCES_DE = ['pieza', 'dispositivo', 'mistral', 'gemini'];
 const NOMBRE_VOZ = {pieza:'la de la pieza', dispositivo:'la del dispositivo', mistral:'Mistral', gemini:'Google (Gemini)'};
-const VOZ_NUBE = {mistral:{nube:'01a0f318-4afd-77a5-aa5e-f4d741c30187'}, gemini:{nube:'gemini:Charon', estilo:'Calm and slow, warm and deep, speaking quietly to one person standing in front of it. Castilian Spanish accent from Spain.'}};
+const VOZ_NUBE = {mistral:{nube:'01a0f318-4afd-77a5-aa5e-f4d741c30187'}, gemini:{nube:'gemini:Charon', estilo:'Castilian Spanish accent from Spain.'}};
 let VOZ_DE = (() => { const v = PARAM('vozde') || st.get('am.sala.vozde', 'pieza'); return VOCES_DE.includes(v) ? v : 'pieza'; })();
 const REGLAS_ID = PARAM('reglas') || 'actual';
 // Sin visita grabada: al empezar, la pieza abre la conversación con lo que genere el prompt
