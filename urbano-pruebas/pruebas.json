@@ -16,6 +16,10 @@
   {
    "id": "goya-local",
    "n": "Goya C · solo lo local (11)"
+  },
+  {
+   "id": "goya-c2",
+   "n": "Goya C2 · local en seco + hilos humanos"
   }
  ],
  "reglas": [
@@ -70,6 +74,10 @@
   {
    "id": "es-goya",
    "n": "Reglas: es Goya (misión oculta)"
+  },
+  {
+   "id": "es-goya2",
+   "n": "Reglas: es Goya 2"
   }
  ]
 }
