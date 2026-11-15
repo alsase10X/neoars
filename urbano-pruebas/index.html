@@ -2289,13 +2289,18 @@ async function preguntarIA(q, abre = false){
   const aviso = m => { dots.remove(); U.pensando = false; $('lineas').insertAdjacentHTML('beforeend', `<div class="ans"><p>${esc(m)}</p></div>`); sugerencias(); estado(); };
   if(!IA.modo) return aviso('Aquí no tengo un modelo conectado, así que solo puedo responder con las preguntas que ha preparado el museo. Prueba con una de estas.');
   const ctl = U.ctl = new AbortController();
+  // Inicio escrito por el intérprete: la pieza lo dice tal cual y al momento; las sugerencias las escribe el modelo después
+  const inicio = abre && OBRA.inicio && typeof OBRA.inicio.texto === 'string' && OBRA.inicio.texto.trim() ? OBRA.inicio.texto.trim() : '';
   let r = null; const t0 = performance.now();
   try{
     await listo; await promptListo;
     if(!REGLAS()) throw {code:'sin_reglas'};
-    const turnos = [{role:'user', content:promptChat()}, ...U.chat.slice(-6), {role:'user', content:visitanteChat(q)}];
-    traza({tipo:'envio', q, modo:IA.modo, borrador:!!window.AM_BORRADOR, turnos});
-    r = await IA.json(turnos, ctl.signal);
+    if(inicio) r = {texto:inicio, sugerencias:[]};
+    else {
+      const turnos = [{role:'user', content:promptChat()}, ...U.chat.slice(-6), {role:'user', content:visitanteChat(q)}];
+      traza({tipo:'envio', q, modo:IA.modo, borrador:!!window.AM_BORRADOR, turnos});
+      r = await IA.json(turnos, ctl.signal);
+    }
   }catch(e){
     if(U.ctl === ctl) U.ctl = null;
     if(e && e.code === 'cancelled') return;
@@ -2334,6 +2339,21 @@ async function preguntarIA(q, abre = false){
   const usa = r && Array.isArray(r.usa) ? r.usa.map(x => String(x).replace(/[\[\]\s]/g, '')).filter(x => BASE().some(b => b.id === x)) : [];
   if(PRUEBAS && usa.length) $('lineas').insertAdjacentHTML('beforeend', `<p class="ep">De la base: ${esc(usa.join(' · '))}</p>`);
   sugerencias(); estado(); hablar(frases);
+  if(inicio) sugerenciasInicio(q, inicio);
+}
+// Las sugerencias del inicio escrito las escribe el modelo, con el inicio ya dicho; solo se ponen si la persona aún no ha preguntado nada
+async function sugerenciasInicio(q, texto){
+  const n = U.chat.length, Q = '(sugerencias del inicio)';
+  try{
+    const turnos = [{role:'user', content:promptChat()}, {role:'user', content:visitanteChat(q)}, {role:'assistant', content:texto},
+      {role:'user', content:'(Todavía no ha dicho nada. Escribe solo las sugerencias para lo que acabas de decir: {"sugerencias":["…","…","…"]})'}];
+    traza({tipo:'envio', q:Q, modo:IA.modo, turnos});
+    const r = await IA.json(turnos);
+    traza({tipo:'respuesta', q:Q, crudo:r});
+    if(U.chat.length !== n || U.pensando) return;
+    U.sugIA = Array.isArray(r && r.sugerencias) ? r.sugerencias.filter(x => typeof x === 'string' && x.trim()).map(x => x.trim().slice(0, 120)).slice(0, 3) : [];
+    sugerencias();
+  }catch(e){ traza({tipo:'error', q:Q, codigo:(e && e.code) || 'desconocido'}); }
 }
 
 /* ======================= v2 · Primero lo validado: el banco de preguntas de la obra ======================= */
