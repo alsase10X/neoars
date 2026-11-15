@@ -1,0 +1,315 @@
+{
+ "titulo": "Monumento a Goya",
+ "autor": "Mariano Benlliure",
+ "fecha": "1902",
+ "pieza": "la estatua",
+ "img": "../../img/calle/goya.jpg",
+ "iw": 768,
+ "ih": 1024,
+ "fondo": "../../img/calle/goya-fondo.jpg",
+ "encuadre": [
+  0.25,
+  0.05,
+  0.5,
+  0.45
+ ],
+ "lugar": {
+  "dir": "Calle de Felipe IV, frente a la fachada norte del Museo del Prado (Madrid)"
+ },
+ "representa": "Representas a una persona real, el pintor Francisco de Goya. Él fue el hombre; tú eres su estatua de bronce. De él hablas en tercera persona y no pones palabras en su boca.",
+ "tema": "Madrid honró a Goya con un bronce de caballero respetable, pero fue en el pedestal donde Benlliure dejó ver la belleza y las pesadillas que definieron su obra.",
+ "zonas": {
+  "rostro": {
+   "n": "La cabeza",
+   "poly": [
+    [
+     0.5,
+     0.09
+    ],
+    [
+     0.66,
+     0.08
+    ],
+    [
+     0.69,
+     0.16
+    ],
+    [
+     0.64,
+     0.21
+    ],
+    [
+     0.53,
+     0.21
+    ],
+    [
+     0.5,
+     0.15
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cómo mira?",
+   "vista": "La cabeza de un hombre mayor, con el pelo revuelto y patillas, el ceño fruncido y la mirada al frente."
+  },
+  "panuelo": {
+   "n": "El pañuelo",
+   "poly": [
+    [
+     0.55,
+     0.19
+    ],
+    [
+     0.66,
+     0.19
+    ],
+    [
+     0.67,
+     0.25
+    ],
+    [
+     0.56,
+     0.26
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué lleva al cuello?",
+   "vista": "Al cuello, un pañuelo anudado sobre el chaleco."
+  },
+  "sombrero": {
+   "n": "El sombrero",
+   "poly": [
+    [
+     0.72,
+     0.25
+    ],
+    [
+     0.88,
+     0.26
+    ],
+    [
+     0.89,
+     0.38
+    ],
+    [
+     0.84,
+     0.44
+    ],
+    [
+     0.76,
+     0.43
+    ],
+    [
+     0.72,
+     0.33
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué sujeta con la mano izquierda?",
+   "vista": "Con la mano izquierda, que está a tu derecha, sujeta un sombrero contra el cuerpo."
+  },
+  "mano": {
+   "n": "La mano derecha",
+   "poly": [
+    [
+     0.27,
+     0.33
+    ],
+    [
+     0.38,
+     0.32
+    ],
+    [
+     0.4,
+     0.45
+    ],
+    [
+     0.3,
+     0.47
+    ],
+    [
+     0.27,
+     0.4
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Dónde tiene la otra mano?",
+   "vista": "El brazo derecho, que está a tu izquierda, cae junto al cuerpo, con la mano escondida en la levita."
+  },
+  "botas": {
+   "n": "Las botas y la levita",
+   "poly": [
+    [
+     0.36,
+     0.52
+    ],
+    [
+     0.53,
+     0.52
+    ],
+    [
+     0.55,
+     0.7
+    ],
+    [
+     0.38,
+     0.71
+    ],
+    [
+     0.35,
+     0.62
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Cómo va vestido?",
+   "vista": "Botas altas hasta la rodilla y una levita larga y abierta que le cae casi hasta los pies."
+  },
+  "nombre": {
+   "n": "El nombre",
+   "poly": [
+    [
+     0.26,
+     0.75
+    ],
+    [
+     0.8,
+     0.75
+    ],
+    [
+     0.8,
+     0.89
+    ],
+    [
+     0.26,
+     0.89
+    ]
+   ],
+   "rel": [],
+   "mira": "¿Qué pone en el pedestal?",
+   "vista": "En el pedestal blanco, en letras de bronce, una sola palabra: GOYA."
+  }
+ },
+ "nube": true,
+ "voces": {
+  "obra": {
+   "pitch": 0.9,
+   "rate": 0.95,
+   "fem": false
+  }
+ },
+ "citas": {},
+ "base": [
+  {
+   "id": "B2",
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Lo encargó en 1902 el alcalde de Madrid Alberto Aguilera."
+  },
+  {
+   "id": "B3",
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Al principio iba a ser una fuente, cerca de la ermita de San Antonio de la Florida."
+  },
+  {
+   "id": "B4",
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "El pedestal se hizo a propósito como un escenario: enseña al que pasa obras de Goya, entre ellas fragmentos de los Caprichos y La maja desnuda en altorrelieve, tumbada para equilibrar el conjunto."
+  },
+  {
+   "id": "B6",
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Para el rostro, Benlliure se inspiró en el retrato de Goya pintado por Vicente López."
+  },
+  {
+   "id": "B12",
+   "f": "Comunidad de Madrid · Itinerarios Benlliure por Madrid, 150 aniversario (1862-2012)",
+   "t": "Benlliure esculpió la cabeza varias veces y en distintos materiales. Después se sacaron copias en escayola y fundiciones póstumas en bronce."
+  },
+  {
+   "id": "B13",
+   "f": "Museo del Prado, ficha E000407",
+   "t": "El Prado guarda una cabeza de Goya en bronce de Benlliure, de 57 cm, que compró al escultor en 1912."
+  },
+  {
+   "id": "B14",
+   "f": "Comunidad de Madrid · Benlliure, monumentos en el mundo, 150 aniversario (1862-2012)",
+   "t": "En 1995, el Ayuntamiento de Madrid encargó una copia póstuma de esta estatua para Burdeos. Está en la plaza de Chapelet."
+  },
+  {
+   "id": "B15",
+   "f": "Real Academia de Bellas Artes de San Fernando, ficha de escultura E-616",
+   "t": "El encargo servía también para conmemorar la mayoría de edad de Alfonso XIII. Benlliure hizo el modelo en 1901-1902."
+  },
+  {
+   "id": "B16",
+   "f": "Julián Gállego, «Madrid y su eterna deuda con Francisco Goya», Heraldo de Aragón; Paisaje de la Luz (Madrid)",
+   "t": "Se inauguró en el Retiro y pasó por otros lugares de Madrid. Desde 1946 está frente a la fachada norte del Prado."
+  },
+  {
+   "id": "B17",
+   "f": "Julián Gállego, «Madrid y su eterna deuda con Francisco Goya», Heraldo de Aragón",
+   "t": "En uno de esos sitios, el trole de un tranvía se salió del cable y le cortó la cabeza. La repararon. No consta el año."
+  },
+  {
+   "id": "B20",
+   "f": "Museo de Historia de Madrid (Ayuntamiento); Museo del Prado, «Cómo llegar»",
+   "t": "La fachada norte del Prado, la que tiene delante, es hoy la Puerta de Goya. Allí están las taquillas y por ahí se entra a ver la colección."
+  }
+ ],
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia estatua",
+   "desc": "en primera persona",
+   "por": "la propia estatua",
+   "corto": "la estatua",
+   "ini": "G",
+   "acc": "#8a6d3b",
+   "voz": "obra",
+   "intro": "1",
+   "presenta": [],
+   "sugiere": [],
+   "relato": [],
+   "qa": [],
+   "placeholder": "Pregúntale a la estatua…",
+   "conversa": "Conversa con la estatua",
+   "te": "La estatua te pregunta",
+   "vts": "Dime: ¿qué sujeta con la mano?",
+   "rol": "Eres la propia estatua de Goya de Mariano Benlliure, frente a la fachada norte del Museo del Prado, y hablas en primera persona. De Goya hablas en tercera persona."
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Monumento a Goya"
+  ],
+  [
+   "Autor",
+   "Mariano Benlliure"
+  ],
+  [
+   "Fecha",
+   "1902"
+  ],
+  [
+   "Materiales",
+   "Bronce, mármol y granito"
+  ],
+  [
+   "Medidas",
+   "Figura de bronce de 2,50 m de alto"
+  ],
+  [
+   "Lugar",
+   "Calle de Felipe IV, frente a la fachada norte del Museo del Prado, Madrid"
+  ],
+  [
+   "Foto",
+   "Facilitada por Alberto; autoría y licencia por confirmar"
+  ]
+ ],
+ "nota": "Prueba C: Goya solo con lo local, lo propio de esta pieza que el modelo no sabe o no daría con seguridad (11 de los 20 hechos, con sus identificadores originales)."
+}
