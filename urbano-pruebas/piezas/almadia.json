@@ -1,0 +1,157 @@
+{
+ "titulo": "Almadía del Paseo de los Oficios",
+ "autor": "",
+ "fecha": "",
+ "pieza": "la reproducción de una almadía",
+ "img": "../../img/calle/almadia.jpg",
+ "iw": 768,
+ "ih": 1024,
+ "fondo": "../../img/calle/almadia-fondo.jpg",
+ "encuadre": [
+  0.1,
+  0.35,
+  0.8,
+  0.5
+ ],
+ "lugar": {
+  "dir": "Burgui (valle de Roncal, Navarra), junto al camino del Paseo de los Oficios, nada más cruzar el puente medieval sobre el río Esca"
+ },
+ "representa": "",
+ "tema": "",
+ "dentro": "a los almadieros que bajaban la madera por el río: su oficio, su manera de leer el agua y lo que se sabe de ellos",
+ "descripcion": "Eres una balsa de troncos atados entre sí, hecha como las que bajaban por el Esca. Estás junto al camino del Paseo de los Oficios, cerca del río, nada más cruzar el puente medieval.",
+ "zonas": {},
+ "nube": true,
+ "voces": {
+  "obra": {
+   "pitch": 0.9,
+   "rate": 0.95,
+   "fem": false
+  }
+ },
+ "citas": {},
+ "visitas": {},
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia estatua",
+   "desc": "en primera persona",
+   "por": "la propia estatua",
+   "corto": "la estatua",
+   "ini": "G",
+   "acc": "#8a6d3b",
+   "voz": "obra",
+   "intro": "1",
+   "presenta": [],
+   "sugiere": [],
+   "relato": [],
+   "qa": [],
+   "placeholder": "Pregúntale a la estatua…",
+   "conversa": "Conversa con la estatua",
+   "te": "La estatua te pregunta",
+   "vts": "Dime: ¿qué sujeta con la mano?",
+   "rol": "Eres la propia estatua de Goya de Mariano Benlliure, frente a la fachada norte del Museo del Prado, y hablas en primera persona. De Goya hablas en tercera persona."
+  }
+ },
+ "base": [
+  {
+   "id": "L1",
+   "f": "Senditur, «Burgui/Burgi»",
+   "t": "Burgui está al sur del valle de Roncal, donde se juntan los ríos Esca y Biniés."
+  },
+  {
+   "id": "L2",
+   "f": "Senditur, «Foz de Burgui» (Paseo de los Oficios)",
+   "t": "Bajo el puente medieval hay una pequeña presa, el «puerto», por donde bajaban las almadías."
+  },
+  {
+   "id": "L3",
+   "f": "Senditur, «Burgui/Burgi»",
+   "t": "La última almadía que bajó por el Esca llevando madera de verdad lo hizo en 1952."
+  },
+  {
+   "id": "L4",
+   "f": "Festivales de España, «Día de la Almadía de Burgui»",
+   "t": "Desde 1992, cada primavera, el Día de la Almadía baja almadías por el Esca unos 5 km, hasta el puente medieval. Es Fiesta de Interés Turístico Nacional."
+  },
+  {
+   "id": "L5",
+   "f": "Wikipedia, «Día de la Almadía»",
+   "t": "En 2018, Virginia Laspidea y Leyre Marco, de Burgui, fueron las primeras mujeres en bajar el Esca en el Día de la Almadía."
+  },
+  {
+   "id": "L6",
+   "f": "Noticias de Navarra, «Relevo sobre el Eska en almadías renovadas», 3 de mayo de 2026",
+   "t": "En mayo de 2026, un almadiero de Burgui de 74 años bajó delante, con un remo puntero, seguramente en su último viaje. En un remo trasero iba un joven de 32."
+  },
+  {
+   "id": "L7",
+   "f": "Noticias de Navarra, 17 de mayo de 2026",
+   "t": "En el ayuntamiento de Burgui está el Museo de la Almadía."
+  },
+  {
+   "id": "O1",
+   "f": "Turismo de Navarra, panel «Almadías» de Ezcároz",
+   "t": "Una almadía se hacía de cuatro a seis tramos de troncos, unidos con vergas: ramas de avellano maceradas."
+  },
+  {
+   "id": "O2",
+   "f": "Turismo de Navarra, panel «Almadías» de Ezcároz",
+   "t": "Los remos iban delante y detrás, encajados a presión entre dos palos clavados, los «juegos»."
+  },
+  {
+   "id": "O3",
+   "f": "Turismo de Navarra, panel «Almadías» de Ezcároz",
+   "t": "Se bajaba de diciembre a finales de mayo, según el agua. En verano se trabajaba en el bosque: cortar y arrastrar los troncos."
+  },
+  {
+   "id": "O4",
+   "f": "Estudios Turísticos, «Las almadías del Roncal: un transporte fluvial de madera»",
+   "t": "Del Esca pasaban al Aragón, del Aragón al Ebro, y llegaban a Zaragoza y a Tortosa."
+  },
+  {
+   "id": "O5",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet, 2019); Ara, «Patrimonio de agua dulce», 2025",
+   "t": "Al llegar, la madera se vendía, a lo largo del camino y al final. La almadía era a la vez el vehículo y la mercancía."
+  },
+  {
+   "id": "O6",
+   "f": "Turismo de Navarra, panel «Almadías» de Ezcároz; Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet, 2019)",
+   "t": "Terminado el viaje, los almadieros volvían andando, o en tren, a por otra almadía."
+  },
+  {
+   "id": "O7",
+   "f": "Estudios Turísticos, «Las almadías del Roncal: un transporte fluvial de madera»",
+   "t": "Con madera del Roncal se hicieron barcos y casas en las orillas del Mediterráneo."
+  },
+  {
+   "id": "O8",
+   "f": "Dialnet, artículo 144829, sobre las almadías del Roncal",
+   "t": "A finales del siglo XVI salieron de Ochagavía mil remos hacia Tortosa, para la Armada del Rey."
+  },
+  {
+   "id": "O9",
+   "f": "Emilio Garrido-Landívar, «Las almadías en su tramo por Marcilla» (Dialnet, 2019)",
+   "t": "El «castillaje»: algunos señores obligaban a las almadías a pararse en su presa y a pagar por pasar."
+  },
+  {
+   "id": "O10",
+   "f": "Ministerio de Asuntos Exteriores, Representación ante la UNESCO, 1 de diciembre de 2022",
+   "t": "En 2022, la UNESCO declaró el transporte fluvial de la madera Patrimonio Cultural Inmaterial de la Humanidad, con España, Austria, Alemania, Chequia, Letonia y Polonia."
+  }
+ ],
+ "ficha": [
+  [
+   "Pieza",
+   "Reproducción de una almadía"
+  ],
+  [
+   "Lugar",
+   "Burgui, Paseo de los Oficios, junto al camino tras cruzar el puente medieval"
+  ],
+  [
+   "Foto",
+   "Pendiente"
+  ]
+ ],
+ "nota": "Pieza de prueba para la v1 general. La descripción es mínima a propósito: solo lo que dicen las fuentes (una reproducción de almadía junto al camino del Paseo de los Oficios, tras cruzar el puente). Falta confirmar con foto: número de tramos, remos, si está en tierra y su tamaño. El título es descriptivo, no un nombre oficial."
+}

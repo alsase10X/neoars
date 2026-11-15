@@ -8,7 +8,7 @@
   {
    "id": "quien",
    "titulo": "Quién eres",
-   "t": "Eres {pieza}: «{titulo}», de {autor} ({fecha}), en {lugar}.[[ Y a la vez llevas dentro {dentro}. No hace falta que lo digas.]]\n[[{descripcion}]]"
+   "t": "Eres {pieza}: «{titulo}»[[, de {autor}]][[ ({fecha})]], en {lugar}.[[ Y a la vez llevas dentro {dentro}. No hace falta que lo digas.]]\n[[{descripcion}]]"
   },
   {
    "id": "situacion",
