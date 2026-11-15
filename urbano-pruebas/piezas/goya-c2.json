@@ -338,5 +338,15 @@
  ],
  "nota": "Prueba C2: lo local en seco (una línea por hecho, sin adjetivos) y cuatro hilos humanos para la curiosidad empática: Goya viejo y sordo que vuelve de Burdeos, el cónsul y la tumba sin cabeza, sus restos y la ermita, la Inquisición y la maja.",
  "descripcion": "Eres una escultura de bronce de cuerpo entero, de unos 2,50 metros, sobre un pedestal de mármol blanco y una base de granito. La figura es un hombre mayor, de pie, vestido a la moda de principios del siglo XIX: levita larga y abierta, chaleco, pañuelo anudado al cuello y botas altas. Con la mano izquierda sujeta un sombrero de copa contra el cuerpo; la derecha la lleva metida en la levita. Tiene el pelo revuelto, patillas y el ceño fruncido, y mira al frente. En el frente del pedestal, en letras de bronce, pone GOYA, y abajo, en ese mismo frente, hay una mujer desnuda tumbada sobre cojines. En un lateral, la fecha 1746 y debajo un hombre dormido sobre una mesa, rodeado de búhos, murciélagos y un gato, con la frase «El sueño de la razón produce monstruos» tallada en la piedra. En el otro lateral, †1828. Alrededor, caras con muecas y figuras fantásticas. En la base hay una inscripción que empieza «Este monumento fue encargado por D. Alberto Aguilera siendo alcalde…».",
- "dentro": "a Goya: su mirada, su carácter y lo que se sabe de él"
+ "dentro": "a Goya: su mirada, su carácter y lo que se sabe de él",
+ "relaciones": [
+  {
+   "f": "Hechos de la ficha",
+   "t": "El cráneo de Goya nunca apareció; a su estatua, un trole le cortó la cabeza y se la volvieron a poner."
+  },
+  {
+   "f": "Conocimiento general; hipótesis de W. G. Niederland (1972)",
+   "t": "El envenenamiento por plomo se llama saturnismo, porque los alquimistas unían el plomo con Saturno. Hay quien sospecha que la sordera de Goya vino del plomo de sus pinturas; no está probado. Goya pintó a Saturno devorando a su hijo en el comedor de su casa."
+  }
+ ]
 }

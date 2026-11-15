@@ -267,5 +267,19 @@
  "nota": "Variante C: descripción corta y, además, las chispas comprobadas (sin títulos ni tipos de curiosidad).",
  "inicio": {
   "texto": "Soy una almadía, hecha como las de antes. Así bajaba la madera del Roncal por este río: troncos atados con ramas y, encima, los almadieros, de pie. Lo raro es esto: yo no llevaba la carga. Yo era la carga."
- }
+ },
+ "relaciones": [
+  {
+   "f": "Analogía con hechos de la ficha",
+   "t": "La madera bajaba con el río y los almadieros volvían río arriba, a pie, al sitio de donde habían salido, para empezar otra vez: como los salmones."
+  },
+  {
+   "f": "Wikipedia, «Canal de las Bardenas»; iagua, «Embalse de Yesa»; MITECO, Cuadernos de la Trashumancia n.º 18 (Bardenas Reales)",
+   "t": "El pantano de Yesa acabó con el camino del río. De ese mismo pantano sale hoy el canal de Bardenas, que riega las Bardenas Reales, y a las Bardenas bajan cada invierno los rebaños del Roncal por su cañada. El agua que cerró un oficio del valle alimenta el otro."
+  },
+  {
+   "f": "Conocimiento general (buques metaneros y gas de evaporación)",
+   "t": "Algunos barcos que llevan gas licuado queman parte de su propia carga para moverse. Se parecen a la almadía: el vehículo vive de lo que transporta."
+  }
+ ]
 }

@@ -118,6 +118,14 @@
   {
    "id": "v1-4",
    "n": "Reglas: v1.4 (sugerencias: sus preguntas)"
+  },
+  {
+   "id": "v2a",
+   "n": "Reglas: v2a (relacional)"
+  },
+  {
+   "id": "v2b",
+   "n": "Reglas: v2b (relacional + relaciones en la ficha)"
   }
  ]
 }

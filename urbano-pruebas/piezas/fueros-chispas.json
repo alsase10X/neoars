@@ -299,5 +299,19 @@
  "nota": "Fueros con chispas: la ficha nueva y, al final, chispas comprobadas (C13 sin comprobar, dicho como tal). Fuera: la visita real de 2025, las 50.000 personas de Castejón y que Olóriz fuera el culpable de que no se inaugurara.",
  "inicio": {
   "texto": "Soy el Monumento a los Fueros. En 1893 un ministro quiso cambiar los impuestos de Navarra, y 120.000 navarros firmaron para apoyar la protesta. Luego me pagaron entre muchos, desde veinticinco céntimos. Y nunca me inauguraron."
- }
+ },
+ "relaciones": [
+  {
+   "f": "National Park Service, «Joseph Pulitzer»; Wikipedia, «Statue of Liberty»",
+   "t": "En 1885, el pedestal de la Estatua de la Libertad se pagó con la colecta de un periódico: unas 125.000 personas, casi todas con un dólar o menos. Ocho años después, 120.000 navarros firmaban el Libro de Honor. Las dos estatuas son una mujer coronada, con un brazo en alto, una ley o una fecha escrita y cadenas rotas. No consta que una copie a la otra: vienen de la misma alegoría antigua de la libertad."
+  },
+  {
+   "f": "Conocimiento general (mito de Alcíone)",
+   "t": "Del alción que la Paz aprieta contra el pecho viene la expresión inglesa «halcyon days», los días tranquilos."
+  },
+  {
+   "f": "Hechos de la ficha",
+   "t": "Ciento veinte mil personas dejaron su nombre en el Libro de Honor; la única cara del monumento es la de una mujer cuyo nombre no publicó ningún periódico."
+  }
+ ]
 }
