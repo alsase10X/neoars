@@ -2135,6 +2135,10 @@ function hablar(frases, alAcabar){
     const f = frases[k];
     decirFrase(f, tok, () => { if(tok !== U.tok) return; encender(f); k++; setTimeout(next, 160); });
   };
+  // Voz de Gemini: la respuesta entera en una sola petición (gasta menos cuota y no hay pausas entre frases).
+  // Si falla, frase a frase con la voz del dispositivo
+  const vg = G.voz && vozGemini(frases);
+  if(vg) return decirTodoNube(frases, tok, vg, () => { fin(); if(alAcabar) alAcabar(); }, () => { U.sinNube = tok; next(); });
   next();
 }
 
@@ -2655,7 +2659,7 @@ function sobre(o){
   const nube = o && o.nube && CONFIG.api;
   const filas = [
     ['Cómo funciona', 'Cada pieza cuenta su historia con textos preparados a partir de su documentación. Las preguntas que no están preparadas las responde un modelo de inteligencia artificial que solo trabaja con esa documentación; si en una respuesta hay algo que no sale de ella, se avisa al final.'],
-    ['La voz', 'Las voces son sintéticas, salvo en las visitas grabadas.' + (nube ? ' En esta pieza, las respuestas las redacta Claude (Anthropic) a través de Perplexity, y la voz es de Mistral.' : '')],
+    ['La voz', 'Las voces son sintéticas, salvo en las visitas grabadas.' + (nube ? ' En esta pieza, las respuestas las redacta Claude (Anthropic) a través de Perplexity, y la voz es de Mistral o de Google (Gemini).' : '')],
     ['Privacidad', 'No hace falta cuenta ni se piden datos personales. Los ajustes se guardan solo en este teléfono. Las preguntas viajan a los servicios de inteligencia artificial que preparan la respuesta y la voz; artmedium no las guarda.']
   ];
   $('fSobre').innerHTML = filas.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')
@@ -2805,7 +2809,7 @@ function decirFrase(f, tok, fin){
   const sinVoz = () => { reloj(); clearTimeout(wd); wd = setTimeout(acabar, f.w.length*ms + 500); };
   encender(f, 1);
   if(!G.voz) return sinVoz();
-  const nv = vozNube(f.voz || U.voz);
+  const nv = U.sinNube === tok ? null : vozNube(f.voz || U.voz);
   if(nv) return decirNube(f, tok, nv, acabar, local);
   local();
   function local(){
@@ -2827,6 +2831,10 @@ function decirFrase(f, tok, fin){
 // El plan gratuito admite una petición por segundo, así que van en fila, con la que toca decir ahora siempre delante
 const NUBE = {hechas:new Map(), fila:[], andando:false, ultima:0};
 const vozNube = k => (CONFIG.api && OBRA && OBRA.nube && (OBRA.voces[k] || {}).nube) || null;
+// Voces de Gemini («gemini:Charon»): llevan un estilo, cómo habla, en la misma entrada de la voz
+const esGemini = v => /^gemini:/.test(v || '');
+const estiloDe = v => { const e = Object.values((OBRA && OBRA.voces) || {}).find(x => x && x.nube === v); return (e && e.estilo) || ''; };
+const vozGemini = frases => { const v = frases.length && vozNube(frases[0].voz || U.voz); return esGemini(v) && frases.every(f => vozNube(f.voz || U.voz) === v) ? v : null; };
 function audioNube(texto, voz, urgente){
   const clave = voz + '\n' + texto;
   let e = NUBE.hechas.get(clave);
@@ -2845,7 +2853,7 @@ async function andarNube(){
     const falta = NUBE.ultima + 1100 - Date.now(); if(falta > 0) await new Promise(r => setTimeout(r, falta));
     NUBE.ultima = Date.now();
     try{
-      const r = await fetch(CONFIG.api.replace(/\/+$/, '') + '/voz', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({texto:e.texto, voz:e.voz})});
+      const r = await fetch(CONFIG.api.replace(/\/+$/, '') + '/voz', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({texto:e.texto, voz:e.voz, estilo:estiloDe(e.voz)})});
       if(!r.ok) throw new Error('voz ' + r.status);
       const ac = contexto(); if(!ac) throw new Error('sin audio');
       const b = await r.arrayBuffer();
@@ -2854,7 +2862,7 @@ async function andarNube(){
   }
   NUBE.andando = false;
 }
-function anticiparNube(frases){ if(!G.voz) return; frases.forEach(f => { const v = vozNube(f.voz || U.voz); if(v) audioNube(HABLA(f.t), v).catch(() => {}); }); }
+function anticiparNube(frases){ if(!G.voz) return; frases.forEach(f => { const v = vozNube(f.voz || U.voz); if(v && !esGemini(v)) audioNube(HABLA(f.t), v).catch(() => {}); }); }
 // Una frase con la voz de la nube; las palabras se encienden según avanza el audio, repartidas por su longitud.
 // Si la nube falla o tarda, la dice la voz del dispositivo
 function decirNube(f, tok, voz, acabar, local){
@@ -2877,6 +2885,37 @@ function decirNube(f, tok, voz, acabar, local){
       VOZ.raf = requestAnimationFrame(paso);
     };
     src.onended = () => { if(tok !== U.tok) return; cancelAnimationFrame(VOZ.raf); VOZ.nodo = null; acabar(); };
+    paso();
+  }).catch(rendirse);
+}
+// Toda una respuesta con una sola locución de la nube: las palabras se encienden frase a frase según avanza el audio
+function decirTodoNube(frases, tok, voz, alFin, local){
+  let ya = false, wd = 0;
+  const rendirse = () => { if(ya || tok !== U.tok) return; ya = true; clearTimeout(wd); local(); };
+  wd = setTimeout(rendirse, 15000);
+  encender(frases[0], 1);
+  audioNube(frases.map(f => HABLA(f.t)).join(' '), voz, true).then(buf => {
+    if(ya || tok !== U.tok) return; ya = true; clearTimeout(wd);
+    const ac = contexto(); if(!ac) return local();
+    callar();
+    const src = ac.createBufferSource(); src.buffer = buf; src.connect(ac.destination);
+    const t0 = ac.currentTime + .05; src.start(t0); VOZ.nodo = src;
+    const pesos = frases.map(f => f.w.map(w => w.textContent.length + 1));
+    const total = pesos.reduce((a, p) => a + p.reduce((x, y) => x + y, 0), 0) || 1;
+    let k = 0, base = 0, n0 = 1;
+    const paso = () => {
+      if(tok !== U.tok) return;
+      const p = Math.min(1, Math.max(0, (ac.currentTime - t0)/buf.duration))*total;
+      while(k < frases.length){
+        const pk = pesos[k], suma = pk.reduce((x, y) => x + y, 0);
+        if(p >= base + suma){ encender(frases[k]); base += suma; k++; n0 = 0; continue; }
+        let n = 0, a = base; while(n < pk.length && a + pk[n]*.5 <= p){ a += pk[n]; n++; }
+        if(n > n0){ n0 = n; encender(frases[k], n); }
+        break;
+      }
+      VOZ.raf = requestAnimationFrame(paso);
+    };
+    src.onended = () => { if(tok !== U.tok) return; cancelAnimationFrame(VOZ.raf); VOZ.nodo = null; frases.forEach(f => encender(f)); alFin(); };
     paso();
   }).catch(rendirse);
 }

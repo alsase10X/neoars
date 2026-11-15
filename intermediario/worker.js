@@ -2,6 +2,7 @@
 // Guarda las claves y reenvía a los proveedores lo que pide la sala:
 //   POST /       {input: [{role, content}, ...]}  → texto de Perplexity (Agent API)
 //   POST /voz    {texto, voz}                      → audio mp3 de Mistral (Voxtral TTS 3)
+//   POST /voz    {texto, voz: 'gemini:Charon', estilo} → audio wav de Google (Gemini TTS); estilo, en lenguaje natural
 //   GET  /voces  ?language=es&gender=&query=       → lista de voces predefinidas de Mistral (JSON)
 //   GET  /archivo  ?ruta=unidad/prompt.json         → el archivo tal cual está en GitHub ahora (sin esperar a Pages)
 //   PUT  /archivo  {ruta, contenido, mensaje}        → lo guarda en GitHub como un commit (solo desde el panel, con contraseña)
@@ -12,11 +13,13 @@
 // En Cloudflare (Settings › Variables and Secrets):
 //   PERPLEXITY_API_KEY  (Secret)  la clave de la consola de Perplexity
 //   MISTRAL_API_KEY     (Secret)  la clave de la consola de Mistral
+//   GEMINI_API_KEY      (Secret)  la clave de Google AI Studio, para las voces «gemini:…»
 //   GITHUB_TOKEN        (Secret)  token «fine-grained» de GitHub, solo para este repositorio, con permiso Contents: Read and write
 //   PANEL_CLAVE         (Secret)  la contraseña del panel de creación
 //   REPO                (Text, opcional)  por defecto alsase10X/neoars; RAMA, por defecto main
 //   MODELO              (Text, opcional)  por defecto anthropic/claude-haiku-5-5
 //   MODELO_VOZ          (Text, opcional)  por defecto voxtral-mini-tts-3-0
+//   MODELO_VOZ_GEMINI   (Text, opcional)  por defecto gemini-3.8-flash-tts
 //   RAZONAR             (Text, opcional)  cuánto razona el modelo antes de escribir: none, minimal, low… (ahora: minimal)
 //   ORIGENES            (Text, opcional)  webs que pueden llamarlo, separadas por comas
 //
@@ -24,6 +27,7 @@
 
 const MODELO = 'anthropic/claude-haiku-5-5';
 const MODELO_VOZ = 'voxtral-mini-tts-3-0';
+const MODELO_VOZ_GEMINI = 'gemini-3.8-flash-tts';
 const ORIGENES = 'https://alsase10x.github.io';
 const MAX_CUERPO = 60000;   // caracteres: la base de una pieza y unos pocos turnos caben de sobra
 const MAX_TURNOS = 12;
@@ -105,7 +109,7 @@ export default {
     }
 
     // Abrir la dirección en el navegador sirve para comprobar que está bien montado
-    if (req.method === 'GET') return texto('artmedium-ia: texto ' + (env.PERPLEXITY_API_KEY ? 'listo' : 'sin clave') + ' · voz ' + (env.MISTRAL_API_KEY ? 'lista' : 'sin clave') + ' · panel ' + (env.PANEL_CLAVE && env.GITHUB_TOKEN ? 'listo' : 'sin clave'));
+    if (req.method === 'GET') return texto('artmedium-ia: texto ' + (env.PERPLEXITY_API_KEY ? 'listo' : 'sin clave') + ' · voz ' + (env.MISTRAL_API_KEY ? 'lista' : 'sin clave') + ' · voz Gemini ' + (env.GEMINI_API_KEY ? 'lista' : 'sin clave') + ' · panel ' + (env.PANEL_CLAVE && env.GITHUB_TOKEN ? 'listo' : 'sin clave'));
     if (req.method !== 'POST') return texto('Método no permitido', 405);
     if (!permitidos.includes(origen)) return texto('Origen no permitido', 403);
 
@@ -115,11 +119,36 @@ export default {
     try { datos = JSON.parse(cuerpo); } catch (e) { return texto('JSON no válido', 400); }
 
     if (ruta === '/voz') {
-      if (!env.MISTRAL_API_KEY) return texto('Falta la clave MISTRAL_API_KEY', 500);
       const dicho = typeof datos.texto === 'string' ? datos.texto.trim() : '';
       if (!dicho) return texto('Falta el texto', 400);
       if (dicho.length > MAX_VOZ) return texto('Texto demasiado largo para una locución', 413);
       if (typeof datos.voz !== 'string' || !datos.voz || datos.voz.length > 80) return texto('Falta la voz', 400);
+      // Voces de Google: «gemini:Charon». El estilo (cómo habla) va aparte del texto, que se dice tal cual
+      if (datos.voz.startsWith('gemini:')) {
+        if (!env.GEMINI_API_KEY) return texto('Falta la clave GEMINI_API_KEY', 500);
+        const contenido = {type: 'text', text: dicho};
+        const estilo = typeof datos.estilo === 'string' ? datos.estilo.trim().slice(0, 300) : '';
+        if (estilo) contenido.annotations = [{type: 'speech_metadata', style: estilo}];
+        const r = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+          method: 'POST',
+          headers: {'x-goog-api-key': env.GEMINI_API_KEY, 'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            model: env.MODELO_VOZ_GEMINI || MODELO_VOZ_GEMINI,
+            input: [{type: 'user_input', content: [contenido]}],
+            response_format: {type: 'audio', mime_type: 'audio/wav'},
+            generation_config: {speech_config: [{voice: datos.voz.slice(7)}]}
+          })
+        });
+        if (!r.ok) return texto('Gemini no ha respondido (' + r.status + '): ' + (await r.text()).slice(0, 300), r.status === 429 ? 429 : 502);
+        const j = await r.json();
+        const trozos = (j.steps || []).filter(s => s && s.type === 'model_output').flatMap(s => s.content || []).filter(c => c && c.type === 'audio' && c.data);
+        if (!trozos.length) return texto('Gemini no ha devuelto audio', 502);
+        let audio = Uint8Array.from(atob(trozos[trozos.length - 1].data), c => c.charCodeAt(0));
+        // Si llega PCM sin cabecera (24 kHz, mono, 16 bits), se le pone la de WAV para que el navegador lo lea
+        if (String.fromCharCode(...audio.subarray(0, 4)) !== 'RIFF') audio = conCabeceraWav(audio, 24000);
+        return new Response(audio, {headers: {...cors, 'Content-Type': 'audio/wav'}});
+      }
+      if (!env.MISTRAL_API_KEY) return texto('Falta la clave MISTRAL_API_KEY', 500);
       const r = await fetch('https://api.mistral.ai/v1/audio/speech', {
         method: 'POST',
         headers: {'Authorization': 'Bearer ' + env.MISTRAL_API_KEY, 'Content-Type': 'application/json'},
@@ -161,3 +190,15 @@ const pedir = (env, cuerpo) => fetch('https://api.perplexity.ai/v1/agent', {
   headers: {'Authorization': 'Bearer ' + env.PERPLEXITY_API_KEY, 'Content-Type': 'application/json'},
   body: JSON.stringify(cuerpo)
 });
+
+// Cabecera WAV para PCM de 16 bits, mono
+function conCabeceraWav(pcm, hz) {
+  const out = new Uint8Array(44 + pcm.length), v = new DataView(out.buffer);
+  const pon = (o, t) => { for (let i = 0; i < t.length; i++) out[o + i] = t.charCodeAt(i); };
+  pon(0, 'RIFF'); v.setUint32(4, 36 + pcm.length, true); pon(8, 'WAVE');
+  pon(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, hz, true); v.setUint32(28, hz * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  pon(36, 'data'); v.setUint32(40, pcm.length, true);
+  out.set(pcm, 44);
+  return out;
+}
