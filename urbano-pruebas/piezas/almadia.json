@@ -30,7 +30,12 @@
   }
  },
  "citas": {},
- "visitas": {},
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
  "mediadores": {
   "obra": {
    "nombre": "La propia estatua",
