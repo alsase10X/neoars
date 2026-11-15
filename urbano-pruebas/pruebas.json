@@ -23,7 +23,15 @@
   },
   {
    "id": "almadia",
-   "n": "Almadía (Burgui)"
+   "n": "Almadía A · descripción larga"
+  },
+  {
+   "id": "almadia-corta",
+   "n": "Almadía B · descripción corta"
+  },
+  {
+   "id": "almadia-chispas",
+   "n": "Almadía C · corta + chispas"
   }
  ],
  "reglas": [
