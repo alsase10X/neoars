@@ -2258,6 +2258,7 @@ function promptChat(){
     // Pruebas: la descripción de la pieza y sus hechos tal cual, sin identificadores ni fuentes y sin caer en la ficha si no hay base
     descripcion:OBRA.descripcion || '', dentro:OBRA.dentro || '',
     hechos:(OBRA.base || []).map(b => `- ${b.t}`).join('\n'),
+    relaciones:(OBRA.relaciones || []).map(r => `- ${r.t || r}`).join('\n'),   // pruebas v2b: relaciones comprobadas, como material
     rol:MED(MEDG()).rol || R.rolPorDefecto || '',
     campoImagen:OBRA.imagenes ? ',"imagen":"identificador de imagen o null"' : ''
   };
