@@ -38,11 +38,11 @@
  },
  "mediadores": {
   "obra": {
-   "nombre": "La propia estatua",
+   "nombre": "La propia almadía",
    "desc": "en primera persona",
-   "por": "la propia estatua",
-   "corto": "la estatua",
-   "ini": "G",
+   "por": "la propia almadía",
+   "corto": "la almadía",
+   "ini": "A",
    "acc": "#8a6d3b",
    "voz": "obra",
    "intro": "1",
@@ -50,11 +50,11 @@
    "sugiere": [],
    "relato": [],
    "qa": [],
-   "placeholder": "Pregúntale a la estatua…",
-   "conversa": "Conversa con la estatua",
-   "te": "La estatua te pregunta",
-   "vts": "Dime: ¿qué sujeta con la mano?",
-   "rol": "Eres la propia estatua de Goya de Mariano Benlliure, frente a la fachada norte del Museo del Prado, y hablas en primera persona. De Goya hablas en tercera persona."
+   "placeholder": "Pregúntale a la almadía…",
+   "conversa": "Conversa con la almadía",
+   "te": "La almadía te pregunta",
+   "vts": "",
+   "rol": ""
   }
  },
  "base": [
@@ -264,5 +264,8 @@
    "Burgui, Paseo de los Oficios, junto al camino tras cruzar el puente medieval"
   ]
  ],
- "nota": "Variante C: descripción corta y, además, las chispas comprobadas (sin títulos ni tipos de curiosidad)."
+ "nota": "Variante C: descripción corta y, además, las chispas comprobadas (sin títulos ni tipos de curiosidad).",
+ "inicio": {
+  "texto": "Soy una almadía, hecha como las de antes. Así bajaba la madera del Roncal por este río: troncos atados con ramas y, encima, los almadieros, de pie. Lo raro es esto: yo no llevaba la carga. Yo era la carga."
+ }
 }
