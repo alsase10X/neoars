@@ -2255,6 +2255,9 @@ function promptChat(){
     zonas:Object.values(OBRA.zonas).map(z => `- ${z.n}${z.vista ? ': ' + z.vista : ''}`).join('\n'),
     base:BASE().map(b => `[${b.id}] ${b.f}: ${b.t}`).join('\n'),
     imagenes:imagenesPrompt(),
+    // Pruebas: la descripción de la pieza y sus hechos tal cual, sin identificadores ni fuentes y sin caer en la ficha si no hay base
+    descripcion:OBRA.descripcion || '',
+    hechos:(OBRA.base || []).map(b => `- ${b.t}`).join('\n'),
     rol:MED(MEDG()).rol || R.rolPorDefecto || '',
     campoImagen:OBRA.imagenes ? ',"imagen":"identificador de imagen o null"' : ''
   };

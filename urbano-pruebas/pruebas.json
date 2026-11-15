@@ -7,7 +7,7 @@
   },
   {
    "id": "goya-sin-base",
-   "n": "Goya A · sin base (solo la ficha)"
+   "n": "Goya A · sin base"
   },
   {
    "id": "goya",
@@ -50,6 +50,10 @@
   {
    "id": "extraneza",
    "n": "Reglas: extrañeza"
+  },
+  {
+   "id": "pura",
+   "n": "Reglas: pura (sin instrucciones)"
   }
  ]
 }
