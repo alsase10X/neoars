@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Panel · piezas urbanas</title>
+<!-- El aspecto es Pico CSS (picocss.com, licencia MIT), tal cual: el mismo archivo que el panel de la unidad -->
+<link rel="stylesheet" href="../../unidad/panel/pico.min.css">
+<style>
+:root{--pico-font-size:100%}
+[hidden]{display:none !important}
+main{padding-top:1rem}
+header.barra{display:flex;flex-wrap:wrap;gap:1rem;align-items:end;justify-content:space-between;margin-bottom:1rem}
+header.barra h1{font-size:1.1rem;margin:0}
+header.barra label{margin:0;font-size:.85rem}
+header.barra select{margin:0;padding-block:.35rem;width:auto;min-width:13rem}
+.elige{display:flex;flex-wrap:wrap;gap:.75rem;align-items:end}
+.elige button{margin:0;padding:.35rem .8rem;font-size:.85rem}
+nav.pest{justify-content:flex-start;margin-bottom:1rem;border-bottom:1px solid var(--pico-muted-border-color)}
+nav.pest button{margin:0 .5rem -1px 0;border-radius:var(--pico-border-radius) var(--pico-border-radius) 0 0}
+.probar{display:grid;grid-template-columns:390px minmax(0,1fr);gap:1.5rem;align-items:start}
+@media (max-width:900px){.probar{grid-template-columns:1fr}}
+.movil{position:sticky;top:1rem}
+.movil iframe{display:block;width:390px;max-width:100%;height:min(760px,calc(100vh - 12rem));border:1px solid var(--pico-muted-border-color);border-radius:1.25rem;background:#000}
+.movil .mandos{display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;justify-content:space-between;margin-top:.6rem;font-size:.85rem}
+.movil .mandos label,.movil .mandos button,.movil .mandos select{margin:0}
+.movil .mandos select{width:auto;padding-block:.25rem;font-size:.85rem}
+.movil .mandos button{padding:.3rem .7rem;font-size:.85rem}
+article{margin-bottom:1rem;padding:1rem 1.1rem}
+article h3{font-size:1rem;margin-bottom:.35rem}
+article p{margin-bottom:.5rem}
+.meta,.nota{font-size:.82rem;color:var(--pico-muted-color)}
+.resp{border-left:3px solid var(--pico-muted-border-color);padding-left:.8rem;margin:.6rem 0}
+.resp p{margin-bottom:.3rem}
+details{margin-bottom:.4rem}
+details summary{font-size:.88rem}
+pre{white-space:pre-wrap;word-break:break-word;max-height:26rem;overflow:auto;font-size:.78rem;padding:.7rem;margin-bottom:.6rem}
+.vacio{color:var(--pico-muted-color)}
+.estado{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.estado p,.estado label,.estado button{margin:0}
+.estado .acc{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+.estado button{padding:.35rem .8rem;font-size:.88rem}
+.sec h3{display:flex;gap:.6rem;align-items:baseline;justify-content:space-between}
+.sec h3 span.b{display:flex;gap:.4rem}
+.sec h3 button{padding:.15rem .6rem;font-size:.78rem;margin:0}
+textarea.mono,.sec textarea{font-family:var(--pico-font-family-monospace);font-size:.82rem;line-height:1.45;margin-bottom:.2rem;field-sizing:content;min-height:4rem;max-height:34rem}
+.sec.cambiada{border-left:3px solid var(--pico-primary)}
+/* El editor de la pieza */
+.ed{max-width:60rem}
+.ed label{font-size:.85rem}
+.ed input,.ed select,.ed textarea{margin-bottom:.7rem}
+.ed textarea{field-sizing:content;min-height:3.2rem;max-height:28rem;line-height:1.45}
+.ed .fila{display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));gap:0 1rem}
+.ed .foto{display:flex;gap:1rem;align-items:flex-start}
+.ed .foto img{width:7rem;height:7rem;object-fit:cover;border-radius:50%;border:2px solid var(--pico-muted-border-color);background:#222}
+.ed .item{border-top:1px solid var(--pico-muted-border-color);padding-top:.7rem;margin-top:.4rem}
+.ed .item .cab{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;font-size:.82rem;color:var(--pico-muted-color);margin-bottom:.3rem}
+.ed .item .cab button,.ed .mas{padding:.15rem .6rem;font-size:.78rem;margin:0;width:auto}
+.ed .mas{margin-top:.3rem}
+.ed .nuevo-texto{background:var(--pico-card-sectioning-background-color);padding:.8rem;border-radius:var(--pico-border-radius);margin-top:.6rem}
+</style>
+</head>
+<body>
+<main class="container-fluid">
+  <header class="barra">
+    <h1>Piezas urbanas · panel</h1>
+    <div class="elige">
+      <label>Pieza <select id="pieza"></select></label>
+      <label>Reglas <select id="reglas"></select></label>
+      <button type="button" class="secondary outline" id="nueva">Nueva pieza</button>
+    </div>
+  </header>
+  <nav class="pest" id="pest">
+    <button type="button" data-p="pieza">Pieza</button>
+    <button type="button" data-p="probar" class="outline">Probar</button>
+    <button type="button" data-p="ajustes" class="outline">Reglas</button>
+  </nav>
+
+  <!-- ======================= Pieza: su ficha ======================= -->
+  <section id="tPieza" class="ed" hidden>
+    <div class="estado">
+      <p id="pEstado"></p>
+      <div class="acc">
+        <button type="button" class="secondary outline" id="pDescartar">Descartar los cambios</button>
+        <button type="button" id="pGuardar">Guardar</button>
+      </div>
+    </div>
+    <div id="editor"></div>
+  </section>
+
+  <!-- ======================= Probar ======================= -->
+  <section id="tProbar" class="probar" hidden>
+    <div class="movil">
+      <iframe id="marco" title="La pieza, como la ve el visitante" allow="microphone; autoplay; geolocation"></iframe>
+      <div class="mandos">
+        <label><input type="checkbox" id="conVoz" role="switch"> Con voz</label>
+        <select id="vozDe" aria-label="Qué voz">
+          <option value="pieza">Voz: la de la pieza</option>
+          <option value="dispositivo">Voz: la del dispositivo</option>
+          <option value="gemini">Voz: Google (Gemini)</option>
+          <option value="mistral">Voz: Mistral</option>
+        </select>
+        <button type="button" class="secondary outline" id="reiniciar">Empezar de nuevo</button>
+      </div>
+    </div>
+    <div>
+      <p class="nota" id="aviso"></p>
+      <details id="entero">
+        <summary>Ver el prompt que recibe el modelo</summary>
+        <p class="meta" id="enteroM"></p>
+        <pre id="enteroT"></pre>
+      </details>
+      <div id="traza"></div>
+    </div>
+  </section>
+
+  <!-- ======================= Reglas: el prompt común ======================= -->
+  <section id="tAjustes" hidden>
+    <div class="estado">
+      <p id="rEstado"></p>
+      <div class="acc">
+        <label><input type="checkbox" id="usar" role="switch"> Probar con el borrador</label>
+        <button type="button" class="secondary outline" id="rDescartar">Descartar el borrador</button>
+        <button type="button" class="secondary" id="rNueva">Guardar como versión nueva…</button>
+        <button type="button" id="rGuardar">Guardar en esta versión</button>
+      </div>
+    </div>
+    <p class="nota">Las reglas son el prompt común: valen para todas las piezas que se prueban con ellas. Se elige cuáles en «Reglas», arriba. Lo que cambies se queda en este navegador como borrador y se puede probar antes de guardarlo. Entre llaves van los datos de cada pieza ({pieza}, {titulo}, {autor}, {fecha}, {lugar}, {dentro}, {descripcion}, {hechos}, {relaciones}); entre dobles corchetes, lo que solo sale si la pieza tiene ese dato.</p>
+    <div id="secciones"></div>
+    <button type="button" class="secondary outline" id="rSeccion" style="padding:.3rem .8rem;font-size:.85rem">Añadir una sección</button>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
+const num = n => Math.round(n).toLocaleString('es-ES');
+const seg = ms => (ms/1000).toFixed(1).replace('.', ',');
+const st = {get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set(k, v){ try{ v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); }catch(e){} }};
+const IA = 'https://artmedium-ia.alberto-studio76.workers.dev';   // el intermediario: tiene las claves y escribe en GitHub
+const RAIZ = 'urbano-pruebas/';
+const igual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const copia = o => o == null ? o : JSON.parse(JSON.stringify(o));
+const aJSON = o => JSON.stringify(o, null, 1) + '\n';
+const TOKENS = c => c/2.8;   // medido en el Monumento a los Fueros: unos 2,8 caracteres por token en castellano
+const hoy = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const slug = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+const kP = id => 'am.urb.p.' + id, kF = id => 'am.urb.f.' + id, kR = id => 'am.urb.r.' + id;
+
+/* ======================= Guardar: el intermediario escribe en el repositorio ======================= */
+// La contraseña es la misma del panel de la unidad: se pide una vez y se queda en este navegador
+function clave(pedir){
+  let c = st.get('am.panel.clave');
+  if(!c && pedir){ c = window.prompt('Contraseña del panel'); if(c){ c = c.trim(); st.set('am.panel.clave', c); } }
+  return c || '';
+}
+async function leerArchivo(ruta){
+  // Como está ahora en el repositorio, sin esperar a GitHub Pages. Sin contraseña guardada, se lee de la web
+  const c = clave(false); if(!c) return null;
+  const r = await fetch(`${IA}/archivo?ruta=${encodeURIComponent(ruta)}`, {headers:{'X-Panel-Clave':c}});
+  if(r.status === 401){ st.set('am.panel.clave', null); return null; }
+  if(!r.ok) return null;
+  return {sha:r.headers.get('X-Sha'), datos: await r.json()};
+}
+// sha 'nuevo': el archivo no debe existir todavía (el intermediario responde 409 si existe)
+async function guardarArchivo(ruta, contenido, mensaje, sha, base64){
+  for(let intento = 0; intento < 2; intento++){
+    const c = clave(true); if(!c) throw new Error('Sin contraseña no se puede guardar.');
+    let r;
+    try{ r = await fetch(`${IA}/archivo`, {method:'PUT', headers:{'Content-Type':'application/json', 'X-Panel-Clave':c}, body:JSON.stringify({ruta, contenido, mensaje, sha:sha || undefined, base64:!!base64})}); }
+    catch(e){ throw new Error('El intermediario no responde o todavía no sabe guardar (falta la ruta /archivo en Cloudflare).'); }
+    if(r.status === 401){ st.set('am.panel.clave', null); if(intento) throw new Error('Contraseña incorrecta.'); continue; }
+    if(r.status === 409 && sha === 'nuevo') throw new Error(`Ya existe ${ruta}: elige otro nombre.`);
+    if(!r.ok) throw new Error(await r.text());
+    return r.json();
+  }
+}
+
+/* ======================= La lista de pruebas (pruebas.json) ======================= */
+let LISTA = {piezas:[], reglas:[]}, LSHA = null;
+async function cargarLista(){
+  let l = null;
+  try{ const f = await leerArchivo(RAIZ + 'pruebas.json'); if(f){ l = f.datos; LSHA = f.sha; } }catch(e){}
+  if(!l) try{ l = await fetch('../pruebas.json', {cache:'no-cache'}).then(r => r.json()); }catch(e){}
+  if(l && Array.isArray(l.piezas) && Array.isArray(l.reglas)) LISTA = l;
+}
+async function guardarLista(cambia, mensaje){
+  // Se relee justo antes de guardar para no pisar otra línea añadida mientras tanto
+  let l = null, sha = LSHA;
+  try{ const f = await leerArchivo(RAIZ + 'pruebas.json'); if(f){ l = f.datos; sha = f.sha; } }catch(e){}
+  l = l || copia(LISTA); cambia(l);
+  const r = await guardarArchivo(RAIZ + 'pruebas.json', aJSON(l), mensaje, sha);
+  LISTA = l; LSHA = r.sha;
+}
+function borradores(pref){ const l = []; try{ for(let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if(k && k.startsWith(pref)) l.push(k.slice(pref.length)); } }catch(e){} return l; }
+function pintarListas(pid, rid){
+  const ps = LISTA.piezas.map(x => ({...x}));
+  borradores('am.urb.p.').forEach(id => {
+    let b = null; try{ b = JSON.parse(st.get(kP(id))); }catch(e){}
+    const x = ps.find(p => p.id === id);
+    if(x) x.cambios = true; else if(b && b.nueva) ps.push({id, n:b.n || id, cambios:true, nueva:true});
+  });
+  if(!ps.some(x => x.id === pid)) pid = ps.length ? ps[ps.length - 1].id : '';
+  $('pieza').innerHTML = ps.map(x => `<option value="${esc(x.id)}"${x.id === pid ? ' selected' : ''}>${esc(x.n)}${x.nueva ? ' · nueva, sin guardar' : x.cambios ? ' · con cambios' : ''}</option>`).join('');
+  const rs = LISTA.reglas;
+  if(!rs.some(x => x.id === rid)) rid = rs.some(x => x.id === 'v2b') ? 'v2b' : (rs[rs.length - 1] || {}).id;
+  $('reglas').innerHTML = rs.map(x => `<option value="${esc(x.id)}"${x.id === rid ? ' selected' : ''}>${esc(x.n)}${st.get(kR(x.id)) ? ' · borrador' : ''}</option>`).join('');
+}
+const repintarListas = () => pintarListas($('pieza').value, $('reglas').value);
+const nombreReglas = id => { const x = LISTA.reglas.find(r => r.id === (id || $('reglas').value)); return x ? x.n.replace(/^Reglas:\s*/, '') : id || $('reglas').value; };
+
+/* ======================= Pieza: el editor ======================= */
+let P = null;   // {id, sha, pub, datos, nueva, n, nPub, foto}
+const med = () => { const d = P.datos; d.mediadores = d.mediadores || {}; const k = Object.keys(d.mediadores)[0] || 'obra'; return d.mediadores[k] || (d.mediadores[k] = {voz:'obra'}); };
+const relacionesComoObjetos = d => { if(d && Array.isArray(d.relaciones)) d.relaciones = d.relaciones.map(r => typeof r === 'string' ? {t:r, f:''} : r); return d; };
+const hayP = () => !!P && (P.nueva || !igual(P.datos, P.pub) || P.n !== P.nPub || !!P.foto);
+async function abrirPieza(){
+  const id = $('pieza').value; P = null; $('editor').innerHTML = ''; estadoP();
+  if(!id) return;
+  let b = null; try{ b = JSON.parse(st.get(kP(id)) || 'null'); }catch(e){}
+  let pub = null, sha = null;
+  if(!(b && b.nueva)){
+    try{ const f = await leerArchivo(`${RAIZ}piezas/${id}.json`); if(f){ pub = f.datos; sha = f.sha; } }catch(e){}
+    if(!pub) try{ pub = await fetch(`../piezas/${id}.json`, {cache:'no-cache'}).then(r => r.ok ? r.json() : null); }catch(e){}
+    if($('pieza').value !== id) return;
+    if(!pub){ $('pEstado').textContent = 'No se ha podido leer la pieza.'; return; }
+    relacionesComoObjetos(pub);
+  }
+  const item = LISTA.piezas.find(x => x.id === id), nPub = item ? item.n : '';
+  P = {id, sha, pub, nueva:!!(b && b.nueva), datos: b && b.datos ? b.datos : copia(pub), n: b && b.n != null ? b.n : nPub, nPub, foto:null};
+  try{ P.foto = JSON.parse(st.get(kF(id)) || 'null'); }catch(e){}
+  if(!hayP()){ st.set(kP(id), null); repintarListas(); }
+  pintarEditor(); estadoP(); cargarVoces();
+}
+function cambioP(repintar){
+  if(!P) return;
+  const antes = !!st.get(kP(P.id));
+  // Cada cambio se queda en este navegador hasta que se guarda; si no hay cambios, no queda nada
+  st.set(kP(P.id), hayP() ? JSON.stringify({nueva:P.nueva, datos:P.datos, n:P.n}) : null);
+  if(antes !== !!st.get(kP(P.id))) repintarListas();
+  if(repintar) pintarEditor();
+  estadoP();
+}
+function estadoP(){
+  if(!P){ $('pEstado').textContent = ''; $('pGuardar').disabled = $('pDescartar').disabled = true; pintarAviso(); return; }
+  const hay = hayP();
+  $('pEstado').innerHTML = P.nueva ? '<strong>Pieza nueva, sin guardar.</strong> «Probar» ya responde con ella.' : hay ? '<strong>Cambios sin guardar.</strong> «Probar» ya responde con ellos.' : 'Sin cambios.';
+  $('pGuardar').disabled = $('pDescartar').disabled = !hay;
+  pintarAviso();
+}
+// Lo que recibe la pieza en «Probar»: la ficha del editor y, si hay foto nueva, la foto en memoria (Pages tarda en servir la subida)
+function paraMotor(d){ const o = copia(d); if(P && P.foto){ o.img = P.foto.url; o.fondo = P.foto.url; o.iw = P.foto.w; o.ih = P.foto.h; } return o; }
+const fotoActual = () => P.foto ? P.foto.url : P.datos.img ? new URL(P.datos.img, new URL(`../piezas/${P.id}.json`, location.href)).href : '';
+
+// Las voces de Google: las 30 de su documentación, con su descripción traducida (no dicen si son de hombre o de mujer: hay que escucharlas)
+const GEMINI = [['Charon','informativa'],['Rasalgethi','informativa'],['Sadaltager','sabia'],['Orus','firme'],['Kore','firme'],['Alnilam','firme'],['Algenib','rasposa'],['Gacrux','madura'],['Schedar','uniforme'],['Iapetus','clara'],['Erinome','clara'],['Algieba','suave'],['Despina','suave'],['Achernar','suave'],['Sulafat','cálida'],['Vindemiatrix','delicada'],['Enceladus','susurrada'],['Achird','amable'],['Umbriel','tranquila'],['Callirrhoe','tranquila'],['Zubenelgenubi','informal'],['Pulcherrima','directa'],['Aoede','ligera'],['Leda','juvenil'],['Zephyr','brillante'],['Autonoe','brillante'],['Puck','animada'],['Laomedeia','animada'],['Sadachbia','viva'],['Fenrir','excitable']];
+const ESTILO = 'Castilian Spanish accent from Spain.';
+const MISTRAL_FUEROS = '01a0f318-4afd-77a5-aa5e-f4d741c30187';
+let VOCES = null;
+async function cargarVoces(){ if(VOCES) return; try{ const r = await fetch(`${IA}/voces?language=es`); if(r.ok){ VOCES = await r.json(); if(P) pintarEditor(); } }catch(e){} }
+function opcionesVoz(v){
+  const g = GEMINI.map(([n, d]) => `<option value="gemini:${n}"${v === 'gemini:' + n ? ' selected' : ''}>${n} · ${d}</option>`).join('');
+  const m = (VOCES || []).map(x => `<option value="${esc(x.id)}"${x.id === v ? ' selected' : ''}>${esc(x.nombre)}${x.genero ? ' · ' + esc(x.genero) : ''}</option>`).join('');
+  const suelta = v && !/^gemini:/.test(v) && !(VOCES || []).some(x => x.id === v) ? `<option value="${esc(v)}" selected>${v === MISTRAL_FUEROS ? 'La del Monumento a los Fueros' : esc(v)}</option>` : '';
+  return `<option value="">Solo la del dispositivo</option><optgroup label="Google (Gemini)">${g}</optgroup><optgroup label="Mistral">${suelta}${m}</optgroup>`;
+}
+
+const campo = (k, titulo, v, tipo = 'input', nota = '') => tipo === 'textarea'
+  ? `<label>${esc(titulo)}<textarea data-k="${esc(k)}" spellcheck="true">${esc(v)}</textarea>${nota ? `<small>${nota}</small>` : ''}</label>`
+  : `<label>${esc(titulo)}<input data-k="${esc(k)}" value="${esc(v)}">${nota ? `<small>${nota}</small>` : ''}</label>`;
+const fichaTexto = f => (Array.isArray(f) ? f : []).map(([k, v]) => `${k}: ${v}`).join('\n');
+function pintarEditor(){
+  if(!P){ $('editor').innerHTML = ''; return; }
+  const d = P.datos, m = med(), vk = m.voz || 'obra', foto = fotoActual(), propio = typeof d.prompt === 'string';
+  d.voces = d.voces || {}; const V = d.voces[vk] || (d.voces[vk] = {pitch:1, rate:1, fem:false});
+  const nube = V.nube || '';
+  let h = `<article><h3>Ficha</h3>
+    <div class="fila">${campo('titulo', 'Título', d.titulo)}${campo('autor', 'Autor', d.autor)}${campo('fecha', 'Fecha', d.fecha)}</div>
+    <div class="fila">${campo('pieza', 'Cómo se nombra', d.pieza, 'input', 'Con artículo: «la escultura», «el monumento». Es {pieza}.')}${campo('lugar.dir', 'Dónde está', (d.lugar || {}).dir || '', 'input', 'Como se diría en una frase: «el parque de Yamaguchi de Pamplona». Es {lugar}.')}</div>
+    ${campo('_n', 'Nombre en la lista de pruebas', P.n, 'input', 'Así sale en el selector de piezas, aquí y en la barra de pruebas.')}
+    <div class="foto">${foto ? `<img src="${esc(foto)}" alt="">` : '<img alt="" style="opacity:.3">'}<label>Foto <input type="file" id="pFoto" accept="image/*"><small>Vertical, de la pieza entera. Se reduce a 1.600 px y se guarda como img/calle/${esc(P.id)}.jpg.</small></label></div>
+    ${campo('_ficha', 'Ficha («i» en la pieza)', fichaTexto(d.ficha), 'textarea', 'Una fila por línea: «Autor: Faustino Aizkorbe». No llega al modelo.')}
+  </article>`;
+  h += `<article><h3>Lo que es</h3>
+    ${campo('dentro', 'Lo que lleva dentro', d.dentro || '', 'textarea', 'Completa «Y a la vez llevas dentro…»: lo que puede abrir más allá de lo que se ve. Es {dentro}.')}
+    ${campo('descripcion', 'Descripción', d.descripcion || '', 'textarea', 'Cómo es, vista de cerca, dicho a ella misma: «Eres…». Es {descripcion}.')}
+    ${campo('inicio.texto', 'Lo primero que dice', (d.inicio || {}).texto || '', 'textarea', 'Sale tal cual al empezar, sin pasar por el modelo. Vacío: la primera respuesta la escribe el modelo.')}
+  </article>`;
+  const base = Array.isArray(d.base) ? d.base : (d.base = []);
+  h += `<article><h3>Hechos y chispas <small class="meta">· ${base.length}</small></h3><p class="nota">Llegan al modelo tal cual, uno por línea y sin la fuente, en «Lo que se sabe» ({hechos}). La fuente se queda aquí para poder comprobarlos.</p>
+    ${base.map((b, i) => `<div class="item"><div class="cab"><span>${esc(b.id)}</span><button type="button" class="secondary outline" data-quitar="base.${i}">Quitar</button></div>${campo(`base.${i}.t`, 'Hecho', b.t, 'textarea')}${campo(`base.${i}.f`, 'Fuente', b.f || '')}</div>`).join('')}
+    <div class="nuevo-texto"><label>Añadir hechos<textarea id="bTexto" placeholder="Pega aquí los hechos o las chispas: cada línea será uno."></textarea></label><label>Fuente<input id="bFuente" placeholder="De dónde salen: web, libro, archivo…"></label><button type="button" class="mas" id="bAnadir">Añadir</button></div>
+  </article>`;
+  const rel = Array.isArray(d.relaciones) ? d.relaciones : (d.relaciones = []);
+  h += `<article><h3>Relaciones <small class="meta">· ${rel.length}</small></h3><p class="nota">Lo que ya se ha visto al juntar dos hechos, comprobado: va en «Lo que ya se ha visto al juntar» ({relaciones}). Solo llega al modelo con reglas que lo piden, como la v2b.</p>
+    ${rel.map((r, i) => `<div class="item"><div class="cab"><span>${i + 1}</span><button type="button" class="secondary outline" data-quitar="relaciones.${i}">Quitar</button></div>${campo(`relaciones.${i}.t`, 'Relación', r.t, 'textarea')}${campo(`relaciones.${i}.f`, 'De dónde sale', r.f || '')}</div>`).join('')}
+    <button type="button" class="mas" id="rMas">Añadir una relación</button>
+  </article>`;
+  h += `<article><h3>Voz</h3>
+    <div class="fila"><label>Voz<select data-k="voces.${esc(vk)}.nube">${opcionesVoz(nube)}</select></label><label>&nbsp;<button type="button" class="secondary outline" id="pEscuchar" style="width:auto;padding:.4rem .9rem">Escuchar</button></label></div>
+    ${/^gemini:/.test(nube) ? campo(`voces.${vk}.estilo`, 'Cómo debe sonar (solo Google)', V.estilo || '', 'input', `Mejor corto, solo el acento: «${ESTILO}». Un estilo largo la vuelve teatral.`) : ''}
+    <label><input type="checkbox" role="switch" data-k="voces.${esc(vk)}.fem"${V.fem ? ' checked' : ''}> Voz de mujer cuando habla el dispositivo</label>
+    <p class="meta" id="pVozNota">${VOCES ? '' : 'La lista de Mistral no ha llegado (puede ser el límite de su cuenta); las de Google están todas.'}</p>
+  </article>`;
+  h += `<article><h3>Prompt propio <small class="meta">· opcional</small></h3>
+    <label><input type="checkbox" role="switch" id="pPropio"${propio ? ' checked' : ''}> Esta pieza usa su propio prompt, no el de las reglas</label>
+    ${propio ? `<textarea data-k="prompt" class="mono" spellcheck="false" aria-label="Prompt propio">${esc(d.prompt)}</textarea>
+    <p class="nota">Va en lugar de las secciones de las reglas elegidas arriba. Al final se añade siempre su «Formato de la respuesta», porque la pieza solo sabe leer respuestas en ese formato; lo que cambia en cada pregunta y la apertura siguen saliendo de las reglas. Entre llaves, los datos de la ficha: {pieza} {titulo} {autor} {fecha} {lugar} {dentro} {descripcion} {hechos} {relaciones}. Entre dobles corchetes, lo que solo sale si el dato existe: [[, de {autor}]].</p>`
+    : `<p class="nota">Ahora responde con las reglas «${esc(nombreReglas())}». Al marcarlo, el prompt propio empieza con el texto de esas reglas para que lo cambies.</p>`}
+  </article>`;
+  h += `<article><h3>Nota</h3>${campo('nota', 'Nota', d.nota || '', 'textarea', 'Sale al pie de la ficha («i»). No llega al modelo.')}</article>`;
+  $('editor').innerHTML = h;
+  $('pFoto').onchange = elegirFoto;
+  $('bAnadir').onclick = anadirHechos;
+  $('rMas').onclick = () => { P.datos.relaciones.push({t:'', f:''}); cambioP(true); };
+  $('pEscuchar').onclick = escuchar;
+  $('pPropio').onchange = e => {
+    if(e.target.checked) P.datos.prompt = P.promptAparte || textoReglas();
+    else { P.promptAparte = P.datos.prompt; delete P.datos.prompt; }
+    cambioP(true);
+  };
+}
+// El texto de las reglas elegidas, sin el formato: el punto de partida de un prompt propio
+const textoReglas = () => { const o = vigR(); return o ? (o.secciones || []).filter(s => s.id !== 'formato').map(s => s.t).filter(Boolean).join('\n\n') : ''; };
+// Al cambiar cómo se nombra, cambian las frases de la pantalla que la nombran
+function etiquetas(d){
+  const pieza = String(d.pieza || '').trim().toLowerCase() || 'la pieza', fem = /^(la|las) /.test(pieza), sin = pieza.replace(/^(el|la|los|las) /, '');
+  Object.assign(med(), {nombre:`${fem ? 'La propia' : 'El propio'} ${sin}`, por:`${fem ? 'la propia' : 'el propio'} ${sin}`, corto:pieza,
+    placeholder:`Pregúntale ${fem ? 'a la' : 'al'} ${sin}…`, conversa:`Conversa con ${pieza}`, te:`${pieza.charAt(0).toUpperCase() + pieza.slice(1)} te pregunta`});
+}
+// Cada campo lleva la ruta del dato dentro de la pieza («lugar.dir», «base.3.t»)
+function poner(k, v){
+  if(k === '_n'){ P.n = v; return; }
+  if(k === '_ficha'){ P.datos.ficha = v.split('\n').map(s => s.trim()).filter(Boolean).map(s => { const i = s.indexOf(':'); return i > 0 ? [s.slice(0, i).trim(), s.slice(i + 1).trim()] : [s, '']; }); return; }
+  const p = k.split('.'); let o = P.datos;
+  for(let i = 0; i < p.length - 1; i++){ if(o[p[i]] == null) o[p[i]] = /^\d+$/.test(p[i + 1]) ? [] : {}; o = o[p[i]]; }
+  const f = p[p.length - 1];
+  o[f] = v;
+  if(k === 'pieza') etiquetas(P.datos);
+  if(f === 'nube' && p[0] === 'voces'){ if(/^gemini:/.test(v)){ if(!o.estilo) o.estilo = ESTILO; } else delete o.estilo; }
+}
+$('editor').addEventListener('input', e => {
+  const k = e.target.dataset.k; if(!k || !P || e.target.tagName === 'SELECT') return;
+  poner(k, e.target.type === 'checkbox' ? e.target.checked : e.target.value);
+  cambioP(false);
+});
+$('editor').addEventListener('change', e => { const k = e.target.dataset.k; if(k && P && e.target.tagName === 'SELECT'){ poner(k, e.target.value); cambioP(true); } });
+$('editor').addEventListener('click', e => {
+  const b = e.target.closest('[data-quitar]'); if(!b || !P) return;
+  const p = b.dataset.quitar.split('.'), i = +p.pop(); let o = P.datos; p.forEach(x => { o = o[x]; });
+  o.splice(i, 1); cambioP(true);
+});
+function anadirHechos(){
+  const t = $('bTexto').value.trim(), f = $('bFuente').value.trim(); if(!t) return;
+  const base = P.datos.base, ids = new Set(base.map(b => String(b.id)));
+  let n = 0; const id = () => { do n++; while(ids.has('H' + n)); ids.add('H' + n); return 'H' + n; };
+  t.split('\n').map(s => s.replace(/^\s*(?:[-•*·]|\d{1,3}[.)])\s+/, '').replace(/\s+/g, ' ').trim()).filter(Boolean).forEach(s => base.push({id:id(), f:f || 'Sin fuente', t:s}));
+  cambioP(true);
+}
+// La foto se reduce aquí mismo; se guarda con la pieza (y, mientras, en este navegador)
+function elegirFoto(){
+  const f = this.files && this.files[0]; if(!f) return;
+  const im = new Image(); im.onload = () => {
+    const k = Math.min(1, 1600/Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement('canvas');
+    c.width = Math.round(im.naturalWidth*k); c.height = Math.round(im.naturalHeight*k);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    const url = c.toDataURL('image/jpeg', .85);
+    P.foto = {url, w:c.width, h:c.height, base64:url.split(',')[1]};
+    st.set(kF(P.id), JSON.stringify(P.foto));
+    P.datos.img = `../../img/calle/${P.id}.jpg`; P.datos.iw = c.width; P.datos.ih = c.height; delete P.datos.fondo;
+    URL.revokeObjectURL(im.src); cambioP(true);
+  };
+  im.src = URL.createObjectURL(f);
+}
+async function escuchar(){
+  const V = P.datos.voces[med().voz || 'obra'] || {}, voz = V.nube || '';
+  if(!voz){ $('pVozNota').textContent = 'Con «Solo la del dispositivo» no hay nada que pedir: se oye en «Probar».'; return; }
+  const largo = ((P.datos.inicio || {}).texto || '').trim() || `Soy ${P.datos.titulo || 'una escultura'}.`;
+  const texto = (largo.match(/^.{20,240}?[.!?](\s|$)/) || [largo.slice(0, 240)])[0].trim();
+  $('pVozNota').textContent = /^gemini:/.test(voz) ? 'Pidiendo la voz a Google… La primera vez puede tardar medio minuto.' : 'Pidiendo la voz a Mistral…';
+  try{
+    const r = await fetch(`${IA}/voz`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({texto, voz, estilo:V.estilo || ''})});
+    if(!r.ok) throw new Error(await r.text());
+    new Audio(URL.createObjectURL(await r.blob())).play(); $('pVozNota').textContent = `«${texto}»`;
+  }catch(e){ $('pVozNota').textContent = 'No ha sonado: ' + e.message; }
+}
+$('pDescartar').onclick = async () => {
+  if(!P) return;
+  if(P.nueva){
+    if(!confirm('¿Quitar esta pieza nueva sin guardarla?')) return;
+    st.set(kP(P.id), null); st.set(kF(P.id), null); pintarListas('', $('reglas').value); await abrirPieza(); abrir(); return;
+  }
+  P.datos = copia(P.pub); P.n = P.nPub; P.foto = null; st.set(kF(P.id), null); cambioP(true);
+};
+$('pGuardar').onclick = async () => {
+  if(!P) return;
+  const b = $('pGuardar'), titulo = P.datos.titulo || P.id; b.disabled = true; b.setAttribute('aria-busy', 'true');
+  let url = '';
+  try{
+    if(P.foto){
+      // Si la pieza ya tenía su foto en ese archivo, se cambia; si no, no se pisa ninguna que ya exista con ese nombre
+      const suya = P.pub && P.pub.img === `../../img/calle/${P.id}.jpg`;
+      await guardarArchivo(`img/calle/${P.id}.jpg`, P.foto.base64, `Foto: ${titulo}`, suya ? null : 'nuevo', true);
+      P.foto = null; st.set(kF(P.id), null);
+    }
+    if(P.nueva || !igual(P.datos, P.pub)){
+      const r = await guardarArchivo(`${RAIZ}piezas/${P.id}.json`, aJSON(P.datos), `${P.nueva ? 'Pieza nueva' : 'Pieza'}: ${titulo}`, P.nueva ? 'nuevo' : P.sha);
+      P.sha = r.sha; url = r.url;
+    }
+    if(P.nueva || P.n !== P.nPub){
+      const n = P.n.trim() || titulo;
+      await guardarLista(l => { const x = l.piezas.find(x => x.id === P.id); if(x) x.n = n; else l.piezas.push({id:P.id, n}); }, `Pruebas: ${P.nueva ? 'entra' : 'se renombra'} ${titulo}`);
+      P.n = P.nPub = n;
+    }
+    P.nueva = false; P.pub = copia(P.datos); cambioP(true); repintarListas();
+    $('pEstado').innerHTML = `<strong>Guardado.</strong> La web tarda unos minutos en servirlo; aquí ya se prueba con lo guardado.${url ? ` <a href="${esc(url)}" target="_blank" rel="noopener">Ver la versión</a>` : ''}`;
+  }catch(e){
+    $('pEstado').innerHTML = `<strong>No se ha guardado.</strong> ${esc(e.message)} Los cambios siguen en este navegador.`;
+    b.disabled = false;
+  }
+  b.removeAttribute('aria-busy');
+};
+// Una pieza nueva: lo mínimo de la ficha y una imagen neutra hasta que tenga foto
+$('nueva').onclick = () => {
+  const titulo = (window.prompt('Título de la pieza (por ejemplo, «Monumento al Encierro»)') || '').trim(); if(!titulo) return;
+  const sugerido = slug(titulo.replace(/^(monumento|escultura|estatua|busto|fuente)\s+(a\s+la|a\s+los|a\s+las|al|a|de\s+la|del|de)\s+/i, ''));
+  const id = slug(window.prompt('Nombre corto para el archivo y el enlace (?pieza=…): letras, números y guiones', sugerido) || ''); if(!id) return;
+  if(LISTA.piezas.some(x => x.id === id) || st.get(kP(id))){ alert(`Ya hay una pieza «${id}». Elige otro nombre.`); return; }
+  const pieza = (window.prompt('Cómo se nombra, con artículo («la escultura», «el monumento»)', 'la escultura') || 'la escultura').trim().toLowerCase();
+  const ini = (titulo.replace(/^(monumento|escultura|estatua|busto|fuente)\s+(a\s+la|a\s+los|a\s+las|al|a|de\s+la|del|de)\s+/i, '').match(/\p{L}/u) || ['?'])[0].toUpperCase();
+  const d = {
+    titulo, autor:'', fecha:'', pieza, img:'../../img/sin-imagen.jpg', lugar:{dir:''}, representa:'', tema:'',
+    dentro:'', descripcion:'', inicio:{texto:''}, zonas:{}, nube:true,
+    voces:{obra:{pitch:1, rate:1, fem:false, nube:'gemini:Charon', estilo:ESTILO}}, citas:{}, visitas:{general:{n:'Visita general', d:'Para todos'}},
+    mediadores:{obra:{desc:'en primera persona', ini, acc:'#b4483a', voz:'obra', intro:'1', presenta:[], sugiere:[], relato:[], qa:[], vts:'', rol:''}},
+    ficha:[['Pieza', titulo]], nota:'', base:[], relaciones:[]
+  };
+  P = {id, sha:null, pub:null, nueva:true, datos:d, n:titulo, nPub:'', foto:null};
+  st.set('am.urb.pieza', id);
+  etiquetas(d); cambioP(false); pintarListas(id, $('reglas').value); pintarEditor(); estadoP(); verPestana('pieza');
+};
+
+/* ======================= Reglas: el prompt común, publicado y en borrador ======================= */
+let R = null;   // {id, sha, pub, bor}
+const vigR = () => R && (R.bor || R.pub);
+const usaBor = () => !!(R && R.bor) && $('usar').checked;
+async function cargarReglas(){
+  const id = $('reglas').value; R = {id, sha:null, pub:null, bor:null};
+  try{ const f = await leerArchivo(`${RAIZ}reglas/${id}.json`); if(f){ R.pub = f.datos; R.sha = f.sha; } }catch(e){}
+  if(!R.pub) try{ R.pub = await fetch(`../reglas/${id}.json`, {cache:'no-cache'}).then(r => r.ok ? r.json() : null); }catch(e){}
+  if($('reglas').value !== id) return;
+  try{ R.bor = JSON.parse(st.get(kR(id)) || 'null'); }catch(e){}
+  if(R.bor && R.pub && igual(R.bor, R.pub)){ R.bor = null; st.set(kR(id), null); }
+  $('usar').checked = !!R.bor && st.get('am.urb.usar') !== '0';
+  pintarReglas();
+}
+function guardarBorR(){
+  if(R.bor && R.pub && igual(R.bor, R.pub)) R.bor = null;
+  const antes = !!st.get(kR(R.id));
+  st.set(kR(R.id), R.bor ? JSON.stringify(R.bor) : null);
+  if(antes !== !!R.bor) repintarListas();
+  estadoR(); pintarAviso();
+}
+// Lo editable: una sección por su id, la nota de la versión, lo que cambia en cada pregunta, la apertura y el papel por defecto
+const SUELTOS = {nota:'Qué es esta versión', visitante:'Lo que cambia en cada pregunta', apertura:'Cómo empieza', rolPorDefecto:'Papel por defecto'};
+const valorR = (o, k) => !o ? undefined : k.startsWith('sec:') ? ((o.secciones || []).find(s => s.id === k.slice(4)) || {}).t : o[k] || '';
+function ponerR(o, k, v){ if(k.startsWith('sec:')){ const s = (o.secciones || []).find(x => x.id === k.slice(4)); if(s) s.t = v; } else o[k] = v; }
+function editarR(fn){
+  if(!vigR()) return;
+  if(!R.bor){ R.bor = copia(R.pub); $('usar').checked = true; st.set('am.urb.usar', null); }   // al empezar un borrador, se prueba con él
+  fn(R.bor); guardarBorR();
+}
+function pintarReglas(){
+  const o = vigR();
+  if(!o){ $('secciones').innerHTML = '<p class="vacio">No se han podido leer estas reglas.</p>'; estadoR(); return; }
+  const bloque = (k, titulo, nota, tecnico) => {
+    const v = valorR(o, k), enPub = valorR(R.pub, k) !== undefined;
+    return `<article class="sec" data-k="${esc(k)}"><h3><span>${esc(titulo)}</span><span class="b"><button type="button" class="secondary outline" data-a="deshacer" hidden>Deshacer</button>${k.startsWith('sec:') && !tecnico ? `<button type="button" class="secondary outline" data-a="quitar">Quitar</button>` : ''}</span></h3>${nota ? `<p class="nota">${nota}${enPub ? '' : ' <strong>Sección nueva.</strong>'}</p>` : enPub ? '' : '<p class="nota"><strong>Sección nueva.</strong></p>'}<textarea spellcheck="false" aria-label="${esc(titulo)}">${esc(v)}</textarea></article>`;
+  };
+  let h = bloque('nota', SUELTOS.nota, 'Solo para ti: no llega al modelo.');
+  h += (o.secciones || []).map(s => bloque('sec:' + s.id, s.titulo || s.id, s.id === 'formato' ? 'La pieza lee la respuesta en este formato: cambiarlo puede dejarla sin responder.' : '', s.id === 'formato')).join('');
+  h += bloque('visitante', SUELTOS.visitante, 'Va al final, en el último mensaje, para que lo de arriba se pueda guardar entre preguntas. {preguntas}: lo que ya ha preguntado; {pregunta}: lo que dice ahora.');
+  h += bloque('apertura', SUELTOS.apertura, 'Lo que «oye» el modelo al empezar, si la pieza no trae escrito lo primero que dice.');
+  if(o.rolPorDefecto || JSON.stringify(o.secciones || []).includes('{rol}')) h += bloque('rolPorDefecto', SUELTOS.rolPorDefecto, 'Lo que va en {rol} si la pieza no trae su propio papel.');
+  $('secciones').innerHTML = h;
+  estadoR();
+}
+function estadoR(){
+  if(!vigR()){ $('rEstado').textContent = 'No se han podido leer estas reglas.'; $('usar').disabled = $('rDescartar').disabled = $('rGuardar').disabled = $('rNueva').disabled = true; return; }
+  $('rEstado').innerHTML = R.bor ? `<strong>Borrador sin guardar</strong> de las reglas «${esc(nombreReglas(R.id))}».` : `Reglas «${esc(nombreReglas(R.id))}»${R.pub && R.pub.version ? ', versión ' + esc(R.pub.version) : ''}. Sin cambios.`;
+  $('usar').disabled = $('rDescartar').disabled = $('rGuardar').disabled = !R.bor; $('rNueva').disabled = false;
+  document.querySelectorAll('#secciones .sec').forEach(a => {
+    const k = a.dataset.k, v = valorR(R.bor || R.pub, k), p = valorR(R.pub, k);
+    const cambiada = !!R.bor && p !== undefined && v !== p;
+    a.classList.toggle('cambiada', cambiada || (!!R.bor && p === undefined));
+    a.querySelector('[data-a="deshacer"]').hidden = !cambiada;
+  });
+}
+$('secciones').addEventListener('input', e => { const a = e.target.closest('.sec'); if(a) editarR(o => ponerR(o, a.dataset.k, e.target.value)); });
+$('secciones').addEventListener('click', e => {
+  const b = e.target.closest('button[data-a]'); if(!b) return;
+  const k = b.closest('.sec').dataset.k;
+  if(b.dataset.a === 'deshacer') editarR(o => ponerR(o, k, valorR(R.pub, k)));
+  else editarR(o => { o.secciones = o.secciones.filter(s => 'sec:' + s.id !== k); });
+  pintarReglas();
+});
+$('rSeccion').onclick = () => {
+  const titulo = (window.prompt('Título de la sección nueva (solo para ti; no llega al modelo)') || '').trim(); if(!titulo || !vigR()) return;
+  editarR(o => {
+    let id = slug(titulo) || 'seccion'; while(o.secciones.some(s => s.id === id)) id += '-2';
+    const i = o.secciones.findIndex(s => s.id === 'formato');
+    o.secciones.splice(i < 0 ? o.secciones.length : i, 0, {id, titulo, t:''});   // antes del formato, que va siempre al final
+  });
+  pintarReglas();
+};
+$('usar').onchange = () => { st.set('am.urb.usar', $('usar').checked ? null : '0'); pintarAviso(); };
+$('rDescartar').onclick = () => { if(!R || !R.bor) return; if(!confirm('¿Descartar el borrador de estas reglas?')) return; R.bor = null; guardarBorR(); pintarReglas(); };
+const cambiadasR = () => [...document.querySelectorAll('#secciones .sec.cambiada h3 > span:first-child')].map(s => s.textContent).join(', ') || 'cambios';
+$('rGuardar').onclick = async () => {
+  if(!R || !R.bor) return;
+  if(!confirm(`Las reglas «${nombreReglas(R.id)}» cambian para todas las piezas que se prueban con ellas. ¿Guardar?`)) return;
+  const b = $('rGuardar'); b.disabled = true; b.setAttribute('aria-busy', 'true');
+  const o = {...R.bor, version:hoy()};
+  try{
+    const r = await guardarArchivo(`${RAIZ}reglas/${R.id}.json`, aJSON(o), `Reglas ${R.id}: ${cambiadasR()}`, R.sha);
+    R.pub = o; R.sha = r.sha; R.bor = null; guardarBorR(); pintarReglas();
+    $('rEstado').innerHTML = `<strong>Guardadas.</strong> La web tarda unos minutos en servirlas; aquí ya se prueba con lo guardado. <a href="${esc(r.url)}" target="_blank" rel="noopener">Ver la versión</a>`;
+  }catch(e){ $('rEstado').innerHTML = `<strong>No se han guardado.</strong> ${esc(e.message)} El borrador sigue en este navegador.`; b.disabled = false; }
+  b.removeAttribute('aria-busy');
+};
+// Una versión nueva parte de lo que hay en pantalla (con el borrador, si lo hay); la que estaba se queda como estaba
+const siguiente = id => { const m = id.match(/^(.*?)(\d+)$/); if(m) return m[1] + (+m[2] + 1); const l = id.match(/^(.*\d)([a-y])$/); return l ? l[1] + String.fromCharCode(l[2].charCodeAt(0) + 1) : id + '-2'; };
+$('rNueva').onclick = async () => {
+  if(!vigR()) return;
+  const id = slug(window.prompt('Nombre corto de la versión nueva: letras, números y guiones', siguiente(R.id)) || ''); if(!id) return;
+  if(LISTA.reglas.some(x => x.id === id)){ alert(`Ya hay unas reglas «${id}».`); return; }
+  const n = (window.prompt('Cómo sale en la lista', `Reglas: ${id}`) || `Reglas: ${id}`).trim();
+  const de = R.id, o = {...copia(vigR()), version:hoy()};
+  const b = $('rNueva'); b.disabled = true; b.setAttribute('aria-busy', 'true');
+  try{
+    const r = await guardarArchivo(`${RAIZ}reglas/${id}.json`, aJSON(o), `Reglas ${id} (desde ${de})`, 'nuevo');
+    await guardarLista(l => { l.reglas.push({id, n}); }, `Pruebas: entran las reglas ${id}`);
+    st.set(kR(de), null);   // el borrador ya es la versión nueva
+    // Se abre con lo recién guardado: la web y el repositorio tardan un poco en tenerlo
+    pintarListas($('pieza').value, id); st.set('am.urb.reglas', id); R = {id, sha:r.sha, pub:o, bor:null}; $('usar').checked = false;
+    pintarReglas(); pintarAviso(); if(!$('tProbar').hidden) abrir();
+    $('rEstado').innerHTML = `<strong>Guardada como «${esc(n)}».</strong> «${esc(nombreReglas(de))}» se queda como estaba.`;
+  }catch(e){ $('rEstado').innerHTML = `<strong>No se ha guardado.</strong> ${esc(e.message)}`; }
+  b.removeAttribute('aria-busy'); b.disabled = false;
+};
+
+/* ======================= Probar: el móvil y lo que ha pasado con cada pregunta ======================= */
+const W = () => $('marco').contentWindow;
+let probadoCon = '';
+const firma = () => JSON.stringify([$('pieza').value, $('reglas').value, P && P.datos, P && P.foto && P.foto.url.length, usaBor() && R.bor, $('conVoz').checked, $('vozDe').value]);
+function abrir(){
+  entradas.length = 0; pintarTraza();
+  if(!$('pieza').value){ $('marco').removeAttribute('src'); return; }
+  // «t» hace que el marco se recargue entero y la conversación empiece de cero; «panel=1», que espere lo que le manda el panel
+  const q = new URLSearchParams({pieza:$('pieza').value, reglas:$('reglas').value, panel:'1', vozde:$('vozDe').value, t:String(Date.now())});
+  if(!$('conVoz').checked) q.set('voz', '0');
+  $('marco').src = '../?' + q;
+  probadoCon = firma(); pintarAviso();
+}
+const probarAlDia = () => { if(firma() !== probadoCon) abrir(); };
+$('marco').addEventListener('load', () => {
+  let w; try{ w = W(); if(!w.location.search) return; w.addEventListener('am:traza', e => alLlegar(e.detail)); }catch(e){ return; }
+  // La pieza tal como está en el editor y las reglas que se prueban: el motor las usa en lugar de lo publicado
+  const m = {tipo:'am:panel', piezas:{}};
+  if(P && P.id === $('pieza').value) m.piezas[P.id] = paraMotor(P.datos);
+  if(R && R.id === $('reglas').value && vigR()) m.reglas = usaBor() ? R.bor : R.pub;
+  try{ w.postMessage(m, '*'); }catch(e){}
+  if($('entero').open) setTimeout(verEntero, 1500);
+});
+$('conVoz').onchange = () => { st.set('am.urb.voz', $('conVoz').checked ? '1' : null); abrir(); };
+$('vozDe').onchange = () => { st.set('am.urb.vozde', $('vozDe').value); abrir(); };
+$('reiniciar').onclick = abrir;
+function pintarAviso(){
+  const partes = [`Probando «${P ? (P.n || P.id) : $('pieza').value}» con las reglas «${nombreReglas()}»`];
+  if(usaBor()) partes.push('<strong>con su borrador</strong>');
+  if(P && typeof P.datos.prompt === 'string') partes.push('<strong>pero con el prompt propio de la pieza</strong>');
+  if(P && hayP()) partes.push(`<strong>${P.nueva ? 'pieza nueva sin guardar' : 'con los cambios sin guardar de la pieza'}</strong>`);
+  $('aviso').innerHTML = partes.join(' · ') + '.';
+}
+// Cada pregunta, con lo que se envió y lo que volvió; se emparejan por la pregunta, porque pueden cruzarse
+const entradas = [], normal = q => String(q || '').replace(/\s+/g, ' ').trim().slice(0, 300);
+const nueva = q => { const e = {q:normal(q)}; entradas.unshift(e); return e; };
+const abierta = q => entradas.find(e => !e.cerrada && e.q === normal(q)) || nueva(q);
+const conQue = () => P && typeof P.datos.prompt === 'string' ? 'con el prompt propio' : usaBor() ? 'con el borrador de las reglas' : '';
+function alLlegar(d){
+  if(d.tipo === 'pregunta') nueva(d.q);
+  else if(d.tipo === 'envio'){ const e = abierta(d.q); e.envio = d; e.con = conQue(); }
+  else if(d.tipo === 'respuesta'){ const e = abierta(d.q); e.respuesta = d; e.cerrada = true; }
+  else if(d.tipo === 'error'){ const e = abierta(d.q); e.error = d; e.cerrada = true; }
+  else return;
+  pintarTraza();
+}
+const ERRORES = {invalid_json:'Lo que devolvió no tenía el formato pedido.', upstream_error:'El intermediario o el modelo han fallado.', sin_reglas:'No se han podido leer las reglas.', rate_limited:'Demasiadas preguntas seguidas.'};
+function pintarEntrada(e){
+  const sugInicio = e.q === '(sugerencias del inicio)', apertura = !sugInicio && /^\(/.test(e.q);
+  let h = `<article><h3>${sugInicio ? 'Sugerencias para lo primero que dice' : apertura ? 'Al empezar' : esc(e.q)}</h3>${apertura ? `<p class="meta">${esc(e.q)}</p>` : ''}`;
+  if(e.envio && !e.respuesta && !e.error) h += '<p class="meta" aria-busy="true">Esperando al modelo…</p>';
+  if(e.error) h += `<p><strong>No ha respondido.</strong> ${esc(ERRORES[e.error.codigo] || 'Código: ' + e.error.codigo)} <span class="meta">${seg(e.error.ms || 0)} s</span></p>${e.error.crudo ? `<details><summary>Lo que devolvió</summary><pre>${esc(e.error.crudo)}</pre></details>` : ''}`;
+  if(e.respuesta){
+    const r = e.respuesta, c = r.crudo || {}, partes = Array.isArray(r.partes) ? r.partes : [], dicho = partes.reduce((a, p) => a + p.t.length, 0);
+    if(partes.length) h += '<div class="resp">' + partes.map(p => `<p>${esc(p.t)}</p>`).join('') + '</div>';
+    if(Array.isArray(c.sugerencias) && c.sugerencias.length) h += `<p class="meta">Sugerencias: ${c.sugerencias.map(s => '«' + esc(s) + '»').join(' · ')}</p>`;
+    if(e.envio){
+      const env = e.envio.turnos.reduce((a, t) => a + t.content.length, 0);
+      h += `<p class="meta">${r.ms ? seg(r.ms) + ' s · ' : ''}${e.con ? '<strong>' + e.con + '</strong> · ' : ''}enviado: ${num(env)} caracteres (unos ${num(TOKENS(env))} tokens)${dicho ? ` · respuesta: ${num(dicho)} caracteres` : ''}</p>`;
+    } else h += `<p class="meta">Lo primero que dice, escrito en la ficha: no pasa por el modelo · ${num(dicho)} caracteres</p>`;
+  }
+  if(e.envio){
+    const t = e.envio.turnos, medio = t.slice(1, -1);
+    h += `<details><summary>Lo que se envió al modelo</summary>
+      <p class="meta">${e.con === 'con el prompt propio' ? 'Prompt propio de la pieza y formato' : 'Reglas con los datos de la pieza'} · ${num(t[0].content.length)} caracteres. No cambia entre preguntas.</p><pre>${esc(t[0].content)}</pre>
+      ${medio.length ? `<p class="meta">Conversación anterior (las últimas seis intervenciones)</p><pre>${esc(medio.map(x => (x.role === 'assistant' ? 'Pieza: ' : 'Visitante: ') + x.content).join('\n'))}</pre>` : ''}
+      <p class="meta">Lo que cambia en cada pregunta</p><pre>${esc(t[t.length - 1].content)}</pre></details>`;
+    if(e.respuesta) h += `<details><summary>Lo que devolvió, tal cual</summary><pre>${esc(JSON.stringify(e.respuesta.crudo, null, 1))}</pre></details>`;
+  }
+  return h + '</article>';
+}
+function pintarTraza(){
+  $('traza').innerHTML = entradas.length ? entradas.map(pintarEntrada).join('')
+    : '<p class="vacio">Toca «Empezar» en el móvil de la izquierda y pregunta. Aquí verás, de cada respuesta, el prompt que se envió al modelo y lo que devolvió.</p>';
+}
+function verEntero(){
+  let t = ''; try{ t = W().AM.prompt(); }catch(e){}
+  $('enteroT').textContent = t || 'Todavía no: espera a que la pieza esté abierta en el móvil.';
+  $('enteroM').innerHTML = t ? `${num(t.length)} caracteres, unos ${num(TOKENS(t.length))} tokens${conQue() ? ' · ' + conQue() : ''}. Lo que cambia en cada pregunta va aparte, al final (se ve en cada respuesta).` : '';
+}
+$('entero').addEventListener('toggle', () => { if($('entero').open) verEntero(); });
+
+/* ======================= Pestañas y arranque ======================= */
+function verPestana(p){
+  document.querySelectorAll('#pest [data-p]').forEach(x => x.classList.toggle('outline', x.dataset.p !== p));
+  $('tPieza').hidden = p !== 'pieza'; $('tProbar').hidden = p !== 'probar'; $('tAjustes').hidden = p !== 'ajustes';
+  st.set('am.urb.pestana', p);
+  if(p === 'probar') probarAlDia();
+  if(p === 'pieza' && P) pintarEditor();   // el texto de «Prompt propio» nombra las reglas elegidas
+}
+$('pest').onclick = e => { const b = e.target.closest('[data-p]'); if(b) verPestana(b.dataset.p); };
+$('pieza').onchange = async () => { st.set('am.urb.pieza', $('pieza').value); await abrirPieza(); if(!$('tProbar').hidden) abrir(); };
+$('reglas').onchange = async () => { st.set('am.urb.reglas', $('reglas').value); await cargarReglas(); if(P) pintarEditor(); if(!$('tProbar').hidden) abrir(); else pintarAviso(); };
+(async () => {
+  const q = new URLSearchParams(location.search);
+  $('conVoz').checked = st.get('am.urb.voz') === '1';
+  const vd = st.get('am.urb.vozde'); if(vd && [...$('vozDe').options].some(o => o.value === vd)) $('vozDe').value = vd;
+  await cargarLista();
+  pintarListas(q.get('pieza') || st.get('am.urb.pieza') || 'javier', q.get('reglas') || st.get('am.urb.reglas') || 'v2b');
+  await Promise.all([abrirPieza(), cargarReglas()]);
+  verPestana(st.get('am.urb.pestana') || 'pieza');
+})();
+</script>
+</body>
+</html>

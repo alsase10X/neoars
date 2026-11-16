@@ -1028,7 +1028,8 @@ function pintarLogo(id){ const el = $(id), ok = !!(MARCA && MARCA.logo); el.hidd
 // Dentro del panel de creación (?panel=1), la pieza espera a que el panel le pase lo que tiene sin guardar:
 // {tipo:'am:panel', sala, piezas:{id: datos}}. Lo que llegue sustituye a lo publicado; lo demás se lee como siempre
 let PANEL = null;
-const panelListo = new URLSearchParams(location.search).get('panel') === '1' && window.parent !== window
+const PANEL_MODO = new URLSearchParams(location.search).get('panel') === '1' && window.parent !== window;
+const panelListo = PANEL_MODO
   ? new Promise(ok => { const t = setTimeout(ok, 3000); window.addEventListener('message', e => { if(e.source === window.parent && e.data && e.data.tipo === 'am:panel'){ PANEL = e.data; clearTimeout(t); ok(); } }); })
   : Promise.resolve();
 async function cargarSala(){
@@ -2246,7 +2247,8 @@ function escuchado(){
 // El panel de creación puede probar un borrador sin publicarlo (window.AM_BORRADOR)
 let PROMPT = null;
 const promptListo = fetch(new URL(`reglas/${REGLAS_ID}.json`, location.href).href, {cache:'no-cache'}).then(r => r.ok ? r.json() : null).then(j => { PROMPT = j; }).catch(() => {});
-const REGLAS = () => window.AM_BORRADOR || PROMPT;
+// El panel de pruebas urbanas manda las reglas que se están probando (borrador o recién guardadas) con la pieza
+const REGLAS = () => window.AM_BORRADOR || (PANEL && PANEL.reglas) || PROMPT;
 // Lo que el panel de creación puede pedirle a la pieza abierta
 window.AM = {listo:promptListo, reglas:() => PROMPT, pieza:() => OBRA, base:() => OBRA ? BASE() : [], prompt:() => OBRA ? promptChat() : '', panel:() => PANEL};
 // Entre llaves, los datos de la pieza; entre dobles corchetes, lo que solo sale si la pieza tiene ese dato
@@ -2272,8 +2274,15 @@ function promptChat(){
     rol:MED(MEDG()).rol || R.rolPorDefecto || '',
     campoImagen:OBRA.imagenes ? ',"imagen":"identificador de imagen o null"' : ''
   };
+  // Prompt propio de la pieza (se escribe en el panel): manda sobre las reglas. El formato de la respuesta se añade siempre
+  // al final, de las reglas elegidas o el de la v2b, porque el motor solo sabe leer respuestas en ese formato
+  if(typeof OBRA.prompt === 'string' && OBRA.prompt.trim()){
+    const f = (R.secciones || []).find(x => x.id === 'formato');
+    return [plantilla(OBRA.prompt, d).trim(), plantilla(f && f.t ? f.t : FORMATO_V2B, d).trim()].filter(Boolean).join('\n\n');
+  }
   return (R.secciones || []).map(x => plantilla(x.t, d).trim()).filter(Boolean).join('\n\n');
 }
+const FORMATO_V2B = 'Responde solo con un objeto JSON, sin texto antes ni después:\n{"texto":"…","sugerencias":["…","…","…"]}\nEn "sugerencias", tres preguntas cortas que le pueden nacer ahora, escritas como las diría ella: dos siguen lo que acabas de contar; la tercera abre algo de lo que aún no habéis hablado.';
 // Lo que cambia en cada pregunta: quién es el visitante, qué ha visto y oído, y lo que pregunta. Va siempre en el último mensaje
 function visitanteChat(q){
   const R = REGLAS() || {}, oido = escuchado(), V = VIS() || {n:'Visita general'};
@@ -2956,6 +2965,7 @@ function desdeEnlace(){
 if(!SALA_ID){ $('salaT').textContent = (SALA || SALA_WEB).nombre; $('salaD').textContent = (SALA || SALA_WEB).d; }
 // Barra de pruebas (solo en esta carpeta): cambia de pieza o de reglas y recarga
 (async () => {
+  if(PANEL_MODO) return;   // dentro del panel, la pieza y las reglas se eligen en el panel
   let L = {piezas:[{id:PIEZA_ID, n:PIEZA_ID}], reglas:[{id:REGLAS_ID, n:REGLAS_ID}]};
   try{ L = await fetch('pruebas.json').then(r => r.json()); }catch(e){}
   const b = document.createElement('div'); b.id = 'pruebasBarra';

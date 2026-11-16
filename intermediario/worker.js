@@ -8,7 +8,8 @@
 //   PUT  /archivo  {ruta, contenido, mensaje}        → lo guarda en GitHub como un commit (solo desde el panel, con contraseña)
 //   GET  /                                         → estado de las claves
 //
-// El panel manda la contraseña en la cabecera X-Panel-Clave. Solo se puede guardar dentro de unidad/ y de img/.
+// El panel manda la contraseña en la cabecera X-Panel-Clave. Solo se pueden guardar datos: los de unidad/, las piezas,
+// las reglas y la lista de urbano-pruebas/, y las imágenes de img/. Nunca código.
 //
 // En Cloudflare (Settings › Variables and Secrets):
 //   PERPLEXITY_API_KEY  (Secret)  la clave de la consola de Perplexity
@@ -36,7 +37,7 @@ const MAX_VOZ = 3000;       // caracteres por locución (a 13 $ el millón, unos
 const REPO = 'alsase10X/neoars', RAMA = 'main';
 const MAX_ARCHIVO = 4000000; // caracteres de un archivo a guardar (una imagen en base64 cabe)
 // Dónde puede escribir el panel: archivos de datos de la unidad y sus imágenes, nada de código
-const RUTA_OK = /^(unidad\/(prompt\.json|(obras|salas|marcas|memorias)\/[\w./-]+\.json)|img\/[\w./-]+\.(jpe?g|png|webp))$/;
+const RUTA_OK = /^(unidad\/(prompt\.json|(obras|salas|marcas|memorias)\/[\w./-]+\.json)|urbano-pruebas\/(pruebas\.json|(piezas|reglas)\/[\w-]+\.json)|img\/[\w./-]+\.(jpe?g|png|webp))$/;
 
 export default {
   async fetch(req, env) {
