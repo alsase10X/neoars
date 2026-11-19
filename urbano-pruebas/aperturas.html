@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperturas · pruebas urbanas</title>
+<style>
+:root{color-scheme:light dark;--fondo:#fff;--texto:#1a1a1a;--suave:#666;--linea:#ddd;--marca:#0b57d0;--caja:#f4f4f4}
+@media (prefers-color-scheme:dark){:root{--fondo:#121212;--texto:#eee;--suave:#aaa;--linea:#333;--marca:#8ab4f8;--caja:#1e1e1e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--texto);font:16px/1.5 system-ui,-apple-system,sans-serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 80px}
+h1{font-size:1.4rem;margin:0 0 4px}
+h2{font-size:1.15rem;margin:36px 0 8px;padding-top:16px;border-top:2px solid var(--texto)}
+h3{font-size:.95rem;margin:22px 0 6px;color:var(--suave);font-weight:600}
+p{margin:0 0 10px}
+.suave{color:var(--suave);font-size:.9rem}
+fieldset{border:1px solid var(--linea);margin:0 0 12px;padding:10px 12px}
+legend{font-size:.85rem;color:var(--suave);padding:0 4px}
+label{display:inline-flex;align-items:center;gap:6px;margin:4px 14px 4px 0;font-size:.95rem}
+select,input[type=number]{font:inherit;padding:4px 6px;background:var(--fondo);color:var(--texto);border:1px solid var(--linea)}
+input[type=number]{width:4em}
+button{font:inherit;padding:10px 16px;border:1px solid var(--texto);background:var(--texto);color:var(--fondo);cursor:pointer}
+button.sec{background:transparent;color:var(--texto)}
+button:disabled{opacity:.4;cursor:default}
+.botones{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.inicio{background:var(--caja);padding:10px 12px;margin:0 0 6px;font-size:.95rem}
+.res{border-left:3px solid var(--linea);padding:4px 0 4px 12px;margin:10px 0}
+.res.ok{border-left-color:var(--marca)}
+.res.err{border-left-color:#d93025}
+.res ul{margin:6px 0 4px;padding-left:20px;font-size:.9rem;color:var(--suave)}
+.meta{font-size:.8rem;color:var(--suave)}
+.meta a{color:var(--marca)}
+#estado{position:sticky;top:0;background:var(--fondo);padding:6px 0;font-size:.9rem;color:var(--suave)}
+</style>
+</head>
+<body>
+<main>
+<h1>Aperturas</h1>
+<p class="suave">Genera la primera respuesta de cada pieza, sin el inicio escrito, en varios momentos y varias veces, para leerlas juntas. Usa el mismo prompt que la página de la pieza al pulsar «Empezar». Cada apertura es una llamada al modelo del proyecto.</p>
+
+<fieldset><legend>Piezas</legend><div id="piezas"></div></fieldset>
+<fieldset><legend>Reglas</legend><select id="reglas"></select> <span id="notaReglas" class="suave"></span></fieldset>
+<fieldset><legend>Momentos</legend><div id="momentos"></div></fieldset>
+<fieldset><legend>Repeticiones</legend><label>Cada combinación <input id="reps" type="number" min="1" max="5" value="2"> veces</label></fieldset>
+
+<div class="botones">
+ <button id="generar" type="button">Generar</button>
+ <button id="parar" type="button" class="sec" hidden>Parar</button>
+ <button id="copiar" type="button" class="sec" disabled>Copiar resultados</button>
+</div>
+<div id="estado"></div>
+<div id="salida"></div>
+</main>
+
+<script>
+const API = 'https://artmedium-ia.alberto-studio76.workers.dev';
+const PIEZAS_POR_DEFECTO = ['almadia-chispas', 'fueros-chispas', 'goya-c2', 'javier'];
+const MOMENTOS_POR_DEFECTO = ['sin', 'manana', 'atardecer', 'noche'];
+const PARALELAS = 2;          // llamadas a la vez
+const PALABRAS_POR_SEGUNDO = 2.5;
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;'}[c]));
+const st = {get:(k, d) => { try{ const v = localStorage.getItem(k); return v == null ? d : v; }catch(e){ return d; } }, set:(k, v) => { try{ localStorage.setItem(k, v); }catch(e){} }};
+
+/* ---- Copia de index.html: plantilla, momento, promptChat y visitanteChat para la apertura. Si cambian allí, cambiar aquí ---- */
+function plantilla(t, d){
+  const vacio = k => d[k] == null || d[k] === '';
+  return String(t || '').replace(/\[\[([\s\S]*?)\]\]/g, (m, x) => (x.match(/\{(\w+)\}/g) || []).some(c => c.slice(1, -1) in d && vacio(c.slice(1, -1))) ? '' : x)
+    .replace(/\{(\w+)\}/g, (m, k) => k in d ? (vacio(k) ? '' : String(d[k])) : m);
+}
+const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+function momentoAhora(f = new Date()){
+  const h = f.getHours(), m = String(f.getMinutes()).padStart(2, '0');
+  return `${h === 1 ? 'Es la' : 'Son las'} ${h}:${m} de un ${DIAS[f.getDay()]} de ${MESES[f.getMonth()]}.`;
+}
+function momentoTexto(R, k){
+  if(k === 'sin') return '';
+  if(k === 'ahora') return momentoAhora();
+  return (R.momentos && R.momentos[k]) || '';
+}
+const FORMATO_V2B = 'Responde solo con un objeto JSON, sin texto antes ni después:\n{"texto":"…","sugerencias":["…","…","…"]}\nEn "sugerencias", tres preguntas cortas que le pueden nacer ahora, escritas como las diría ella: dos siguen lo que acabas de contar; la tercera abre algo de lo que aún no habéis hablado.';
+// Solo los campos que usan las reglas v1 y v2 (no la base con identificadores de las reglas antiguas)
+function promptChat(R, O){
+  const d = {
+    titulo:O.titulo, autor:O.autor, fecha:O.fecha, tema:O.tema || '',
+    pieza:O.pieza || '', lugar:(O.lugar && O.lugar.dir) || O.dir || '', representa:O.representa || '',
+    zonas:Object.values(O.zonas || {}).map(z => `- ${z.n}${z.vista ? ': ' + z.vista : ''}`).join('\n'),
+    base:'', imagenes:'',
+    descripcion:O.descripcion || '', dentro:O.dentro || '',
+    hechos:(O.base || []).map(b => `- ${b.t}`).join('\n'),
+    relaciones:(O.relaciones || []).map(r => `- ${r.t || r}`).join('\n'),
+    rol:R.rolPorDefecto || '', campoImagen:''
+  };
+  if(typeof O.prompt === 'string' && O.prompt.trim()){
+    const f = (R.secciones || []).find(x => x.id === 'formato');
+    return [plantilla(O.prompt, d).trim(), plantilla(f && f.t ? f.t : FORMATO_V2B, d).trim()].filter(Boolean).join('\n\n');
+  }
+  return (R.secciones || []).map(x => plantilla(x.t, d).trim()).filter(Boolean).join('\n\n');
+}
+// Como en la página de la pieza: la apertura entra a la vez como «lo que ya te ha preguntado» y como «lo que te dice ahora»
+function visitanteChat(R, q){
+  return plantilla(R.visitante, {visita:'Visita general', lugar:'ninguno', preguntas:q, escuchado:' nada todavía', pregunta:q});
+}
+function parseJSON(t){
+  t = String(t || '').trim();
+  try{ return JSON.parse(t); }catch(e){}
+  const m = t.match(/```(?:json)?\s*([\s\S]*?)```/); if(m){ try{ return JSON.parse(m[1]); }catch(e){} }
+  const a = t.indexOf('{'), b = t.lastIndexOf('}'); if(a >= 0 && b > a){ try{ return JSON.parse(t.slice(a, b + 1)); }catch(e){} }
+  return null;
+}
+/* ---- Fin de la copia ---- */
+
+const leer = url => fetch(url, {cache:'no-cache'}).then(r => { if(!r.ok) throw new Error(url); return r.json(); });
+const NOMBRES_MOMENTO = {sin:'Sin momento', ahora:'Ahora (reloj del móvil)', manana:'Mañana', atardecer:'Atardecer', noche:'Noche'};
+let LISTA = {piezas:[], reglas:[]}, R = null, corriendo = null, RESULTADOS = null;
+
+async function iniciar(){
+  try{ LISTA = await leer('pruebas.json'); }catch(e){ $('estado').textContent = 'No se ha podido leer pruebas.json.'; return; }
+  const elegidas = (st.get('am.aperturas.piezas', '') || PIEZAS_POR_DEFECTO.join(',')).split(',');
+  $('piezas').innerHTML = LISTA.piezas.map(p => `<label><input type="checkbox" value="${esc(p.id)}"${elegidas.includes(p.id) ? ' checked' : ''}> ${esc(p.n)}</label>`).join('');
+  const regla = st.get('am.aperturas.reglas', 'v2b-momento');
+  $('reglas').innerHTML = LISTA.reglas.map(r => `<option value="${esc(r.id)}"${r.id === regla ? ' selected' : ''}>${esc(r.n)}</option>`).join('');
+  $('reglas').onchange = cargarReglas;
+  await cargarReglas();
+  try{ const g = JSON.parse(st.get('am.aperturas.ultimo', 'null')); if(g && g.items){ RESULTADOS = g; pintar(); $('copiar').disabled = false; $('estado').textContent = `Última prueba: ${g.fecha}.`; } }catch(e){}
+}
+async function cargarReglas(){
+  const id = $('reglas').value; st.set('am.aperturas.reglas', id);
+  try{ R = await leer(`reglas/${id}.json`); }catch(e){ R = null; $('notaReglas').textContent = 'No se han podido leer estas reglas.'; return; }
+  const conMomento = /\{momento\}/.test(R.apertura || '');
+  const claves = conMomento ? ['sin', 'ahora', ...Object.keys(R.momentos || {})] : ['sin'];
+  const elegidos = (st.get('am.aperturas.momentos', '') || MOMENTOS_POR_DEFECTO.join(',')).split(',');
+  $('momentos').innerHTML = claves.map(k => {
+    const t = k === 'sin' || k === 'ahora' ? '' : ' · ' + R.momentos[k];
+    return `<label><input type="checkbox" value="${k}"${elegidos.includes(k) || claves.length === 1 ? ' checked' : ''}> ${esc(NOMBRES_MOMENTO[k] || k)}<span class="suave">${esc(t)}</span></label>`;
+  }).join('');
+  $('notaReglas').textContent = conMomento ? '' : 'Estas reglas no llevan momento en la apertura.';
+}
+const marcados = id => [...document.querySelectorAll(`#${id} input:checked`)].map(i => i.value);
+
+$('generar').onclick = async () => {
+  const piezas = marcados('piezas'), momentos = marcados('momentos'), reps = Math.max(1, Math.min(5, +$('reps').value || 1));
+  if(!R || !piezas.length || !momentos.length){ $('estado').textContent = 'Elige al menos una pieza y un momento.'; return; }
+  st.set('am.aperturas.piezas', piezas.join(',')); st.set('am.aperturas.momentos', momentos.join(','));
+  const fichas = {};
+  for(const id of piezas){ try{ fichas[id] = await leer(`piezas/${id}.json`); }catch(e){ $('estado').textContent = `No se ha podido leer la pieza ${id}.`; return; } }
+  const ahora = new Date();
+  RESULTADOS = {
+    fecha:ahora.toLocaleString('es-ES'), reglas:$('reglas').value,
+    piezas:piezas.map(id => ({id, n:(LISTA.piezas.find(p => p.id === id) || {}).n || id, inicio:(fichas[id].inicio && fichas[id].inicio.texto) || ''})),
+    momentos:momentos.map(k => ({k, t:momentoTexto(R, k)})),
+    items:[]
+  };
+  // Primero una vuelta completa (cada pieza en cada momento) y después las repeticiones, para tener pronto algo de todo
+  for(let n = 1; n <= reps; n++) for(const p of piezas) for(const m of momentos) RESULTADOS.items.push({p, m, n, estado:'espera'});
+  pintar();
+  const ctl = corriendo = new AbortController();
+  $('generar').disabled = true; $('parar').hidden = false; $('copiar').disabled = true;
+  let hechas = 0; const total = RESULTADOS.items.length, cola = [...RESULTADOS.items];
+  const contar = () => { $('estado').textContent = `${hechas} de ${total} aperturas…`; };
+  contar();
+  const trabajar = async () => {
+    while(cola.length && !ctl.signal.aborted){
+      const it = cola.shift(); it.estado = 'pidiendo'; pintar();
+      const q = plantilla(R.apertura, {momento:momentoTexto(R, it.m)}).replace(/\s+/g, ' ').trim().slice(0, 300);
+      const turnos = [{role:'user', content:promptChat(R, fichas[it.p])}, {role:'user', content:visitanteChat(R, q)}];
+      const t0 = performance.now();
+      try{
+        const r = await fetch(API, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({input:turnos}), signal:ctl.signal});
+        const t = await r.text();
+        if(!r.ok) throw new Error(t.slice(0, 200) || 'Error ' + r.status);
+        const v = parseJSON(t); if(!v || typeof v.texto !== 'string') throw new Error('Respuesta sin JSON válido: ' + t.slice(0, 200));
+        Object.assign(it, {estado:'ok', texto:v.texto.trim(), sugerencias:Array.isArray(v.sugerencias) ? v.sugerencias.filter(x => typeof x === 'string').slice(0, 3) : [], ms:Math.round(performance.now() - t0)});
+      }catch(e){
+        if(ctl.signal.aborted){ it.estado = 'espera'; break; }
+        Object.assign(it, {estado:'error', error:String(e && e.message || e)});
+      }
+      hechas++; contar(); pintar(); guardar();
+    }
+  };
+  await Promise.all(Array.from({length:PARALELAS}, trabajar));
+  corriendo = null; $('generar').disabled = false; $('parar').hidden = true; $('copiar').disabled = false;
+  $('estado').textContent = ctl.signal.aborted ? `Parado: ${hechas} de ${total}.` : `Hecho: ${total} aperturas.`;
+  guardar();
+};
+$('parar').onclick = () => { if(corriendo) corriendo.abort(); };
+function guardar(){ try{ st.set('am.aperturas.ultimo', JSON.stringify(RESULTADOS)); }catch(e){} }
+
+const palabras = t => (String(t).match(/\S+/g) || []).length;
+const segundos = t => Math.round(palabras(t) / PALABRAS_POR_SEGUNDO);
+function enlace(it){ return `index.html?pieza=${encodeURIComponent(it.p)}&reglas=${encodeURIComponent(RESULTADOS.reglas)}&momento=${encodeURIComponent(it.m)}&inicio=no`; }
+function pintar(){
+  if(!RESULTADOS){ $('salida').innerHTML = ''; return; }
+  $('salida').innerHTML = RESULTADOS.piezas.map(p => {
+    const bloques = RESULTADOS.momentos.map(m => {
+      const its = RESULTADOS.items.filter(it => it.p === p.id && it.m === m.k);
+      return `<h3>${esc(NOMBRES_MOMENTO[m.k] || m.k)}${m.t ? ' · ' + esc(m.t) : ''}</h3>` + its.map(it => {
+        if(it.estado === 'ok') return `<div class="res ok"><p>${esc(it.texto)}</p>${it.sugerencias.length ? '<ul>' + it.sugerencias.map(s => `<li>${esc(s)}</li>`).join('') + '</ul>' : ''}<p class="meta">${palabras(it.texto)} palabras · ≈ ${segundos(it.texto)} s de voz · ${(it.ms / 1000).toFixed(1)} s de espera · <a href="${enlace(it)}" target="_blank" rel="noopener">seguir en la pieza</a></p></div>`;
+        if(it.estado === 'error') return `<div class="res err"><p class="meta">Error: ${esc(it.error)}</p></div>`;
+        return `<div class="res"><p class="meta">${it.estado === 'pidiendo' ? 'Generando…' : 'En espera'}</p></div>`;
+      }).join('');
+    }).join('');
+    return `<h2>${esc(p.n)}</h2><p class="suave">Inicio escrito (referencia):</p><p class="inicio">${p.inicio ? esc(p.inicio) : '<em>No tiene inicio escrito.</em>'}</p>${bloques}`;
+  }).join('');
+}
+
+$('copiar').onclick = async () => {
+  if(!RESULTADOS) return;
+  const L = [`# Aperturas · reglas ${RESULTADOS.reglas} · ${RESULTADOS.fecha}`, ''];
+  for(const p of RESULTADOS.piezas){
+    L.push(`## ${p.n}`, '', `Inicio escrito: ${p.inicio || '(no tiene)'}`, '');
+    for(const m of RESULTADOS.momentos){
+      L.push(`### ${NOMBRES_MOMENTO[m.k] || m.k}${m.t ? ' · ' + m.t : ''}`, '');
+      RESULTADOS.items.filter(it => it.p === p.id && it.m === m.k).forEach(it => {
+        if(it.estado === 'ok'){
+          L.push(`${it.n}. ${it.texto}`, `   (${palabras(it.texto)} palabras · ≈ ${segundos(it.texto)} s de voz · ${(it.ms / 1000).toFixed(1)} s de espera)`);
+          it.sugerencias.forEach(s => L.push(`   - ${s}`));
+        } else L.push(`${it.n}. (${it.estado === 'error' ? 'error: ' + it.error : 'sin hacer'})`);
+        L.push('');
+      });
+    }
+  }
+  const txt = L.join('\n');
+  try{ await navigator.clipboard.writeText(txt); $('estado').textContent = 'Copiado. Pégalo en la conversación.'; }
+  catch(e){
+    const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'width:100%;height:240px;font:12px monospace';
+    $('salida').prepend(ta); ta.select(); $('estado').textContent = 'No se ha podido copiar solo: selecciona el texto de arriba y cópialo.';
+  }
+};
+iniciar();
+</script>
+</body>
+</html>

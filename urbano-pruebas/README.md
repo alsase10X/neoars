@@ -14,6 +14,7 @@ Banco de pruebas para encontrar el prompt maestro de las piezas urbanas: una sol
 | `piezas/` | Las piezas de prueba, con el mismo formato que `unidad/obras/calle/`. |
 | `reglas/` | Las versiones de reglas. `actual` es copia de `unidad/prompt.json`. |
 | `pruebas.json` | Lo que ofrece la barra. Para añadir una pieza o unas reglas: su archivo y una línea aquí. |
+| `aperturas.html` | Genera de una vez la primera respuesta de varias piezas, en varios momentos y varias veces, sin el inicio escrito, para leerlas juntas y copiarlas. Usa el mismo prompt que la pieza al pulsar «Empezar» (copia de `plantilla`, `promptChat` y `visitanteChat`: si cambian en `index.html`, hay que cambiarlas aquí). |
 
 ## Las versiones de reglas
 
@@ -39,6 +40,8 @@ Lo que cambia entre tipos no es el prompt, sino la memoria de la pieza. En la fi
 - **Sin visita grabada.** Al pulsar «Empezar», la pieza abre la conversación con lo que genere el prompt a partir de la situación (`apertura` en cada archivo de reglas).
 - **Las sugerencias las genera el prompt**, dos al final de cada respuesta (sección «Para seguir» y campo `sugerencias` del formato). En `actual` sigue saliendo una sola, la de `sigue`.
 - **Las piezas solo traen lo que es de la pieza:** base documental, zonas, foto y la línea `representa`. La entrada y las preguntas son del prompt, no de la pieza.
+- **El momento de la apertura.** Si la `apertura` de las reglas lleva `{momento}` (como `v2b-momento`), se rellena con uno de sus `momentos` (`?momento=manana`, `atardecer`, `noche`), con la hora del móvil (`?momento=ahora`, por defecto) o con nada (`?momento=sin`). Las demás reglas no cambian.
+- **Sin el inicio escrito.** Con `?inicio=no`, la pieza no dice su `inicio` y genera la apertura, aunque la ficha lo traiga.
 
 ## Al probar
 

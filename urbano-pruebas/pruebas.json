@@ -134,6 +134,10 @@
   {
    "id": "v2b",
    "n": "Reglas: v2b (relacional + relaciones en la ficha)"
+  },
+  {
+   "id": "v2b-momento",
+   "n": "Reglas: v2b + momento (apertura: hora y «no sabe nada de ti»)"
   }
  ]
 }
