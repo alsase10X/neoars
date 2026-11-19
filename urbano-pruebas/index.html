@@ -993,6 +993,21 @@ const REGLAS_ID = PARAM('reglas') || 'actual';
 // Sin visita grabada: al empezar, la pieza abre la conversación con lo que genere el prompt
 const PRUEBAS = true;
 const APERTURA = '(Se ha parado delante de ti y ha acercado el móvil para escucharte. Todavía no ha dicho nada.)';
+// Pruebas de apertura: si la apertura de las reglas lleva {momento}, se rellena con uno de sus «momentos» (?momento=manana…),
+// con la hora del móvil (?momento=ahora, por defecto) o con nada (?momento=sin). ?inicio=no: no se dice el inicio escrito
+const MOMENTO_ID = PARAM('momento') || 'ahora';
+const SIN_INICIO = PARAM('inicio') === 'no';
+const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+function momentoAhora(f = new Date()){
+  const h = f.getHours(), m = String(f.getMinutes()).padStart(2, '0');
+  return `${h === 1 ? 'Es la' : 'Son las'} ${h}:${m} de un ${DIAS[f.getDay()]} de ${MESES[f.getMonth()]}.`;
+}
+function momento(R){
+  if(MOMENTO_ID === 'sin') return '';
+  if(MOMENTO_ID === 'ahora') return momentoAhora();
+  return (R && R.momentos && R.momentos[MOMENTO_ID]) || '';
+}
 // La marca del cliente: un archivo con su logo, tema, acento, tipografía de títulos y forma de los botones.
 // La lee la sala («marca») o el enlace (?marca=<marca>, o ?marca=ninguna para verla sin marca). La mediación no cambia
 let MARCA = null;
@@ -1559,7 +1574,7 @@ if(PRUEBAS) $('empezar').onclick = () => {
   U.started = true; U.fin = true; U.conv = true; $('inicio').hidden = true; $('flujo').hidden = false; $('abajo').hidden = false;
   $('obraV').classList.toggle('sintexto', !G.texto);
   requestAnimationFrame(() => selloCam(U.zona, false));
-  promptListo.then(() => preguntarIA((REGLAS() || {}).apertura || APERTURA, true));
+  promptListo.then(() => { const R = REGLAS() || {}; preguntarIA(plantilla(R.apertura || APERTURA, {momento:momento(R)}), true); });
 };
 
 /* ======================= El relato: cápsulas, frases, palabras ======================= */
@@ -2310,7 +2325,7 @@ async function preguntarIA(q, abre = false){
   if(!IA.modo) return aviso('Aquí no tengo un modelo conectado, así que solo puedo responder con las preguntas que ha preparado el museo. Prueba con una de estas.');
   const ctl = U.ctl = new AbortController();
   // Inicio escrito por el intérprete: la pieza lo dice tal cual y al momento; las sugerencias las escribe el modelo después
-  const inicio = abre && OBRA.inicio && typeof OBRA.inicio.texto === 'string' && OBRA.inicio.texto.trim() ? OBRA.inicio.texto.trim() : '';
+  const inicio = abre && !SIN_INICIO && OBRA.inicio && typeof OBRA.inicio.texto === 'string' && OBRA.inicio.texto.trim() ? OBRA.inicio.texto.trim() : '';
   let r = null; const t0 = performance.now();
   try{
     await listo; await promptListo;
