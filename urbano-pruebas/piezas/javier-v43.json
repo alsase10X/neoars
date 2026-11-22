@@ -1,0 +1,317 @@
+{
+ "titulo": "Monumento a San Francisco Javier",
+ "autor": "Faustino Aizkorbe",
+ "fecha": "2006",
+ "pieza": "la escultura",
+ "img": "../../img/calle/javier.jpg",
+ "iw": 400,
+ "ih": 533,
+ "encuadre": [
+  0.3,
+  0.05,
+  0.36,
+  0.4
+ ],
+ "lugar": {
+  "dir": "el parque de Yamaguchi de Pamplona"
+ },
+ "representa": "",
+ "tema": "",
+ "dentro": "a Francisco de Javier: su viaje hasta el otro lado del mundo, cómo vivió y lo que todavía une a Pamplona con Yamaguchi",
+ "descripcion": "Eres una escultura de bronce con pátina verde, de algo más de cinco metros de alto, sobre un pedestal cúbico de color óxido, de casi dos metros. Eres una figura alta y estrecha, hecha de planos lisos y curvos: arriba, una cabeza lisa, sin rasgos, cortada en un plano que mira al cielo; en el pecho, una abertura oscura, la sotana que se abre para enseñar el corazón; abajo, dos piezas largas y curvas que se estrechan hasta el pedestal, con una ranura entre ellas. En el pedestal pone SAN FRANCISCO JAVIER y 1506-1552, y debajo hay un pequeño dibujo grabado. Estás en el césped de un parque de estilo japonés, entre árboles.",
+ "zonas": {},
+ "nube": true,
+ "voces": {
+  "obra": {
+   "pitch": 0.9,
+   "rate": 0.95,
+   "fem": true,
+   "nube": "gemini:Charon",
+   "estilo": "Castilian Spanish accent from Spain."
+  }
+ },
+ "citas": {},
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia escultura",
+   "desc": "en primera persona",
+   "por": "la propia escultura",
+   "corto": "la escultura",
+   "ini": "J",
+   "acc": "#4f7a62",
+   "voz": "obra",
+   "intro": "1",
+   "presenta": [],
+   "sugiere": [],
+   "relato": [],
+   "qa": [],
+   "placeholder": "Pregúntale a la escultura…",
+   "conversa": "Conversa con la escultura",
+   "te": "La escultura te pregunta",
+   "vts": "",
+   "rol": ""
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Monumento a San Francisco Javier"
+  ],
+  [
+   "Autor",
+   "Faustino Aizkorbe"
+  ],
+  [
+   "Fecha",
+   "2006 (inaugurado el 4 de agosto)"
+  ],
+  [
+   "Material",
+   "Bronce fundido con pátina verde"
+  ],
+  [
+   "Medidas",
+   "Figura de 530 cm; pedestal de 172 × 151 × 151 cm"
+  ],
+  [
+   "Lugar",
+   "Parque de Yamaguchi, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://esculturas.pamplona.es/escultura/san-francisco-javier/\" target=\"_blank\" rel=\"noopener\">Guía de escultura urbana, Ayuntamiento de Pamplona</a>; <a href=\"https://www.unav.edu/web/catedra-patrimonio/itinerarios-visitas/monumento-pamplona/monumento-a-san-francisco-javier\" target=\"_blank\" rel=\"noopener\">Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra</a>"
+  ],
+  [
+   "Foto",
+   "Facilitada por Alberto; parece de la web de la Cátedra de Patrimonio y Arte Navarro (UNAV); licencia por confirmar"
+  ]
+ ],
+ "nota": "Javier, ficha para la v2b: lo local, la persona y la vida, y tres relaciones comprobadas. De las 30 relaciones aportadas quedan fuera las que no se han podido comprobar o eran falsas: el parque inaugurado en 2006 (fue en 1997), la «misma silueta» en otros países, los planos, mitades y brazos de la forma (sin ver en el sitio), el patronazgo del turismo, la marcha popular, la tempura y las genéricas (pátina, fundición, grúas, monzones, escorbuto, astronomía). Copia de prueba de «javier» para la v4.3: sin inicio ni prompt, para que la apertura y la voz salgan solo de las reglas.",
+ "base": [
+  {
+   "id": "J1",
+   "f": "Ayuntamiento de Pamplona, Guía de escultura urbana; Cátedra de Patrimonio y Arte Navarro (UNAV)",
+   "t": "La encargó el Ayuntamiento de Pamplona en 2006, en el quinto centenario del nacimiento de Javier, para recordar su labor misionera por el mundo. Se inauguró el 4 de agosto de 2006."
+  },
+  {
+   "id": "J2",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikidata, «Faustino Aizkorbe»",
+   "t": "La hizo Faustino Aizkorbe, escultor navarro nacido en Olloki en 1948. Antes había hecho esculturas de Javier para Yamaguchi (Japón), Sancián (China), Goa (India) y el propio pueblo de Javier. En todas se aparta de la imagen tradicional del santo."
+  },
+  {
+   "id": "J3",
+   "f": "Ayuntamiento de Pamplona, Guía de escultura urbana",
+   "t": "Aizkorbe participa de la escuela escultórica vasca de Oteiza, Chillida, Basterretxea y Mendiburu, de la que toma conceptos y técnicas. En su obra pesan sus investigaciones sobre el vacío y el espacio interior."
+  },
+  {
+   "id": "J4",
+   "f": "Universidad de Sevilla, Patrimonio Cultural, ficha 980 (busto relicario de san Francisco Javier); Universidade do Porto, Letras (vera effigies de san Francisco Javier)",
+   "t": "La imagen del santo que mira al cielo y se abre la sotana para mostrar el corazón encendido se extendió a partir de un grabado de Theodor Galle para la primera biografía de Javier, la de Orazio Torsellini (Roma, 1594)."
+  },
+  {
+   "id": "J5",
+   "f": "Vozpópuli, 2026; Ayuntamiento de Pamplona",
+   "t": "Pamplona y Yamaguchi están hermanadas desde 1980, por Javier: predicó allí en 1550 y 1551."
+  },
+  {
+   "id": "J6",
+   "f": "Ayuntamiento de Pamplona (pamplona.es), 2025",
+   "t": "El parque de Yamaguchi lo diseñaron dos paisajistas japoneses, como regalo de la ciudad hermanada, y se inauguró en 1997. Está pensado según las estaciones del año, con una cascada, una playa de arena y piedra, un puente de piedra, un lago y un palafito."
+  },
+  {
+   "id": "J7",
+   "f": "Ayuntamiento de Pamplona, 19 de mayo de 2025",
+   "t": "En mayo de 2025, por los 45 años del hermanamiento, se plantaron en el parque seis cerezos japoneses, y Yamaguchi regaló a Pamplona una placa con dos símbolos: el rombo de la familia Ōuchi, que dio permiso a Javier para predicar, y la cruz del santo."
+  },
+  {
+   "id": "J8",
+   "f": "Vozpópuli, 2026",
+   "t": "Cada 3 de noviembre, Yamaguchi celebra su Día de España con un pasacalles inspirado en los Sanfermines. Salen dos gigantes: Javier y Ōuchi Yoshitaka."
+  },
+  {
+   "id": "J9",
+   "f": "Nippon.com, «Lazos entre España y Japón en la tierra natal de San Francisco Javier»",
+   "t": "En Japón, Javier sale en los libros de historia del colegio, y hay un dulce que se llama «zabieru», como allí pronuncian Xavier."
+  },
+  {
+   "id": "J10",
+   "f": "ACI Prensa, 19 de abril de 2006",
+   "t": "En 2006, el año del quinto centenario, el antebrazo derecho de Javier viajó desde Roma y estuvo en el santuario de Javier durante las principales celebraciones."
+  },
+  {
+   "id": "P1",
+   "f": "San Francisco de Javier. Cartas selectas (Pamplona, 2006), introducción; Wikipedia, «Francisco Javier»",
+   "t": "Francisco de Jaso y Azpilicueta nació el 7 de abril de 1506 en el castillo de Javier, el menor de los hermanos, en una familia noble navarra. Su padre presidía el Consejo Real de los reyes de Navarra."
+  },
+  {
+   "id": "P2",
+   "f": "Cátedra de Patrimonio (UNAV), «Javier, un castillo para un Santo»; Príncipe de Viana 292 (2025); ACI Prensa",
+   "t": "Cuando él tenía seis años, en 1512, Castilla conquistó Navarra. Su familia estaba del lado de los reyes navarros y perdió buena parte de lo que tenía. En 1516, el cardenal Cisneros mandó derribar las defensas del castillo y desmochar sus torres."
+  },
+  {
+   "id": "P3",
+   "f": "Argia; Wikipedia, «Francisco Javier»",
+   "t": "Sus hermanos mayores, Miguel y Juan, lucharon por los reyes de Navarra. Miguel estaba entre los que defendieron el castillo de Amaiur hasta 1522."
+  },
+  {
+   "id": "P4",
+   "f": "Wikipedia, «Xavier (given name)»; I. López Mendizábal, «Etimología de Xabier», Euskera (1968)",
+   "t": "Javier, Xabier, es el nombre de su casa: el castillo y el pueblo donde nació. Se suele decir que viene del euskera etxe berri, «casa nueva»; hay filólogos que lo discuten. De ahí vienen el nombre propio Javier, Xavier, Xaver o Saverio."
+  },
+  {
+   "id": "P5",
+   "f": "Noticias de Navarra, 2011; G. Verd Conradi, Archivo Teológico Granadino (2018); Cartas selectas",
+   "t": "Se cree que su lengua materna era el euskera; hay estudiosos que lo discuten. Escribía sus cartas en castellano o en portugués."
+  },
+  {
+   "id": "P6",
+   "f": "Clairval, 2007; Biografías y Vidas",
+   "t": "En septiembre de 1525, con diecinueve años, se despidió de su madre y de sus hermanos y se fue a estudiar a París. No volvió a verlos."
+  },
+  {
+   "id": "P7",
+   "f": "America Magazine, 2015 (tradición)",
+   "t": "Se cuenta que en París era buen atleta y destacaba en el salto."
+  },
+  {
+   "id": "P8",
+   "f": "J. Uriarte, Theologica Xaveriana 160 (2006); Cartas selectas; Biografías y Vidas",
+   "t": "En el colegio de Santa Bárbara, en París, compartió habitación con Pedro Fabro y con Ignacio de Loyola, un guipuzcoano cojo y mayor que él. De aquella amistad salió la Compañía de Jesús: en 1534, en Montmartre, hicieron sus primeros votos."
+  },
+  {
+   "id": "P9",
+   "f": "Cartas selectas; EWTN",
+   "t": "El 7 de abril de 1541, el día que cumplía 35 años, salió de Lisboa hacia la India, como nuncio del papa. Llegó a Goa trece meses después, el doble de lo normal."
+  },
+  {
+   "id": "P10",
+   "f": "P. M. Lamet, «Perfil humano y gesta apostólica de Francisco de Javier» (Universidad de Deusto); Cartas selectas",
+   "t": "Las cartas que mandaba desde Asia se copiaban y se leían con pasión en las universidades y las cortes de Europa. Se conservan 137 documentos suyos, casi todos cartas."
+  },
+  {
+   "id": "P11",
+   "f": "Carta de Cochín, 15 de enero de 1544, citada por G. Verd Conradi",
+   "t": "En una carta de enero de 1544, desde la India, escribió: «Muchas veces me mueven pensamientos de ir a los Estudios de esas partes, dando voces, como hombre que tiene perdido el juicio, y principalmente a la Universidad de París»."
+  },
+  {
+   "id": "P12",
+   "f": "Wikipedia, «Anjirō»; Nippon.com",
+   "t": "En Malaca, en 1547, conoció a Anjirō, un japonés que había huido de su país. Lo que le contó de Japón le decidió a ir."
+  },
+  {
+   "id": "P13",
+   "f": "Wikipedia, «Francisco Javier»; Dialnet 6964267",
+   "t": "Llegó a Japón el 15 de agosto de 1549, a Kagoshima."
+  },
+  {
+   "id": "P14",
+   "f": "Wikipedia, «Anjirō»; G. Marino, «La sombra de Lutero en Japón», DICE (UCM, 2018); S. Ichikawa, Gakushuin (2012)",
+   "t": "Para decir Dios, Anjirō le dio la palabra Dainichi, el nombre de un buda. Durante casi dos años, Javier predicó al Dios cristiano con ese nombre. En 1551, en Yamaguchi, se dio cuenta del error y empezó a decir Deus."
+  },
+  {
+   "id": "P15",
+   "f": "T. Conlan, «Remembering the 1551 Taineiji Incident», Origins (Ohio State University)",
+   "t": "En Yamaguchi, a Javier y a sus compañeros los llamaban «hombres de la India» y los tomaban por monjes budistas."
+  },
+  {
+   "id": "P16",
+   "f": "EBSCO Research Starters, «Father Xavier Introduces Christianity to Japan»; Tabi Samurai Japan",
+   "t": "La primera vez que se presentó ante Ōuchi Yoshitaka, el señor de Yamaguchi, en 1550, iba con ropa pobre de viaje y sin regalos, y no consiguió nada."
+  },
+  {
+   "id": "P17",
+   "f": "EBSCO Research Starters; A. Pérez Riobó; The Japan Times, 24 de diciembre de 2016",
+   "t": "En 1551 volvió bien vestido, como embajador del virrey de la India, con los regalos que llevaba para el emperador: un reloj mecánico, una caja de música, anteojos, un espejo, libros, telas y una escopeta de tres cañones. Ōuchi le dio permiso para predicar y un templo vacío, el Daidō-ji."
+  },
+  {
+   "id": "P18",
+   "f": "Journal of Jesuit Studies 7 (2020); Universidad de Leiden",
+   "t": "Aquel reloj se considera el primer reloj mecánico que llegó a Japón."
+  },
+  {
+   "id": "P19",
+   "f": "Vozpópuli, 2026",
+   "t": "Según la tradición, en Yamaguchi predicaba dos veces al día junto al brocal de un pozo."
+  },
+  {
+   "id": "P20",
+   "f": "Wikipedia, «Ōuchi Yoshitaka»; EBSCO Research Starters",
+   "t": "En septiembre de 1551, Ōuchi Yoshitaka murió en una rebelión de sus vasallos. Fue el mismo mes en que Javier dejó Yamaguchi."
+  },
+  {
+   "id": "P21",
+   "f": "Biografías y Vidas; Vatican News, 3 de diciembre de 2020",
+   "t": "Salió de Japón a finales de 1551 y no volvió. Quiso entrar en China, cerrada a los extranjeros. En la isla de Sancián, a unos 14 kilómetros de la costa, esperaba un junco chino que lo llevara a Cantón, y enfermó."
+  },
+  {
+   "id": "P22",
+   "f": "Razón y Fe (Comillas), relato de Antonio de Santa Fe; ACI Prensa",
+   "t": "Murió el 3 de diciembre de 1552, con 46 años, en una cabaña de paja que no era suya. Solo lo acompañaba un chino, Antonio de Santa Fe."
+  },
+  {
+   "id": "P23",
+   "f": "Noticias de Navarra, 2011 (relato de Antonio de Santa Fe recogido por Schurhammer)",
+   "t": "Antonio contó que, al final, decía palabras «que no entendía, por no ser de nuestra lengua». Hay quien piensa que hablaba en euskera; no se puede saber."
+  },
+  {
+   "id": "P24",
+   "f": "Noticias de Navarra, 2011",
+   "t": "Desde 1995, el 3 de diciembre, el día de su muerte, es el Día Internacional del Euskera. Se eligió esa fecha por él."
+  },
+  {
+   "id": "P25",
+   "f": "The Japan Times, 24 de diciembre de 2016; Organización Nacional de Turismo de Japón",
+   "t": "En la Navidad de 1552, en Yamaguchi, sus compañeros celebraron la primera Navidad de Japón de la que queda constancia. Cada diciembre, Yamaguchi se llama a sí misma «ciudad de la Navidad»."
+  },
+  {
+   "id": "P26",
+   "f": "Paisajes sonoros históricos (Ruiz Jiménez); FSSPX News; ACI Prensa, 2024",
+   "t": "Lo enterraron en Sancián. Meses después lo llevaron a Malaca y, en 1554, a Goa, en la India, donde está su cuerpo, en la basílica del Bom Jesus. Desde 1782 se expone cada diez años; la última vez, en 2024."
+  },
+  {
+   "id": "P27",
+   "f": "ACI Prensa; JSTOR Daily; Universidade Nova de Lisboa",
+   "t": "En 1614, a petición de Roma, le cortaron el antebrazo derecho y lo llevaron a la iglesia del Gesù, en Roma, donde sigue."
+  },
+  {
+   "id": "P28",
+   "f": "ACI Prensa; Argia",
+   "t": "Lo canonizaron en 1622, el mismo día que a Ignacio de Loyola, Teresa de Jesús, Isidro Labrador y Felipe Neri."
+  },
+  {
+   "id": "P29",
+   "f": "Papa Francisco, catequesis (Opus Dei)",
+   "t": "Es patrón de las misiones, junto a Teresa de Lisieux."
+  },
+  {
+   "id": "P30",
+   "f": "Cátedra de Patrimonio (UNAV), «Rito y protocolo en la fiesta de San Fermín» (2013); Dialnet 144884; Ayuntamiento de Pamplona",
+   "t": "En 1624, las Cortes de Navarra lo declararon único patrón del reino. El Ayuntamiento de Pamplona se opuso, porque su patrón era San Fermín, y hubo pleitos durante décadas. En 1657, el papa Alejandro VII declaró patronos a los dos por igual."
+  },
+  {
+   "id": "P31",
+   "f": "Wikipedia, «Castillo de Javier»; Lexilogos; ACI Prensa, 2015",
+   "t": "Cada marzo, miles de personas van andando hasta el castillo de Javier, desde Pamplona y desde toda Navarra: son las Javieradas."
+  }
+ ],
+ "relaciones": [
+  {
+   "f": "Hechos de la ficha (P30, J1)",
+   "t": "En el siglo XVII, el Ayuntamiento de Pamplona pleiteó durante décadas para que Javier no fuera el único patrón de Navarra, porque el suyo era San Fermín. Coincide que, en 2006, fue el mismo Ayuntamiento el que encargó esta escultura."
+  },
+  {
+   "f": "Hechos de la ficha (J5, J6, J8)",
+   "t": "En Pamplona, Javier está de bronce en un parque japonés que regaló Yamaguchi. En Yamaguchi, cada 3 de noviembre, Javier sale de gigante, como en los Sanfermines, junto al señor que le dejó predicar. Cada ciudad lo tiene a la manera de la otra."
+  },
+  {
+   "f": "Analogía con hechos de la ficha (P14, P15)",
+   "t": "Durante casi dos años, en Japón, Javier llamó a Dios con el nombre de un buda, y a él lo tomaban por un monje budista llegado de la India: lo que se veía no era lo que era. A esta escultura le pasa algo parecido: parece una forma abstracta y es una de las imágenes más conocidas del santo."
+  }
+ ]
+}

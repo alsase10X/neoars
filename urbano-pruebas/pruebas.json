@@ -48,6 +48,14 @@
   {
    "id": "fueros-memoria",
    "n": "Fueros · memoria de testigo (prueba)"
+  },
+  {
+   "id": "fueros-v43",
+   "n": "Fueros · v4.3 (sin inicio escrito)"
+  },
+  {
+   "id": "javier-v43",
+   "n": "San Francisco Javier · v4.3 (sin inicio ni prompt propio)"
   }
  ],
  "reglas": [
