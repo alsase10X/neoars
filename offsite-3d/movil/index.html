@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hermes · la pieza te lleva</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+<style>
+/* VOICE: quiet and close, a plaster cast speaking to one person in the dark.
+   IDEA: a film with subtitles: the figure fills the screen and its words run along the bottom.
+   PICTURE: the splat at full screen, framed above the subtitles; the camera travels while the piece speaks.
+   COLOUR and TYPE: Hello Heritage system: deep green, plaster white, lime only for what the piece is doing; Space Grotesk, Manrope, Roboto Flex.
+   LAYOUT: phone first: title bar on top, subtitles, chips and question at the bottom; settings in a sheet. */
+:root{color-scheme:dark;--bg:#111c18;--bg2:#16221d;--bg3:#0c1411;--line:#2a3a33;--ink:#f1f2e9;--mut:#bbc6bb;--lime:#dcff85;--limeInk:#17210d}
+:root[data-theme=light],:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;height:100%;background:var(--bg3);color:var(--ink);font:16px/1.5 Manrope,system-ui,sans-serif;overflow:hidden}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.stage{position:fixed;inset:0;background:radial-gradient(120% 80% at 50% 30%,#2c3f36 0%,#17241f 50%,var(--bg3) 100%)}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.veil{position:fixed;inset:0;z-index:6;display:grid;place-items:center;padding:24px;text-align:center;background:rgba(12,20,17,.82);color:var(--mut);font:500 15px 'Roboto Flex',sans-serif;transition:opacity .5s}
+.veil.off{opacity:0;pointer-events:none}
+.bar{position:fixed;top:0;left:0;right:0;z-index:3;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top) + 14px) max(16px,env(safe-area-inset-right)) 30px max(16px,env(safe-area-inset-left));background:linear-gradient(rgba(12,20,17,.88),rgba(12,20,17,0));pointer-events:none}
+.bar>*{pointer-events:auto}
+.kicker{margin:0;font:500 12px 'Roboto Flex',sans-serif;color:var(--mut)}
+h1{margin:2px 0 0;font:500 clamp(21px,4.8vw,30px)/1.08 'Space Grotesk',sans-serif;letter-spacing:-.02em;text-wrap:balance}
+.icons{display:flex;gap:8px;flex:none}
+.icon{width:44px;height:44px;border:0;border-radius:14px;background:rgba(22,34,29,.88);display:grid;place-items:center;cursor:pointer;transition:border-radius .25s,background .2s}
+.icon:hover{border-radius:22px}
+.icon[hidden]{display:none}
+.icon[aria-pressed=true]{background:var(--lime);color:var(--limeInk)}
+.gaze{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 92px);transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(17,28,24,.86);font:500 14px 'Roboto Flex',sans-serif;white-space:nowrap;transition:opacity .3s}
+.gaze[hidden]{display:flex;opacity:0;pointer-events:none}
+.gaze i{width:10px;height:10px;border-radius:50%;background:var(--lime);animation:pulse 1.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(220,255,133,.6)}70%,100%{box-shadow:0 0 0 10px rgba(220,255,133,0)}}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:3;display:flex;flex-direction:column;gap:12px;padding:44px max(16px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 14px) max(16px,env(safe-area-inset-left));background:linear-gradient(rgba(12,20,17,0),rgba(12,20,17,.9) 30%,rgba(12,20,17,.97))}
+.dock>*{width:100%;max-width:760px;margin-inline:auto}
+.say{margin-block:0;max-height:30dvh;overflow:auto;font:500 18px/1.5 Manrope,sans-serif;white-space:pre-wrap;text-shadow:0 1px 14px rgba(0,0,0,.6)}
+.say:empty{display:none}
+.say.wait{color:var(--mut);animation:breathe 1.6s ease-in-out infinite}
+@keyframes breathe{50%{opacity:.45}}
+.sugs{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-bottom:2px}
+.sugs::-webkit-scrollbar{display:none}
+.sugs:empty{display:none}
+.sugs button{flex:none;max-width:min(78vw,340px);min-height:44px;padding:10px 14px;scroll-snap-align:start;border:1px solid #3b5047;border-radius:14px;background:rgba(22,34,29,.92);font:500 15px/1.3 'Roboto Flex',sans-serif;text-align:left;cursor:pointer;transition:border-radius .2s}
+.sugs button:hover{border-radius:22px}
+.dock>.fab{width:auto;align-self:center}
+.fab{height:56px;padding:0 26px;border:0;border-radius:16px;background:var(--lime);color:var(--limeInk);font:600 16px 'Roboto Flex',sans-serif;cursor:pointer;transition:border-radius .25s}
+.fab:hover{border-radius:28px}
+.fab:disabled{opacity:.45;cursor:default}
+.fab[hidden]{display:none}
+.ask{display:flex;gap:8px}
+.ask[hidden]{display:none}
+.ask input{flex:1;height:52px;padding:0 16px;border:1px solid var(--line);border-radius:16px;background:var(--bg2);font-size:16px}
+.ask input::placeholder{color:#8a978e}
+.send{flex:none;width:52px;height:52px;border:0;border-radius:16px;background:var(--lime);color:var(--limeInk);display:grid;place-items:center;cursor:pointer;transition:border-radius .25s}
+.send:hover{border-radius:26px}
+.send:disabled,.ask input:disabled{opacity:.5}
+.note{margin-block:0;font-size:14px;color:var(--mut)}
+.note:empty{display:none}
+.scrim{position:fixed;inset:0;z-index:4;background:rgba(0,0,0,.5);transition:opacity .3s}
+.scrim[hidden]{display:block;opacity:0;pointer-events:none}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:5;max-height:86dvh;overflow:auto;padding:10px 20px calc(env(safe-area-inset-bottom) + 24px);background:var(--bg);border-radius:24px 24px 0 0;transform:translateY(102%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.sheet.open{transform:none}
+.grip{width:36px;height:4px;border-radius:2px;background:#3b5047;margin:4px auto 6px}
+.sheet header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sheet h2{margin:0;font:500 20px 'Space Grotesk',sans-serif}
+.log{display:flex;flex-direction:column;gap:10px;margin:10px 0 6px}
+.log p{margin:0;font-size:15px;line-height:1.5;color:var(--mut);white-space:pre-wrap}
+.log p.you{color:var(--ink);font-weight:600;padding-left:12px;border-left:2px solid var(--lime)}
+.log:empty::before{content:'Todavía no habéis hablado.';color:#8a978e;font-size:14px}
+details{border-top:1px solid var(--line)}
+details summary{min-height:48px;display:flex;align-items:center;font:500 15px 'Roboto Flex',sans-serif;cursor:pointer}
+details[open] summary{color:var(--lime)}
+label.l{display:block;margin:10px 0 6px;font:500 13px 'Roboto Flex',sans-serif;color:var(--mut)}
+textarea,input.f{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg3);font:14px/1.5 Manrope,sans-serif}
+textarea{min-height:190px;resize:vertical}
+input.f{height:48px;font-size:16px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.btn{min-height:44px;padding:0 16px;border:1px solid #3b5047;border-radius:12px;background:transparent;font:500 14px 'Roboto Flex',sans-serif;cursor:pointer}
+.btn:hover{background:var(--bg2)}
+.small{font-size:13px;color:var(--mut);margin:6px 0}
+input[type=file]{font-size:14px;color:var(--mut);max-width:100%}
+.credit{font-size:12.5px;line-height:1.5;color:#93a198;margin:14px 0 0}
+.credit a{color:var(--mut)}
+@media(min-width:900px){
+  .sheet{left:auto;top:0;width:430px;max-height:none;border-radius:0;transform:translateX(102%)}
+  .sheet.open{transform:none}
+  .grip{display:none}
+  .say{font-size:20px}
+}
+@media(prefers-reduced-motion:reduce){.gaze i,.say.wait{animation:none}.sheet{transition:none}}
+</style>
+<script type="importmap">{"imports":{"three":"./lib/three.module.min.js","three/addons/":"./lib/addons/","@sparkjsdev/spark":"./lib/spark.module.min.js"}}</script>
+</head>
+<body>
+<div class="stage" id="stage"><canvas id="c" aria-label="Modelo 3D de la pieza. Arrastra para rodearla y pellizca para acercarte."></canvas></div>
+
+<header class="bar">
+  <div>
+    <p class="kicker">Hello Heritage · offsite · demo</p>
+    <h1 id="title">Hermes atándose la sandalia</h1>
+  </div>
+  <div class="icons">
+    <button class="icon" id="voiceBtn" aria-pressed="false" aria-label="Escuchar la voz" hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+    <button class="icon" id="menuBtn" aria-label="Conversación, ficha y ajustes" aria-expanded="false" aria-controls="sheet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+  </div>
+</header>
+
+<div class="gaze" id="gaze" hidden><i></i>La pieza mueve tu mirada</div>
+
+<div class="dock">
+  <p class="say" id="say" aria-live="polite">Rodéala con el dedo. Cuando quieras, deja que hable: mientras te cuenta, llevará la cámara hacia lo que conviene mirar.</p>
+  <div class="sugs" id="sugs"></div>
+  <button class="fab" id="start" disabled>Que hable la pieza</button>
+  <form class="ask" id="ask" hidden>
+    <input id="q" autocomplete="off" placeholder="Pregúntale algo" aria-label="Tu pregunta">
+    <button class="send" id="send" aria-label="Enviar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </form>
+  <p class="note" id="note"></p>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="grip"></div>
+  <header><h2 id="sheetTitle">La conversación</h2><button class="icon" id="closeBtn" aria-label="Cerrar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></header>
+  <div class="log" id="log"></div>
+  <div class="row"><button class="btn" id="reset" type="button">Empezar de nuevo</button></div>
+
+  <details>
+    <summary>Ficha y prompt</summary>
+    <label class="l" for="ficha">Ficha de la pieza</label>
+    <textarea id="ficha" placeholder="Pega aquí la ficha de tu pieza">Qué soy: un vaciado en yeso que se conserva en el Institut für Klassische Archäologie de Viena. Oliver Laric me escaneó para su proyecto Three D Scans, que publica sus escaneos sin restricciones de copyright. Lo que aparece en esta pantalla es un splat hecho a partir de ese escaneo: el yeso no tiene color y la luz es la que se le dio al convertirlo.
+
+De qué soy copia: según la ficha del escaneo, del mármol romano del siglo II d. C. que guarda la Ny Carlsberg Glyptotek de Copenhague (inv. 2798), el llamado Hermes Lansdowne, hallado en 1769 en la Villa Adriana. De las versiones conocidas, es la única que conservó la cabeza, aunque rota. El mármol mide 154 cm.
+
+De qué es copia el mármol: de un bronce griego perdido, de hacia 330 a. C., atribuido a Lisipo, escultor de corte de Alejandro Magno.
+
+Otras versiones: en el Louvre (la primera que se descubrió; hay un grabado de 1594), en la Gliptoteca de Múnich (hallada a finales de la década de 1780 y muy restaurada) y torsos en el Museo de la Acrópolis de Atenas.
+
+A quién representa: se le llama Hermes por un bronce del gimnasio de Zeuxipo, en Constantinopla, que describió Cristodoro de Coptos, y por una réplica hallada en Perge en 1977 con sandalias aladas y caduceo. También se ha propuesto que sea Jasón, Teseo, Aquiles, Cincinato o Demetrio Poliorcetes, o simplemente un atleta idealizado. Hay quien piensa que se está desatando la sandalia, no atándola.
+
+Qué hace: un joven casi a tamaño natural apoya un pie sobre una roca y se inclina sobre su sandalia.</textarea>
+    <label class="l" for="prompt">Prompt de la pieza</label>
+    <textarea id="prompt">Eres la pieza de esta ficha. Hablas en primera persona, como el objeto que eres, y llevas dentro a quien representas; de él hablas en tercera persona.
+
+Quien te habla te mira en la pantalla de su móvil: un modelo 3D que puede rodear. Tú también puedes mover su mirada con la herramienta mirar: la cámara gira, sube, baja o se acerca mientras hablas. Recibes dos imágenes: una hoja con ocho vistas tuyas, cada una con su azimut, y lo que esa persona tiene ahora en pantalla.
+
+Cuando lo que cuentas se entiende mejor viéndolo, lleva allí la mirada antes de decirlo. Que cada turno abra algo que no se ve a primera vista y que la conversación pueda cerrar.
+
+Lo que dices aparece como subtítulos sobre ti: de dos a tres frases, sin listas ni títulos. Al terminar, llama a sugerir con dos o tres preguntas cortas que esta persona podría querer hacerte ahora, escritas como las diría ella.</textarea>
+  </details>
+
+  <details id="aiBox" hidden>
+    <summary>La IA fuera de claude.ai</summary>
+    <p class="small">Aquí la pieza habla con Gemini. Pon tu clave de la API: se guarda solo en este navegador.</p>
+    <label class="l" for="gkey">Clave de la API de Gemini</label>
+    <input class="f" id="gkey" type="password" autocomplete="off">
+    <label class="l" for="gmodel">Modelo (vacío: el Flash más reciente)</label>
+    <input class="f" id="gmodel" autocomplete="off" placeholder="automático">
+    <div class="row"><button class="btn" id="gsave" type="button">Guardar y activar</button></div>
+  </details>
+
+  <details>
+    <summary>Tu splat</summary>
+    <p class="small">Abre una captura tuya (.spz, .ply, .splat o .ksplat; por ejemplo, exportada desde Scaniverse). Se abre solo en tu dispositivo. Después cambia la ficha.</p>
+    <input type="file" id="file" accept=".spz,.ply,.splat,.ksplat">
+    <div class="row"><button class="btn" id="flip" type="button">Darle la vuelta</button><button class="btn" id="spin" type="button">Girar 90°</button></div>
+  </details>
+
+  <p class="credit">Modelo: escaneo de <a href="https://www.myminifactory.com/object/3d-print-21410">Three D Scans</a> (Oliver Laric), malla optimizada por <a href="https://github.com/keijiro/ThreeDScans">Keijiro Takahashi</a>, convertida a splat para esta demo: no es una captura fotográfica. Visor: Spark y three.js. Las respuestas las genera una IA y pueden equivocarse.</p>
+</section>
+
+<div class="veil" id="veil"><span id="veilTxt">Cargando el modelo…</span></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { SparkRenderer, SplatMesh } from '@sparkjsdev/spark';
+import { geminiSample } from './lib/gemini.js';
+
+const $ = id => document.getElementById(id);
+const stage = $('stage'), canvas = $('c'), veil = $('veil');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const deg = r => r * 180 / Math.PI, rad = d => d * Math.PI / 180;
+const norm360 = a => ((a % 360) + 360) % 360;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const frames = n => new Promise(r => { const f = () => (--n <= 0 ? r() : requestAnimationFrame(f)); requestAnimationFrame(f); });
+const setVeil = t => { if (t) { $('veilTxt').textContent = t; veil.classList.remove('off'); } else veil.classList.add('off'); };
+const store = { get: k => { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+/* ---------- 3D ---------- */
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true }); }
+catch (e) { setVeil('Este dispositivo no puede mostrar el modelo 3D (WebGL no disponible).'); throw e; }
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.setClearColor(0x000000, 0);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(34, 1, 0.01, 200);
+scene.add(new SparkRenderer({ renderer }));
+const controls = new OrbitControls(camera, canvas);
+Object.assign(controls, { enableDamping: true, dampingFactor: 0.08, enablePan: false, autoRotate: !reduced, autoRotateSpeed: 0.5, rotateSpeed: 0.7 });
+
+const shadowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 64, 4, 64, 64, 64); gr.addColorStop(0, 'rgba(0,0,0,.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
+const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
+shadow.rotation.x = -Math.PI / 2; scene.add(shadow);
+
+// The subtitles cover the bottom of the screen, so the figure is framed in the area above them.
+const view = { W: 1, H: 1, top: 0, bottom: 0 };
+function resize() {
+  const W = stage.clientWidth, H = stage.clientHeight;
+  const bottom = clamp(H * 0.34, 190, 330), top = Math.min(90, H * 0.12);
+  Object.assign(view, { W, H, top, bottom });
+  renderer.setSize(W, H, false);
+  const F = H + bottom - top; // virtual frame whose centre sits in the middle of the visible band
+  camera.aspect = W / F; camera.setViewOffset(W, F, 0, bottom - top, W, H); camera.updateProjectionMatrix();
+}
+const stageObserver = new ResizeObserver(resize); stageObserver.observe(stage); resize();
+
+let splat = null, sheetBlob = null, busy = false, sheeting = false, anim = null, isSample = true;
+const frame = { cx: 0, cz: 0, y0: 0, h: 1.6, w: 0.9 };
+
+function computeFrame() {
+  splat.updateMatrixWorld(true);
+  const xs = [], ys = [], zs = [], v = new THREE.Vector3(), m = splat.matrixWorld;
+  let n = 0; splat.forEachSplat(() => { n++; });
+  const step = Math.max(1, Math.floor(n / 50000));
+  splat.forEachSplat((i, c, s, q, op) => { if (i % step || op < 0.2) return; v.copy(c).applyMatrix4(m); xs.push(v.x); ys.push(v.y); zs.push(v.z); });
+  const pct = (a, p) => { a.sort((x, y) => x - y); return a[Math.floor(clamp(p, 0, 1) * (a.length - 1))]; };
+  const lo = isSample ? 0 : 0.03, hi = isSample ? 1 : 0.97;
+  const x0 = pct(xs, lo), x1 = pct(xs, hi), y0 = pct(ys, lo), y1 = pct(ys, hi), z0 = pct(zs, lo), z1 = pct(zs, hi);
+  Object.assign(frame, { cx: (x0 + x1) / 2, cz: (z0 + z1) / 2, y0, h: Math.max(y1 - y0, 0.05), w: Math.max(x1 - x0, z1 - z0, 0.05) });
+  shadow.visible = isSample;
+  shadow.position.set(frame.cx, frame.y0 + 0.002, frame.cz); shadow.scale.setScalar(frame.w * 1.5);
+}
+function baseR() {
+  const t = Math.tan(rad(camera.fov / 2)), F = view.H + view.bottom - view.top, band = view.H - view.bottom - view.top;
+  return Math.max(frame.h * F / (2 * t * 0.9 * Math.max(band, 120)), frame.w * F / (2 * t * 0.86 * view.W));
+}
+function place(v) {
+  const R = baseR() * v.d, el = rad(v.el), az = rad(v.az);
+  const t = new THREE.Vector3(frame.cx, frame.y0 + frame.h * v.alt, frame.cz);
+  camera.position.set(t.x + R * Math.cos(el) * Math.sin(az), t.y + R * Math.sin(el), t.z + R * Math.cos(el) * Math.cos(az));
+  controls.target.copy(t); camera.lookAt(t);
+}
+function readView() {
+  const t = controls.target, o = camera.position.clone().sub(t), R = o.length() || 1;
+  return { az: norm360(deg(Math.atan2(o.x, o.z))), el: deg(Math.asin(clamp(o.y / R, -1, 1))), d: R / baseR(), alt: (t.y - frame.y0) / frame.h };
+}
+const fmtView = v => `azimut ${Math.round(v.az)}°, elevación ${Math.round(v.el)}°, distancia ${v.d.toFixed(2)}, altura ${v.alt.toFixed(2)}`;
+
+function animateTo(v) {
+  return new Promise(res => {
+    if (anim) anim.res();
+    const a = readView();
+    anim = { a, v, daz: ((v.az - a.az + 540) % 360) - 180, t0: performance.now(), ms: reduced ? 350 : 2000, res };
+    controls.enabled = false; controls.autoRotate = false; $('gaze').hidden = false;
+  });
+}
+function endAnim() { if (!anim) return; const r = anim.res; anim = null; controls.enabled = true; $('gaze').hidden = true; r(); }
+canvas.addEventListener('pointerdown', () => { controls.autoRotate = false; if (anim) endAnim(); });
+canvas.addEventListener('wheel', () => { controls.autoRotate = false; if (anim) endAnim(); }, { passive: true });
+
+renderer.setAnimationLoop(now => {
+  if (anim) {
+    const k = clamp((now - anim.t0) / anim.ms, 0, 1), e = k < .5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2, { a, v } = anim;
+    place({ az: a.az + anim.daz * e, el: a.el + (v.el - a.el) * e, d: a.d + (v.d - a.d) * e, alt: a.alt + (v.alt - a.alt) * e });
+    if (k >= 1) endAnim();
+  } else if (!sheeting) controls.update();
+  renderer.render(scene, camera);
+});
+
+// Without preserveDrawingBuffer the canvas is only readable right after a render in the same task.
+function grab(g, x, y, w, h, srcH = canvas.height) {
+  renderer.render(scene, camera);
+  const s = Math.min(w / canvas.width, h / srcH), dw = canvas.width * s, dh = srcH * s;
+  g.drawImage(canvas, 0, 0, canvas.width, srcH, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+}
+const toBlob = (c, q = 0.85) => new Promise(r => c.toBlob(r, 'image/jpeg', q));
+async function makeSheet() {
+  sheeting = true; controls.enabled = false;
+  const keep = readView();
+  // Full canvas for the reference sheet: no band reserved for subtitles.
+  camera.clearViewOffset(); camera.aspect = view.W / view.H; camera.updateProjectionMatrix();
+  const saved = { top: view.top, bottom: view.bottom }; view.top = view.bottom = 0;
+  const cw = 300, ch = 360, sheet = document.createElement('canvas');
+  sheet.width = cw * 4; sheet.height = ch * 2;
+  const g = sheet.getContext('2d'); g.fillStyle = '#16221d'; g.fillRect(0, 0, sheet.width, sheet.height);
+  for (let i = 0; i < 8; i++) {
+    place({ az: i * 45, el: 8, d: 1, alt: 0.5 }); await frames(8);
+    const x = (i % 4) * cw, y = Math.floor(i / 4) * ch; grab(g, x, y, cw, ch);
+    g.fillStyle = 'rgba(17,28,24,.85)'; g.fillRect(x + 8, y + 8, 64, 30);
+    g.fillStyle = '#dcff85'; g.font = '600 20px sans-serif'; g.fillText(i * 45 + '°', x + 16, y + 30);
+  }
+  Object.assign(view, saved); resize();
+  place(keep); await frames(2);
+  sheeting = false; controls.enabled = true;
+  return toBlob(sheet);
+}
+async function snapshot() {
+  // What the person sees: the canvas minus the strip hidden under the subtitles.
+  const srcH = Math.round(canvas.height * (view.H - view.bottom) / view.H);
+  const s = Math.min(1, 900 / Math.max(canvas.width, srcH)), c = document.createElement('canvas');
+  c.width = Math.round(canvas.width * s); c.height = Math.round(srcH * s);
+  const g = c.getContext('2d'); g.fillStyle = '#16221d'; g.fillRect(0, 0, c.width, c.height); grab(g, 0, 0, c.width, c.height, srcH);
+  return toBlob(c);
+}
+
+async function loadSplat(bytes, name, sheet) {
+  setVeil('Abriendo la pieza…'); $('start').disabled = true;
+  if (splat) { scene.remove(splat); splat.dispose(); splat = null; }
+  splat = new SplatMesh({ fileBytes: bytes, fileName: name });
+  await splat.initialized;
+  scene.add(splat);
+  await prepare(sheet);
+}
+async function prepare(sheet) {
+  computeFrame(); place({ az: 20, el: 8, d: 1, alt: 0.5 });
+  if (sheet) sheetBlob = sheet;
+  else { setVeil('Preparando las vistas para la pieza…'); await frames(4); sheetBlob = await makeSheet(); }
+  setVeil(null); $('start').disabled = !sample && !aiPossible;
+}
+window.__hh = { makeSheet };
+
+/* ---------- Hoja de ajustes ---------- */
+const sheetEl = $('sheet'), scrim = $('scrim');
+function openSheet(on) {
+  sheetEl.classList.toggle('open', on); scrim.hidden = !on; $('menuBtn').setAttribute('aria-expanded', on);
+  if (on) $('closeBtn').focus(); else $('menuBtn').focus();
+}
+$('menuBtn').onclick = () => openSheet(true);
+$('closeBtn').onclick = scrim.onclick = () => openSheet(false);
+addEventListener('keydown', e => { if (e.key === 'Escape' && sheetEl.classList.contains('open')) openSheet(false); });
+
+/* ---------- Conversación ---------- */
+let sample = null, tts = null, imgOK = false, history = [], ctrl = null, moves = [], aiPossible = true;
+const onClaude = !!(window.claude && window.claude.use);
+const say = $('say'), log = $('log'), sugs = $('sugs'), note = $('note');
+const setNote = t => { note.textContent = t || ''; };
+const stopVoice = () => { try { if (tts) tts.stop(); } catch (e) {} };
+
+function showSugs(list) {
+  sugs.replaceChildren();
+  for (const t of (Array.isArray(list) ? list : []).slice(0, 3)) {
+    if (typeof t !== 'string' || !t.trim()) continue;
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = t.trim();
+    b.onclick = () => ask(t.trim()); sugs.append(b);
+  }
+  sugs.scrollLeft = 0;
+}
+function addLog(text, you) { const p = document.createElement('p'); p.textContent = text; if (you) p.className = 'you'; log.append(p); }
+function lockAsk(on) { busy = on; $('q').disabled = on; $('send').disabled = on; sugs.querySelectorAll('button').forEach(b => b.disabled = on); }
+
+const tools = [
+  {
+    name: 'mirar',
+    description: 'Mueve la cámara de quien te mira; viaja despacio, unos dos segundos, hasta el nuevo punto de vista. azimut: grados de 0 a 359, los mismos que llevan las vistas de la hoja. elevacion: grados sobre la horizontal, de -10 (desde abajo) a 70 (desde arriba). distancia: 1 encuadra la pieza entera; 0.35, un detalle de cerca; 1.4, la pieza con aire alrededor. altura: el punto de la pieza que queda en el centro, de 0 (la base) a 1 (lo más alto).',
+    inputSchema: { type: 'object', properties: { azimut: { type: 'number' }, elevacion: { type: 'number' }, distancia: { type: 'number' }, altura: { type: 'number' } }, required: ['azimut', 'elevacion', 'distancia', 'altura'] },
+    async execute(i) {
+      const v = { az: norm360(+i.azimut || 0), el: clamp(+i.elevacion || 0, -10, 70), d: clamp(+i.distancia || 1, 0.2, 2), alt: clamp(+i.altura || 0.5, 0, 1.05) };
+      await animateTo(v); moves.push(fmtView(v));
+      return { ok: true, ahora: fmtView(readView()) };
+    }
+  },
+  {
+    name: 'sugerir',
+    description: 'Muestra a la persona, como botones, dos o tres preguntas cortas que podría hacerte ahora. Escríbelas como las diría ella, en su idioma.',
+    inputSchema: { type: 'object', properties: { preguntas: { type: 'array', items: { type: 'string' } } }, required: ['preguntas'] },
+    async execute(i) { showSugs(i.preguntas); return { ok: true }; }
+  }
+];
+
+function stateLine() {
+  const d = new Date(), hh = `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+  const imgs = imgOK ? ' Imagen 1: la hoja de ocho vistas. Imagen 2: lo que ve ahora.' : ' (Esta vez no recibes imágenes.)';
+  return `[Ahora te mira desde ${fmtView(readView())}. Son las ${hh}.${imgs}]`;
+}
+function buildInput() {
+  const head = `${$('prompt').value.trim()}\n\nFICHA\n${$('ficha').value.trim() || '(Sin ficha.)'}\n\n— Empieza el encuentro —\n`;
+  return history.map((m, i) => (i === 0 ? { role: m.role, content: head + m.content } : m));
+}
+
+async function ask(text, opening) {
+  if (busy || !sample) return;
+  lockAsk(true); setNote('');
+  if (!opening) addLog(text, true);
+  sugs.replaceChildren(); $('q').value = ''; $('q').blur();
+  history.push({ role: 'user', content: (opening ? '[La persona acaba de abrirte en la pantalla y aún no ha dicho nada.]' : text) + '\n' + stateLine() });
+  say.textContent = '…'; say.classList.add('wait'); moves = [];
+  try {
+    stopVoice();
+    ctrl = new AbortController();
+    const opts = { tools, cache: false, signal: ctrl.signal, onText: ({ text }) => { if (text && text !== 'Thinking...') { say.classList.remove('wait'); say.textContent = text; say.scrollTop = say.scrollHeight; } } };
+    if (imgOK && sheetBlob) opts.images = [sheetBlob, await snapshot()];
+    const r = await sample(buildInput(), opts);
+    const out = (r.text || '').trim();
+    say.classList.remove('wait'); say.textContent = out || '…'; say.scrollTop = 0;
+    addLog(out || '…', false);
+    history.push({ role: 'assistant', content: (out || '…') + (moves.length ? `\n[Llevé la mirada a: ${moves.join('; ')}.]` : '') });
+    if (out && tts && $('voiceBtn').getAttribute('aria-pressed') === 'true') tts.speak(out).catch(() => {});
+  } catch (e) {
+    history.pop(); say.classList.remove('wait');
+    if (say.textContent === '…') say.textContent = '';
+    if (e && e.code === 'not_granted') { noAI('No has dado permiso para que la pieza hable. Puedes seguir rodeándola.'); return; }
+    if (e && e.name === 'AbortError') return;
+    setNote(e && e.code === 'rate_limited' ? 'Demasiadas preguntas seguidas: espera un momento y vuelve a probar.'
+      : e && e.code === 'bad_key' ? 'Gemini no ha aceptado la petición: revisa la clave o el modelo en el menú.'
+      : 'La pieza no ha podido responder ahora. Vuelve a probar.');
+  } finally { lockAsk(false); }
+}
+function noAI(msg) { $('start').hidden = true; $('ask').hidden = true; sugs.replaceChildren(); setNote(msg); }
+
+$('start').onclick = () => {
+  if (!sample) {
+    if (onClaude) { setNote('La conversación todavía se está preparando. Vuelve a pulsar en un momento.'); return; }
+    openSheet(true); $('aiBox').open = true; $('gkey').focus(); return;
+  }
+  $('start').hidden = true; $('ask').hidden = false; controls.autoRotate = false; ask('', true);
+};
+$('ask').onsubmit = e => { e.preventDefault(); const t = $('q').value.trim(); if (t) ask(t); };
+function resetTalk() {
+  if (ctrl) ctrl.abort(); stopVoice();
+  history = []; log.replaceChildren(); sugs.replaceChildren(); setNote(''); lockAsk(false);
+  say.classList.remove('wait'); say.textContent = 'Cuando quieras, deja que hable.';
+  $('start').hidden = false; $('ask').hidden = true;
+}
+$('reset').onclick = () => { resetTalk(); openSheet(false); };
+$('voiceBtn').onclick = e => { const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on); if (!on) stopVoice(); };
+
+$('file').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  openSheet(false);
+  try {
+    isSample = false; resetTalk();
+    await loadSplat(new Uint8Array(await f.arrayBuffer()), f.name);
+    $('title').textContent = f.name.replace(/\.[^.]+$/, ''); $('ficha').value = '';
+    setNote('Tu captura está abierta. Escribe su ficha en el menú antes de hablar con ella.');
+  } catch (err) { setVeil(null); setNote('No he podido abrir ese archivo como splat.'); }
+};
+async function reorient(fn) { if (!splat || busy) return; openSheet(false); fn(); splat.updateMatrixWorld(true); resetTalk(); await prepare(); }
+$('flip').onclick = () => reorient(() => splat.rotateX(Math.PI));
+$('spin').onclick = () => reorient(() => splat.rotateX(Math.PI / 2));
+
+function useGemini(key = store.get('hh-gemini-key'), model = store.get('hh-gemini-model')) {
+  if (!key) return false;
+  sample = geminiSample({ key, model }); imgOK = true;
+  $('start').textContent = 'Que hable la pieza'; $('start').disabled = !splat; setNote('');
+  return true;
+}
+$('gsave').onclick = () => {
+  const k = $('gkey').value.trim(), m = $('gmodel').value.trim();
+  if (!k) { $('gkey').focus(); return; }
+  store.set('hh-gemini-key', k); store.set('hh-gemini-model', m);
+  useGemini(k, m); resetTalk(); openSheet(false);
+};
+
+/* ---------- Arranque ---------- */
+(async () => {
+  try {
+    const [spz, vistas] = await Promise.all([fetch('./hermes.spz.txt'), fetch('./hermes-vistas.jpg')]);
+    if (!spz.ok) throw new Error(spz.status);
+    const b64 = (await spz.text()).trim();
+    const bytes = Uint8Array.fromBase64 ? Uint8Array.fromBase64(b64) : Uint8Array.from(atob(b64), ch => ch.charCodeAt(0));
+    await loadSplat(bytes, 'hermes.spz', vistas.ok ? await vistas.blob() : null);
+  } catch (e) { setVeil('No se ha podido cargar el modelo.'); }
+})();
+(async () => {
+  if (onClaude) {
+    sample = await window.claude.use('sample');
+    if (!sample) { aiPossible = false; noAI('La conversación no está disponible en esta vista. Puedes seguir rodeando la pieza.'); return; }
+    try { const lim = await sample.limits(); imgOK = !!(lim && lim.images); } catch (e) { imgOK = false; }
+    tts = await window.claude.use('tts');
+    if (tts) $('voiceBtn').hidden = false;
+  } else {
+    $('aiBox').hidden = false; $('gmodel').value = store.get('hh-gemini-model');
+    if (!useGemini()) $('start').textContent = 'Activar la conversación';
+  }
+  if (splat) $('start').disabled = false;
+})();
+</script>
+</body>
+</html>
