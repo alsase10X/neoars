@@ -11,7 +11,7 @@
 <style>
 /* VOICE: quiet and close, a plaster cast speaking to one person in the dark.
    IDEA: a film with subtitles: the figure fills the screen and its words run along the bottom.
-   PICTURE: the splat at full screen, framed above the subtitles; the camera travels while the piece speaks.
+   PICTURE: the 3D piece at full screen, framed above the subtitles; the camera travels while the piece speaks.
    COLOUR and TYPE: Hello Heritage system: deep green, plaster white, lime only for what the piece is doing; Space Grotesk, Manrope, Roboto Flex.
    LAYOUT: phone first: title bar on top, subtitles, chips and question at the bottom; settings in a sheet. */
 :root{color-scheme:dark;--bg:#111c18;--bg2:#16221d;--bg3:#0c1411;--line:#2a3a33;--ink:#f1f2e9;--mut:#bbc6bb;--lime:#dcff85;--limeInk:#17210d}
@@ -166,9 +166,9 @@ Lo que dices aparece como subtítulos sobre ti: de dos a tres frases, sin listas
   </details>
 
   <details>
-    <summary>Tu splat</summary>
-    <p class="small">Abre una captura tuya (.spz, .ply, .splat o .ksplat; por ejemplo, exportada desde Scaniverse). Se abre solo en tu dispositivo. Después cambia la ficha.</p>
-    <input type="file" id="file" accept=".spz,.ply,.splat,.ksplat">
+    <summary>Tu modelo 3D</summary>
+    <p class="small">Abre una captura tuya o un modelo que ya exista: un splat (.spz, .ply, .splat o .ksplat, por ejemplo exportado desde Scaniverse) o una malla (.glb, o .gltf con todo dentro; de Sketchfab, descárgalo en GLB). Se abre solo en tu dispositivo. Después cambia la ficha.</p>
+    <input type="file" id="file" accept=".spz,.ply,.splat,.ksplat,.glb,.gltf">
     <div class="row"><button class="btn" id="flip" type="button">Darle la vuelta</button><button class="btn" id="spin" type="button">Girar 90°</button></div>
   </details>
 
@@ -221,20 +221,27 @@ function resize() {
 }
 const stageObserver = new ResizeObserver(resize); stageObserver.observe(stage); resize();
 
-let splat = null, sheetBlob = null, busy = false, sheeting = false, anim = null, isSample = true;
+let piece = null, kind = 'splat', sheetBlob = null, busy = false, sheeting = false, anim = null, isSample = true;
 const frame = { cx: 0, cz: 0, y0: 0, h: 1.6, w: 0.9 };
 
 function computeFrame() {
-  splat.updateMatrixWorld(true);
-  const xs = [], ys = [], zs = [], v = new THREE.Vector3(), m = splat.matrixWorld;
-  let n = 0; splat.forEachSplat(() => { n++; });
-  const step = Math.max(1, Math.floor(n / 50000));
-  splat.forEachSplat((i, c, s, q, op) => { if (i % step || op < 0.2) return; v.copy(c).applyMatrix4(m); xs.push(v.x); ys.push(v.y); zs.push(v.z); });
-  const pct = (a, p) => { a.sort((x, y) => x - y); return a[Math.floor(clamp(p, 0, 1) * (a.length - 1))]; };
-  const lo = isSample ? 0 : 0.03, hi = isSample ? 1 : 0.97;
-  const x0 = pct(xs, lo), x1 = pct(xs, hi), y0 = pct(ys, lo), y1 = pct(ys, hi), z0 = pct(zs, lo), z1 = pct(zs, hi);
+  piece.updateMatrixWorld(true);
+  let x0, x1, y0, y1, z0, z1;
+  if (kind === 'mesh') {
+    const b = new THREE.Box3().setFromObject(piece);
+    [x0, y0, z0] = b.min.toArray(); [x1, y1, z1] = b.max.toArray();
+  } else {
+    // Splat captures carry stray splats around them: frame the central 94 %.
+    const xs = [], ys = [], zs = [], v = new THREE.Vector3(), m = piece.matrixWorld;
+    let n = 0; piece.forEachSplat(() => { n++; });
+    const step = Math.max(1, Math.floor(n / 50000));
+    piece.forEachSplat((i, c, s, q, op) => { if (i % step || op < 0.2) return; v.copy(c).applyMatrix4(m); xs.push(v.x); ys.push(v.y); zs.push(v.z); });
+    const pct = (a, p) => { a.sort((x, y) => x - y); return a[Math.floor(clamp(p, 0, 1) * (a.length - 1))]; };
+    const lo = isSample ? 0 : 0.03, hi = isSample ? 1 : 0.97;
+    x0 = pct(xs, lo); x1 = pct(xs, hi); y0 = pct(ys, lo); y1 = pct(ys, hi); z0 = pct(zs, lo); z1 = pct(zs, hi);
+  }
   Object.assign(frame, { cx: (x0 + x1) / 2, cz: (z0 + z1) / 2, y0, h: Math.max(y1 - y0, 0.05), w: Math.max(x1 - x0, z1 - z0, 0.05) });
-  shadow.visible = isSample;
+  shadow.visible = isSample || kind === 'mesh';
   shadow.position.set(frame.cx, frame.y0 + 0.002, frame.cz); shadow.scale.setScalar(frame.w * 1.5);
 }
 function baseR() {
@@ -310,13 +317,53 @@ async function snapshot() {
   return toBlob(c);
 }
 
+function disposePiece() {
+  if (!piece) return;
+  scene.remove(piece);
+  if (kind === 'splat') piece.dispose();
+  else piece.traverse(o => {
+    if (o.geometry) o.geometry.dispose();
+    for (const mat of [].concat(o.material || [])) { for (const k in mat) if (mat[k] && mat[k].isTexture) mat[k].dispose(); mat.dispose(); }
+  });
+  piece = null;
+}
+// Meshes need light; splats carry their own. One piece is shown at a time.
+let lights = null, envTex = null;
+async function meshLight(on) {
+  if (on && !lights) {
+    lights = new THREE.Group();
+    lights.add(new THREE.HemisphereLight(0xf1f2e9, 0x1a2620, 0.8));
+    const key = new THREE.DirectionalLight(0xffffff, 1.8); key.position.set(-2, 4, 3); lights.add(key);
+    const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
+    envTex = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+  }
+  if (lights) { if (on) scene.add(lights); else scene.remove(lights); }
+  scene.environment = on ? envTex : null; scene.environmentIntensity = 0.7;
+  renderer.toneMapping = on ? THREE.ACESFilmicToneMapping : THREE.NoToneMapping;
+}
 async function loadSplat(bytes, name, sheet) {
   setVeil('Abriendo la pieza…'); $('start').disabled = true;
-  if (splat) { scene.remove(splat); splat.dispose(); splat = null; }
-  splat = new SplatMesh({ fileBytes: bytes, fileName: name });
-  await splat.initialized;
-  scene.add(splat);
+  disposePiece(); await meshLight(false); kind = 'splat';
+  piece = new SplatMesh({ fileBytes: bytes, fileName: name });
+  await piece.initialized;
+  scene.add(piece);
   await prepare(sheet);
+}
+async function loadMesh(buffer) {
+  setVeil('Abriendo la pieza…'); $('start').disabled = true;
+  const [{ GLTFLoader }, { DRACOLoader }, { MeshoptDecoder }] = await Promise.all([
+    import('three/addons/loaders/GLTFLoader.js'), import('three/addons/loaders/DRACOLoader.js'), import('three/addons/libs/meshopt_decoder.module.js')]);
+  const loader = new GLTFLoader(), draco = new DRACOLoader();
+  draco.setDecoderPath(new URL('./lib/addons/libs/draco/', location.href).href);
+  loader.setDRACOLoader(draco); loader.setMeshoptDecoder(MeshoptDecoder);
+  const gltf = await loader.parseAsync(buffer, '');
+  const model = gltf.scene || gltf.scenes[0];
+  // Units vary from file to file (metres, millimetres…): bring the model to about two metres.
+  const size = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
+  model.scale.multiplyScalar(2 / Math.max(size.x, size.y, size.z, 1e-6));
+  disposePiece(); kind = 'mesh'; piece = model;
+  scene.add(piece); await meshLight(true);
+  await prepare();
 }
 async function prepare(sheet) {
   computeFrame(); place({ az: 20, el: 8, d: 1, alt: 0.5 });
@@ -436,19 +483,23 @@ $('file').onchange = async e => {
   openSheet(false);
   try {
     isSample = false; resetTalk();
-    await loadSplat(new Uint8Array(await f.arrayBuffer()), f.name);
+    const isMesh = /\.(glb|gltf)$/i.test(f.name), buf = await f.arrayBuffer();
+    if (isMesh) await loadMesh(buf); else await loadSplat(new Uint8Array(buf), f.name);
     $('title').textContent = f.name.replace(/\.[^.]+$/, ''); $('ficha').value = '';
-    setNote('Tu captura está abierta. Escribe su ficha en el menú antes de hablar con ella.');
-  } catch (err) { setVeil(null); setNote('No he podido abrir ese archivo como splat.'); }
+    setNote('Tu modelo está abierto. Escribe su ficha en el menú antes de hablar con él.');
+  } catch (err) {
+    setVeil(null); $('start').disabled = !piece;
+    setNote(/\.gltf$/i.test(f.name) ? 'No he podido abrir ese .gltf: si usa archivos aparte, prueba con la versión GLB.' : 'No he podido abrir ese archivo como modelo 3D.');
+  }
 };
-async function reorient(fn) { if (!splat || busy) return; openSheet(false); fn(); splat.updateMatrixWorld(true); resetTalk(); await prepare(); }
-$('flip').onclick = () => reorient(() => splat.rotateX(Math.PI));
-$('spin').onclick = () => reorient(() => splat.rotateX(Math.PI / 2));
+async function reorient(fn) { if (!piece || busy) return; openSheet(false); fn(); piece.updateMatrixWorld(true); resetTalk(); await prepare(); }
+$('flip').onclick = () => reorient(() => piece.rotateX(Math.PI));
+$('spin').onclick = () => reorient(() => piece.rotateX(Math.PI / 2));
 
 function useGemini(key = store.get('hh-gemini-key'), model = store.get('hh-gemini-model')) {
   if (!key) return false;
   sample = geminiSample({ key, model }); imgOK = true;
-  $('start').textContent = 'Que hable la pieza'; $('start').disabled = !splat; setNote('');
+  $('start').textContent = 'Que hable la pieza'; $('start').disabled = !piece; setNote('');
   return true;
 }
 $('gsave').onclick = () => {
@@ -479,7 +530,7 @@ $('gsave').onclick = () => {
     $('aiBox').hidden = false; $('gmodel').value = store.get('hh-gemini-model');
     if (!useGemini()) $('start').textContent = 'Activar la conversación';
   }
-  if (splat) $('start').disabled = false;
+  if (piece) $('start').disabled = false;
 })();
 </script>
 </body>

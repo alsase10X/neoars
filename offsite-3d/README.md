@@ -24,7 +24,7 @@ En cada turno la pieza recibe la ficha, el prompt, una hoja con ocho vistas suya
 
 ## Tu propia pieza
 
-En «Tu splat» se abre una captura propia (.spz, .ply, .splat o .ksplat; por ejemplo, exportada desde Scaniverse). Se carga solo en el navegador. Después hay que escribir su ficha.
+En la versión móvil, «Tu modelo 3D» abre tanto una captura propia en splat (.spz, .ply, .splat o .ksplat; por ejemplo, exportada desde Scaniverse) como un modelo de malla que ya exista (.glb, o .gltf con todo dentro; de Sketchfab, descárgalo en GLB). La IA mueve la cámara igual con los dos. Se carga solo en el navegador. Después hay que escribir su ficha. En la versión de portátil, «Tu splat» abre solo splats.
 
 ## Créditos y licencias
 
