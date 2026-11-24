@@ -134,7 +134,7 @@ input[type=file]{font-size:14px;color:var(--mut);max-width:100%}
   <details>
     <summary>Ficha y prompt</summary>
     <label class="l" for="ficha">Ficha de la pieza</label>
-    <textarea id="ficha" placeholder="Pega aquí la ficha de tu pieza">Qué soy: un vaciado en yeso que se conserva en el Institut für Klassische Archäologie de Viena. Oliver Laric me escaneó para su proyecto Three D Scans, que publica sus escaneos sin restricciones de copyright. Lo que aparece en esta pantalla es un splat hecho a partir de ese escaneo: el yeso no tiene color y la luz es la que se le dio al convertirlo.
+    <textarea id="ficha" placeholder="Pega aquí la ficha de tu pieza">Qué soy: un vaciado en yeso que se conserva en el Institut für Klassische Archäologie de Viena. Oliver Laric me escaneó para su proyecto Three D Scans, que publica sus escaneos sin restricciones de copyright. Lo que aparece en esta pantalla es el modelo 3D de ese escaneo, aligerado: el yeso no tiene color y la luz es la del visor.
 
 De qué soy copia: según la ficha del escaneo, del mármol romano del siglo II d. C. que guarda la Ny Carlsberg Glyptotek de Copenhague (inv. 2798), el llamado Hermes Lansdowne, hallado en 1769 en la Villa Adriana. De las versiones conocidas, es la única que conservó la cabeza, aunque rota. El mármol mide 154 cm.
 
@@ -172,7 +172,7 @@ Lo que dices aparece como subtítulos sobre ti: de dos a tres frases, sin listas
     <div class="row"><button class="btn" id="flip" type="button">Darle la vuelta</button><button class="btn" id="spin" type="button">Girar 90°</button></div>
   </details>
 
-  <p class="credit">Modelo: escaneo de <a href="https://www.myminifactory.com/object/3d-print-21410">Three D Scans</a> (Oliver Laric), malla optimizada por <a href="https://github.com/keijiro/ThreeDScans">Keijiro Takahashi</a>, convertida a splat para esta demo: no es una captura fotográfica. Visor: Spark y three.js. Las respuestas las genera una IA y pueden equivocarse.</p>
+  <p class="credit">Modelo: escaneo de <a href="https://www.myminifactory.com/object/3d-print-21410">Three D Scans</a> (Oliver Laric), malla optimizada por <a href="https://github.com/keijiro/ThreeDScans">Keijiro Takahashi</a>. Visor: three.js y, para splats, Spark. Las respuestas las genera una IA y pueden equivocarse.</p>
 </section>
 
 <div class="veil" id="veil"><span id="veilTxt">Cargando el modelo…</span></div>
@@ -180,7 +180,6 @@ Lo que dices aparece como subtítulos sobre ti: de dos a tres frases, sin listas
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { SparkRenderer, SplatMesh } from '@sparkjsdev/spark';
 import { geminiSample } from './lib/gemini.js';
 
 const $ = id => document.getElementById(id);
@@ -201,9 +200,11 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
 renderer.setClearColor(0x000000, 0);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(34, 1, 0.01, 200);
-scene.add(new SparkRenderer({ renderer }));
+// Spark (the splat renderer) is only downloaded when a splat is opened.
+let spark = null;
+async function ensureSpark() { if (!spark) { spark = await import('@sparkjsdev/spark'); scene.add(new spark.SparkRenderer({ renderer })); } return spark; }
 const controls = new OrbitControls(camera, canvas);
-Object.assign(controls, { enableDamping: true, dampingFactor: 0.08, enablePan: false, autoRotate: !reduced, autoRotateSpeed: 0.5, rotateSpeed: 0.7 });
+Object.assign(controls, { enableDamping: true, dampingFactor: 0.2, enablePan: false, autoRotate: !reduced, autoRotateSpeed: 0.6, rotateSpeed: 1 });
 
 const shadowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d'); const gr = g.createRadialGradient(64, 64, 4, 64, 64, 64); gr.addColorStop(0, 'rgba(0,0,0,.55)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
 const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
@@ -264,7 +265,7 @@ function animateTo(v) {
   return new Promise(res => {
     if (anim) anim.res();
     const a = readView();
-    anim = { a, v, daz: ((v.az - a.az + 540) % 360) - 180, t0: performance.now(), ms: reduced ? 350 : 2000, res };
+    anim = { a, v, daz: ((v.az - a.az + 540) % 360) - 180, t0: performance.now(), ms: reduced ? 300 : 1200, res };
     controls.enabled = false; controls.autoRotate = false; $('gaze').hidden = false;
   });
 }
@@ -332,24 +333,26 @@ let lights = null, envTex = null;
 async function meshLight(on) {
   if (on && !lights) {
     lights = new THREE.Group();
-    lights.add(new THREE.HemisphereLight(0xf1f2e9, 0x1a2620, 0.8));
-    const key = new THREE.DirectionalLight(0xffffff, 1.8); key.position.set(-2, 4, 3); lights.add(key);
+    lights.add(new THREE.HemisphereLight(0xf1f2e9, 0x1a2620, 0.25));
+    const key = new THREE.DirectionalLight(0xfff6e8, 2.2); key.position.set(-2.5, 3.5, 2.5); lights.add(key);
+    const rim = new THREE.DirectionalLight(0xcfe3ff, 0.6); rim.position.set(2.5, 2, -3); lights.add(rim);
     const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
     envTex = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
   }
   if (lights) { if (on) scene.add(lights); else scene.remove(lights); }
-  scene.environment = on ? envTex : null; scene.environmentIntensity = 0.7;
+  scene.environment = on ? envTex : null; scene.environmentIntensity = 0.35;
   renderer.toneMapping = on ? THREE.ACESFilmicToneMapping : THREE.NoToneMapping;
 }
 async function loadSplat(bytes, name, sheet) {
   setVeil('Abriendo la pieza…'); $('start').disabled = true;
+  const { SplatMesh } = await ensureSpark();
   disposePiece(); await meshLight(false); kind = 'splat';
   piece = new SplatMesh({ fileBytes: bytes, fileName: name });
   await piece.initialized;
   scene.add(piece);
   await prepare(sheet);
 }
-async function loadMesh(buffer) {
+async function loadMesh(buffer, sheet) {
   setVeil('Abriendo la pieza…'); $('start').disabled = true;
   const [{ GLTFLoader }, { DRACOLoader }, { MeshoptDecoder }] = await Promise.all([
     import('three/addons/loaders/GLTFLoader.js'), import('three/addons/loaders/DRACOLoader.js'), import('three/addons/libs/meshopt_decoder.module.js')]);
@@ -363,7 +366,7 @@ async function loadMesh(buffer) {
   model.scale.multiplyScalar(2 / Math.max(size.x, size.y, size.z, 1e-6));
   disposePiece(); kind = 'mesh'; piece = model;
   scene.add(piece); await meshLight(true);
-  await prepare();
+  await prepare(sheet);
 }
 async function prepare(sheet) {
   computeFrame(); place({ az: 20, el: 8, d: 1, alt: 0.5 });
@@ -405,7 +408,7 @@ function lockAsk(on) { busy = on; $('q').disabled = on; $('send').disabled = on;
 const tools = [
   {
     name: 'mirar',
-    description: 'Mueve la cámara de quien te mira; viaja despacio, unos dos segundos, hasta el nuevo punto de vista. azimut: grados de 0 a 359, los mismos que llevan las vistas de la hoja. elevacion: grados sobre la horizontal, de -10 (desde abajo) a 70 (desde arriba). distancia: 1 encuadra la pieza entera; 0.35, un detalle de cerca; 1.4, la pieza con aire alrededor. altura: el punto de la pieza que queda en el centro, de 0 (la base) a 1 (lo más alto).',
+    description: 'Mueve la cámara de quien te mira; viaja algo más de un segundo hasta el nuevo punto de vista. azimut: grados de 0 a 359, los mismos que llevan las vistas de la hoja. elevacion: grados sobre la horizontal, de -10 (desde abajo) a 70 (desde arriba). distancia: 1 encuadra la pieza entera; 0.35, un detalle de cerca; 1.4, la pieza con aire alrededor. altura: el punto de la pieza que queda en el centro, de 0 (la base) a 1 (lo más alto).',
     inputSchema: { type: 'object', properties: { azimut: { type: 'number' }, elevacion: { type: 'number' }, distancia: { type: 'number' }, altura: { type: 'number' } }, required: ['azimut', 'elevacion', 'distancia', 'altura'] },
     async execute(i) {
       const v = { az: norm360(+i.azimut || 0), el: clamp(+i.elevacion || 0, -10, 70), d: clamp(+i.distancia || 1, 0.2, 2), alt: clamp(+i.altura || 0.5, 0, 1.05) };
@@ -512,11 +515,12 @@ $('gsave').onclick = () => {
 /* ---------- Arranque ---------- */
 (async () => {
   try {
-    const [spz, vistas] = await Promise.all([fetch('./hermes.spz.txt'), fetch('./hermes-vistas.jpg')]);
-    if (!spz.ok) throw new Error(spz.status);
-    const b64 = (await spz.text()).trim();
+    // The GLB travels as base64 text because the artifact host does not serve .glb files.
+    const [glb, vistas] = await Promise.all([fetch('./hermes.glb.txt'), fetch('./hermes-vistas.jpg')]);
+    if (!glb.ok) throw new Error(glb.status);
+    const b64 = (await glb.text()).trim();
     const bytes = Uint8Array.fromBase64 ? Uint8Array.fromBase64(b64) : Uint8Array.from(atob(b64), ch => ch.charCodeAt(0));
-    await loadSplat(bytes, 'hermes.spz', vistas.ok ? await vistas.blob() : null);
+    await loadMesh(bytes.buffer, vistas.ok ? await vistas.blob() : null);
   } catch (e) { setVeil('No se ha podido cargar el modelo.'); }
 })();
 (async () => {

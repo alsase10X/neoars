@@ -2,7 +2,7 @@
 
 Una escultura en 3D (Gaussian splat) que conversa contigo y mueve la cámara hacia lo que conviene mirar mientras habla.
 
-- `movil/`: pensada primero para el móvil. Modelo a pantalla completa, lo que dice la pieza como subtítulos, preguntas sugeridas en chips y ajustes en un menú. Modelo ligero (250.000 splats) y hoja de vistas ya hecha.
+- `movil/`: pensada primero para el móvil. Modelo a pantalla completa, lo que dice la pieza como subtítulos, preguntas sugeridas en chips y ajustes en un menú. El Hermes de muestra va como malla GLB (1,2 MB), con la hoja de vistas ya hecha; el visor de splats solo se descarga si abres uno.
 - `portatil/`: primera versión, con el modelo a la izquierda y la conversación a la derecha (600.000 splats).
 
 ## Cómo verla
@@ -28,6 +28,6 @@ En la versión móvil, «Tu modelo 3D» abre tanto una captura propia en splat (
 
 ## Créditos y licencias
 
-- Modelo: escaneo del vaciado en yeso del *Hermes atándose la sandalia* (Institut für Klassische Archäologie, Viena) por Three D Scans (Oliver Laric), publicado sin restricciones de copyright; malla optimizada por Keijiro Takahashi ([keijiro/ThreeDScans](https://github.com/keijiro/ThreeDScans)). Para esta demo se convirtió la malla en splat: no es una captura fotográfica, el yeso no tiene color y la luz está horneada.
-- `hermes.spz.txt` es el archivo SPZ en base64 (el servidor de artefactos de Claude no sirve .spz).
+- Modelo: escaneo del vaciado en yeso del *Hermes atándose la sandalia* (Institut für Klassische Archäologie, Viena) por Three D Scans (Oliver Laric), publicado sin restricciones de copyright; malla optimizada por Keijiro Takahashi ([keijiro/ThreeDScans](https://github.com/keijiro/ThreeDScans)). En `movil/` va como malla GLB; en `portatil/` se convirtió en splat para probar ese formato (no es una captura fotográfica y la luz está horneada).
+- `hermes.glb.txt` y `hermes.spz.txt` son los archivos GLB y SPZ en base64, porque el servidor de artefactos de Claude no sirve .glb ni .spz.
 - Visor: [Spark](https://github.com/sparkjsdev/spark) 2.4.0 (MIT) y [three.js](https://github.com/mrdoob/three.js) r181 (MIT), incluidos en `lib/`.
