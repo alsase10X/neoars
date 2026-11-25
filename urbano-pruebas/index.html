@@ -2304,7 +2304,7 @@ function visitanteChat(q){
   return plantilla(R.visitante, {
     visita:V.n + (V.d ? ' (' + V.d + ')' : ''),
     lugar:U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno',
-    preguntas:[...U.asked].slice(-6).join(' / ') || 'ninguna',
+    preguntas:[...U.asked].slice(-10).join(' / ') || 'ninguna',
     escuchado:oido ? '\n' + oido : ' nada todavía',
     pregunta:q
   });
@@ -2332,7 +2332,7 @@ async function preguntarIA(q, abre = false){
     if(!REGLAS()) throw {code:'sin_reglas'};
     if(inicio) r = {texto:inicio, sugerencias:[]};
     else {
-      const turnos = [{role:'user', content:promptChat()}, ...U.chat.slice(-6), {role:'user', content:visitanteChat(q)}];
+      const turnos = [{role:'user', content:promptChat()}, ...U.chat.slice(-20), {role:'user', content:visitanteChat(q)}];   // los diez últimos intercambios
       traza({tipo:'envio', q, modo:IA.modo, borrador:!!window.AM_BORRADOR, turnos});
       r = await IA.json(turnos, ctl.signal);
     }
