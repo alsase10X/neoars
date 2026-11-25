@@ -1,7 +1,7 @@
 {
  "id": "javier",
  "nombre": "Francisco de Javier",
- "nota": "Despensa común de todas las estatuas de Javier. Cada hecho, una sola vez, con su fuente. uso: ficha (quién fue: va siempre en el prompt de cualquier estatua suya), chispa (lo raro o humano, para ofrecer) o fondo (lo que se sabe responder). Cada pieza elige en su campo «usa» qué chispas lleva en el prompt; las que no elige pasan a su fondo. Verificado el 17 y el 25 de noviembre de 2026.",
+ "nota": "Despensa común de todas las estatuas de Javier. Cada hecho, una sola vez, con su fuente. uso: ficha (quién fue: va siempre en el prompt de cualquier estatua suya), chispa (lo raro o humano, para ofrecer) o fondo (lo que se sabe responder). Cada pieza elige en su campo «usa» qué chispas lleva en el prompt; las que no elige pasan a su fondo. Verificado el 17 y el 25 de noviembre de 2026. Cada chispa se entiende sola, sin saber quién fue Javier ni leer las demás (25 de noviembre de 2026).",
  "hechos": [
   {
    "id": "P0",
@@ -72,7 +72,7 @@
   {
    "id": "P11",
    "uso": "chispa",
-   "t": "En una carta de enero de 1544, desde la India, escribió: «Muchas veces me mueven pensamientos de ir a los Estudios de esas partes, dando voces, como hombre que tiene perdido el juicio, y principalmente a la Universidad de París».",
+   "t": "Desde la India, en una carta de enero de 1544 a sus compañeros de Roma, se quejaba de que allí faltaba gente para enseñar y bautizar, y decía que muchas veces le daban ganas de ir a las universidades de Europa, y sobre todo a la de París, «dando voces, como hombre que tiene perdido el juicio», para que los que estudiaban allí vinieran a ayudarle.",
    "f": "Carta de Cochín, 15 de enero de 1544, citada por G. Verd Conradi"
   },
   {
@@ -108,13 +108,13 @@
   {
    "id": "P17",
    "uso": "chispa",
-   "t": "En 1551 volvió bien vestido, como embajador del virrey de la India, con los regalos que llevaba para el emperador: un reloj mecánico, una caja de música, anteojos, un espejo, libros, telas y una escopeta de tres cañones. Ōuchi le dio permiso para predicar y un templo vacío, el Daidō-ji.",
+   "t": "En 1551 volvió a presentarse ante Ōuchi Yoshitaka, el señor de Yamaguchi, pero esta vez bien vestido, como embajador del virrey de la India, y con los regalos que llevaba para el emperador: un reloj mecánico, una caja de música, anteojos, un espejo, libros, telas y una escopeta de tres cañones. Ōuchi le dio permiso para predicar y un templo vacío, el Daidō-ji.",
    "f": "EBSCO Research Starters; A. Pérez Riobó; The Japan Times, 24 de diciembre de 2016"
   },
   {
    "id": "P18",
    "uso": "chispa",
-   "t": "Aquel reloj se considera el primer reloj mecánico que llegó a Japón.",
+   "t": "El reloj mecánico que Javier regaló a Ōuchi Yoshitaka en 1551 se considera el primero que llegó a Japón.",
    "f": "Journal of Jesuit Studies 7 (2020); Universidad de Leiden"
   },
   {
@@ -138,13 +138,13 @@
   {
    "id": "P22",
    "uso": "chispa",
-   "t": "Murió el 3 de diciembre de 1552, con 46 años, en una cabaña de paja que no era suya. Solo lo acompañaba un chino, Antonio de Santa Fe.",
+   "t": "Murió el 3 de diciembre de 1552, con 46 años, en la isla de Sancián, frente a la costa de China, en una cabaña de paja que no era suya. Solo lo acompañaba un chino, Antonio de Santa Fe.",
    "f": "Razón y Fe (Comillas), relato de Antonio de Santa Fe; ACI Prensa"
   },
   {
    "id": "P23",
    "uso": "chispa",
-   "t": "Antonio contó que, al final, decía palabras «que no entendía, por no ser de nuestra lengua». Hay quien piensa que hablaba en euskera; no se puede saber.",
+   "t": "Antonio de Santa Fe, el chino que lo acompañó al morir, contó que al final decía palabras «que no entendía, por no ser de nuestra lengua». Hay quien piensa que hablaba en euskera; no se puede saber.",
    "f": "Noticias de Navarra, 2011 (relato de Antonio de Santa Fe recogido por Schurhammer)"
   },
   {
@@ -156,7 +156,7 @@
   {
    "id": "P25",
    "uso": "chispa",
-   "t": "En la Navidad de 1552, en Yamaguchi, sus compañeros celebraron la primera Navidad de Japón de la que queda constancia. Cada diciembre, Yamaguchi se llama a sí misma «ciudad de la Navidad».",
+   "t": "En la Navidad de 1552, en Yamaguchi, los jesuitas que Javier había dejado allí celebraron la primera Navidad de Japón de la que queda constancia. Cada diciembre, Yamaguchi se llama a sí misma «ciudad de la Navidad».",
    "f": "The Japan Times, 24 de diciembre de 2016; Organización Nacional de Turismo de Japón"
   },
   {
@@ -168,7 +168,7 @@
   {
    "id": "P27",
    "uso": "chispa",
-   "t": "En 1614, a petición de Roma, le cortaron el antebrazo derecho y lo llevaron a la iglesia del Gesù, en Roma, donde sigue.",
+   "t": "Su cuerpo está en Goa, pero no entero: en 1614, a petición de Roma, le cortaron el antebrazo derecho y lo llevaron a la iglesia del Gesù, en Roma, donde sigue.",
    "f": "ACI Prensa; JSTOR Daily; Universidade Nova de Lisboa"
   },
   {
