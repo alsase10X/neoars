@@ -56,6 +56,10 @@
   {
    "id": "javier-v43",
    "n": "San Francisco Javier · v4.3 (sin inicio ni prompt propio)"
+  },
+  {
+   "id": "javier-pamplona",
+   "n": "San Francisco Javier · despensa común + ficha de la pieza"
   }
  ],
  "reglas": [
@@ -154,6 +158,10 @@
   {
    "id": "v4-3",
    "n": "Reglas: v4.3 (identidad: revelar y mostrar)"
+  },
+  {
+   "id": "v2b-fondo",
+   "n": "Reglas: v2b + fondo (lo que sabe si le preguntan)"
   }
  ]
 }
