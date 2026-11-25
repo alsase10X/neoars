@@ -2297,11 +2297,24 @@ function fondoPrompt(){
   const b = (OBRA.base || []).filter(x => x && x.t && x.uso === 'fondo'), P = OBRA._personaje, usa = new Set(OBRA.usa || []);
   return P ? b.concat((P.hechos || []).filter(x => x.uso !== 'ficha' && !usa.has(x.id))) : b;
 }
+// Pruebas: el fondo buscado. En vez de mandar el fondo entero en el prompt, el motor elige los hechos del fondo que comparten
+// más palabras (raíces) con la pregunta, pesando más las raras, y los añade solo al mensaje de ese turno. Sin coincidencias, nada.
+function fondoBuscado(q, n = 4){
+  const F = fondoPrompt(), T = toks(q); if(!F.length || !T.length) return '';
+  if(!OBRA._fondoIdx || OBRA._fondoIdx.N !== F.length){
+    const docs = F.map(x => toks(x.t)), df = {}; docs.forEach(d => d.forEach(t => { df[t] = (df[t] || 0) + 1; }));
+    OBRA._fondoIdx = {docs, df, N:docs.length};
+  }
+  const I = OBRA._fondoIdx, idf = t => Math.log(1 + I.N / (I.df[t] || I.N));
+  return F.map((x, k) => ({x, s:T.reduce((a, t) => a + (I.docs[k].includes(t) ? idf(t) : 0), 0)}))
+    .filter(y => y.s >= 1).sort((a, b) => b.s - a.s).slice(0, n).map(y => `- ${y.x.t}`).join('\n');
+}
 const FORMATO_V2B = 'Responde solo con un objeto JSON, sin texto antes ni después:\n{"texto":"…","sugerencias":["…","…","…"]}\nEn "sugerencias", tres preguntas cortas que le pueden nacer ahora, escritas como las diría ella: dos siguen lo que acabas de contar; la tercera abre algo de lo que aún no habéis hablado.';
 // Lo que cambia en cada pregunta: quién es el visitante, qué ha visto y oído, y lo que pregunta. Va siempre en el último mensaje
 function visitanteChat(q){
   const R = REGLAS() || {}, oido = escuchado(), V = VIS() || {n:'Visita general'};
   return plantilla(R.visitante, {
+    ...(String(R.visitante || '').includes('{fondoBuscado}') ? {fondoBuscado:q === R.apertura ? '' : fondoBuscado(q)} : {}),   // pruebas: el fondo buscado (no en la apertura)
     visita:V.n + (V.d ? ' (' + V.d + ')' : ''),
     lugar:U.zona && OBRA.zonas[U.zona] ? OBRA.zonas[U.zona].n : 'ninguno',
     preguntas:[...U.asked].slice(-10).join(' / ') || 'ninguna',
@@ -2332,7 +2345,9 @@ async function preguntarIA(q, abre = false){
     if(!REGLAS()) throw {code:'sin_reglas'};
     if(inicio) r = {texto:inicio, sugerencias:[]};
     else {
-      const turnos = [{role:'user', content:promptChat()}, ...U.chat.slice(-20), {role:'user', content:visitanteChat(q)}];   // los diez últimos intercambios
+      // El intermediario solo pasa al modelo los 12 últimos mensajes (MAX_TURNOS en intermediario/worker.js): si se mandan más,
+      // se cae el primero, que es el prompt entero. Por eso: el prompt, los cinco últimos intercambios y la pregunta de ahora
+      const turnos = [{role:'user', content:promptChat()}, ...U.chat.slice(-10), {role:'user', content:visitanteChat(q)}];
       traza({tipo:'envio', q, modo:IA.modo, borrador:!!window.AM_BORRADOR, turnos});
       r = await IA.json(turnos, ctl.signal);
     }

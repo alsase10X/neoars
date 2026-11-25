@@ -162,6 +162,10 @@
   {
    "id": "v2b-fondo",
    "n": "Reglas: v2b + fondo (lo que sabe si le preguntan)"
+  },
+  {
+   "id": "v2b-fondo-buscado",
+   "n": "Reglas: v2b + fondo buscado (el motor busca en el fondo en cada turno)"
   }
  ]
 }
