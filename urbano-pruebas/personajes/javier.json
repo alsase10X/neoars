@@ -6,8 +6,8 @@
   {
    "id": "P0",
    "uso": "ficha",
-   "t": "Francisco de Javier (1506-1552) era navarro: nació en el castillo de Javier, fundó con Ignacio de Loyola la Compañía de Jesús y fue como misionero a la India y a Japón. Murió a las puertas de China. Es patrón de Navarra y de las misiones.",
-   "f": "Resumen de P1, P8, P9, P13, P21, P29 y P30"
+   "t": "Francisco de Javier (1506-1552), su vida en orden: nació en el castillo de Javier, en Navarra, en una familia noble que perdió buena parte de lo que tenía cuando Castilla conquistó Navarra. Con diecinueve años se fue a estudiar a París y no volvió nunca; allí fundó con Ignacio de Loyola la Compañía de Jesús, los jesuitas. En 1541 salió de Lisboa hacia la India como enviado del papa, y en 1542 llegó a Goa. En Malaca, en 1547, conoció a un japonés, Anjirō, y decidió ir a Japón, adonde llegó en 1549; en 1550 y 1551 estuvo en Yamaguchi. Después quiso entrar en China, cerrada a los extranjeros, y murió en 1552 en la isla de Sancián, frente a la costa, esperando un barco. Su cuerpo acabó en Goa, donde sigue. Es patrón de Navarra y de las misiones.",
+   "f": "Resumen de P1, P2, P6, P8, P9, P12, P13, P21, P26, P29 y P30"
   },
   {
    "id": "P1",
@@ -90,7 +90,7 @@
   {
    "id": "P14",
    "uso": "chispa",
-   "t": "Para decir Dios, Anjirō le dio la palabra Dainichi, el nombre de un buda. Durante casi dos años, Javier predicó al Dios cristiano con ese nombre. En 1551, en Yamaguchi, se dio cuenta del error y empezó a decir Deus.",
+   "t": "Anjirō, el japonés que conoció en Malaca y que le animó a ir a Japón, le dio una palabra para decir Dios: Dainichi. Pero Dainichi es el nombre de un buda. Durante casi dos años, Javier predicó al Dios cristiano con ese nombre. En 1551, en Yamaguchi, se dio cuenta del error y empezó a decir Deus.",
    "f": "Wikipedia, «Anjirō»; G. Marino, «La sombra de Lutero en Japón», DICE (UCM, 2018); S. Ichikawa, Gakushuin (2012)"
   },
   {
@@ -168,7 +168,7 @@
   {
    "id": "P27",
    "uso": "chispa",
-   "t": "Su cuerpo está en Goa, pero no entero: en 1614, a petición de Roma, le cortaron el antebrazo derecho y lo llevaron a la iglesia del Gesù, en Roma, donde sigue.",
+   "t": "Murió en una isla frente a China, pero su cuerpo acabó en Goa, en la India, donde había empezado su misión en Asia. No está entero: en 1614, a petición de Roma, le cortaron el antebrazo derecho y lo llevaron a la iglesia del Gesù, en Roma, donde sigue.",
    "f": "ACI Prensa; JSTOR Daily; Universidade Nova de Lisboa"
   },
   {
@@ -210,19 +210,19 @@
   {
    "id": "P34",
    "uso": "chispa",
-   "t": "En la exposición de sus restos de 2024-2025, en Goa, un estado de la India de 1,5 millones de habitantes, entraron más de 7 millones de personas en 45 días.",
+   "t": "Su cuerpo, en Goa, se expone a la gente cada diez años. En la última exposición, en 2024-2025, en Goa, un estado de la India de 1,5 millones de habitantes, entraron más de 7 millones de personas en 45 días.",
    "f": "Matters India, 9 de enero de 2025; Vatican News, noviembre de 2024"
   },
   {
    "id": "P35",
    "uso": "chispa",
-   "t": "En la exposición de 2014, peregrinos hindúes y musulmanes de pueblos de Kolhapur caminaron unos 250 kilómetros hasta la basílica de Goa.",
+   "t": "En 2014, cuando se expuso su cuerpo en Goa, en la India, peregrinos hindúes y musulmanes de pueblos de Kolhapur caminaron unos 250 kilómetros hasta la basílica donde está.",
    "f": "UCA News, «Goa announces next Francis Xavier exposition»"
   },
   {
    "id": "P36",
    "uso": "chispa",
-   "t": "En Malaca, ante las ruinas de la iglesia de San Pablo, donde estuvo enterrado, hay una estatua suya de mármol de 1953, de cuando se cumplieron 400 años de la llegada de su cuerpo. Le falta la mano derecha, como a su cuerpo, y le han ido quitando dedos, posiblemente como amuletos. La leyenda dice que un árbol cayó sobre ella al día siguiente de bendecirla; probablemente no es cierto, porque en un documental de 1961 aparece con los dos brazos.",
+   "t": "Antes de llegar a Goa, su cuerpo estuvo enterrado un tiempo en Malaca, en la iglesia de San Pablo. Ante sus ruinas hay una estatua suya de mármol de 1953, de cuando se cumplieron 400 años de la llegada del cuerpo. Le falta la mano derecha, como a su cuerpo, al que le cortaron el antebrazo para llevarlo a Roma, y le han ido quitando dedos, posiblemente como amuletos. La leyenda dice que un árbol cayó sobre ella al día siguiente de bendecirla; probablemente no es cierto, porque en un documental de 1961 aparece con los dos brazos.",
    "f": "Wikipedia, «Statue of Saint Francis Xavier, Malacca» y «Church of Saint Paul, Malacca»"
   },
   {
@@ -252,13 +252,13 @@
   {
    "id": "P41",
    "uso": "chispa",
-   "t": "Su retrato más conocido, el del Museo Municipal de Kobe, lo pintó un japonés desconocido después de 1623, según el museo, y lo escondieron cristianos clandestinos durante la prohibición. Apareció en 1920 en una casa de Sendaiji, hoy Ibaraki (Osaka), antiguo feudo de Takayama Ukon; algunas fuentes dicen Takatsuki. Sigue el formato de los grabados flamencos de Wierix y Galle.",
+   "t": "Su retrato más conocido está en el Museo Municipal de Kobe, en Japón. Lo pintó un japonés desconocido, después de 1623 según el museo, cuando el cristianismo estaba prohibido en Japón, y lo tuvieron escondido cristianos clandestinos. Apareció en 1920 en una casa de Ibaraki, cerca de Osaka; algunas fuentes dicen Takatsuki. Sigue el formato de los grabados flamencos de Wierix y Galle.",
    "f": "Museo Municipal de Kobe (Google Arts & Culture); Smarthistory"
   },
   {
    "id": "P42",
    "uso": "chispa",
-   "t": "Una carta de un jesuita de 1625 cuenta que llevó una imagen de Javier a un grupo de cristianos clandestinos de Yamaguchi.",
+   "t": "Cuando el cristianismo estaba prohibido en Japón, los cristianos que quedaban se escondían. Una carta de un jesuita de 1625 cuenta que llevó una imagen de Javier a un grupo de ellos en Yamaguchi.",
    "f": "Smarthistory, «A Discovery in Takatsuki»"
   },
   {
