@@ -166,6 +166,10 @@
   {
    "id": "v2b-fondo-buscado",
    "n": "Reglas: v2b + fondo buscado (el motor busca en el fondo en cada turno)"
+  },
+  {
+   "id": "v2b-tilden",
+   "n": "Reglas: v2b + Tilden (misión corta que nombra a Tilden)"
   }
  ]
 }
