@@ -990,6 +990,9 @@ const NOMBRE_VOZ = {pieza:'la de la pieza', dispositivo:'la del dispositivo', mi
 const VOZ_NUBE = {mistral:{nube:'01a0f318-4afd-77a5-aa5e-f4d741c30187'}, gemini:{nube:'gemini:Charon', estilo:'Castilian Spanish accent from Spain.'}};
 let VOZ_DE = (() => { const v = PARAM('vozde') || st.get('am.sala.vozde', 'pieza'); return VOCES_DE.includes(v) ? v : 'pieza'; })();
 const REGLAS_ID = PARAM('reglas') || 'actual';
+// Pruebas: el modelo que responde (?modelo=haiku|sonnet). Sin él, el que tenga puesto el intermediario
+const MODELOS_PRUEBA = {haiku:'Haiku', sonnet:'Sonnet'};
+const MODELO_ID = Object.hasOwn(MODELOS_PRUEBA, PARAM('modelo') || '') ? PARAM('modelo') : null;
 // Sin visita grabada: al empezar, la pieza abre la conversación con lo que genere el prompt
 const PRUEBAS = true;
 const APERTURA = '(Se ha parado delante de ti y ha acercado el móvil para escucharte. Todavía no ha dicho nada.)';
@@ -2172,6 +2175,12 @@ function cargarPuter(){
 }
 const puterDentro = () => { try{ return !!(window.puter && puter.auth.isSignedIn()); }catch(e){ return false; } };
 // Para el panel de creación: cada paso de una pregunta se cuenta en un suceso. Fuera del panel nadie lo escucha
+// Pruebas: el modelo que de verdad ha respondido, según el intermediario. Si no lo dice, es que aún no está publicado el que lo dice
+function modeloUsado(m){
+  const e = document.getElementById('pruebasModelo'); if(!e) return;
+  e.textContent = m ? 'Responde: ' + m.replace(/^anthropic\//, '') : MODELO_ID ? 'Responde: no se sabe (¿intermediario sin publicar?)' : '';
+  e.hidden = !e.textContent;
+}
 const traza = d => { try{ dispatchEvent(new CustomEvent('am:traza', {detail:{pieza:OBRA && OBRA.id, ...d}})); }catch(e){} };
 const IA = {
   _modo:null, s:null,
@@ -2199,9 +2208,10 @@ const IA = {
       const c = r && r.message ? r.message.content : r;
       t = typeof c === 'string' ? c : Array.isArray(c) ? c.map(p => (p && p.text) || '').join('') : String(c || '');
     } else if(this.modo === 'api'){
-      let r; try{ r = await fetch(CONFIG.api, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({input:turnos}), signal}); }
+      let r; try{ r = await fetch(CONFIG.api, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({input:turnos, ...(MODELO_ID ? {modelo:MODELO_ID} : {})}), signal}); }
       catch(e){ throw {code:e && e.name === 'AbortError' ? 'cancelled' : 'upstream_error'}; }
       if(!r.ok) throw {code:'upstream_error'};
+      modeloUsado(r.headers.get('X-Modelo'));
       t = await r.text();
     } else throw {code:'not_granted'};
     const v = parseJSON(t); if(!v) throw {code:'invalid_json', crudo:t.slice(0, 2000)}; return v;
@@ -2999,10 +3009,12 @@ if(!SALA_ID){ $('salaT').textContent = (SALA || SALA_WEB).nombre; $('salaD').tex
   let L = {piezas:[{id:PIEZA_ID, n:PIEZA_ID}], reglas:[{id:REGLAS_ID, n:REGLAS_ID}]};
   try{ L = await fetch('pruebas.json').then(r => r.json()); }catch(e){}
   const b = document.createElement('div'); b.id = 'pruebasBarra';
-  b.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:2147483000;display:flex;gap:6px;font:12px/1.2 system-ui,sans-serif;opacity:.85';
+  b.style.cssText = 'position:fixed;left:8px;bottom:8px;max-width:calc(100% - 16px);z-index:2147483000;display:flex;flex-wrap:wrap;gap:6px;font:12px/1.2 system-ui,sans-serif;opacity:.85';
   const sel = (k, lista, actual) => `<select data-k="${k}" style="font:inherit;padding:4px 6px;background:#000c;color:#fff;border:1px solid #fff6;border-radius:0">` + lista.map(x => `<option value="${x.id}"${x.id === actual ? ' selected' : ''}>${x.n}</option>`).join('') + '</select>';
-  b.innerHTML = sel('pieza', L.piezas, PIEZA_ID) + sel('reglas', L.reglas, REGLAS_ID);
-  b.addEventListener('change', e => { const u = new URL(location.href); u.searchParams.set(e.target.dataset.k, e.target.value); u.hash = ''; location.href = u.href; });
+  const modelos = [{id:'', n:'Modelo: el del intermediario'}, ...Object.entries(MODELOS_PRUEBA).map(([id, n]) => ({id, n:'Modelo: ' + n}))];
+  b.innerHTML = sel('pieza', L.piezas, PIEZA_ID) + sel('reglas', L.reglas, REGLAS_ID) + sel('modelo', modelos, MODELO_ID || '') +
+    '<span id="pruebasModelo" hidden style="align-self:center;padding:4px 6px;background:#000c;color:#fff"></span>';
+  b.addEventListener('change', e => { const u = new URL(location.href), k = e.target.dataset.k; if(e.target.value) u.searchParams.set(k, e.target.value); else u.searchParams.delete(k); u.hash = ''; location.href = u.href; });
   document.body.appendChild(b);
 })();
 cargarSala().then(() => { pintarSala(); desdeEnlace(); }).catch(() => { $('salaV').hidden = false; $('obras').innerHTML = '<li class="pie">No se han podido cargar las obras. Revisa la conexión y vuelve a abrir la página.</li>'; });

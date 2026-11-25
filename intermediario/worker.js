@@ -1,6 +1,7 @@
 // artmedium · intermediario de IA (Cloudflare Worker)
 // Guarda las claves y reenvía a los proveedores lo que pide la sala:
-//   POST /       {input: [{role, content}, ...]}  → texto de Perplexity (Agent API)
+//   POST /       {input: [{role, content}, ...], modelo?}  → texto de Perplexity (Agent API); en la cabecera X-Modelo, el modelo que ha respondido
+//                modelo (opcional): 'haiku' o 'sonnet'. Sin él, el de la variable MODELO o, si no hay, Haiku
 //   POST /voz    {texto, voz}                      → audio mp3 de Mistral (Voxtral TTS 3)
 //   POST /voz    {texto, voz: 'gemini:Charon', estilo} → audio wav de Google (Gemini TTS); estilo, en lenguaje natural
 //   GET  /voces  ?language=es&gender=&query=       → lista de voces predefinidas de Mistral (JSON)
@@ -27,6 +28,8 @@
 // Sin herramientas: el modelo no busca en la web y responde solo con la base de la pieza que le manda la página.
 
 const MODELO = 'anthropic/claude-haiku-5-5';
+// Los modelos que puede pedir la página, y solo estos: así nadie puede usar el intermediario con uno caro
+const MODELOS = {haiku: 'anthropic/claude-haiku-5-5', sonnet: 'anthropic/claude-sonnet-5-5'};
 const MODELO_VOZ = 'voxtral-mini-tts-3-0';
 const MODELO_VOZ_GEMINI = 'gemini-3.8-flash-tts';
 const ORIGENES = 'https://alsase10x.github.io';
@@ -47,7 +50,7 @@ export default {
       'Access-Control-Allow-Origin': permitidos.includes(origen) ? origen : permitidos[0],
       'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Panel-Clave',
-      'Access-Control-Expose-Headers': 'X-Sha',
+      'Access-Control-Expose-Headers': 'X-Sha, X-Modelo',
       'Vary': 'Origin'
     };
     const texto = (t, status = 200) => new Response(t, {status, headers: {...cors, 'Content-Type': 'text/plain; charset=utf-8'}});
@@ -169,7 +172,8 @@ export default {
       : [];
     if (!turnos.length) return texto('Falta la conversación', 400);
 
-    const base = {model: env.MODELO || MODELO, max_output_tokens: MAX_SALIDA, reasoning: {effort: env.RAZONAR || 'none'}};
+    const modelo = (Object.hasOwn(MODELOS, datos.modelo) && MODELOS[datos.modelo]) || env.MODELO || MODELO;
+    const base = {model: modelo, max_output_tokens: MAX_SALIDA, reasoning: {effort: env.RAZONAR || 'none'}};
     // Primero, la conversación con sus papeles; si la API no la acepta así, la misma conversación en un solo texto
     let r = await pedir(env, {...base, input: turnos});
     if (r.status === 400 || r.status === 422) {
@@ -182,7 +186,7 @@ export default {
       .flatMap(o => o.content || []).filter(c => c && c.type === 'output_text').map(c => c.text).join('') || j.output_text || '';
     // Si no hay texto (p. ej. se le acabaron los tokens razonando), se dice por qué en vez de devolver nada
     if (!salida) return texto('Respuesta vacía del modelo: ' + JSON.stringify({estado: j.status, motivo: j.incomplete_details, tipos: (j.output || []).map(o => o && o.type), uso: j.usage}).slice(0, 600), 502);
-    return texto(salida);
+    return new Response(salida, {headers: {...cors, 'Content-Type': 'text/plain; charset=utf-8', 'X-Modelo': modelo}});
   }
 };
 
