@@ -2345,7 +2345,9 @@ async function preguntarIA(q, abre = false){
     if(!REGLAS()) throw {code:'sin_reglas'};
     if(inicio) r = {texto:inicio, sugerencias:[]};
     else {
-      const turnos = [{role:'user', content:promptChat()}, ...U.chat.slice(-20), {role:'user', content:visitanteChat(q)}];   // los diez últimos intercambios
+      // El intermediario solo pasa al modelo los 12 últimos mensajes (MAX_TURNOS en intermediario/worker.js): si se mandan más,
+      // se cae el primero, que es el prompt entero. Por eso: el prompt, los cinco últimos intercambios y la pregunta de ahora
+      const turnos = [{role:'user', content:promptChat()}, ...U.chat.slice(-10), {role:'user', content:visitanteChat(q)}];
       traza({tipo:'envio', q, modo:IA.modo, borrador:!!window.AM_BORRADOR, turnos});
       r = await IA.json(turnos, ctl.signal);
     }
