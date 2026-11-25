@@ -993,6 +993,8 @@ const REGLAS_ID = PARAM('reglas') || 'actual';
 // Pruebas: el modelo que responde (?modelo=haiku|sonnet). Sin él, el que tenga puesto el intermediario
 const MODELOS_PRUEBA = {haiku:'Haiku', sonnet:'Sonnet'};
 const MODELO_ID = Object.hasOwn(MODELOS_PRUEBA, PARAM('modelo') || '') ? PARAM('modelo') : null;
+// Pruebas: ?inicio=libre hace que la apertura la escriba el modelo aunque la pieza tenga un inicio escrito
+const INICIO_LIBRE = PARAM('inicio') === 'libre';
 // Sin visita grabada: al empezar, la pieza abre la conversación con lo que genere el prompt
 const PRUEBAS = true;
 const APERTURA = '(Se ha parado delante de ti y ha acercado el móvil para escucharte. Todavía no ha dicho nada.)';
@@ -2348,7 +2350,7 @@ async function preguntarIA(q, abre = false){
   if(!IA.modo) return aviso('Aquí no tengo un modelo conectado, así que solo puedo responder con las preguntas que ha preparado el museo. Prueba con una de estas.');
   const ctl = U.ctl = new AbortController();
   // Inicio escrito por el intérprete: la pieza lo dice tal cual y al momento; las sugerencias las escribe el modelo después
-  const inicio = abre && OBRA.inicio && typeof OBRA.inicio.texto === 'string' && OBRA.inicio.texto.trim() ? OBRA.inicio.texto.trim() : '';
+  const inicio = !INICIO_LIBRE && abre && OBRA.inicio && typeof OBRA.inicio.texto === 'string' && OBRA.inicio.texto.trim() ? OBRA.inicio.texto.trim() : '';
   let r = null; const t0 = performance.now();
   try{
     await listo; await promptListo;
@@ -3013,6 +3015,7 @@ if(!SALA_ID){ $('salaT').textContent = (SALA || SALA_WEB).nombre; $('salaD').tex
   const sel = (k, lista, actual) => `<select data-k="${k}" style="font:inherit;padding:4px 6px;background:#000c;color:#fff;border:1px solid #fff6;border-radius:0">` + lista.map(x => `<option value="${x.id}"${x.id === actual ? ' selected' : ''}>${x.n}</option>`).join('') + '</select>';
   const modelos = [{id:'', n:'Modelo: el del intermediario'}, ...Object.entries(MODELOS_PRUEBA).map(([id, n]) => ({id, n:'Modelo: ' + n}))];
   b.innerHTML = sel('pieza', L.piezas, PIEZA_ID) + sel('reglas', L.reglas, REGLAS_ID) + sel('modelo', modelos, MODELO_ID || '') +
+    sel('inicio', [{id:'', n:'Inicio: el escrito, si lo hay'}, {id:'libre', n:'Inicio: libre (lo escribe el modelo)'}], INICIO_LIBRE ? 'libre' : '') +
     '<span id="pruebasModelo" hidden style="align-self:center;padding:4px 6px;background:#000c;color:#fff"></span>';
   b.addEventListener('change', e => { const u = new URL(location.href), k = e.target.dataset.k; if(e.target.value) u.searchParams.set(k, e.target.value); else u.searchParams.delete(k); u.hash = ''; location.href = u.href; });
   document.body.appendChild(b);
