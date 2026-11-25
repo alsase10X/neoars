@@ -92,7 +92,7 @@
    "Facilitada por Alberto; parece de la web de la Cátedra de Patrimonio y Arte Navarro (UNAV); licencia por confirmar"
   ]
  ],
- "nota": "Javier en Pamplona, con la despensa común (personajes/javier.json). En la ficha de la pieza: la identidad, lo que hay delante, por qué está aquí (uso «ficha») y las chispas de la obra y del sitio. Del personaje, solo las chispas de «usa»; el resto va al fondo. Pendiente de comprobar antes de usar: si «Momento espiritual», de Oteiza, sigue en el parque de Yamaguchi (el original de 1959 está en el museo de la Fundación Oteiza, en Alzuza); si la figura de Javier en el pueblo de Javier es la misma obra a otro tamaño y si las que se venden en internet son ediciones de Aizkorbe; el «Homenaje a Alberti» de Aizkorbe en Barañáin. El campo «prompt» de javier.json no se ha copiado, para que mande la versión de reglas elegida. Sin inicio escrito: el campo «inicio» de javier.json parece una nota («ha de abrir el diálogo…») y la pieza lo diría tal cual; aquí abre el modelo hasta que Alberto escriba el inicio.",
+ "nota": "Javier en Pamplona, con la despensa común (personajes/javier.json). En la ficha de la pieza: la identidad, lo que hay delante, por qué está aquí (uso «ficha») y las chispas de la obra y del sitio. Del personaje, solo las chispas de «usa»; el resto va al fondo. Pendiente de comprobar antes de usar: si «Momento espiritual», de Oteiza, sigue en el parque de Yamaguchi (el original de 1959 está en el museo de la Fundación Oteiza, en Alzuza); si la figura de Javier en el pueblo de Javier es la misma obra a otro tamaño y si las que se venden en internet son ediciones de Aizkorbe; el «Homenaje a Alberti» de Aizkorbe en Barañáin. El campo «prompt» de javier.json no se ha copiado, para que mande la versión de reglas elegida. Inicio escrito (aprobado por Alberto el 25 de noviembre de 2026), con las dos caras y el sitio, solo con hechos de la ficha: P6, P13, P21, J6 y la descripción.",
  "personaje": "javier",
  "base": [
   {
@@ -188,5 +188,8 @@
   "P41",
   "P42",
   "P46"
- ]
+ ],
+ "inicio": {
+  "texto": "Soy San Francisco Javier, aunque no tenga cara: el escultor me hizo de planos lisos y con una abertura en el pecho. Él era navarro; se fue a estudiar a París con diecinueve años y no volvió nunca. Llegó hasta Japón, a la ciudad que regaló este parque, y murió esperando un barco que lo llevara a China."
+ }
 }

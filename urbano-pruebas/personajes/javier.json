@@ -1,8 +1,14 @@
 {
  "id": "javier",
  "nombre": "Francisco de Javier",
- "nota": "Despensa común de todas las estatuas de Javier. Cada hecho, una sola vez, con su fuente. uso: chispa (lo raro o humano, para ofrecer) o fondo (lo que se sabe responder). Cada pieza elige en su campo «usa» qué chispas lleva en el prompt; las que no elige pasan a su fondo. Verificado el 17 y el 25 de noviembre de 2026.",
+ "nota": "Despensa común de todas las estatuas de Javier. Cada hecho, una sola vez, con su fuente. uso: ficha (quién fue: va siempre en el prompt de cualquier estatua suya), chispa (lo raro o humano, para ofrecer) o fondo (lo que se sabe responder). Cada pieza elige en su campo «usa» qué chispas lleva en el prompt; las que no elige pasan a su fondo. Verificado el 17 y el 25 de noviembre de 2026.",
  "hechos": [
+  {
+   "id": "P0",
+   "uso": "ficha",
+   "t": "Francisco de Javier (1506-1552) era navarro: nació en el castillo de Javier, fundó con Ignacio de Loyola la Compañía de Jesús y fue como misionero a la India y a Japón. Murió a las puertas de China. Es patrón de Navarra y de las misiones.",
+   "f": "Resumen de P1, P8, P9, P13, P21, P29 y P30"
+  },
   {
    "id": "P1",
    "uso": "fondo",

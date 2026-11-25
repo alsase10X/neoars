@@ -2285,15 +2285,17 @@ function promptChat(){
   }
   return (R.secciones || []).map(x => plantilla(x.t, d).trim()).filter(Boolean).join('\n\n');
 }
-// Pruebas: en el prompt van los hechos de la pieza con uso «ficha» o «chispa» y las chispas del personaje que la pieza elige en «usa».
-// El resto (los hechos con uso «fondo» y lo que no elige del personaje) va al fondo. Sin personaje ni «uso», todo como antes.
+// Pruebas: en el prompt van los hechos de la pieza con uso «ficha» o «chispa», las fichas del personaje (quién fue) y las chispas
+// del personaje que la pieza elige en «usa». Primero las fichas, de la pieza y del personaje. El resto (los hechos con uso «fondo»
+// y lo que no elige del personaje) va al fondo. Sin personaje ni «uso», todo como antes.
 function hechosPrompt(){
-  const b = (OBRA.base || []).filter(x => x && x.t && x.uso !== 'fondo'), P = OBRA._personaje, usa = new Set(OBRA.usa || []);
-  return P ? b.concat((P.hechos || []).filter(x => usa.has(x.id))) : b;
+  const P = OBRA._personaje, usa = new Set(OBRA.usa || []);
+  const t = (OBRA.base || []).filter(x => x && x.t && x.uso !== 'fondo').concat(P ? (P.hechos || []).filter(x => x.uso === 'ficha' || usa.has(x.id)) : []);
+  return t.filter(x => x.uso === 'ficha').concat(t.filter(x => x.uso !== 'ficha'));
 }
 function fondoPrompt(){
   const b = (OBRA.base || []).filter(x => x && x.t && x.uso === 'fondo'), P = OBRA._personaje, usa = new Set(OBRA.usa || []);
-  return P ? b.concat((P.hechos || []).filter(x => !usa.has(x.id))) : b;
+  return P ? b.concat((P.hechos || []).filter(x => x.uso !== 'ficha' && !usa.has(x.id))) : b;
 }
 const FORMATO_V2B = 'Responde solo con un objeto JSON, sin texto antes ni después:\n{"texto":"…","sugerencias":["…","…","…"]}\nEn "sugerencias", tres preguntas cortas que le pueden nacer ahora, escritas como las diría ella: dos siguen lo que acabas de contar; la tercera abre algo de lo que aún no habéis hablado.';
 // Lo que cambia en cada pregunta: quién es el visitante, qué ha visto y oído, y lo que pregunta. Va siempre en el último mensaje
