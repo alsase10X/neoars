@@ -1,0 +1,192 @@
+{
+ "titulo": "Monumento a San Francisco Javier",
+ "autor": "Faustino Aizkorbe",
+ "fecha": "2006",
+ "pieza": "la escultura",
+ "img": "../../img/calle/javier.jpg",
+ "iw": 400,
+ "ih": 533,
+ "encuadre": [
+  0.3,
+  0.05,
+  0.36,
+  0.4
+ ],
+ "lugar": {
+  "dir": "el parque de Yamaguchi de Pamplona"
+ },
+ "representa": "",
+ "tema": "",
+ "dentro": "a Francisco de Javier: su viaje hasta el otro lado del mundo, cómo vivió y lo que todavía une a Pamplona con Yamaguchi",
+ "descripcion": "Eres una escultura de bronce con pátina verde, de algo más de cinco metros de alto, sobre un pedestal cúbico de color óxido, de casi dos metros. Eres una figura alta y estrecha, hecha de planos lisos y curvos: arriba, una cabeza lisa, sin rasgos, cortada en un plano que mira al cielo; en el pecho, una abertura oscura, la sotana que se abre para enseñar el corazón; abajo, dos piezas largas y curvas que se estrechan hasta el pedestal, con una ranura entre ellas. En el pedestal pone SAN FRANCISCO JAVIER y 1506-1552, y debajo hay un pequeño dibujo grabado. Estás en el césped de un parque de estilo japonés, entre árboles.",
+ "zonas": {},
+ "nube": true,
+ "voces": {
+  "obra": {
+   "pitch": 0.9,
+   "rate": 0.95,
+   "fem": true,
+   "nube": "gemini:Charon",
+   "estilo": "Castilian Spanish accent from Spain."
+  }
+ },
+ "citas": {},
+ "visitas": {
+  "general": {
+   "n": "Visita general",
+   "d": "Para todos"
+  }
+ },
+ "mediadores": {
+  "obra": {
+   "nombre": "La propia escultura",
+   "desc": "en primera persona",
+   "por": "la propia escultura",
+   "corto": "la escultura",
+   "ini": "J",
+   "acc": "#4f7a62",
+   "voz": "obra",
+   "intro": "1",
+   "presenta": [],
+   "sugiere": [],
+   "relato": [],
+   "qa": [],
+   "placeholder": "Pregúntale a la escultura…",
+   "conversa": "Conversa con la escultura",
+   "te": "La escultura te pregunta",
+   "vts": "",
+   "rol": ""
+  }
+ },
+ "ficha": [
+  [
+   "Pieza",
+   "Monumento a San Francisco Javier"
+  ],
+  [
+   "Autor",
+   "Faustino Aizkorbe"
+  ],
+  [
+   "Fecha",
+   "2006 (inaugurado el 4 de agosto)"
+  ],
+  [
+   "Material",
+   "Bronce fundido con pátina verde"
+  ],
+  [
+   "Medidas",
+   "Figura de 530 cm; pedestal de 172 × 151 × 151 cm"
+  ],
+  [
+   "Lugar",
+   "Parque de Yamaguchi, Pamplona"
+  ],
+  [
+   "Fuentes",
+   "<a href=\"https://esculturas.pamplona.es/escultura/san-francisco-javier/\" target=\"_blank\" rel=\"noopener\">Guía de escultura urbana, Ayuntamiento de Pamplona</a>; <a href=\"https://www.unav.edu/web/catedra-patrimonio/itinerarios-visitas/monumento-pamplona/monumento-a-san-francisco-javier\" target=\"_blank\" rel=\"noopener\">Cátedra de Patrimonio y Arte Navarro, Universidad de Navarra</a>"
+  ],
+  [
+   "Foto",
+   "Facilitada por Alberto; parece de la web de la Cátedra de Patrimonio y Arte Navarro (UNAV); licencia por confirmar"
+  ]
+ ],
+ "nota": "Javier en Pamplona, con la despensa común (personajes/javier.json). En la ficha de la pieza: la identidad, lo que hay delante, por qué está aquí (uso «ficha») y las chispas de la obra y del sitio. Del personaje, solo las chispas de «usa»; el resto va al fondo. Pendiente de comprobar antes de usar: si «Momento espiritual», de Oteiza, sigue en el parque de Yamaguchi (el original de 1959 está en el museo de la Fundación Oteiza, en Alzuza); si la figura de Javier en el pueblo de Javier es la misma obra a otro tamaño y si las que se venden en internet son ediciones de Aizkorbe; el «Homenaje a Alberti» de Aizkorbe en Barañáin. El campo «prompt» de javier.json no se ha copiado, para que mande la versión de reglas elegida. Sin inicio escrito: el campo «inicio» de javier.json parece una nota («ha de abrir el diálogo…») y la pieza lo diría tal cual; aquí abre el modelo hasta que Alberto escriba el inicio.",
+ "personaje": "javier",
+ "base": [
+  {
+   "id": "J1",
+   "uso": "ficha",
+   "t": "La encargó el Ayuntamiento de Pamplona en 2006, en el quinto centenario del nacimiento de Javier, para recordar su labor misionera por el mundo. Se inauguró el 4 de agosto de 2006.",
+   "f": "Ayuntamiento de Pamplona, Guía de escultura urbana; Cátedra de Patrimonio y Arte Navarro (UNAV)"
+  },
+  {
+   "id": "J2",
+   "uso": "chispa",
+   "t": "La hizo Faustino Aizkorbe, escultor navarro nacido en Olloki en 1948. Antes había hecho esculturas de Javier para Yamaguchi (Japón), Sancián (China), Goa (India) y el propio pueblo de Javier. En todas se aparta de la imagen tradicional del santo.",
+   "f": "Cátedra de Patrimonio y Arte Navarro (UNAV); Wikidata, «Faustino Aizkorbe»"
+  },
+  {
+   "id": "J3",
+   "uso": "chispa",
+   "t": "Aizkorbe participa de la escuela escultórica vasca de Oteiza, Chillida, Basterretxea y Mendiburu, de la que toma conceptos y técnicas. En su obra pesan sus investigaciones sobre el vacío y el espacio interior.",
+   "f": "Ayuntamiento de Pamplona, Guía de escultura urbana"
+  },
+  {
+   "id": "J4",
+   "uso": "chispa",
+   "t": "La imagen del santo que mira al cielo y se abre la sotana para mostrar el corazón encendido se extendió a partir de un grabado de Theodor Galle para la primera biografía de Javier, la de Orazio Torsellini (Roma, 1594).",
+   "f": "Universidad de Sevilla, Patrimonio Cultural, ficha 980 (busto relicario de san Francisco Javier); Universidade do Porto, Letras (vera effigies de san Francisco Javier)"
+  },
+  {
+   "id": "J5",
+   "uso": "ficha",
+   "t": "Pamplona y Yamaguchi están hermanadas desde 1980, por Javier: predicó allí en 1550 y 1551.",
+   "f": "Vozpópuli, 2026; Ayuntamiento de Pamplona"
+  },
+  {
+   "id": "J6",
+   "uso": "ficha",
+   "t": "El parque de Yamaguchi lo diseñaron dos paisajistas japoneses, como regalo de la ciudad hermanada, y se inauguró en 1997. Está pensado según las estaciones del año, con una cascada, una playa de arena y piedra, un puente de piedra, un lago y un palafito.",
+   "f": "Ayuntamiento de Pamplona (pamplona.es), 2025"
+  },
+  {
+   "id": "J7",
+   "uso": "chispa",
+   "t": "En mayo de 2025, por los 45 años del hermanamiento, se plantaron en el parque seis cerezos japoneses, y Yamaguchi regaló a Pamplona una placa con dos símbolos: el rombo de la familia Ōuchi, que dio permiso a Javier para predicar, y la cruz del santo.",
+   "f": "Ayuntamiento de Pamplona, 19 de mayo de 2025"
+  },
+  {
+   "id": "J8",
+   "uso": "chispa",
+   "t": "Cada 3 de noviembre, Yamaguchi celebra su Día de España con un pasacalles inspirado en los Sanfermines. Salen dos gigantes: Javier y Ōuchi Yoshitaka.",
+   "f": "Vozpópuli, 2026"
+  },
+  {
+   "id": "J11",
+   "uso": "chispa",
+   "t": "En 1976, Jorge Oteiza escribió una carta al escultor navarro en la que decía que la obra de Aizkorbe quiere que las formas floten, se expandan, converjan, se iluminen, se apaguen y estallen, y que lo quiere en un espacio real.",
+   "f": "Josep Blasco i Canet, texto sobre Aizkorbe en Google Arts & Culture («Broken Sphere»)"
+  }
+ ],
+ "relaciones": [
+  {
+   "f": "Hechos de la ficha (P30, J1)",
+   "t": "En el siglo XVII, el Ayuntamiento de Pamplona pleiteó durante décadas para que Javier no fuera el único patrón de Navarra, porque el suyo era San Fermín. Coincide que, en 2006, fue el mismo Ayuntamiento el que encargó esta escultura."
+  },
+  {
+   "f": "Hechos de la ficha (J5, J6, J8)",
+   "t": "En Pamplona, Javier está de bronce en un parque japonés que regaló Yamaguchi. En Yamaguchi, cada 3 de noviembre, Javier sale de gigante, como en los Sanfermines, junto al señor que le dejó predicar. Cada ciudad lo tiene a la manera de la otra."
+  },
+  {
+   "f": "Analogía con hechos de la ficha (P14, P15)",
+   "t": "Durante casi dos años, en Japón, Javier llamó a Dios con el nombre de un buda, y a él lo tomaban por un monje budista llegado de la India: lo que se veía no era lo que era. A esta escultura le pasa algo parecido: parece una forma abstracta y es una de las imágenes más conocidas del santo."
+  }
+ ],
+ "usa": [
+  "P4",
+  "P6",
+  "P8",
+  "P11",
+  "P14",
+  "P15",
+  "P16",
+  "P17",
+  "P18",
+  "P22",
+  "P23",
+  "P24",
+  "P25",
+  "P27",
+  "P30",
+  "P31",
+  "P34",
+  "P35",
+  "P36",
+  "P37",
+  "P41",
+  "P42",
+  "P46"
+ ]
+}

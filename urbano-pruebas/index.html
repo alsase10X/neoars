@@ -1044,6 +1044,8 @@ async function cargarSala(){
     const url = new URL(ruta, base).href, id = ruta.split('/').pop().replace(/\.json$/, '');
     const d = PANEL && PANEL.piezas && PANEL.piezas[id] ? JSON.parse(JSON.stringify(PANEL.piezas[id])) : await fetch(url, {cache:'no-cache'}).then(r => { if(!r.ok) throw new Error(ruta); return r.json(); });   // pruebas: siempre la última versión de la pieza
     d.id = id;
+    // Pruebas: la despensa común del personaje (personajes/<id>.json), compartida por todas sus estatuas
+    if(d.personaje){ try{ d._personaje = await fetch(new URL(`../personajes/${d.personaje}.json`, url).href, {cache:'no-cache'}).then(r => r.ok ? r.json() : null); }catch(e){} }
     if(d.lugar && !(isFinite(d.lugar.lat) && isFinite(d.lugar.lng))){ d.dir = d.lugar.dir; delete d.lugar; }   // sin coordenadas no hay punto en el mapa
     Object.values(d.mediadores || {}).forEach(m => { if(m.audio && m.audio.src) m.audio.src = abs(m.audio.src, url); });
     Object.values(d.imagenes || {}).forEach(im => { im.src = abs(im.src, url); });
@@ -2269,7 +2271,8 @@ function promptChat(){
     imagenes:imagenesPrompt(),
     // Pruebas: la descripción de la pieza y sus hechos tal cual, sin identificadores ni fuentes y sin caer en la ficha si no hay base
     descripcion:OBRA.descripcion || '', dentro:OBRA.dentro || '',
-    hechos:(OBRA.base || []).map(b => `- ${b.t}`).join('\n'),
+    hechos:hechosPrompt().map(b => `- ${b.t}`).join('\n'),
+    fondo:fondoPrompt().map(b => `- ${b.t}`).join('\n'),   // pruebas: lo que se sabe responder si preguntan (no es la imagen de fondo de la pieza)
     relaciones:(OBRA.relaciones || []).map(r => `- ${r.t || r}`).join('\n'),   // pruebas v2b: relaciones comprobadas, como material
     rol:MED(MEDG()).rol || R.rolPorDefecto || '',
     campoImagen:OBRA.imagenes ? ',"imagen":"identificador de imagen o null"' : ''
@@ -2281,6 +2284,16 @@ function promptChat(){
     return [plantilla(OBRA.prompt, d).trim(), plantilla(f && f.t ? f.t : FORMATO_V2B, d).trim()].filter(Boolean).join('\n\n');
   }
   return (R.secciones || []).map(x => plantilla(x.t, d).trim()).filter(Boolean).join('\n\n');
+}
+// Pruebas: en el prompt van los hechos de la pieza con uso «ficha» o «chispa» y las chispas del personaje que la pieza elige en «usa».
+// El resto (los hechos con uso «fondo» y lo que no elige del personaje) va al fondo. Sin personaje ni «uso», todo como antes.
+function hechosPrompt(){
+  const b = (OBRA.base || []).filter(x => x && x.t && x.uso !== 'fondo'), P = OBRA._personaje, usa = new Set(OBRA.usa || []);
+  return P ? b.concat((P.hechos || []).filter(x => usa.has(x.id))) : b;
+}
+function fondoPrompt(){
+  const b = (OBRA.base || []).filter(x => x && x.t && x.uso === 'fondo'), P = OBRA._personaje, usa = new Set(OBRA.usa || []);
+  return P ? b.concat((P.hechos || []).filter(x => !usa.has(x.id))) : b;
 }
 const FORMATO_V2B = 'Responde solo con un objeto JSON, sin texto antes ni después:\n{"texto":"…","sugerencias":["…","…","…"]}\nEn "sugerencias", tres preguntas cortas que le pueden nacer ahora, escritas como las diría ella: dos siguen lo que acabas de contar; la tercera abre algo de lo que aún no habéis hablado.';
 // Lo que cambia en cada pregunta: quién es el visitante, qué ha visto y oído, y lo que pregunta. Va siempre en el último mensaje
