@@ -34,6 +34,7 @@ a{color:var(--lime)}
 main{position:relative;overflow:hidden}
 #map{position:absolute;inset:0;background:#0c1411}
 .leaflet-container{font:13px 'Roboto Flex',sans-serif;background:#0c1411}
+.leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.82) contrast(.9) saturate(.35) sepia(.15)}
 .leaflet-control-attribution{background:rgba(17,28,24,.75)!important;color:var(--ink2)!important}
 .leaflet-control-attribution a{color:var(--ink2)!important}
 .leaflet-tooltip{background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;font:13px 'Roboto Flex',sans-serif;box-shadow:none}
@@ -206,8 +207,9 @@ async function loadWikidata(qid) {
   const q = `SELECT ?item ?label ?desc ?coord (SAMPLE(?img) AS ?image) (SAMPLE(?art) AS ?es) (SAMPLE(?enart) AS ?en)
  (GROUP_CONCAT(DISTINCT ?tl; separator="|") AS ?types) (GROUP_CONCAT(DISTINCT ?hl; separator="|") AS ?her)
  (GROUP_CONCAT(DISTINCT ?al; separator="|") AS ?auth) (MIN(YEAR(?inc)) AS ?year) WHERE {
- ?item wdt:P131+ wd:${qid} ; wdt:P625 ?coord .
- FILTER(EXISTS{?item wdt:P1435 []} || EXISTS{?item wdt:P18 []} || EXISTS{?a0 schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/>})
+ { SELECT DISTINCT ?item WHERE { ?item wdt:P131+ wd:${qid} ; wdt:P625 [] .
+   FILTER(EXISTS{?item wdt:P1435 []} || EXISTS{?item wdt:P18 []} || EXISTS{?a0 schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/>}) } LIMIT 1500 }
+ ?item wdt:P625 ?coord .
  OPTIONAL{?item wdt:P18 ?img} OPTIONAL{?art schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/>}
  OPTIONAL{?enart schema:about ?item ; schema:isPartOf <https://en.wikipedia.org/>}
  OPTIONAL{?item wdt:P31 ?t} OPTIONAL{?item wdt:P1435 ?h} OPTIONAL{?item wdt:P170|wdt:P84 ?a} OPTIONAL{?item wdt:P571 ?inc}
@@ -233,7 +235,7 @@ const OVERPASS = ['https://maps.mail.ru/osm/tools/overpass/api/interpreter', 'ht
 async function loadOSM(qid) {
   const q = `[out:json][timeout:50];area["wikidata"="${qid}"]->.a;(nwr(area.a)["tourism"="artwork"]["name"];nwr(area.a)["historic"]["name"];nwr(area.a)["memorial"]["name"];);out tags center 900;`;
   let err;
-  for (const u of OVERPASS) { try { return (await getJSON(u, { method: 'POST', body: new URLSearchParams({ data: q }) }, 45000)).elements || []; } catch (e) { err = e; } }
+  for (const u of OVERPASS) { try { return (await getJSON(u, { method: 'POST', body: new URLSearchParams({ data: q }) }, 25000)).elements || []; } catch (e) { err = e; } }
   throw err;
 }
 
@@ -255,7 +257,7 @@ function mergeOSM(places, els) {
 }
 
 async function loadGeo(city) {
-  const j = await wp({ action: 'query', list: 'geosearch', gscoord: city.lat + '|' + city.lon, gsradius: '10000', gslimit: '500' });
+  const j = await wp({ action: 'query', list: 'geosearch', gscoord: city.lat + '|' + city.lon, gsradius: '7000', gslimit: '500' });
   return (j.query?.geosearch || []).filter(g => g.title !== city.name).map(g => ({ id: 'wp:' + g.pageid, name: g.title, desc: '', lat: g.lat, lon: g.lon, img: '', article: g.title, en: '', types: [], her: [], auth: [], year: null, src: 'wp' }));
 }
 
@@ -310,37 +312,53 @@ function setPlaces(places) {
   $('#cityName').textContent = state.city.name;
   document.title = state.city.name + ' · guía';
   drawMarkers(); renderThemes();
+  if (state.fitted) return;
   const pts = places.filter(p => dist(p, state.city) < 6000).map(p => [p.lat, p.lon]);
-  if (pts.length > 3) map.fitBounds(pts, { paddingTopLeft: [20, 20], paddingBottomRight: [20, sheetPx()] }); else map.setView([state.city.lat, state.city.lon], 14);
+  if (pts.length > 3) { map.fitBounds(pts, { paddingTopLeft: [20, 20], paddingBottomRight: [20, sheetPx()] }); state.fitted = true; }
 }
 
 async function loadCatalog() {
+  const run = state.run = (state.run || 0) + 1;
+  state.fitted = false; state.greeted = false;
   state.places = []; state.sel = null; state.contents = []; state.filter = null; $('#log').innerHTML = ''; $('#card').innerHTML = ''; setSugs([]); hl.clearLayers(); selLayer.clearLayers();
   setStatus('Buscando ' + cfg.ciudad + ' en Wikipedia…');
-  const key = 'hh.cat1.' + fold(cfg.ciudad), cached = LS.get(key, null);
+  const key = 'hh.cat2.' + fold(cfg.ciudad), cached = LS.get(key, null);
   if (cached && Date.now() - cached.t < 864e5 && cached.places?.length) { state.city = cached.city; setPlaces(cached.places); setStatus(cached.status); return greet(); }
   let city;
   try { city = await resolveCity(cfg.ciudad); } catch (e) { setStatus('Sin datos'); return addMsg('g', `<p>${esc(e.message)}. Prueba con otro nombre en Ajustes.</p>`); }
-  state.city = city;
+  if (run !== state.run) return;
+  state.city = city; $('#cityName').textContent = city.name;
   if (city.lat) map.setView([city.lat, city.lon], 14);
-  setStatus('Cargando lugares de Wikidata y OpenStreetMap…');
-  const [wd, osm] = await Promise.allSettled([loadWikidata(city.qid), loadOSM(city.qid)]);
-  let places = wd.status === 'fulfilled' ? wd.value : [];
-  const fails = [];
-  if (wd.status === 'rejected') fails.push('Wikidata');
-  if (osm.status === 'fulfilled') places = mergeOSM(places, osm.value); else fails.push('OpenStreetMap');
-  if (places.length < 15) { try { const g = await loadGeo(city), have = new Set(places.map(p => p.article)); places.push(...g.filter(p => !have.has(p.article))); } catch { fails.push('Wikipedia'); } }
-  places = places.filter(p => city.lat == null || dist(p, city) < 30000);
-  const status = places.length + ' lugares' + (fails.length ? ' · no respondió ' + fails.join(', ') : '');
-  setPlaces(places); setStatus(status);
-  if (places.length && !fails.length) LS.set(key, { t: Date.now(), city, places, status });
-  greet();
+  // Cada fuente pinta en cuanto llega: Wikipedia (rápida) primero; Wikidata y OpenStreetMap la completan después.
+  let wpP = [], wdP = null, osmE = null;
+  const fails = [], pending = new Set(['Wikidata', 'OpenStreetMap', 'Wikipedia']);
+  const line = () => state.places.length + ' lugares' + (pending.size ? ' · cargando ' + [...pending].join(', ') + '…' : '') + (fails.length ? ' · no respondió ' + fails.join(', ') : '');
+  const rebuild = () => {
+    if (run !== state.run) return;
+    const wd = wdP || [], arts = new Set(wd.map(p => p.article).filter(Boolean));
+    let places = wd.length >= 15 ? [...wd] : [...wd, ...wpP.filter(p => !arts.has(p.article))];
+    if (osmE) places = mergeOSM(places, osmE);
+    places = places.filter(p => city.lat == null || dist(p, city) < 30000);
+    if (places.length) setPlaces(places);
+    setStatus(line());
+    if (places.length && !state.greeted) greet();
+  };
+  setStatus(line());
+  const step = (name, pr, ok) => pr.then(r => { pending.delete(name); ok(r); }).catch(() => { pending.delete(name); fails.push(name); }).finally(rebuild);
+  await Promise.all([
+    step('Wikipedia', loadGeo(city), r => wpP = r),
+    step('Wikidata', loadWikidata(city.qid), r => wdP = r),
+    step('OpenStreetMap', loadOSM(city.qid), r => osmE = r)
+  ]);
+  if (run !== state.run) return;
+  if (!state.places.length) { setStatus('Sin lugares'); return greet(); }
+  if (!fails.length) LS.set(key, { t: Date.now(), city, places: state.places, status: line() });
 }
 
 /* ---------- Mapa ---------- */
 const map = L.map('map', { zoomControl: false, preferCanvas: true, attributionControl: false }).setView([36.53, -6.29], 14);
 L.control.attribution({ position: 'topright', prefix: false }).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 20, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>' }).addTo(map);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
 const layer = L.layerGroup().addTo(map), hl = L.layerGroup().addTo(map), selLayer = L.layerGroup().addTo(map), meLayer = L.layerGroup().addTo(map);
 const sheetPx = () => innerWidth < 900 ? $('#sheet').offsetHeight + 10 : 20;
 
@@ -414,9 +432,10 @@ function splitSugs(txt) {
   return { body: body.join('\n').trim(), sugs };
 }
 function greet() {
+  state.greeted = true;
   if (!state.places.length) return addMsg('g', `<p>No he encontrado lugares con coordenadas para ${esc(state.city.name)}.</p>`);
   const top = state.places.filter(p => p.article).sort((a, b) => b.imp - a.imp);
-  addMsg('g', `<p>Soy tu guía de ${esc(state.city.name)}. Tengo en el mapa ${state.places.length} lugares sacados de Wikipedia, Wikidata y OpenStreetMap. Pregúntame lo que quieras, toca un punto o elige un tema.</p>` +
+  addMsg('g', `<p>Soy tu guía de ${esc(state.city.name)}. Tengo en el mapa los lugares que Wikipedia, Wikidata y OpenStreetMap conocen de la ciudad. Pregúntame lo que quieras, toca un punto o elige un tema.</p>` +
     (cfg.clave ? '' : `<p class="src">Sin clave de Gemini te contesto con los párrafos de Wikipedia. Con ella, en Ajustes, hablo con mi propia voz y busco por mi cuenta.</p>`));
   setSugs(cfg.clave ? ['¿Por dónde empiezo si tengo una hora?', '¿Qué hay cerca de mí?', 'Cuéntame algo de ' + state.city.name + ' que casi nadie sepa'] : ['¿Qué hay cerca?', ...top.slice(0, 2).map(p => '¿Qué tiene de especial ' + p.name + '?')]);
 }
