@@ -193,11 +193,12 @@ const THEMES = [
   ['Plazas, calles y conjuntos', /plaza|calle|paseo|alameda|barrio|conjunto historico|centro historico|jardin historico|parque|jardin/],
   ['Palacios y edificios', /palacio|casa|edificio|mansion|hospital|aduana|ayuntamiento|carcel|cuartel|mercado|estacion|hotel|colegio|universidad|escuela|instituto|banco|tribunal|lonja|pabellon|plaza de toros|cementerio|puente/]
 ];
-const THEME_NAMES = [...THEMES.map(t => t[0]), 'Otros'];
-const THEME_COL = { 'Arqueología': '#e2b77d', 'Fortificaciones': '#cdbb9b', 'Iglesias y conventos': '#bfaeea', 'Torres': '#9fd3e6', 'Monumentos y esculturas': '#f0d36c', 'Museos y teatros': '#f2a8bd', 'Mar y puertos': '#86c9f5', 'Campo y oficios': '#d8c27a', 'Plazas, calles y conjuntos': '#e8c994', 'Palacios y edificios': '#c9ceaa', 'Otros': '#aab5af' };
+const THEME_NAMES = [...THEMES.map(t => t[0]), 'Patrimonio inmaterial', 'Otros'];
+const THEME_COL = { 'Arqueología': '#e2b77d', 'Fortificaciones': '#cdbb9b', 'Iglesias y conventos': '#bfaeea', 'Torres': '#9fd3e6', 'Monumentos y esculturas': '#f0d36c', 'Museos y teatros': '#f2a8bd', 'Mar y puertos': '#86c9f5', 'Campo y oficios': '#d8c27a', 'Plazas, calles y conjuntos': '#e8c994', 'Palacios y edificios': '#c9ceaa', 'Patrimonio inmaterial': '#ffa98a', 'Otros': '#aab5af' };
 // Lo que no es una pieza (localidades, accidentes naturales, organizaciones), salvo que esté protegido como patrimonio
 const NO_PIEZA = /\b(?:municipio|localidad|ciudad|pueblo|aldea|pedania|entidad singular|asentamiento|comarca|partido judicial|distrito|barrio|rio|arroyo|montana|sierra|pico|embalse|playa|isla|laguna|lago|carretera|autovia|club|equipo|empresa|organizacion|estadio|polideportivo|aeropuerto|espacio natural|parque natural|reserva|paraje)\b/;
 function themeOf(p) {
+  if (p.src === 'iaph') return 'Patrimonio inmaterial';
   const a = fold(p.types.join(' ')), b = fold(p.name + ' ' + p.desc);
   for (const [n, re] of THEMES) if (re.test(a)) return n;
   for (const [n, re] of THEMES) if (re.test(b)) return n;
@@ -258,6 +259,41 @@ async function loadWikidata(qid) {
   return out.filter(p => p.her.length || !NO_PIEZA.test(fold(p.types.join(' '))));
 }
 
+// Lo inmaterial de la provincia (fiestas, oficios, saberes) del Atlas del Patrimonio Inmaterial de Andalucía, por la API del IAPH.
+// Pasa por el intermediario, que guarda las claves. Cada bien se ancla a su municipio, con sus coordenadas de Wikidata.
+async function loadIAPH(prov) {
+  const ruta = `busqueda/inmaterial/q=provincia_smv:${prov.name.replace(/^Provincia de /i, '')}&rows=400`;
+  const [j, mj] = await Promise.all([
+    getJSON(IA + '/iaph?ruta=' + encodeURIComponent(ruta), {}, 40000),
+    sparql(`SELECT ?l ?c WHERE { ?m wdt:P31 wd:Q2074737 ; wdt:P131 wd:${prov.qid} ; wdt:P625 ?c ; rdfs:label ?l FILTER(LANG(?l)="es") }`)
+  ]);
+  const muns = mj.results.bindings.map(b => { const m = /Point\(([-\d.eE]+) ([-\d.eE]+)\)/.exec(b.c.value); return m && { n: fold(b.l.value), label: b.l.value, lat: +m[2], lon: +m[1] }; }).filter(Boolean);
+  const norm = s => fold(String(s).trim().replace(/^(.*) \((el|la|los|las)\)$/i, '$2 $1'));
+  const findMun = name => { const n = norm(name); return n && (muns.find(m => m.n === n) || muns.find(m => m.n.startsWith(n) || n.startsWith(m.n))); };
+  const first = v => String((Array.isArray(v) ? v[0] : v) || '').trim();
+  const val = v => (Array.isArray(v) ? v.map(x => String(x).trim()).filter(Boolean).join(' · ') : String(v || '')).trim();
+  const CAMPOS = [['Descripción', 'clob.descripcion_s'], ['Cómo se desarrolla', 'clob.desarrollo_s'], ['Orígenes', 'clob.origenes_s'], ['Evolución', 'clob.evolucion_s'], ['Preparativos', 'clob.preparativos_s'], ['Indumentaria', 'clob.indumentaria_s'], ['Instrumentos', 'clob.instrumentos_s'], ['Cómo se transmite', 'clob.modotransmision_s'], ['Transformaciones', 'clob.transformaciones_s'], ['Dónde se extiende', 'clob.extension_act_s'], ['El espacio', 'clob.desc_espacio_s'], ['Cuándo', 'identifica.periodicidad_s'], ['Quién lo practica', 'oficio_agente.oficio_smv'], ['Herramientas', 'oficio_herramienta.descripcion_smv'], ['Lo que produce', 'oficio_producto.descripcion_smv']];
+  const out = [];
+  for (const d of j.response?.docs || []) {
+    const m = findMun(first(d.municipio_smv) || d['identifica.municipio_s']), name = first(d.denominacion || d['identifica.denominacion_s']);
+    if (!m || !name) continue;
+    // Varias en el mismo pueblo: cada una a unos cientos de metros del centro, siempre en el mismo sitio
+    const h = hash(String(d.id)), a = (h % 360) * RAD, r = .003 + (h % 7) * .0009;
+    const img = [].concat(d['imagen.id_img_smv'] || []).map(x => String(x).trim()).find(Boolean);
+    out.push({ id: 'iaph:' + d.id, name, desc: clip(val(d['clob.descripcion_s']), 160), lat: m.lat + Math.sin(a) * r, lon: m.lon + Math.cos(a) * r,
+      img: img ? IA + '/iaph?ruta=' + encodeURIComponent(`bien/inmaterial/${d.id}/${img}`) : '', article: '', mun: m.label, year: null,
+      types: [d['identifica.ambito_s'], first(d['tipologia.den_tipologia_smv'])].map(x => String(x || '').trim()).filter(Boolean), her: d.proteccion_s === 'SI' ? ['Protegido'] : [], style: [], auth: [], src: 'iaph',
+      text: CAMPOS.map(([k, f]) => [k, val(d[f])]).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n\n') });
+  }
+  return out;
+}
+function addIAPH(run) {
+  return loadIAPH(state.prov).then(ps => {
+    if (run !== state.run || !ps.length) return;
+    setPlaces([...state.places.filter(p => p.src !== 'iaph'), ...ps], true); saveCache();
+  }).catch(() => { if (run === state.run) setStatus(statusLine() + ' · sin el IAPH'); });
+}
+
 const META_SECS = /^(referencias|notas|enlaces externos|vease tambien|bibliografia|fuentes|galeria|notas y referencias)$/;
 async function article(title) {
   if (!title) return '';
@@ -304,7 +340,7 @@ const initials = p => p.name.split(/[\s\-–(]+/).filter(w => w.length > 2 && !S
 const avatar = (p, cls = '', w = 250) => `<span class="ph ${cls}" style="--c:${THEME_COL[p.theme] || '#aab5af'}" aria-hidden="true">${esc(initials(p))}${p.img ? `<img src="${esc(thumb(p, w))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
 const metaLine = p => [p.types[0] || p.theme, p.mun, p.year, p.auth[0]].filter(Boolean).join(' · ');
 const FILTERS = {
-  mun: (p, v) => p.mun === v, tipo: (p, v) => p.theme === v, estilo: (p, v) => p.style.includes(v), autor: (p, v) => p.auth.includes(v), siglo: (p, v) => century(p.year) === v
+  ambito: (p, v) => p.src === 'iaph' && p.types[0] === v, mun: (p, v) => p.mun === v, tipo: (p, v) => p.theme === v, estilo: (p, v) => p.style.includes(v), autor: (p, v) => p.auth.includes(v), siglo: (p, v) => century(p.year) === v
 };
 const visible = () => state.filter ? state.places.filter(p => FILTERS[state.filter.kind](p, state.filter.value)) : state.places;
 const refPoint = () => state.sel || state.prov;
@@ -320,22 +356,29 @@ function kin(p) {
   const out = [], add = (why, list) => list.filter(x => x !== p && !out.some(o => o.p === x)).slice(0, 5).forEach(x => out.push({ p: x, why }));
   p.auth.forEach(a => add('mismo autor: ' + a, state.places.filter(x => x.auth.includes(a))));
   p.style.forEach(s => add('mismo estilo: ' + s, state.places.filter(x => x.style.includes(s)).sort((a, b) => dist(p, a) - dist(p, b))));
-  if (p.mun) add('mismo tipo en ' + p.mun, state.places.filter(x => x.mun === p.mun && x.theme === p.theme));
+  if (p.src === 'iaph') {
+    add('en ' + p.mun, state.places.filter(x => x.mun === p.mun && x.src !== 'iaph').sort((a, b) => b.imp - a.imp));
+    add('lo mismo en otro pueblo: ' + p.types[0], state.places.filter(x => x.src === 'iaph' && x.types[0] === p.types[0] && x.mun !== p.mun).sort((a, b) => dist(p, a) - dist(p, b)));
+  } else if (p.mun) {
+    add('mismo tipo en ' + p.mun, state.places.filter(x => x.mun === p.mun && x.theme === p.theme));
+    add('lo inmaterial de ' + p.mun, state.places.filter(x => x.src === 'iaph' && x.mun === p.mun));
+  }
   return out;
 }
 
-function setPlaces(places) {
+function setPlaces(places, keepView) {
   const pt = new Set(terms(state.prov.name.replace(/^provincia de /i, '')));
   places.forEach(p => { p.theme = themeOf(p); p.imp = imp(p); p._n = terms(p.name).filter(w => !pt.has(w)); p._t = new Set(terms([p.name, p.desc, p.types.join(' '), p.auth.join(' '), p.style.join(' '), p.her.join(' '), p.mun, p.theme].join(' '))); });
   state.places = places; state.byId = new Map(places.map(p => [p.id, p]));
   $('#title').textContent = state.prov.name;
   document.title = state.prov.name + ' · museo vivo';
   refresh();
+  if (keepView) return;
   const pts = places.map(p => [p.lat, p.lon]);
   if (pts.length > 3) map.fitBounds(pts, { paddingTopLeft: [20, 60], paddingBottomRight: [20, sheetPx()] });
 }
 function refresh() { drawMarkers(); setWall(); renderTemas(); drawFilter(); setStatus(statusLine()); }
-const statusLine = () => { const v = visible(); return v.length + ' piezas' + (state.filter ? ' en este filtro' : '') + ' · ' + v.filter(p => p.img).length + ' con foto'; };
+const statusLine = () => { const v = visible(), i = v.filter(p => p.src === 'iaph').length; return v.length + ' piezas' + (state.filter ? ' en este filtro' : '') + (i ? ` · ${i} del patrimonio inmaterial` : '') + ' · ' + v.filter(p => p.img).length + ' con foto'; };
 const cacheKey = () => 'hh.prov1.' + fold(cfg.provincia);
 function saveCache() { if (state.places.length) LS.set(cacheKey(), { t: Date.now(), prov: state.prov, places: state.places.map(({ _n, _t, ...p }) => p) }); }
 
@@ -343,7 +386,7 @@ async function load() {
   const run = ++state.run;
   const cached = LS.get(cacheKey(), null);
   // La provincia construida se guarda una semana en el navegador: la segunda visita abre al instante
-  if (cached && Date.now() - cached.t < 6048e5 && cached.places?.length) { state.prov = cached.prov; setPlaces(cached.places); greet(); return fillImages(run); }
+  if (cached && Date.now() - cached.t < 6048e5 && cached.places?.length) { state.prov = cached.prov; setPlaces(cached.places); greet(); if (!cached.places.some(p => p.src === 'iaph')) addIAPH(run); return fillImages(run); }
   setStatus('Buscando ' + cfg.provincia + ' en Wikipedia…');
   try { state.prov = await resolveProv(cfg.provincia); } catch (e) { setStatus('Sin datos'); return addMsg('g', `<p>${esc(e.message)}.</p>`); }
   $('#title').textContent = state.prov.name;
@@ -356,7 +399,7 @@ async function load() {
   }
   if (run !== state.run) return;
   setPlaces(places); saveCache(); greet();
-  fillImages(run);
+  addIAPH(run); fillImages(run);
 }
 
 /* ---------- Muro ---------- */
@@ -441,7 +484,7 @@ function showOnMap(ps) {
 }
 
 /* ---------- Filtro y temas ---------- */
-const KIND = { mun: 'Dónde', tipo: 'Qué es', estilo: 'Estilo', autor: 'Autor', siglo: 'Época' };
+const KIND = { ambito: 'Lo inmaterial', mun: 'Dónde', tipo: 'Qué es', estilo: 'Estilo', autor: 'Autor', siglo: 'Época' };
 function setFilter(kind, value) {
   state.filter = kind ? { kind, value } : null;
   W.ox = W.oy = 0; refresh();
@@ -467,11 +510,13 @@ function renderTemas() {
   const tipos = groups(p => p.theme).sort((a, b) => THEME_NAMES.indexOf(a[0]) - THEME_NAMES.indexOf(b[0]));
   const estilos = groups(p => p.style).sort((a, b) => b[1].length - a[1].length).slice(0, 12);
   const autores = groups(p => p.auth).sort((a, b) => b[1].length - a[1].length).slice(0, 12);
+  const ambitos = groups(p => p.src === 'iaph' ? p.types[0] : '').sort((a, b) => b[1].length - a[1].length);
   const siglos = groups(p => century(p.year)).sort((a, b) => (a[1][0].year ?? 0) - (b[1][0].year ?? 0));
   $('#vTemas').innerHTML = `<h2 class="vt-h">${esc(state.prov.name)}: ${state.places.length} piezas</h2>
     <h3 class="ax">Dónde<small>Por municipio</small></h3><div class="chipsrow">${muns.map(([k, ps]) => `<button type="button" data-k="mun" data-v="${esc(k)}">${esc(k)}<i>${ps.length}</i></button>`).join('')}</div>
     <h3 class="ax">Qué es<small>Por tipo de pieza</small></h3>${cards('tipo', tipos)}
     <h3 class="ax">Qué cuenta<small>Temas que cruzan la provincia</small></h3>
+    ${ambitos.length ? `<p class="sub">Lo inmaterial: fiestas, oficios y saberes</p>${cards('ambito', ambitos)}` : ''}
     ${estilos.some(([, ps]) => ps.length > 2) ? `<p class="sub">Estilos</p>${cards('estilo', estilos, 3)}` : ''}
     ${autores.some(([, ps]) => ps.length > 1) ? `<p class="sub">Autores con varias obras</p>${cards('autor', autores, 2)}` : ''}
     ${siglos.length ? `<p class="sub">Épocas</p><div class="chipsrow">${siglos.map(([k, ps]) => `<button type="button" data-k="siglo" data-v="${esc(k)}">${esc(k)}<i>${ps.length}</i></button>`).join('')}</div>` : ''}`;
@@ -567,13 +612,13 @@ function common() {
 }
 const APP = 'Cómo funciona la aplicación: cuando nombras una pieza tal como aparece aquí, se señala en el mapa y sale como tarjeta; al final, dos o tres preguntas que la persona podría hacerte ahora, cada una en su propia línea, empezando por ›.';
 async function pieceSystem(p) {
-  const txt = await article(p.article).catch(() => '');
+  const iaph = p.src === 'iaph', txt = iaph ? p.text : await article(p.article).catch(() => '');
   const parientes = kin(p), cerca = nearest(p, 6);
-  return `Eres ${p.name}${p.mun ? ', en ' + p.mun : ''}: ${p.types[0] || p.theme}. Hablas tú, la pieza, en primera persona, como el objeto que eres. Lo que te ha pasado desde que existes lo cuentas de primera mano; lo anterior, de oídas. A quien representas o recuerdas lo nombras en tercera persona.
+  return `Eres ${p.name}${p.mun ? ', en ' + p.mun : ''}: ${iaph ? p.types.join(', ') + ', del patrimonio inmaterial' : p.types[0] || p.theme}. Hablas tú, la pieza, en primera persona, como lo que eres. Lo que te ha pasado desde que existes lo cuentas de primera mano; lo anterior, de oídas. A quien representas o recuerdas lo nombras en tercera persona.
 
 Antes de cada respuesta, pregúntate, desde la mirada de Freeman Tilden: con lo que sé de mí, ¿qué puede surgir entre esta persona y yo?
 
-Lo que sabes de ti y de tus parientes en la ${state.prov.name.replace(/^Provincia/, 'provincia')} te llega aquí debajo: tu ficha de Wikidata, tu artículo de Wikipedia y las piezas con las que compartes autor, estilo, tipo o lugar.
+Lo que sabes de ti y de tus parientes en la ${state.prov.name.replace(/^Provincia/, 'provincia')} te llega aquí debajo: ${iaph ? 'tu ficha del Atlas del Patrimonio Inmaterial de Andalucía (IAPH)' : 'tu ficha de Wikidata, tu artículo de Wikipedia'} y las piezas con las que compartes autor, estilo, tipo o lugar.
 
 ${APP}
 
@@ -582,7 +627,7 @@ ${common()}
 TU FICHA
 ${placeLine(p)}
 
-TU ARTÍCULO DE WIKIPEDIA
+${iaph ? 'TU FICHA DEL ATLAS DEL PATRIMONIO INMATERIAL (IAPH)' : 'TU ARTÍCULO DE WIKIPEDIA'}
 ${clip(txt || 'No tienes artículo propio.', 16000)}
 ${parientes.length ? '\nTUS PARIENTES EN LA PROVINCIA\n' + parientes.map(k => `${placeLine(k.p, p)} (${k.why})`).join('\n') : ''}
 
@@ -642,7 +687,8 @@ async function talk(q, hidden = false) {
   } catch (e) {
     m.remove();
     addMsg('note', `No llega la respuesta (${esc(e.name === 'AbortError' ? 'tarda demasiado' : e.message)}).`);
-    if (p && p.article) { const txt = await article(p.article).catch(() => ''); if (txt) addMsg('g', paras(clip(txt.split('\n').filter(l => l.length > 40).slice(0, 2).join('\n'), 900)) + `<div class="src"><a href="https://es.wikipedia.org/wiki/${encodeURIComponent(p.article.replace(/ /g, '_'))}" target="_blank" rel="noopener">Wikipedia</a></div>`, p); }
+    if (p && p.src === 'iaph' && p.text) addMsg('g', paras(clip(p.text.split('\n').filter(Boolean).slice(0, 2).join('\n'), 900)) + '<div class="src">Atlas del Patrimonio Inmaterial de Andalucía (IAPH)</div>', p);
+    else if (p && p.article) { const txt = await article(p.article).catch(() => ''); if (txt) addMsg('g', paras(clip(txt.split('\n').filter(l => l.length > 40).slice(0, 2).join('\n'), 900)) + `<div class="src"><a href="https://es.wikipedia.org/wiki/${encodeURIComponent(p.article.replace(/ /g, '_'))}" target="_blank" rel="noopener">Wikipedia</a></div>`, p); }
   } finally { state.busy = false; $('#send').disabled = false; }
 }
 function ask(q) {
