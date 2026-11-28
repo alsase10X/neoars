@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111c18">
+<title>Patrimonio de la provincia · Hello Heritage</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Roboto+Flex:opsz,wght@8..144,400;8..144,500&family=Space+Grotesk:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+/* Hello Heritage · museo vivo de una provincia. Mismo sistema visual que guia-ciudad (verde oscuro, lima, Material 3 Expressive).
+   Tres maneras de entrar en las mismas piezas: dónde (municipio), qué es (tipo) y qué cuenta (estilo, autor, época).
+   Muro arrastrable, mapa y temas. Al abrir una pieza habla ella; el guía relaciona y propone recorridos. */
+:root{--bg:#111c18;--bg2:#16221d;--sf:#1d2c26;--sf2:#25372f;--ink:#f1f2e9;--ink2:#bbc6bb;--lime:#dcff85;--line:rgba(241,242,233,.12);--sheet:34vh;color-scheme:dark}
+body.has-sel{--sheet:56vh}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,system-ui,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--lime)}
+:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+#app{position:fixed;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr)}
+.top{display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px;background:var(--bg);border-bottom:1px solid var(--line);z-index:20}
+.brand{flex:1;line-height:1.15}
+.brand h1{font:600 22px/1.05 'Space Grotesk',sans-serif;letter-spacing:-.025em;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#status{font:13px 'Roboto Flex',sans-serif;color:var(--ink2);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg{display:flex;background:var(--sf);border-radius:999px;padding:3px;flex:none}
+.seg button{border:0;background:none;padding:0 12px;height:38px;border-radius:999px;font:500 14px 'Roboto Flex',sans-serif;color:var(--ink2);transition:border-radius .25s,background .25s}
+.seg button[aria-pressed=true]{background:var(--lime);color:#111c18;border-radius:12px}
+.icon{flex:none;width:44px;height:44px;border-radius:16px;border:0;background:var(--sf);display:grid;place-items:center;color:var(--ink)}
+.icon svg{width:22px;height:22px}
+main{position:relative;overflow:hidden}
+#map{position:absolute;inset:0;background:#0c1411}
+.leaflet-container{font:13px 'Roboto Flex',sans-serif;background:#0c1411}
+.leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.82) contrast(.9) saturate(.35) sepia(.15)}
+.leaflet-control-attribution{background:rgba(17,28,24,.75)!important;color:var(--ink2)!important}
+.leaflet-control-attribution a{color:var(--ink2)!important}
+.leaflet-tooltip{background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;font:13px 'Roboto Flex',sans-serif;box-shadow:none}
+.leaflet-tooltip-top:before{border-top-color:var(--bg2)}
+#muro{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:grab;background:var(--bg);z-index:450;user-select:none}
+#muro.drag{cursor:grabbing}
+.tile{position:absolute;left:0;top:0;padding:3px;border:0;background:none;will-change:transform}
+.tile>div{position:relative;width:100%;height:100%;border-radius:20px;overflow:hidden;background:var(--sf)}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.tile span{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font:500 13px/1.2 'Roboto Flex',sans-serif;color:#fff;text-align:left;background:linear-gradient(transparent,rgba(0,0,0,.72));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile.on>div{outline:3px solid var(--lime);outline-offset:-3px}
+.empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink2);padding:24px;text-align:center}
+#filt{position:absolute;top:12px;left:12px;right:120px;z-index:1050;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
+#filt button{pointer-events:auto;border:0;border-radius:999px;height:40px;padding:0 16px;font:500 14px 'Roboto Flex',sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+#filt .f{background:var(--lime);color:#111c18}
+#filt .r{background:var(--sf2);color:var(--ink)}
+#vTemas{position:absolute;inset:0;overflow:auto;background:var(--bg);padding:16px max(12px,3vw) calc(var(--sheet) + 24px);z-index:1000}
+.vt-h{font:600 28px/1.1 'Space Grotesk',sans-serif;letter-spacing:-.02em;margin:4px 0 6px;text-wrap:balance}
+.ax{margin:22px 0 6px;font:600 20px/1.2 'Space Grotesk',sans-serif}
+.ax small{display:block;font:14px/1.4 Manrope,sans-serif;color:var(--ink2);margin-top:2px}
+.sub{font:500 14px 'Roboto Flex',sans-serif;color:var(--ink2);margin:14px 0 6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:8px}
+.tc{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;border:0;background:var(--bg2);border-radius:20px;padding:8px 14px 8px 8px;text-align:left;min-height:60px}
+.tc b{font:600 16px/1.2 'Space Grotesk',sans-serif;display:block}
+.tc small{display:block;font:13px/1.3 'Roboto Flex',sans-serif;color:var(--ink2);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.n{font:500 14px 'Roboto Flex',sans-serif;background:var(--sf2);border-radius:999px;padding:4px 10px}
+.chipsrow{display:flex;flex-wrap:wrap;gap:6px}
+.chipsrow button{border:1px solid var(--line);background:var(--bg2);border-radius:12px;padding:0 12px;min-height:40px;font:14px 'Roboto Flex',sans-serif}
+.chipsrow button i{font-style:normal;color:var(--ink2);margin-left:6px}
+.ph{position:relative;flex:none;display:grid;place-items:center;overflow:hidden;background:var(--c);color:#111c18;font:600 15px/1 'Space Grotesk',sans-serif;width:44px;height:44px;border-radius:14px}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph.xl{width:68px;height:68px;border-radius:22px;font-size:22px}
+.ph.s{width:32px;height:32px;border-radius:11px;font-size:12px}
+#sheet{position:fixed;left:0;right:0;bottom:0;height:var(--sheet);background:var(--bg2);border-radius:28px 28px 0 0;display:flex;flex-direction:column;z-index:1100;box-shadow:0 -10px 30px rgba(0,0,0,.4);transition:height .35s cubic-bezier(.2,.9,.25,1.15)}
+#sheet[data-size=max]{height:calc(100% - 64px - env(safe-area-inset-top))}
+#grab{flex:none;height:22px;border:0;background:none;display:grid;place-items:center;width:100%}
+#grab::before{content:"";width:40px;height:5px;border-radius:3px;background:var(--line)}
+#card:empty{display:none}
+.card{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;padding:0 14px 10px;border-bottom:1px solid var(--line);align-items:start}
+.card h2{font:600 20px/1.15 'Space Grotesk',sans-serif;letter-spacing:-.01em;margin:0 0 3px;text-wrap:balance}
+.meta{font:13px/1.4 'Roboto Flex',sans-serif;color:var(--ink2)}
+.her{display:inline-block;margin:6px 6px 0 0;font:500 12px/1.3 'Roboto Flex',sans-serif;color:#111c18;background:var(--lime);border-radius:8px;padding:2px 8px}
+.who{display:inline-block;margin:6px 0 0;font:500 12px/1.3 'Roboto Flex',sans-serif;color:var(--lime);border:1px solid rgba(220,255,133,.4);border-radius:8px;padding:1px 8px}
+.x{width:auto;min-width:36px;height:36px;border-radius:12px;border:0;background:var(--sf);font:500 13px 'Roboto Flex',sans-serif;padding:0 10px}
+#log{flex:1;overflow:auto;padding:6px 14px 4px;position:relative;overscroll-behavior:contain}
+.msg{margin:10px 0}
+.msg.u{text-align:right}
+.msg.u .b{display:inline-block;background:var(--sf2);padding:9px 14px;border-radius:22px 22px 6px 22px;max-width:86%;text-align:left}
+.msg.g{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px}
+.av{width:28px;height:28px;margin-top:2px}
+.msg.g .t p{margin:0 0 9px}
+.think .av{animation:turn 4s linear infinite}
+.think .t{color:var(--ink2);font:14px 'Roboto Flex',sans-serif;padding-top:4px}
+@keyframes turn{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.think .av{animation:none}#sheet{transition:none}}
+.src{font:12px 'Roboto Flex',sans-serif;color:var(--ink2);margin-top:2px}
+.note{text-align:center;font:13px 'Roboto Flex',sans-serif;color:var(--ink2);margin:12px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 2px}
+.pc{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--sf);border-radius:14px;padding:6px 12px 6px 6px;min-height:44px;text-align:left;font:14px/1.25 'Roboto Flex',sans-serif}
+.pc i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--lime);color:#111c18;font:500 12px/22px 'Roboto Flex',sans-serif;text-align:center;font-style:normal}
+.pc small{display:block;color:var(--ink2);font-size:12px}
+#sugs{display:flex;gap:6px;overflow-x:auto;padding:0 14px 2px;flex:none;scrollbar-width:none}
+#sugs:empty{display:none}
+#sugs button{flex:none;max-width:80vw;border:1px solid rgba(220,255,133,.35);background:none;color:var(--lime);border-radius:999px;padding:0 14px;height:40px;font:14px 'Roboto Flex',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ask{display:flex;gap:8px;padding:8px 12px 4px;flex:none}
+#q{flex:1;height:48px;border-radius:24px;border:1px solid var(--line);background:var(--sf);padding:0 18px;font-size:16px}
+#q::placeholder{color:var(--ink2)}
+#send{flex:none;width:48px;height:48px;border-radius:16px;border:0;background:var(--lime);color:#111c18;display:grid;place-items:center;transition:border-radius .25s}
+#send:hover,#send:focus-visible{border-radius:50%}
+#send:disabled{opacity:.4}
+.powered{flex:none;text-align:center;font:12px 'Roboto Flex',sans-serif;color:var(--ink2);padding:2px 12px calc(6px + env(safe-area-inset-bottom))}
+dialog{background:var(--bg2);color:var(--ink);border:0;border-radius:28px;padding:20px;width:min(92vw,440px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog h2{font:600 22px 'Space Grotesk',sans-serif;margin:0 0 12px}
+dialog label{display:block;font:500 14px 'Roboto Flex',sans-serif;margin:12px 0 4px;color:var(--ink2)}
+dialog select{display:block;width:100%;height:48px;border-radius:14px;border:1px solid var(--line);background:var(--sf);padding:0 14px;font-size:16px;margin-top:4px}
+.btn{border:1px solid var(--line);background:var(--sf);border-radius:999px;height:40px;padding:0 16px;font:500 14px 'Roboto Flex',sans-serif}
+.btn.pri{background:var(--lime);color:#111c18;border-color:transparent}
+.dl-a{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(min-width:900px){
+  :root,body.has-sel{--sheet:0px}
+  #app{grid-template-columns:minmax(0,1fr) 420px}
+  .top{grid-column:1/-1}
+  #sheet{position:relative;grid-column:2;grid-row:2;height:auto;border-radius:0;box-shadow:none;border-left:1px solid var(--line);transition:none}
+  #grab{display:none}
+  .card{padding-top:14px}
+  #sugs{flex-wrap:wrap}#sugs button{max-width:100%}
+}
+@media(max-width:899px){body.v-temas{--sheet:30vh}body.v-temas #card{display:none}}
+body:not(.v-mapa) .leaflet-control-container{display:none}
+@media(max-width:420px){.brand h1{font-size:19px}.seg button{padding:0 10px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="brand"><h1 id="title">Patrimonio</h1><span id="status">Cargando…</span></div>
+    <nav class="seg" aria-label="Vista"><button type="button" data-v="muro" aria-pressed="true">Muro</button><button type="button" data-v="mapa" aria-pressed="false">Mapa</button><button type="button" data-v="temas" aria-pressed="false">Temas</button></nav>
+    <button type="button" class="icon" id="btnCfg" aria-label="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+  </header>
+  <main>
+    <div id="map" role="application" aria-label="Mapa de piezas"></div>
+    <div id="muro" aria-label="Muro de piezas: arrastra para recorrerlo"><div id="tiles"></div></div>
+    <div id="filt"></div>
+    <section id="vTemas" hidden aria-label="Temas"></section>
+  </main>
+  <aside id="sheet" data-size="min" aria-label="Conversación">
+    <button type="button" id="grab" aria-label="Ampliar o reducir la conversación"></button>
+    <div id="card"></div>
+    <div id="log" aria-live="polite"></div>
+    <div id="sugs"></div>
+    <form id="ask" autocomplete="off"><input id="q" enterkeyhint="send" placeholder="Pregunta…" aria-label="Pregunta"><button id="send" aria-label="Enviar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></form>
+    <div class="powered">powered by Hello Heritage</div>
+  </aside>
+</div>
+<dialog id="cfg"><form method="dialog" id="cfgForm">
+  <h2>Ajustes</h2>
+  <label>Modelo<select name="modelo"><option value="haiku">Claude Haiku · rápido</option><option value="sonnet">Claude Sonnet · más fino, más lento</option></select></label>
+  <div class="dl-a"><button class="btn" value="cancel">Cancelar</button><button class="btn pri" value="ok">Guardar</button></div>
+</form></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+{
+/* ---------- Utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fold = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const STOP = new Set(('el la los las lo un una unos unas de del al a y o u e en con por para que como es son fue era hay me te se le les su sus mi tu yo este esta esto estos estas ese esa eso aqui alli muy mas pero sobre entre cual quien donde cuando porque ya ha han hace tiene puedo dime cuentame hablame algo the of and to in is what who where').split(' '));
+const terms = s => fold(s).split(/[^a-z0-9]+/).filter(w => w.length > 2 && !STOP.has(w)).map(w => w.slice(0, 5));
+const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} } };
+const clip = (s, n) => s && s.length > n ? s.slice(0, n).replace(/\s+\S*$/, '') + ' […]' : (s || '');
+const RAD = Math.PI / 180;
+const dist = (a, b) => { const x = Math.sin((b.lat - a.lat) * RAD / 2) ** 2 + Math.cos(a.lat * RAD) * Math.cos(b.lat * RAD) * Math.sin((b.lon - a.lon) * RAD / 2) ** 2; return 12742000 * Math.asin(Math.sqrt(x)); };
+const meters = m => m < 950 ? Math.round(m / 10) * 10 + ' m' : (m / 1000).toFixed(m < 20000 ? 1 : 0).replace('.', ',') + ' km';
+const mod = (a, n) => ((a % n) + n) % n;
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
+const century = y => y == null ? '' : y < 1 ? 'Antigüedad (antes de Cristo)' : 'Siglo ' + (ROMAN[Math.floor((y - 1) / 100) + 1] || '');
+const hash = s => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
+
+const params = new URLSearchParams(location.search);
+const saved = LS.get('hh.museo', {});
+const cfg = { provincia: params.get('provincia') || 'Provincia de Cádiz', modelo: ['haiku', 'sonnet'].includes(params.get('modelo')) ? params.get('modelo') : saved.modelo === 'sonnet' ? 'sonnet' : 'haiku' };
+// El intermediario de artmedium (intermediario/worker.js): guarda las claves y llama a Haiku o Sonnet por Perplexity
+const IA = 'https://artmedium-ia.alberto-studio76.workers.dev';
+
+/* ---------- Qué es: tipos ---------- */
+const THEMES = [
+  ['Arqueología', /yacimiento|arqueol|fenic|romano|romana|necropolis|ruina|dolmen|megalit|abrigo|cueva|arte rupestre|hipogeo|sarcofago|salazon|anfiteatro|villa romana|calzada/],
+  ['Fortificaciones', /castillo|fortaleza|fortific|fuerte|baluarte|muralla|puerta de|puertas de|bateria|bastion|revellin|alcazaba|alcazar|recinto amurallado|polvorin|bunker|atalaya/],
+  ['Iglesias y conventos', /iglesia|catedral|capilla|convento|monasterio|oratorio|ermita|templo|parroquia|santuario|cripta|basilica|sinagoga|mezquita|colegiata|cartuja/],
+  ['Torres', /torre/],
+  ['Monumentos y esculturas', /monumento|estatua|escultura|busto|memorial|obra de arte|fuente|placa|grupo escult|mural|cruz|relieve/],
+  ['Museos y teatros', /museo|teatro|biblioteca|archivo|galeria|cine|auditorio|centro cultural|casino|ateneo/],
+  ['Mar y puertos', /puerto|muelle|faro|astillero|almadraba|salina|dique|balneario|barco|buque|pecio/],
+  ['Campo y oficios', /molino|bodega|cortijo|hacienda|lagar|noria|acueducto|aljibe|\bpozo\b|almazara|\bventa\b|granja|fabrica|tejar|horno de cal|ingenio/],
+  ['Plazas, calles y conjuntos', /plaza|calle|paseo|alameda|barrio|conjunto historico|centro historico|jardin historico|parque|jardin/],
+  ['Palacios y edificios', /palacio|casa|edificio|mansion|hospital|aduana|ayuntamiento|carcel|cuartel|mercado|estacion|hotel|colegio|universidad|escuela|instituto|banco|tribunal|lonja|pabellon|plaza de toros|cementerio|puente/]
+];
+const THEME_NAMES = [...THEMES.map(t => t[0]), 'Otros'];
+const THEME_COL = { 'Arqueología': '#e2b77d', 'Fortificaciones': '#cdbb9b', 'Iglesias y conventos': '#bfaeea', 'Torres': '#9fd3e6', 'Monumentos y esculturas': '#f0d36c', 'Museos y teatros': '#f2a8bd', 'Mar y puertos': '#86c9f5', 'Campo y oficios': '#d8c27a', 'Plazas, calles y conjuntos': '#e8c994', 'Palacios y edificios': '#c9ceaa', 'Otros': '#aab5af' };
+// Lo que no es una pieza (localidades, accidentes naturales, organizaciones), salvo que esté protegido como patrimonio
+const NO_PIEZA = /\b(?:municipio|localidad|ciudad|pueblo|aldea|pedania|entidad singular|asentamiento|comarca|partido judicial|distrito|barrio|rio|arroyo|montana|sierra|pico|embalse|playa|isla|laguna|lago|carretera|autovia|club|equipo|empresa|organizacion|estadio|polideportivo|aeropuerto|espacio natural|parque natural|reserva|paraje)\b/;
+function themeOf(p) {
+  const a = fold(p.types.join(' ')), b = fold(p.name + ' ' + p.desc);
+  for (const [n, re] of THEMES) if (re.test(a)) return n;
+  for (const [n, re] of THEMES) if (re.test(b)) return n;
+  return 'Otros';
+}
+
+const state = { prov: null, places: [], byId: new Map(), sel: null, filter: null, view: 'muro', speaker: null, chats: { guia: [] }, busy: false, articles: new Map(), run: 0 };
+
+/* ---------- Fuentes abiertas ---------- */
+async function getJSON(url, opt = {}, ms = 30000) {
+  const c = new AbortController(), t = setTimeout(() => c.abort(), ms);
+  try { const r = await fetch(url, { ...opt, signal: c.signal }); if (!r.ok) throw new Error('HTTP ' + r.status); return await r.json(); }
+  finally { clearTimeout(t); }
+}
+const wp = p => getJSON('https://es.wikipedia.org/w/api.php?' + new URLSearchParams({ format: 'json', formatversion: '2', origin: '*', ...p }));
+const sparql = q => getJSON('https://query.wikidata.org/sparql?format=json&query=' + encodeURIComponent(q), {}, 58000);
+
+async function resolveProv(name) {
+  const j = await wp({ action: 'query', titles: name, redirects: '1', prop: 'pageprops|coordinates|extracts', ppprop: 'wikibase_item', exintro: '1', explaintext: '1' });
+  const p = j.query?.pages?.[0];
+  if (!p || p.missing || !p.pageprops?.wikibase_item) throw new Error('No encuentro «' + name + '» en Wikipedia');
+  const c = p.coordinates?.[0] || {};
+  return { name: p.title, qid: p.pageprops.wikibase_item, lat: c.lat, lon: c.lon, intro: p.extract || '' };
+}
+
+// Las piezas: todo lo que hay en la provincia con protección patrimonial o con artículo en Wikipedia.
+// Dos consultas sobre el mismo conjunto: los datos de cada pieza y sus facetas (tipo, protección, estilo, autor).
+const piezasDe = qid => `{ SELECT DISTINCT ?item WHERE { ?item wdt:P131+ wd:${qid} ; wdt:P625 [] .
+  FILTER(EXISTS{?item wdt:P1435 []} || EXISTS{?a0 schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/>}) } LIMIT 5000 }`;
+async function loadWikidata(qid) {
+  const v = b => b?.value, split = s => s ? s.split('|').filter(Boolean) : [], title = u => u ? decodeURIComponent(u.split('/wiki/')[1] || '').replace(/_/g, ' ') : '';
+  const base = sparql(`SELECT ?item ?label ?desc (SAMPLE(?c) AS ?coord) (SAMPLE(?img) AS ?image) (SAMPLE(?art) AS ?es) (SAMPLE(?ml) AS ?mun) (MIN(YEAR(?inc)) AS ?year) WHERE {
+ ${piezasDe(qid)}
+ ?item wdt:P625 ?c .
+ OPTIONAL{?item wdt:P18 ?img} OPTIONAL{?art schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/>}
+ OPTIONAL{?item wdt:P131* ?m . ?m wdt:P31 wd:Q2074737 . ?m rdfs:label ?ml FILTER(LANG(?ml)="es")}
+ OPTIONAL{?item wdt:P571 ?inc}
+ OPTIONAL{?item rdfs:label ?label FILTER(LANG(?label)="es")} OPTIONAL{?item schema:description ?desc FILTER(LANG(?desc)="es")}
+} GROUP BY ?item ?label ?desc`);
+  const facets = sparql(`SELECT ?item (GROUP_CONCAT(DISTINCT ?tl;separator="|") AS ?types) (GROUP_CONCAT(DISTINCT ?hl;separator="|") AS ?her)
+ (GROUP_CONCAT(DISTINCT ?sl;separator="|") AS ?style) (GROUP_CONCAT(DISTINCT ?al;separator="|") AS ?auth) WHERE {
+ ${piezasDe(qid)}
+ OPTIONAL{?item wdt:P31 ?t . ?t rdfs:label ?tl FILTER(LANG(?tl)="es")} OPTIONAL{?item wdt:P1435 ?h . ?h rdfs:label ?hl FILTER(LANG(?hl)="es")}
+ OPTIONAL{?item wdt:P149 ?s . ?s rdfs:label ?sl FILTER(LANG(?sl)="es")} OPTIONAL{?item wdt:P170|wdt:P84 ?a . ?a rdfs:label ?al FILTER(LANG(?al)="es")}
+} GROUP BY ?item`).catch(() => null);
+  const [b, f] = await Promise.all([base, facets]);
+  const fx = new Map((f?.results.bindings || []).map(x => [v(x.item).split('/').pop(), x]));
+  const out = [], seen = new Set();
+  for (const x of b.results.bindings) {
+    const id = v(x.item).split('/').pop(), m = /Point\(([-\d.eE]+) ([-\d.eE]+)\)/.exec(v(x.coord) || ''), es = title(v(x.es));
+    const name = v(x.label) || es;
+    if (seen.has(id) || !m || !name) continue;
+    seen.add(id);
+    const g = fx.get(id) || {};
+    out.push({ id, name, desc: v(x.desc) || '', lat: +m[2], lon: +m[1], img: v(x.image) ? v(x.image).replace(/^http:/, 'https:') + '?width=500' : '', article: es,
+      mun: v(x.mun) || '', year: v(x.year) ? +v(x.year) : null, types: split(v(g.types)), her: split(v(g.her)), style: split(v(g.style)), auth: split(v(g.auth)) });
+  }
+  return out.filter(p => p.her.length || !NO_PIEZA.test(fold(p.types.join(' '))));
+}
+
+const META_SECS = /^(referencias|notas|enlaces externos|vease tambien|bibliografia|fuentes|galeria|notas y referencias)$/;
+async function article(title) {
+  if (!title) return '';
+  if (state.articles.has(title)) return state.articles.get(title);
+  const j = await wp({ action: 'query', titles: title, redirects: '1', prop: 'extracts', explaintext: '1' });
+  let lines = (j.query?.pages?.[0]?.extract || '').split('\n');
+  const cut = lines.findIndex(l => { const m = /^==\s*(.+?)\s*==$/.exec(l.trim()); return m && META_SECS.test(fold(m[1])); });
+  if (cut > 0) lines = lines.slice(0, cut);
+  const txt = lines.join('\n').trim();
+  state.articles.set(title, txt);
+  return txt;
+}
+async function intros(titles) {
+  const out = {};
+  for (let i = 0; i < titles.length; i += 20) {
+    const j = await wp({ action: 'query', prop: 'extracts', exintro: '1', explaintext: '1', exlimit: '20', redirects: '1', titles: titles.slice(i, i + 20).join('|') }).catch(() => null);
+    const alias = {};
+    for (const r of [...(j?.query?.normalized || []), ...(j?.query?.redirects || [])]) alias[r.to] = r.from;
+    for (const pg of j?.query?.pages || []) if (pg.extract) { let t = pg.title; while (t && !out[t]) { out[t] = pg.extract; t = alias[t]; } }
+  }
+  return out;
+}
+// Fotos: la de Wikidata y, si no hay, la principal del artículo de Wikipedia (de 50 en 50, cuatro peticiones a la vez)
+async function fillImages(run) {
+  const need = state.places.filter(p => !p.img && p.article && !p.imgTried), chunks = [];
+  for (let i = 0; i < need.length; i += 50) chunks.push(need.slice(i, i + 50));
+  const one = async chunk => {
+    const j = await wp({ action: 'query', prop: 'pageimages', piprop: 'thumbnail', pithumbsize: '500', pilimit: '50', redirects: '1', titles: chunk.map(p => p.article).join('|') }).catch(() => null);
+    if (!j) return;
+    const alias = {}, img = {};
+    for (const r of [...(j.query?.normalized || []), ...(j.query?.redirects || [])]) alias[r.to] = r.from;
+    for (const pg of j.query?.pages || []) if (pg.thumbnail?.source) { let t = pg.title; while (t && !img[t]) { img[t] = pg.thumbnail.source; t = alias[t]; } }
+    chunk.forEach(p => { p.imgTried = true; if (img[p.article]) p.img = img[p.article]; });
+  };
+  for (let i = 0; i < chunks.length; i += 4) { if (run !== state.run) return; await Promise.all(chunks.slice(i, i + 4).map(one)); }
+  if (run !== state.run || !need.length) return;
+  refresh(); saveCache();
+}
+
+/* ---------- Catálogo ---------- */
+const imp = p => (p.article ? 3 : 0) + (p.her.length ? 2 : 0) + (p.img ? 1 : 0) + (p.auth.length ? 1 : 0);
+const thumb = (p, w) => !p.img ? '' : p.img.includes('FilePath') ? p.img.replace(/([?&]width=)\d+/, '$1' + w) : p.img.replace(/\/\d+px-/, '/' + w + 'px-');
+const initials = p => p.name.split(/[\s\-–(]+/).filter(w => w.length > 2 && !STOP.has(fold(w))).slice(0, 2).map(w => w[0].toUpperCase()).join('') || p.name[0];
+const avatar = (p, cls = '', w = 250) => `<span class="ph ${cls}" style="--c:${THEME_COL[p.theme] || '#aab5af'}" aria-hidden="true">${esc(initials(p))}${p.img ? `<img src="${esc(thumb(p, w))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
+const metaLine = p => [p.types[0] || p.theme, p.mun, p.year, p.auth[0]].filter(Boolean).join(' · ');
+const FILTERS = {
+  mun: (p, v) => p.mun === v, tipo: (p, v) => p.theme === v, estilo: (p, v) => p.style.includes(v), autor: (p, v) => p.auth.includes(v), siglo: (p, v) => century(p.year) === v
+};
+const visible = () => state.filter ? state.places.filter(p => FILTERS[state.filter.kind](p, state.filter.value)) : state.places;
+const refPoint = () => state.sel || state.prov;
+function nearest(p, n, list = state.places) { return list.filter(x => x !== p).map(x => [x, dist(p, x)]).sort((a, b) => a[1] - b[1]).slice(0, n); }
+function searchPlaces(q, limit = 10) {
+  const t = [...new Set(terms(q))];
+  if (!t.length) return [];
+  return state.places.map(p => { let s = 0; for (const w of t) s += p._n.includes(w) ? 3 : p._t.has(w) ? 1.5 : 0; return { p, s }; })
+    .filter(x => x.s > 0).sort((a, b) => b.s + b.p.imp * .2 - a.s - a.p.imp * .2).slice(0, limit).map(x => x.p);
+}
+// Parientes de una pieza en la provincia: mismo autor, mismo estilo, mismo tipo en el mismo municipio
+function kin(p) {
+  const out = [], add = (why, list) => list.filter(x => x !== p && !out.some(o => o.p === x)).slice(0, 5).forEach(x => out.push({ p: x, why }));
+  p.auth.forEach(a => add('mismo autor: ' + a, state.places.filter(x => x.auth.includes(a))));
+  p.style.forEach(s => add('mismo estilo: ' + s, state.places.filter(x => x.style.includes(s)).sort((a, b) => dist(p, a) - dist(p, b))));
+  if (p.mun) add('mismo tipo en ' + p.mun, state.places.filter(x => x.mun === p.mun && x.theme === p.theme));
+  return out;
+}
+
+function setPlaces(places) {
+  const pt = new Set(terms(state.prov.name.replace(/^provincia de /i, '')));
+  places.forEach(p => { p.theme = themeOf(p); p.imp = imp(p); p._n = terms(p.name).filter(w => !pt.has(w)); p._t = new Set(terms([p.name, p.desc, p.types.join(' '), p.auth.join(' '), p.style.join(' '), p.her.join(' '), p.mun, p.theme].join(' '))); });
+  state.places = places; state.byId = new Map(places.map(p => [p.id, p]));
+  $('#title').textContent = state.prov.name;
+  document.title = state.prov.name + ' · museo vivo';
+  refresh();
+  const pts = places.map(p => [p.lat, p.lon]);
+  if (pts.length > 3) map.fitBounds(pts, { paddingTopLeft: [20, 60], paddingBottomRight: [20, sheetPx()] });
+}
+function refresh() { drawMarkers(); setWall(); renderTemas(); drawFilter(); setStatus(statusLine()); }
+const statusLine = () => { const v = visible(); return v.length + ' piezas' + (state.filter ? ' en este filtro' : '') + ' · ' + v.filter(p => p.img).length + ' con foto'; };
+const cacheKey = () => 'hh.prov1.' + fold(cfg.provincia);
+function saveCache() { if (state.places.length) LS.set(cacheKey(), { t: Date.now(), prov: state.prov, places: state.places.map(({ _n, _t, ...p }) => p) }); }
+
+async function load() {
+  const run = ++state.run;
+  const cached = LS.get(cacheKey(), null);
+  // La provincia construida se guarda una semana en el navegador: la segunda visita abre al instante
+  if (cached && Date.now() - cached.t < 6048e5 && cached.places?.length) { state.prov = cached.prov; setPlaces(cached.places); greet(); return fillImages(run); }
+  setStatus('Buscando ' + cfg.provincia + ' en Wikipedia…');
+  try { state.prov = await resolveProv(cfg.provincia); } catch (e) { setStatus('Sin datos'); return addMsg('g', `<p>${esc(e.message)}.</p>`); }
+  $('#title').textContent = state.prov.name;
+  if (state.prov.lat) map.setView([state.prov.lat, state.prov.lon], 9);
+  setStatus('Cargando las piezas de Wikidata…');
+  let places;
+  try { places = await loadWikidata(state.prov.qid); } catch (e) {
+    setStatus('Wikidata no ha respondido');
+    return addMsg('g', `<p>Wikidata no ha respondido (${esc(e.message)}). <button type="button" class="btn" id="retry">Volver a intentarlo</button></p>`);
+  }
+  if (run !== state.run) return;
+  setPlaces(places); saveCache(); greet();
+  fillImages(run);
+}
+
+/* ---------- Muro ---------- */
+const muro = $('#muro'), tilesEl = $('#tiles');
+const W = { ox: 0, oy: 0, vx: 0, vy: 0, list: [], C: 1, R: 1, S: 150, nodes: new Map(), drag: null, raf: 0 };
+function setWall() {
+  // Orden estable pero mezclado: cada pieza tiene su sitio en el muro y las vecinas son de temas distintos
+  W.list = visible().filter(p => p.img).sort((a, b) => hash(a.id) - hash(b.id));
+  const n = W.list.length;
+  W.C = Math.max(1, Math.ceil(Math.sqrt(n * 1.6))); W.R = Math.max(1, Math.ceil(n / W.C));
+  W.S = innerWidth < 600 ? 132 : 176;
+  tilesEl.innerHTML = ''; W.nodes.clear();
+  drawWall();
+}
+function drawWall() {
+  const n = W.list.length;
+  if (!n) { if (!tilesEl.firstChild) tilesEl.innerHTML = `<p class="empty">${state.places.length ? 'Ninguna pieza con foto en este filtro.' : 'Cargando las piezas…'}</p>`; return; }
+  const S = W.S, w = muro.clientWidth, h = muro.clientHeight;
+  const i0 = Math.floor(-W.ox / S) - 1, j0 = Math.floor(-W.oy / S) - 1, i1 = i0 + Math.ceil(w / S) + 2, j1 = j0 + Math.ceil(h / S) + 2, keep = new Set();
+  for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+    const k = i + ',' + j; keep.add(k);
+    let el = W.nodes.get(k);
+    if (!el) {
+      // El muro no se acaba: al salir por un lado vuelven a aparecer las piezas del otro
+      const p = W.list[(mod(j, W.R) * W.C + mod(i, W.C)) % n];
+      el = document.createElement('button'); el.type = 'button'; el.className = 'tile' + (state.sel === p ? ' on' : ''); el.dataset.id = p.id;
+      el.style.width = el.style.height = S + 'px'; el.setAttribute('aria-label', p.name);
+      el.innerHTML = `<div><img src="${esc(thumb(p, 250))}" alt="" draggable="false" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"><span>${esc(p.name)}</span></div>`;
+      tilesEl.append(el); W.nodes.set(k, el);
+    }
+    el.style.transform = `translate3d(${i * S + W.ox}px,${j * S + W.oy}px,0)`;
+  }
+  for (const [k, el] of W.nodes) if (!keep.has(k)) { el.remove(); W.nodes.delete(k); }
+}
+function glide() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const step = () => { W.vx *= .94; W.vy *= .94; if (Math.hypot(W.vx, W.vy) < .4) return; W.ox += W.vx; W.oy += W.vy; drawWall(); W.raf = requestAnimationFrame(step); };
+  W.raf = requestAnimationFrame(step);
+}
+muro.addEventListener('pointerdown', e => { if (e.button) return; cancelAnimationFrame(W.raf); W.drag = { x: e.clientX, y: e.clientY, ox: W.ox, oy: W.oy, lt: performance.now(), moved: 0 }; W.vx = W.vy = 0; muro.setPointerCapture(e.pointerId); muro.classList.add('drag'); });
+muro.addEventListener('pointermove', e => {
+  const d = W.drag; if (!d) return;
+  const nx = d.ox + e.clientX - d.x, ny = d.oy + e.clientY - d.y, now = performance.now(), dt = Math.max(8, now - d.lt);
+  W.vx = (nx - W.ox) / dt * 16; W.vy = (ny - W.oy) / dt * 16; d.lt = now; W.ox = nx; W.oy = ny;
+  d.moved = Math.max(d.moved, Math.hypot(e.clientX - d.x, e.clientY - d.y)); drawWall();
+});
+const endDrag = e => {
+  const d = W.drag; W.drag = null; muro.classList.remove('drag'); if (!d) return;
+  if (d.moved < 6 && e.type === 'pointerup') { const t = document.elementFromPoint(e.clientX, e.clientY)?.closest('.tile'); if (t) openPlace(t.dataset.id); return; }
+  glide();
+};
+muro.addEventListener('pointerup', endDrag); muro.addEventListener('pointercancel', endDrag);
+muro.addEventListener('wheel', e => { e.preventDefault(); W.ox -= e.deltaX; W.oy -= e.deltaY; drawWall(); }, { passive: false });
+tilesEl.addEventListener('click', e => { if (e.detail === 0) { const t = e.target.closest('.tile'); if (t) openPlace(t.dataset.id); } });
+const wallRO = new ResizeObserver(() => drawWall()); wallRO.observe(muro);
+
+/* ---------- Mapa ---------- */
+const map = L.map('map', { zoomControl: false, preferCanvas: true, attributionControl: false }).setView([36.6, -5.9], 9);
+L.control.attribution({ position: 'topright', prefix: false }).addTo(map);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+const layer = L.layerGroup().addTo(map), hl = L.layerGroup().addTo(map), selLayer = L.layerGroup().addTo(map);
+const sheetPx = () => innerWidth < 900 ? $('#sheet').offsetHeight + 10 : 20;
+function drawMarkers() {
+  layer.clearLayers();
+  for (const p of visible()) {
+    const big = p.imp >= 5;
+    L.circleMarker([p.lat, p.lon], { radius: big ? 6 : 4, weight: 1, color: '#0c1411', fillColor: THEME_COL[p.theme], fillOpacity: .95 })
+      .bindTooltip(p.name, { direction: 'top', offset: [0, -6] }).on('click', () => openPlace(p.id)).addTo(layer);
+  }
+}
+function markSel(p) {
+  selLayer.clearLayers();
+  document.querySelectorAll('.tile.on').forEach(t => t.classList.remove('on'));
+  if (!p) return;
+  document.querySelectorAll(`.tile[data-id="${CSS.escape(p.id)}"]`).forEach(t => t.classList.add('on'));
+  L.circleMarker([p.lat, p.lon], { radius: 13, weight: 3, color: '#dcff85', fill: false, interactive: false }).addTo(selLayer);
+}
+function showOnMap(ps) {
+  hl.clearLayers();
+  ps.forEach(p => L.circleMarker([p.lat, p.lon], { radius: 8, weight: 2, color: '#111c18', fillColor: '#dcff85', fillOpacity: 1 }).bindTooltip(p.name, { direction: 'top', offset: [0, -8] }).on('click', () => openPlace(p.id)).addTo(hl));
+  if (state.view === 'mapa' && ps.length) map.flyToBounds(ps.map(p => [p.lat, p.lon]), { paddingTopLeft: [40, 60], paddingBottomRight: [40, sheetPx() + 20], maxZoom: 15, duration: .6 });
+}
+
+/* ---------- Filtro y temas ---------- */
+const KIND = { mun: 'Dónde', tipo: 'Qué es', estilo: 'Estilo', autor: 'Autor', siglo: 'Época' };
+function setFilter(kind, value) {
+  state.filter = kind ? { kind, value } : null;
+  W.ox = W.oy = 0; refresh();
+  if (state.view === 'temas') showView('muro');
+  const v = visible();
+  if (state.view === 'mapa' && v.length) map.flyToBounds(v.map(p => [p.lat, p.lon]), { paddingTopLeft: [30, 70], paddingBottomRight: [30, sheetPx()], maxZoom: 15 });
+}
+function drawFilter() {
+  $('#filt').innerHTML = state.filter && state.view !== 'temas' ? `<button type="button" class="f" data-act="clear" aria-label="Quitar el filtro">${esc(state.filter.value)}  ✕</button><button type="button" class="r" data-act="route">Recorrido con el guía</button>` : '';
+}
+function groups(fn) {
+  const g = new Map();
+  for (const p of state.places) for (const k of [].concat(fn(p)).filter(Boolean)) { if (!g.has(k)) g.set(k, []); g.get(k).push(p); }
+  return [...g].map(([k, ps]) => [k, ps.sort((a, b) => b.imp - a.imp)]);
+}
+function cards(kind, list, min = 1) {
+  return `<div class="cards">${list.filter(([, ps]) => ps.length >= min).map(([k, ps]) => { const w = ps.find(p => p.img) || ps[0];
+    return `<button type="button" class="tc" data-k="${kind}" data-v="${esc(k)}">${avatar(w, '', 250)}<span><b>${esc(k)}</b><small>${esc(ps.slice(0, 3).map(p => p.name).join(' · '))}</small></span><span class="n">${ps.length}</span></button>`; }).join('')}</div>`;
+}
+function renderTemas() {
+  if (!state.prov) return;
+  const muns = groups(p => p.mun).sort((a, b) => b[1].length - a[1].length);
+  const tipos = groups(p => p.theme).sort((a, b) => THEME_NAMES.indexOf(a[0]) - THEME_NAMES.indexOf(b[0]));
+  const estilos = groups(p => p.style).sort((a, b) => b[1].length - a[1].length).slice(0, 12);
+  const autores = groups(p => p.auth).sort((a, b) => b[1].length - a[1].length).slice(0, 12);
+  const siglos = groups(p => century(p.year)).sort((a, b) => (a[1][0].year ?? 0) - (b[1][0].year ?? 0));
+  $('#vTemas').innerHTML = `<h2 class="vt-h">${esc(state.prov.name)}: ${state.places.length} piezas</h2>
+    <h3 class="ax">Dónde<small>Por municipio</small></h3><div class="chipsrow">${muns.map(([k, ps]) => `<button type="button" data-k="mun" data-v="${esc(k)}">${esc(k)}<i>${ps.length}</i></button>`).join('')}</div>
+    <h3 class="ax">Qué es<small>Por tipo de pieza</small></h3>${cards('tipo', tipos)}
+    <h3 class="ax">Qué cuenta<small>Temas que cruzan la provincia</small></h3>
+    ${estilos.some(([, ps]) => ps.length > 2) ? `<p class="sub">Estilos</p>${cards('estilo', estilos, 3)}` : ''}
+    ${autores.some(([, ps]) => ps.length > 1) ? `<p class="sub">Autores con varias obras</p>${cards('autor', autores, 2)}` : ''}
+    ${siglos.length ? `<p class="sub">Épocas</p><div class="chipsrow">${siglos.map(([k, ps]) => `<button type="button" data-k="siglo" data-v="${esc(k)}">${esc(k)}<i>${ps.length}</i></button>`).join('')}</div>` : ''}`;
+}
+function showView(v) {
+  state.view = v;
+  document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
+  $('#vTemas').hidden = v !== 'temas'; muro.hidden = v !== 'muro';
+  document.body.classList.toggle('v-temas', v === 'temas');
+  document.body.classList.toggle('v-mapa', v === 'mapa');
+  if (v === 'muro') drawWall();
+  if (v === 'mapa') map.invalidateSize();
+  drawFilter();
+  if (innerWidth < 900) { $('#sheet').dataset.size = 'min'; $('#q').blur(); }
+}
+const setStatus = s => $('#status').textContent = s;
+
+/* ---------- Conversación ---------- */
+const cookie = (() => { let d = ''; for (let i = 0; i <= 144; i++) { const a = i / 144 * 2 * Math.PI, r = 12 + 1.5 * Math.cos(9 * a); d += (i ? 'L' : 'M') + (14 + r * Math.cos(a)).toFixed(2) + ' ' + (14 + r * Math.sin(a)).toFixed(2); } return d + 'Z'; })();
+const AV = `<svg class="av" viewBox="0 0 28 28" aria-hidden="true"><path d="${cookie}" fill="#dcff85"/></svg>`;
+const log = $('#log');
+function addMsg(kind, html, who) {
+  const d = document.createElement('div');
+  d.className = kind === 'note' ? 'note' : 'msg ' + kind;
+  d.innerHTML = kind === 'u' ? `<div class="b">${html}</div>` : kind === 'note' ? html : (who ? avatar(who, 's') : AV) + `<div class="t">${html}</div>`;
+  log.append(d);
+  requestAnimationFrame(() => log.scrollTo({ top: d.offsetTop - 6, behavior: 'smooth' }));
+  return d;
+}
+const thinking = (txt, who) => { const d = addMsg('g', esc(txt), who); d.classList.add('think'); return d; };
+function done(m, html, ps = []) {
+  m.classList.remove('think');
+  m.querySelector('.t').innerHTML = html + (ps.length ? chipsHTML(ps) : '');
+  requestAnimationFrame(() => log.scrollTo({ top: m.offsetTop - 6, behavior: 'smooth' }));
+}
+function chipsHTML(ps) {
+  const from = state.sel;
+  return `<div class="chips">${ps.map(p => `<button type="button" class="pc" data-id="${esc(p.id)}">${avatar(p, 's')}<span>${esc(p.name)}<small>${esc([p.mun || p.theme, from && from !== p ? meters(dist(from, p)) : ''].filter(Boolean).join(' · '))}</small></span></button>`).join('')}</div>`;
+}
+function setSugs(list) { const el = $('#sugs'); el.innerHTML = list.slice(0, 3).map(s => `<button type="button">${esc(s)}</button>`).join(''); el.scrollLeft = 0; }
+const paras = s => (s || '').split(/\n+/).filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('');
+function md(s) {
+  s = s.replace(/\s*\((?:id:?\s*)?Q\d+\)/g, '').replace(/\bQ\d{3,}\b/g, '');
+  return esc(s.trim()).split(/\n{2,}/).map(b => '<p>' + b.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>').replace(/^[-•]\s+/gm, '• ').replace(/\n/g, '<br>') + '</p>').join('');
+}
+function splitSugs(txt) {
+  const sugs = [], body = [];
+  for (const l of txt.split('\n')) { const m = /^\s*[-*]?\s*[›»]\s*(.+)$/.exec(l); if (m) sugs.push(m[1].replace(/^\*\*|\*\*$/g, '').trim()); else body.push(l); }
+  return { body: body.join('\n').trim(), sugs };
+}
+function mentioned(body, except) {
+  const f = ' ' + fold(body).replace(/[^a-z0-9]+/g, ' ') + ' ', found = [], names = new Set();
+  for (const p of [...state.places].sort((a, b) => b.name.length - a.name.length)) {
+    const n = ' ' + fold(p.name).replace(/[^a-z0-9]+/g, ' ').trim() + ' ', i = f.indexOf(n);
+    if (p === except || n.length < 9 || i < 0 || names.has(n) || found.some(x => i < x.i + x.len && x.i < i + n.length)) continue;
+    names.add(n); found.push({ p, i, len: n.length });
+  }
+  return found.sort((a, b) => a.i - b.i).slice(0, 6).map(x => x.p);
+}
+function greet() {
+  addMsg('g', `<p>Esto es el patrimonio de la ${esc(state.prov.name.replace(/^Provincia/, 'provincia'))}. Arrastra el muro, toca una pieza y te hablará ella. Yo soy el guía: pregúntame por un lugar, un tema o una época.</p>`);
+  const [m1, m2] = groups(p => p.mun).sort((a, b) => b[1].length - a[1].length).map(x => x[0]);
+  setSugs([m2 ? `¿Qué tienen en común ${m1} y ${m2}?` : '¿Por dónde empiezo?', 'Propónme un recorrido de un día', '¿Qué pieza casi nadie conoce?']);
+}
+
+/* ---------- Ficha y quién habla ---------- */
+function renderCard(p) {
+  $('#card').innerHTML = `<div class="card">${avatar(p, 'xl', 500)}
+    <div><h2>${esc(p.name)}</h2><div class="meta">${esc(metaLine(p))}</div>${p.her[0] ? `<span class="her">${esc(p.her[0])}</span>` : ''}<span class="who">Te habla la pieza</span></div>
+    <button type="button" class="x" id="toGuide">Guía</button></div>`;
+}
+async function openPlace(id) {
+  const p = state.byId.get(id); if (!p || state.busy) return;
+  state.sel = p; state.speaker = p.id; state.chats[p.id] = state.chats[p.id] || [];
+  document.body.classList.add('has-sel');
+  renderCard(p); markSel(p);
+  if (state.view === 'temas') showView('muro');
+  if (state.view === 'mapa') { const z = Math.max(map.getZoom(), 15), pt = map.project([p.lat, p.lon], z).add([0, innerWidth < 900 ? $('#sheet').offsetHeight / 2 : 0]); map.flyTo(map.unproject(pt, z), z, { duration: .6 }); }
+  addMsg('note', `Ahora te habla «${esc(p.name)}»`);
+  talk(state.chats[p.id].length ? 'He vuelto.' : `Acabo de encontrarte en el ${state.view === 'mapa' ? 'mapa' : 'muro'}.`, true);
+}
+function toGuide() {
+  if (!state.speaker) return;
+  state.speaker = null; state.sel = null; $('#card').innerHTML = ''; markSel(null); document.body.classList.remove('has-sel');
+  addMsg('note', 'Vuelve el guía');
+  setSugs(['¿Qué más hay como esto en la provincia?', 'Propónme un recorrido', '¿Qué pieza casi nadie conoce?']);
+}
+
+const placeLine = (p, from) => [p.name, [p.types.slice(0, 2).join(', '), p.mun, p.year, p.auth.join(', '), p.style.join(', '), p.her[0]].filter(Boolean).join(' · '), p.desc, from ? 'a ' + meters(dist(from, p)) : ''].filter(Boolean).join(' — ');
+function common() {
+  const now = new Date().toLocaleString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+  return `Ahora: ${now}. Idioma del navegador: ${navigator.language}. La persona explora desde una pantalla: puede estar lejos.`;
+}
+const APP = 'Cómo funciona la aplicación: cuando nombras una pieza tal como aparece aquí, se señala en el mapa y sale como tarjeta; al final, dos o tres preguntas que la persona podría hacerte ahora, cada una en su propia línea, empezando por ›.';
+async function pieceSystem(p) {
+  const txt = await article(p.article).catch(() => '');
+  const parientes = kin(p), cerca = nearest(p, 6);
+  return `Eres ${p.name}${p.mun ? ', en ' + p.mun : ''}: ${p.types[0] || p.theme}. Hablas tú, la pieza, en primera persona, como el objeto que eres. Lo que te ha pasado desde que existes lo cuentas de primera mano; lo anterior, de oídas. A quien representas o recuerdas lo nombras en tercera persona.
+
+Antes de cada respuesta, pregúntate, desde la mirada de Freeman Tilden: con lo que sé de mí, ¿qué puede surgir entre esta persona y yo?
+
+Lo que sabes de ti y de tus parientes en la ${state.prov.name.replace(/^Provincia/, 'provincia')} te llega aquí debajo: tu ficha de Wikidata, tu artículo de Wikipedia y las piezas con las que compartes autor, estilo, tipo o lugar.
+
+${APP}
+
+${common()}
+
+TU FICHA
+${placeLine(p)}
+
+TU ARTÍCULO DE WIKIPEDIA
+${clip(txt || 'No tienes artículo propio.', 16000)}
+${parientes.length ? '\nTUS PARIENTES EN LA PROVINCIA\n' + parientes.map(k => `${placeLine(k.p, p)} (${k.why})`).join('\n') : ''}
+
+CERCA DE TI
+${cerca.map(([x, d]) => `${x.name} (${x.types[0] || x.theme}) a ${meters(d)}`).join('; ')}`;
+}
+async function guideSystem(q) {
+  const prov = state.prov, fq = fold(q), hits = searchPlaces(q, 8);
+  const kw = fq.split(/[^a-z0-9]+/).filter(w => w.length > 3 && !STOP.has(w)).slice(0, 4).join(' ');
+  const srch = kw ? await wp({ action: 'query', list: 'search', srsearch: kw + ' ' + prov.name.replace(/^Provincia de /, ''), srlimit: '4', srprop: '' }).catch(() => null) : null;
+  const extra = (srch?.query?.search || []).map(x => x.title).filter(t => !hits.some(p => p.article === t)).slice(0, 3);
+  const txt = await intros([...hits.map(p => p.article).filter(Boolean).slice(0, 6), ...extra]);
+  const counts = (fn, n) => groups(fn).sort((a, b) => b[1].length - a[1].length).slice(0, n).map(([k, ps]) => `${k} (${ps.length})`).join(', ');
+  const top = [...state.places].sort((a, b) => b.imp - a.imp).slice(0, 30).map(p => p.name + (p.mun ? ' (' + p.mun + ')' : '')).join('; ');
+  const f = state.filter ? `\nLA PERSONA TIENE ABIERTO EL FILTRO «${state.filter.value}» (${KIND[state.filter.kind]})\n` + visible().sort((a, b) => b.imp - a.imp).slice(0, 16).map(p => placeLine(p)).join('\n') : '';
+  return `Eres un intérprete del patrimonio de la ${prov.name.replace(/^Provincia/, 'provincia')}, en la tradición de Freeman Tilden. Conoces sus pueblos y ciudades a fondo y acompañas a una persona que explora su patrimonio.
+
+Antes de cada respuesta, pregúntate: desde esa mirada y con lo que conozco, ¿qué puede surgir entre esta persona y yo?
+
+Lo que conoces de la provincia te llega aquí debajo, renovado en cada turno: el catálogo de piezas, sacado de Wikidata, y textos de Wikipedia.
+
+${APP}
+
+${common()}
+
+EL CATÁLOGO: ${state.places.length} piezas.
+Municipios con más piezas: ${counts(p => p.mun, 15)}.
+Tipos: ${counts(p => p.theme, 12)}.
+Estilos: ${counts(p => p.style, 10)}.
+Algunas de las más documentadas: ${top}.
+${f}
+${hits.length ? '\nPIEZAS QUE CASAN CON LO QUE DICE\n' + hits.map(p => placeLine(p) + (txt[p.article] ? '\n' + clip(txt[p.article], 700) : '')).join('\n\n') : ''}
+${extra.filter(t => txt[t]).length ? '\nOTROS ARTÍCULOS DE WIKIPEDIA\n' + extra.filter(t => txt[t]).map(t => `«${t}»: ${clip(txt[t], 900)}`).join('\n\n') : ''}
+
+Resumen de Wikipedia sobre la provincia: ${clip(prov.intro, 1200)}`;
+}
+
+async function talk(q, hidden = false) {
+  const p = state.speaker ? state.byId.get(state.speaker) : null, key = p ? p.id : 'guia', chat = state.chats[key];
+  state.busy = true; $('#send').disabled = true; setSugs([]);
+  const m = thinking(p ? 'Despertando…' : 'Leyendo Wikipedia…', p);
+  try {
+    const sys = p ? await pieceSystem(p) : await guideSystem(q);
+    m.querySelector('.t').textContent = 'Pensando…';
+    // El intermediario pasa al modelo los 12 últimos mensajes: el prompt con su contexto, cuatro intercambios y lo de ahora
+    const input = [{ role: 'user', content: clip(sys, 42000) }, ...chat.slice(-8).map(t => ({ role: t.role, content: clip(t.content, 1800) })), { role: 'user', content: q }];
+    const c = new AbortController(), t = setTimeout(() => c.abort(), 60000);
+    let r, txt;
+    try { r = await fetch(IA, { method: 'POST', signal: c.signal, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ input, modelo: cfg.modelo }) }); txt = await r.text(); }
+    finally { clearTimeout(t); }
+    if (!r.ok) throw new Error(txt.slice(0, 140) || 'HTTP ' + r.status);
+    const { body, sugs } = splitSugs(txt.trim()), ps = mentioned(body, p);
+    chat.push({ role: 'user', content: q }, { role: 'assistant', content: body });
+    done(m, md(body), ps);
+    if (ps.length) showOnMap(ps);
+    setSugs(sugs);
+  } catch (e) {
+    m.remove();
+    addMsg('note', `No llega la respuesta (${esc(e.name === 'AbortError' ? 'tarda demasiado' : e.message)}).`);
+    if (p && p.article) { const txt = await article(p.article).catch(() => ''); if (txt) addMsg('g', paras(clip(txt.split('\n').filter(l => l.length > 40).slice(0, 2).join('\n'), 900)) + `<div class="src"><a href="https://es.wikipedia.org/wiki/${encodeURIComponent(p.article.replace(/ /g, '_'))}" target="_blank" rel="noopener">Wikipedia</a></div>`, p); }
+  } finally { state.busy = false; $('#send').disabled = false; }
+}
+function ask(q) {
+  q = q.trim(); if (!q || state.busy || !state.prov) return;
+  addMsg('u', esc(q)); $('#q').value = '';
+  talk(q);
+}
+
+/* ---------- Eventos ---------- */
+$('.seg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) showView(b.dataset.v); });
+$('#vTemas').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (b) setFilter(b.dataset.k, b.dataset.v); });
+$('#filt').addEventListener('click', e => {
+  const a = e.target.closest('[data-act]')?.dataset.act;
+  if (a === 'clear') setFilter(null);
+  if (a === 'route' && state.filter) { if (state.speaker) toGuide(); ask(`Propónme un recorrido por «${state.filter.value}».`); }
+});
+log.addEventListener('click', e => { const c = e.target.closest('.pc'); if (c) openPlace(c.dataset.id); if (e.target.id === 'retry') { log.innerHTML = ''; load(); } });
+$('#card').addEventListener('click', e => { if (e.target.closest('#toGuide')) toGuide(); });
+$('#sugs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) ask(b.textContent); });
+$('#ask').addEventListener('submit', e => { e.preventDefault(); ask($('#q').value); });
+$('#q').addEventListener('focus', () => { if (innerWidth < 900) $('#sheet').dataset.size = 'max'; });
+$('#grab').addEventListener('click', () => { const s = $('#sheet'); s.dataset.size = s.dataset.size === 'max' ? 'min' : 'max'; });
+map.on('click', () => { if (innerWidth < 900) $('#sheet').dataset.size = 'min'; });
+muro.addEventListener('pointerdown', () => { if (innerWidth < 900) $('#sheet').dataset.size = 'min'; });
+const dlg = $('#cfg'), f = $('#cfgForm');
+$('#btnCfg').addEventListener('click', () => { f.modelo.value = cfg.modelo; dlg.showModal(); });
+dlg.addEventListener('close', () => { if (dlg.returnValue === 'ok') { cfg.modelo = f.modelo.value === 'sonnet' ? 'sonnet' : 'haiku'; LS.set('hh.museo', { modelo: cfg.modelo }); } });
+
+load().catch(e => { setStatus('Error'); addMsg('g', `<p>No he podido cargar la provincia: ${esc(e.message)}</p>`); });
+}
+</script>
+</body>
+</html>
