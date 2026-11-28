@@ -6,6 +6,9 @@
 //   POST /voz    {texto, voz: 'gemini:Charon', estilo} → audio wav de Google (Gemini TTS); estilo, en lenguaje natural
 //   GET  /voces  ?language=es&gender=&query=       → lista de voces predefinidas de Mistral (JSON)
 //   GET  /archivo  ?ruta=unidad/prompt.json         → el archivo tal cual está en GitHub ahora (sin esperar a Pages)
+//   GET  /iaph     ?ruta=busqueda/inmaterial/q=provincia_smv:Cádiz&rows=300
+//                                                   → la API de datos abiertos del IAPH (Guía Digital del Patrimonio Cultural de Andalucía),
+//                                                     solo lectura; las imágenes de un bien, con ?ruta=bien/inmaterial/{id}/{idImagen}
 //   PUT  /archivo  {ruta, contenido, mensaje}        → lo guarda en GitHub como un commit (solo desde el panel, con contraseña)
 //   GET  /                                         → estado de las claves
 //
@@ -18,6 +21,8 @@
 //   GEMINI_API_KEY      (Secret)  la clave de Google AI Studio, para las voces «gemini:…»
 //   GITHUB_TOKEN        (Secret)  token «fine-grained» de GitHub, solo para este repositorio, con permiso Contents: Read and write
 //   PANEL_CLAVE         (Secret)  la contraseña del panel de creación
+//   IAPH_KEY            (Secret)  Consumer Key de la aplicación DefaultApplication en guiadigital.iaph.es/store (Production Keys)
+//   IAPH_SECRET         (Secret)  Consumer Secret de esa misma aplicación
 //   REPO                (Text, opcional)  por defecto alsase10X/neoars; RAMA, por defecto main
 //   MODELO              (Text, opcional)  por defecto anthropic/claude-haiku-5-5
 //   MODELO_VOZ          (Text, opcional)  por defecto voxtral-mini-tts-3-0
@@ -40,6 +45,10 @@ const MAX_VOZ = 3000;       // caracteres por locución (a 13 $ el millón, unos
 const REPO = 'alsase10X/neoars', RAMA = 'main';
 const MAX_ARCHIVO = 4000000; // caracteres de un archivo a guardar (una imagen en base64 cabe)
 // Dónde puede escribir el panel: archivos de datos de la unidad y sus imágenes, nada de código
+// Lo que se puede pedir a la API del IAPH: búsquedas, fichas, imágenes y municipios. Nada que escriba ni la lista entera del localizador
+const IAPH = 'https://guiadigital.iaph.es';
+const IAPH_OK = /^(busqueda\/(inmaterial|inmueble|mueble|paisaje|ruta|municipio|imagen)\/q=[^#]{1,400}|bien\/(inmueble|mueble|inmaterial)(\/enriquecido)?\/[\w-]+(\/[\w-]+)?|termino\/municipio\/[^/]{1,60}|municipio\/\d+|ruta\/\d+|paisaje\/\d+|repositorio\/imagen\/[\w-]+|localizador\/[\w-]+|tesauro(\/[\w.]+)?)$/;
+let iaphToken = null; // {valor, hasta}: el token se pide con las claves y se reutiliza mientras vale (una hora)
 const RUTA_OK = /^(unidad\/(prompt\.json|(obras|salas|marcas|memorias)\/[\w./-]+\.json)|urbano-pruebas\/(pruebas\.json|(piezas|reglas)\/[\w-]+\.json)|img\/[\w./-]+\.(jpe?g|png|webp))$/;
 
 export default {
@@ -112,8 +121,47 @@ export default {
       return new Response(JSON.stringify({sha: j.content.sha, commit: j.commit.sha, url: j.commit.html_url}), {headers: {...cors, 'Content-Type': 'application/json; charset=utf-8'}});
     }
 
+    // La API del IAPH: el token va por aquí y no llega nunca al navegador. Cada respuesta se guarda un día en la caché de Cloudflare
+    if (req.method === 'GET' && ruta === '/iaph') {
+      if (!env.IAPH_KEY || !env.IAPH_SECRET) return texto('Faltan IAPH_KEY o IAPH_SECRET en Cloudflare', 500);
+      const r = new URL(req.url).searchParams.get('ruta') || '';
+      if (!IAPH_OK.test(r) || r.includes('..')) return texto('Ruta no permitida', 400);
+      // Las consultas, solo desde las webs permitidas; las imágenes, desde cualquier <img> (el navegador no manda el origen)
+      const esImagen = /^bien\/\w+\/[\w-]+\/[\w-]+$/.test(r);
+      if (!esImagen && !permitidos.includes(origen)) return texto('Origen no permitido', 403);
+      const filas = /[?&]rows=(\d+)/.exec(r);
+      if (filas && +filas[1] > 500) return texto('Como mucho 500 filas por consulta', 400);
+      const destino = IAPH + '/api/1.0/' + r, cache = caches.default, clave = new Request(destino);
+      let resp = await cache.match(clave);
+      if (!resp) {
+        const token = async nuevo => {
+          if (!nuevo && iaphToken && iaphToken.hasta > Date.now()) return iaphToken.valor;
+          const t = await fetch(IAPH + '/token', {method: 'POST', headers: {'Authorization': 'Basic ' + btoa(env.IAPH_KEY + ':' + env.IAPH_SECRET), 'Content-Type': 'application/x-www-form-urlencoded'}, body: 'grant_type=client_credentials'});
+          if (!t.ok) throw new Error('El IAPH no ha dado el token (' + t.status + ')');
+          const j = await t.json();
+          iaphToken = {valor: j.access_token, hasta: Date.now() + Math.max(60, (j.expires_in || 3600) - 120) * 1000};
+          return iaphToken.valor;
+        };
+        const pedir = async nuevo => fetch(destino, {headers: {'Authorization': 'Bearer ' + await token(nuevo), 'Accept': 'application/json'}});
+        let a;
+        try { a = await pedir(false); if (a.status === 401) a = await pedir(true); } catch (e) { return texto(e.message, 502); }
+        if (!a.ok) return texto('El IAPH no ha respondido (' + a.status + ')', 502);
+        if (esImagen) {
+          // Las imágenes llegan dentro de un JSON, en base64: se devuelven como imagen para poder ponerlas en un <img>
+          const b64 = (await a.json().catch(() => null))?.imagen?.response;
+          if (!b64) return texto('Sin imagen', 404);
+          const tipo = b64.startsWith('/9j') ? 'image/jpeg' : b64.startsWith('iVBOR') ? 'image/png' : 'application/octet-stream';
+          resp = new Response(Uint8Array.from(atob(b64), c => c.charCodeAt(0)), {headers: {'Content-Type': tipo, 'Cache-Control': 'public, max-age=604800'}});
+        } else resp = new Response(a.body, {headers: {'Content-Type': a.headers.get('Content-Type') || 'application/octet-stream', 'Cache-Control': 'public, max-age=86400'}});
+        await cache.put(clave, resp.clone());
+      }
+      const h = new Headers(resp.headers);
+      for (const [k, v] of Object.entries(cors)) h.set(k, v);
+      return new Response(resp.body, {status: resp.status, headers: h});
+    }
+
     // Abrir la dirección en el navegador sirve para comprobar que está bien montado
-    if (req.method === 'GET') return texto('artmedium-ia: texto ' + (env.PERPLEXITY_API_KEY ? 'listo' : 'sin clave') + ' · voz ' + (env.MISTRAL_API_KEY ? 'lista' : 'sin clave') + ' · voz Gemini ' + (env.GEMINI_API_KEY ? 'lista' : 'sin clave') + ' · panel ' + (env.PANEL_CLAVE && env.GITHUB_TOKEN ? 'listo' : 'sin clave'));
+    if (req.method === 'GET') return texto('artmedium-ia: texto ' + (env.PERPLEXITY_API_KEY ? 'listo' : 'sin clave') + ' · voz ' + (env.MISTRAL_API_KEY ? 'lista' : 'sin clave') + ' · voz Gemini ' + (env.GEMINI_API_KEY ? 'lista' : 'sin clave') + ' · panel ' + (env.PANEL_CLAVE && env.GITHUB_TOKEN ? 'listo' : 'sin clave') + ' · IAPH ' + (env.IAPH_KEY && env.IAPH_SECRET ? 'listo' : 'sin clave'));
     if (req.method !== 'POST') return texto('Método no permitido', 405);
     if (!permitidos.includes(origen)) return texto('Origen no permitido', 403);
 
