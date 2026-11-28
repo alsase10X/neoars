@@ -224,27 +224,35 @@ async function resolveProv(name) {
   return { name: p.title, qid: p.pageprops.wikibase_item, lat: c.lat, lon: c.lon, intro: p.extract || '' };
 }
 
+// Los municipios de la provincia, con sus coordenadas: una consulta ligera que sirve a las piezas y a lo inmaterial
+async function loadMuns(qid) {
+  if (state.muns?.qid === qid) return state.muns.list;
+  const j = await sparql(`SELECT ?m ?l ?c WHERE { ?m wdt:P31 wd:Q2074737 ; wdt:P131 wd:${qid} ; wdt:P625 ?c ; rdfs:label ?l FILTER(LANG(?l)="es") }`);
+  const list = j.results.bindings.map(b => { const m = /Point\(([-\d.eE]+) ([-\d.eE]+)\)/.exec(b.c.value); return m && { id: b.m.value.split('/').pop(), n: fold(b.l.value), label: b.l.value, lat: +m[2], lon: +m[1] }; }).filter(Boolean);
+  state.muns = { qid, list };
+  return list;
+}
 // Las piezas: todo lo que hay en la provincia con protección patrimonial o con artículo en Wikipedia.
 // Dos consultas sobre el mismo conjunto: los datos de cada pieza y sus facetas (tipo, protección, estilo, autor).
 const piezasDe = qid => `{ SELECT DISTINCT ?item WHERE { ?item wdt:P131+ wd:${qid} ; wdt:P625 [] .
   FILTER(EXISTS{?item wdt:P1435 []} || EXISTS{?a0 schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/>}) } LIMIT 5000 }`;
 async function loadWikidata(qid) {
   const v = b => b?.value, split = s => s ? s.split('|').filter(Boolean) : [], title = u => u ? decodeURIComponent(u.split('/wiki/')[1] || '').replace(/_/g, ' ') : '';
-  const base = sparql(`SELECT ?item ?label ?desc (SAMPLE(?c) AS ?coord) (SAMPLE(?img) AS ?image) (SAMPLE(?art) AS ?es) (SAMPLE(?ml) AS ?mun) (MIN(YEAR(?inc)) AS ?year) WHERE {
+  // Todo opcional después de elegir las piezas: si las coordenadas van como obligatorias, Wikidata las busca en todo el mundo y tarda más de un minuto
+  const base = sparql(`SELECT ?item (SAMPLE(?l) AS ?label) (SAMPLE(?d) AS ?desc) (SAMPLE(?c) AS ?coord) (SAMPLE(?img) AS ?image) (SAMPLE(?art) AS ?es) (SAMPLE(?a1) AS ?p1) (SAMPLE(?a2) AS ?p2) (MIN(YEAR(?inc)) AS ?year) WHERE {
  ${piezasDe(qid)}
- ?item wdt:P625 ?c .
- OPTIONAL{?item wdt:P18 ?img} OPTIONAL{?art schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/>}
- OPTIONAL{?item wdt:P131* ?m . ?m wdt:P31 wd:Q2074737 . ?m rdfs:label ?ml FILTER(LANG(?ml)="es")}
- OPTIONAL{?item wdt:P571 ?inc}
- OPTIONAL{?item rdfs:label ?label FILTER(LANG(?label)="es")} OPTIONAL{?item schema:description ?desc FILTER(LANG(?desc)="es")}
-} GROUP BY ?item ?label ?desc`);
+ OPTIONAL{?item wdt:P625 ?c} OPTIONAL{?item wdt:P18 ?img} OPTIONAL{?art schema:about ?item ; schema:isPartOf <https://es.wikipedia.org/>}
+ OPTIONAL{?item wdt:P131 ?a1 . OPTIONAL{?a1 wdt:P131 ?a2}} OPTIONAL{?item wdt:P571 ?inc}
+ OPTIONAL{?item rdfs:label ?l FILTER(LANG(?l)="es")} OPTIONAL{?item schema:description ?d FILTER(LANG(?d)="es")}
+} GROUP BY ?item`);
   const facets = sparql(`SELECT ?item (GROUP_CONCAT(DISTINCT ?tl;separator="|") AS ?types) (GROUP_CONCAT(DISTINCT ?hl;separator="|") AS ?her)
  (GROUP_CONCAT(DISTINCT ?sl;separator="|") AS ?style) (GROUP_CONCAT(DISTINCT ?al;separator="|") AS ?auth) WHERE {
  ${piezasDe(qid)}
  OPTIONAL{?item wdt:P31 ?t . ?t rdfs:label ?tl FILTER(LANG(?tl)="es")} OPTIONAL{?item wdt:P1435 ?h . ?h rdfs:label ?hl FILTER(LANG(?hl)="es")}
  OPTIONAL{?item wdt:P149 ?s . ?s rdfs:label ?sl FILTER(LANG(?sl)="es")} OPTIONAL{?item wdt:P170|wdt:P84 ?a . ?a rdfs:label ?al FILTER(LANG(?al)="es")}
 } GROUP BY ?item`).catch(() => null);
-  const [b, f] = await Promise.all([base, facets]);
+  const [b, f, muns] = await Promise.all([base, facets, loadMuns(qid)]);
+  const munOf = new Map(muns.map(m => [m.id, m.label])), qidOf = u => (u || '').split('/').pop();
   const fx = new Map((f?.results.bindings || []).map(x => [v(x.item).split('/').pop(), x]));
   const out = [], seen = new Set();
   for (const x of b.results.bindings) {
@@ -254,7 +262,7 @@ async function loadWikidata(qid) {
     seen.add(id);
     const g = fx.get(id) || {};
     out.push({ id, name, desc: v(x.desc) || '', lat: +m[2], lon: +m[1], img: v(x.image) ? v(x.image).replace(/^http:/, 'https:') + '?width=500' : '', article: es,
-      mun: v(x.mun) || '', year: v(x.year) ? +v(x.year) : null, types: split(v(g.types)), her: split(v(g.her)), style: split(v(g.style)), auth: split(v(g.auth)) });
+      mun: munOf.get(id) || munOf.get(qidOf(v(x.p1))) || munOf.get(qidOf(v(x.p2))) || '', year: v(x.year) ? +v(x.year) : null, types: split(v(g.types)), her: split(v(g.her)), style: split(v(g.style)), auth: split(v(g.auth)) });
   }
   return out.filter(p => p.her.length || !NO_PIEZA.test(fold(p.types.join(' '))));
 }
@@ -263,11 +271,7 @@ async function loadWikidata(qid) {
 // Pasa por el intermediario, que guarda las claves. Cada bien se ancla a su municipio, con sus coordenadas de Wikidata.
 async function loadIAPH(prov) {
   const ruta = `busqueda/inmaterial/q=provincia_smv:${prov.name.replace(/^Provincia de /i, '')}&rows=400`;
-  const [j, mj] = await Promise.all([
-    getJSON(IA + '/iaph?ruta=' + encodeURIComponent(ruta), {}, 40000),
-    sparql(`SELECT ?l ?c WHERE { ?m wdt:P31 wd:Q2074737 ; wdt:P131 wd:${prov.qid} ; wdt:P625 ?c ; rdfs:label ?l FILTER(LANG(?l)="es") }`)
-  ]);
-  const muns = mj.results.bindings.map(b => { const m = /Point\(([-\d.eE]+) ([-\d.eE]+)\)/.exec(b.c.value); return m && { n: fold(b.l.value), label: b.l.value, lat: +m[2], lon: +m[1] }; }).filter(Boolean);
+  const [j, muns] = await Promise.all([getJSON(IA + '/iaph?ruta=' + encodeURIComponent(ruta), {}, 40000), loadMuns(prov.qid)]);
   const norm = s => fold(String(s).trim().replace(/^(.*) \((el|la|los|las)\)$/i, '$2 $1'));
   const findMun = name => { const n = norm(name); return n && (muns.find(m => m.n === n) || muns.find(m => m.n.startsWith(n) || n.startsWith(m.n))); };
   const first = v => String((Array.isArray(v) ? v[0] : v) || '').trim();
